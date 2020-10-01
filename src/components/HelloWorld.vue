@@ -1,10 +1,11 @@
 <template>
-  <div class="hello">
-    <p>Welcome to </p>
-    <h1>The (Brain) Game from the Future</h1>
-    <hr/>
-    <p>
-      Click the cards below to generate your prompt:
+  <div>
+    <div id="head">
+      <h1>Brain Play in the Future</h1>
+      <p>#BrainJam 2021</p>
+    </div>
+    <p class="padded">
+      Click the cards below to generate your prompt.
     </p>
     <div id="card-holder">
       <button class="card" style="background: lightskyblue" v-on:click="query('future')">
@@ -28,6 +29,9 @@
         <div class="break"/>
         <p>What is it?</p>
       </button>
+    </div>
+    <div>
+      <p class="padded"><strong>Note:</strong> Brain Play in the Future is a derivative of <a href="http://situationlab.org/project/the-thing-from-the-future/">The Thing From The Future</a> by Jeff Watson and <a href="http://situationlab.org/">The Situation Lab</a></p>
     </div>
     <hr/>
     <div id="examples">
@@ -89,11 +93,21 @@ p{
   width: 100%;
 }
 
+.padded {
+  padding: 25px;
+}
+
 button{
   font-family: Montserrat, sans-serif;
   text-align: center;
   color: #222222;
   font-weight: 500;
+}
+
+#head{
+  background:black;
+  color: white;
+  padding: 25px;
 }
 
 #card-holder{
@@ -110,7 +124,7 @@ button{
   height: 250px;
   width: 200px;
   padding: 25px 0px;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 .break{
