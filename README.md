@@ -1,4 +1,4 @@
-# brainjam
+# BCIGameJam
 
 ## Project setup
 ```

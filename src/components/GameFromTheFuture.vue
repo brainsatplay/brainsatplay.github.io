@@ -1,19 +1,13 @@
 <template>
   <div>
-    <div id="head">
-      <h1>Brain Play in the Future</h1>
-      <p>#BCIGameJam 2021</p>
-    </div>
-    <p class="padded">
-      Click the cards below to generate your prompt.
-    </p>
+    <label for="modes">Choose a card deck: </label>
     <select name="modes"  id="modes" v-model="selected">
       <option disabled value="">Please select one</option>
       <option >The Thing from the Future</option>
-      <option >Futures Cone + Brain-Controlled Game</option> <!--value="cone-cone-cards"-->
-      <option>Brain-Controlled Future</option> <!--value="control-cards-cards"-->
-      <option>Futures Cone + Related to Brain-Controlled Games</option> <!--value="cone-cards-cone"-->
-      <option>Related to Brain-Controlled Games</option> <!--value="cards-cards-cone"-->
+      <option >Futures Cone + Brain-Controlled Game</option>
+      <option>Brain-Controlled Future</option>
+      <option>Futures Cone + Related to Brain-Controlled Games</option>
+      <option>Related to Brain-Controlled Games</option>
     </select>
     <div id="card-holder">
       <button class="card" style="background: lightskyblue" v-on:click="queryCSV('future',{ selected })">
@@ -39,20 +33,7 @@
       </button>
     </div>
     <div>
-      <p class="padded"><strong>Note:</strong> Brain Play in the Future is a derivative of <a href="http://situationlab.org/project/the-thing-from-the-future/">The Thing From The Future</a> by Jeff Watson and <a href="http://situationlab.org/">The Situation Lab</a></p>
-    </div>
-    <hr/>
-    <div id="examples">
-      <h1>Examples</h1>
-      <div class="example">
-        <h2>BRAINPONG</h2>
-        <img alt="Brain Pong" src="@/assets/BrainPong.jpg">
-        <p>A single player meditation game, where players
-          experience being the ball in a ping pong game
-          against themselves taking place inside their head.
-          The game exercises mindfulness, focus and getting into
-          a flow state.</p>
-      </div>
+      <p><strong>Note:</strong> The Game from the Future is a derivative of <a href="http://situationlab.org/project/the-thing-from-the-future/">The Thing From The Future</a> by Jeff Watson and <a href="http://situationlab.org/">The Situation Lab</a></p>
     </div>
   </div>
 </template>
@@ -65,7 +46,6 @@ export default {
   data () {
     return {
       selected: 'Original Version',
-      html: 'Original Version'
     }},
   props: {
     msg: String,
@@ -164,21 +144,11 @@ p{
   width: 100%;
 }
 
-.padded {
-  padding: 25px;
-}
-
 button{
   font-family: Montserrat, sans-serif;
   text-align: center;
   color: #222222;
   font-weight: 500;
-}
-
-#head{
-  background:black;
-  color: white;
-  padding: 25px;
 }
 
 #card-holder{
@@ -211,11 +181,6 @@ button{
     vertical-align: middle;
     border-top: 2px solid black;
     border-bottom: 2px solid black;
-  }
-
-  .example{
-    width: 500px;
-    margin: 50px;
   }
 
 </style>
