@@ -11,7 +11,7 @@ git add -A
 git commit -m 'committed'
 
 # if you are deploying to https://<USERNAME>.github.io
- git push -f git@github.com:garrettmflynn/brainjam.git master
+ git push -f git@github.com:garrettmflynn/BCIGameJam.git master
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages

@@ -131,7 +131,7 @@ export default {
         default:
           file_id = 'cards'
       }
-      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/brainjam/master/src/assets/' + file_id + '.csv'
+      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + '.csv'
       console.log(file)
       d3.csv(file).then(function (data) {
         let row = Math.floor(Math.random() * data.length);
