@@ -1,6 +1,8 @@
 <template>
   <div class="hello">
-    <h1>Welcome to The (Brain) Game from the Future</h1>
+    <p>Welcome to </p>
+    <h1>The (Brain) Game from the Future</h1>
+    <hr/>
     <p>
       Click the cards below to generate your prompt:
     </p>
@@ -8,21 +10,21 @@
       <button class="card" style="background: lightskyblue" v-on:click="query('future')">
         <p>In a </p>
         <div class="break"/>
-        <div class="blank"><p id='future'>Good</p></div>
+        <div class="blank"><p id='future'>&nbsp;</p></div>
         <div class="break"/>
         <p>future</p>
       </button>
       <button class="card" style="background: lightcoral" v-on:click="query('thing')">
         <p>There is a</p>
         <div class="break"/>
-        <div class="blank"><p id='thing'>Dog</p></div>
+        <div class="blank"><p id='thing'>&nbsp;</p></div>
         <div class="break"/>
-        <p>...</p>
+        <p>&nbsp;</p>
       </button>
       <button class="card" style="background: mediumpurple" v-on:click="query('theme')">
         <p >Related to</p>
         <div class="break"/>
-        <div class="blank"><p id='theme'>_______</p></div>
+        <div class="blank"><p id='theme'>&nbsp;</p></div>
         <div class="break"/>
         <p>What is it?</p>
       </button>
@@ -40,20 +42,16 @@ export default {
   methods: {
     query: function queryCSV(text_id) {
       const d3 = require("d3");
-      d3.csv('cards.csv').then(function (data) {
-        data.forEach(function(d) {
-          d[text_id] = +d[text_id];
-        });
-        console.log(data[0]);
+      d3.csv('https://raw.githubusercontent.com/GarrettMFlynn/brainjam/master/src/assets/cards.csv').then(function (data) {
+        let row = Math.floor(Math.random() * data.length);
+        let choice = data[row][text_id]
+        console.log(data[row]);
+        console.log(choice)
+        document.getElementById(text_id).innerHTML = choice;
       });
-      console.log(text_id);
     }
   }
 }
-  // let data = csv.toObjects('@/assets/cards.csv');
-  // let row = Math.floor(Math.random() * length(data));
-  // let choice = data[row][text_id]
-  // document.getElementById(text_id).text(choice);
 
 </script>
 
