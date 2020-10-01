@@ -2,27 +2,35 @@
   <div>
     <div id="head">
       <h1>Brain Play in the Future</h1>
-      <p>#BrainJam 2021</p>
+      <p>#BCIGameJam 2021</p>
     </div>
     <p class="padded">
       Click the cards below to generate your prompt.
     </p>
+    <select name="modes"  id="modes" v-model="selected">
+      <option disabled value="">Please select one</option>
+      <option >The Thing from the Future</option>
+      <option >Futures Cone + Brain-Controlled Game</option> <!--value="cone-cone-cards"-->
+      <option>Brain-Controlled Future</option> <!--value="control-cards-cards"-->
+      <option>Futures Cone + Related to Brain-Controlled Games</option> <!--value="cone-cards-cone"-->
+      <option>Related to Brain-Controlled Games</option> <!--value="cards-cards-cone"-->
+    </select>
     <div id="card-holder">
-      <button class="card" style="background: lightskyblue" v-on:click="query('future')">
+      <button class="card" style="background: lightskyblue" v-on:click="queryCSV('future',{ selected })">
         <p>In a </p>
         <div class="break"/>
         <div class="blank"><p id='future'>&nbsp;</p></div>
         <div class="break"/>
         <p>future</p>
       </button>
-      <button class="card" style="background: lightcoral" v-on:click="query('thing')">
+      <button class="card" style="background: lightcoral" v-on:click="queryCSV('thing',{ selected })">
         <p>There is a</p>
         <div class="break"/>
         <div class="blank"><p id='thing'>&nbsp;</p></div>
         <div class="break"/>
         <p>&nbsp;</p>
       </button>
-      <button class="card" style="background: mediumpurple" v-on:click="query('theme')">
+      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('theme',{ selected })">
         <p >Related to</p>
         <div class="break"/>
         <div class="blank"><p id='theme'>&nbsp;</p></div>
@@ -53,20 +61,83 @@
 
 export default {
   name: 'HelloWorld',
+  el: '...',
+  data () {
+    return {
+      selected: 'Original Version',
+      html: 'Original Version'
+    }},
   props: {
-    msg: String
+    msg: String,
   },
   methods: {
-    query: function queryCSV(text_id) {
+    queryCSV(text_id,option) {
       const d3 = require("d3");
-      d3.csv('https://raw.githubusercontent.com/GarrettMFlynn/brainjam/master/src/assets/cards.csv').then(function (data) {
+      console.log(option.selected)
+      let file_id = ''
+      switch(option.selected) {
+        case 'Futures Cone + Brain-Controlled Game':
+          switch(text_id){
+            case 'future':
+              file_id = 'cone'
+              break
+            case 'thing':
+              file_id = 'cone'
+              break
+            case 'theme':
+              file_id = 'cards'
+              break
+          }
+          break;
+        case 'Brain-Controlled Future':
+          switch(text_id){
+            case 'future':
+              file_id = 'control'
+              break
+            case 'thing':
+              file_id = 'cards'
+              break
+            case 'theme':
+              file_id = 'cards'
+              break
+          }
+          break;
+        case 'Futures Cone + Related to Brain-Controlled Games':
+          switch(text_id){
+            case 'future':
+              file_id = 'cone'
+              break
+            case 'thing':
+              file_id = 'cards'
+              break
+            case 'theme':
+              file_id = 'cone'
+              break
+          }
+          break;
+        case 'Related to Brain-Controlled Games':
+          switch(text_id){
+            case 'future':
+              file_id = 'cards'
+              break
+            case 'thing':
+              file_id = 'cards'
+              break
+            case 'theme':
+              file_id = 'cone'
+              break
+          }
+          break;
+        default:
+          file_id = 'cards'
+      }
+      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/brainjam/master/src/assets/' + file_id + '.csv'
+      console.log(file)
+      d3.csv(file).then(function (data) {
         let row = Math.floor(Math.random() * data.length);
         let choice = data[row][text_id]
-        console.log(data[row]);
-        console.log(choice)
         document.getElementById(text_id).innerHTML = choice;
-      });
-    }
+      })},
   }
 }
 

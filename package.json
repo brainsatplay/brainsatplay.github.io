@@ -11,7 +11,9 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "d3": "^6.2.0",
-    "vue": "^3.0.0-0"
+    "jquery": "^3.5.1",
+    "vue": "^3.0.0-0",
+    "vue-select": "^3.10.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
