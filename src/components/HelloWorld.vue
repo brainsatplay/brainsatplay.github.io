@@ -29,6 +29,19 @@
         <p>What is it?</p>
       </button>
     </div>
+    <hr/>
+    <div id="examples">
+      <h1>Examples</h1>
+      <div class="example">
+        <h2>BRAINPONG</h2>
+        <img alt="Brain Pong" src="@/assets/BrainPong.jpg">
+        <p>A single player meditation game, where players
+          experience being the ball in a ping pong game
+          against themselves taking place inside their head.
+          The game exercises mindfulness, focus and getting into
+          a flow state.</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -113,6 +126,11 @@ button{
     vertical-align: middle;
     border-top: 2px solid black;
     border-bottom: 2px solid black;
+  }
+
+  .example{
+    width: 500px;
+    margin: 50px;
   }
 
 </style>
