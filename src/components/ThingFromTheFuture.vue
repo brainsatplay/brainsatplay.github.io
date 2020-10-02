@@ -3,41 +3,31 @@
     <label for="modes">Choose a card deck: </label>
     <select name="modes"  id="modes" v-model="selected">
       <option disabled value="">Please select one</option>
-      <option >Classic</option>
+      <option >The Thing from the Future</option>
+      <option >Futures Cone + Brain-Controlled Game</option>
+      <option>Brain-Controlled Future</option>
+      <option>Futures Cone + Related to Brain-Controlled Games</option>
+      <option>Related to Brain-Controlled Games</option>
     </select>
     <div id="card-holder">
-      <button class="card" style="background: lightskyblue" v-on:click="queryCSV('future-time',{ selected })">
+      <button class="card" style="background: lightskyblue" v-on:click="queryCSV('future',{ selected })">
         <p>In a </p>
         <div class="break"/>
-        <div class="blank"><p id='future-time'>&nbsp;</p></div>
+        <div class="blank"><p id='future'>&nbsp;</p></div>
         <div class="break"/>
         <p>future</p>
       </button>
-      <button class="card" style="background: lightcoral" v-on:click="queryCSV('conflict',{ selected })">
+      <button class="card" style="background: lightcoral" v-on:click="queryCSV('thing',{ selected })">
         <p>There is a</p>
         <div class="break"/>
-        <div class="blank"><p id='conflict'>&nbsp;</p></div>
+        <div class="blank"><p id='thing'>&nbsp;</p></div>
         <div class="break"/>
         <p>&nbsp;</p>
       </button>
-      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('players',{ selected })">
+      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('theme',{ selected })">
         <p >Related to</p>
         <div class="break"/>
-        <div class="blank"><p id='players'>&nbsp;</p></div>
-        <div class="break"/>
-        <p>What is it?</p>
-      </button>
-      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('motivation',{ selected })">
-        <p >Related to</p>
-        <div class="break"/>
-        <div class="blank"><p id='motivation'>&nbsp;</p></div>
-        <div class="break"/>
-        <p>What is it?</p>
-      </button>
-      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('location',{ selected })">
-        <p >Related to</p>
-        <div class="break"/>
-        <div class="blank"><p id='location'>&nbsp;</p></div>
+        <div class="blank"><p id='theme'>&nbsp;</p></div>
         <div class="break"/>
         <p>What is it?</p>
       </button>
@@ -66,39 +56,67 @@ export default {
       console.log(option.selected)
       let file_id = ''
       switch(option.selected) {
-        case 'Classic':
+        case 'Futures Cone + Brain-Controlled Game':
           switch(text_id){
             case 'future':
-              file_id = 'tgftf'
+              file_id = 'cone'
               break
-            case 'conflict':
-              file_id = 'tgftf'
+            case 'thing':
+              file_id = 'cone'
               break
-            case 'players':
-              file_id = 'tgftf'
+            case 'theme':
+              file_id = 'cards'
               break
-            case 'motivation':
-              file_id = 'tgftf'
+          }
+          break;
+        case 'Brain-Controlled Future':
+          switch(text_id){
+            case 'future':
+              file_id = 'control'
               break
-            case 'location':
-              file_id = 'tgftf'
+            case 'thing':
+              file_id = 'cards'
+              break
+            case 'theme':
+              file_id = 'cards'
+              break
+          }
+          break;
+        case 'Futures Cone + Related to Brain-Controlled Games':
+          switch(text_id){
+            case 'future':
+              file_id = 'cone'
+              break
+            case 'thing':
+              file_id = 'cards'
+              break
+            case 'theme':
+              file_id = 'cone'
+              break
+          }
+          break;
+        case 'Related to Brain-Controlled Games':
+          switch(text_id){
+            case 'future':
+              file_id = 'cards'
+              break
+            case 'thing':
+              file_id = 'cards'
+              break
+            case 'theme':
+              file_id = 'cone'
               break
           }
           break;
         default:
-          file_id = 'tgftf'
+          file_id = 'cards'
       }
       let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + '.csv'
       console.log(file)
       d3.csv(file).then(function (data) {
         let row = Math.floor(Math.random() * data.length);
-        let str = text_id.split('-');
-        console.log(str)
-        let choice = []
-        for (const col in str)
-          choice.push(data[row][col])
-        let output = choice.join(', ')
-        document.getElementById(text_id).innerHTML = output;
+        let choice = data[row][text_id]
+        document.getElementById(text_id).innerHTML = choice;
       })},
   }
 }
