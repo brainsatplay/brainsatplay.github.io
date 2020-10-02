@@ -5,39 +5,41 @@
       <option disabled value="">Please select one</option>
       <option >Classic</option>
     </select>
-    <div id="card-holder">
-      <button class="card" style="background: lightskyblue" v-on:click="queryCSV('future-time',{ selected })">
+    <div class="card-holder">
+      <button class="card" style="background: hsla(86, 53%, 47%, 1); border-color: hsla(95, 43%, 35%, 1);" v-on:click="queryCSV('future-time',{ selected })">
         <p>In a </p>
         <div class="break"/>
-        <div class="blank"><p id='future-time'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='future-time'>&nbsp;</p></div>
         <div class="break"/>
         <p>future</p>
       </button>
-      <button class="card" style="background: lightcoral" v-on:click="queryCSV('conflict',{ selected })">
+      <button class="card" style="background: hsla(353, 85%, 66%, 1); border-color: hsla(353, 79%, 37%, 1);" v-on:click="queryCSV('conflict',{ selected })">
         <p>There is a</p>
         <div class="break"/>
-        <div class="blank"><p id='conflict'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='conflict'>&nbsp;</p></div>
+        <div class="break"/>
+        <p>brain game</p>
+      </button>
+      <button class="card" style="background: hsla(299, 27%, 57%, 1); border-color: hsla(299, 27%, 37%, 1);" v-on:click="queryCSV('players',{ selected })">
+        <p >for</p>
+        <div class="break"/>
+        <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='players'>&nbsp;</p></div>
+        <div class="break"/>
+        <p>player[s]</p>
+      </button>
+    </div>
+    <div class="card-holder">
+      <button class="card" style="background: hsla(193, 100%, 43%, 1); border-color: hsla(194, 99%, 31%, 1);" v-on:click="queryCSV('motivation',{ selected })">
+        <p >which is played for</p>
+        <div class="break"/>
+        <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='motivation'>&nbsp;</p></div>
         <div class="break"/>
         <p>&nbsp;</p>
       </button>
-      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('players',{ selected })">
-        <p >Related to</p>
+      <button class="card" style="background: hsla(36, 100%, 50%, 1); border-color: hsla(36, 100%, 36%, 1);" v-on:click="queryCSV('location',{ selected })">
+        <p >&nbsp;</p>
         <div class="break"/>
-        <div class="blank"><p id='players'>&nbsp;</p></div>
-        <div class="break"/>
-        <p>What is it?</p>
-      </button>
-      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('motivation',{ selected })">
-        <p >Related to</p>
-        <div class="break"/>
-        <div class="blank"><p id='motivation'>&nbsp;</p></div>
-        <div class="break"/>
-        <p>What is it?</p>
-      </button>
-      <button class="card" style="background: mediumpurple" v-on:click="queryCSV('location',{ selected })">
-        <p >Related to</p>
-        <div class="break"/>
-        <div class="blank"><p id='location'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='location'>&nbsp;</p></div>
         <div class="break"/>
         <p>What is it?</p>
       </button>
@@ -118,9 +120,6 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-a {
-  color: #42b983;
-}
 
 p{
   width: 100%;
@@ -133,21 +132,23 @@ button{
   font-weight: 500;
 }
 
-#card-holder{
+.card-holder{
   display:flex;
   align-items: center;
   justify-content: center;
 }
 
 .card{
-  background: antiquewhite;
   display: flex;
   flex-wrap: wrap;
   margin: 25px;
   height: 250px;
   width: 200px;
   padding: 25px 0px;
-  border: 2px solid black;
+  border: 2px solid;
+  border-radius: 15px;
+  color: white;
+  font-weight: 500;
 }
 
 .break{
@@ -161,8 +162,7 @@ button{
     flex-grow: 1;
     display: table-cell;
     vertical-align: middle;
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
+    color: black;
   }
 
 </style>

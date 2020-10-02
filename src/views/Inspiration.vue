@@ -3,7 +3,7 @@
         <h1>The Game from the Future</h1>
         <p>A Brainstorming Game for the #BCIGameJam</p>
     </div>
-    <section>
+    <section id="tgftf">
         <GameFromTheFuture/>
     </section>
     <div class="head">
@@ -39,6 +39,12 @@
 </script>
 
 <style scoped>
+
+    #tgftf{
+        color: white;
+        background: black;
+    }
+
     .example{
         width: 100%;
     }

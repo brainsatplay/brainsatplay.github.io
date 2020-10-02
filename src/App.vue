@@ -9,6 +9,7 @@
 
 <style>
   body,html {margin: 0px;}
+
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -25,8 +26,13 @@
     color: white;
     padding: 25px;
   }
+
   section{
-    margin: 50px;
+    padding: 50px;
+  }
+
+  a {
+    color: hsla(193, 100%, 43%, 1);
   }
 
   #nav {
@@ -49,6 +55,6 @@
   }
 
   #nav a.router-link-exact-active {
-    color: #42b983;
+    color: hsla(193, 100%, 43%, 1);
   }
 </style>
