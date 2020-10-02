@@ -6,40 +6,40 @@
       <option >Classic</option>
     </select>
     <div class="card-holder">
-      <button class="card" style="background: hsla(86, 53%, 47%, 1); border-color: hsla(95, 43%, 35%, 1);" v-on:click="queryCSV('future-time',{ selected })">
+      <button class="card" style="background: hsla(86, 53%, 47%, 1); border-color: hsla(95, 43%, 35%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
         <p>In a </p>
         <div class="break"/>
-        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='future-time'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future-Time'>&nbsp;</p></div>
         <div class="break"/>
         <p>future</p>
       </button>
-      <button class="card" style="background: hsla(353, 85%, 66%, 1); border-color: hsla(353, 79%, 37%, 1);" v-on:click="queryCSV('conflict',{ selected })">
+      <button class="card" style="background: hsla(353, 85%, 66%, 1); border-color: hsla(353, 79%, 37%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
         <p>There is a</p>
         <div class="break"/>
-        <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='conflict'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
         <div class="break"/>
         <p>brain game</p>
       </button>
-      <button class="card" style="background: hsla(299, 27%, 57%, 1); border-color: hsla(299, 27%, 37%, 1);" v-on:click="queryCSV('players',{ selected })">
+      <button class="card" style="background: hsla(299, 27%, 57%, 1); border-color: hsla(299, 27%, 37%, 1);" v-on:click="queryCSV('Players',{ selected })">
         <p >for</p>
         <div class="break"/>
-        <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='players'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
         <div class="break"/>
         <p>player[s]</p>
       </button>
     </div>
     <div class="card-holder">
-      <button class="card" style="background: hsla(193, 100%, 43%, 1); border-color: hsla(194, 99%, 31%, 1);" v-on:click="queryCSV('motivation',{ selected })">
+      <button class="card" style="background: hsla(193, 100%, 43%, 1); border-color: hsla(194, 99%, 31%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
         <p >which is played for</p>
         <div class="break"/>
-        <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='motivation'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
         <div class="break"/>
         <p>&nbsp;</p>
       </button>
-      <button class="card" style="background: hsla(36, 100%, 50%, 1); border-color: hsla(36, 100%, 36%, 1);" v-on:click="queryCSV('location',{ selected })">
+      <button class="card" style="background: hsla(36, 100%, 50%, 1); border-color: hsla(36, 100%, 36%, 1);" v-on:click="queryCSV('Location',{ selected })">
         <p >&nbsp;</p>
         <div class="break"/>
-        <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='location'>&nbsp;</p></div>
+        <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
         <div class="break"/>
         <p>What is it?</p>
       </button>
@@ -97,9 +97,17 @@ export default {
         let str = text_id.split('-');
         console.log(str)
         let choice = []
-        for (const col in str)
-          choice.push(data[row][col])
-        let output = choice.join(', ')
+        let output
+        if (choice.length > 1){
+          for (const col in str)
+            choice.push(data[row][col])
+            console.log(choice)
+          output = choice.join(', ')
+        } else {
+          output = data[row][str[0]]
+        }
+        console.log(output)
+        console.log(text_id)
         document.getElementById(text_id).innerHTML = output;
       })},
   }
