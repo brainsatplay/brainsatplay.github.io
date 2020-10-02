@@ -56,12 +56,14 @@
     .example{
         width: 75%;
         display: flex;
+        flex-wrap:wrap-reverse;
         align-items: center;
         justify-content: center;
     }
 
     .example_text{
         margin: 50px;
+        width: 400px;
         text-align: left
     }
 </style>

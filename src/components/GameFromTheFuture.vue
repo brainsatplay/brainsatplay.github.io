@@ -1,15 +1,16 @@
 <template>
   <div>
     <div id="selections">
-      <div id="language_select">
-        <label for="languages">Choose a language</label>
-        <div class="break"></div>
-        <select name="languages"  id="languages" v-model="selected" @change="chooseLanguage({ selected })">
-          <option disabled value="">Please select one</option>
-          <option >English</option>
-          <option >Greek</option>
-        </select>
-      </div>
+<!--      <div id="language_select">-->
+<!--        <label for="languages">Choose a language</label>-->
+<!--        <div class="break"></div>-->
+<!--        <select name="languages"  id="languages" v-model="selected" @change="chooseLanguage({ selected })">-->
+<!--          <option disabled value="">Please select one</option>-->
+<!--          <option >English</option>-->
+<!--          <option >Greek</option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--      <div class="break"></div>-->
 <!--      <div id="selector">-->
 <!--        <label for="modes">Choose a card deck</label>-->
 <!--    <div class="break"></div>-->
@@ -22,47 +23,47 @@
     </div>
     <div class="card-holder">
       <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
-        <h2 class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h2>
+        <h2 id="Future0" class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h2>
         <div class="card-text">
-        <p id="Future0">In a</p>
+        <p id="Future1">In a</p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
-        <p id="Future1">future</p>
+        <p id="Future2">future</p>
           <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
         </div>
       </button>
       <button class="card" style="background: hsla(338, 85%, 43%, 1); border-color: hsla(355, 87%, 20%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
-        <h2 class ='card-type' style="color: hsla(355, 87%, 20%, 1);" >Conflict</h2>
+        <h2 id="Conflict0" class ='card-type' style="color: hsla(355, 87%, 20%, 1);" >Conflict</h2>
         <div class="card-text">
-        <p id="Conflict0">There is a</p>
+        <p id="Conflict1">There is a</p>
         <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
-        <p id="Conflict1">brain game</p>
+        <p id="Conflict2">brain game</p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(297, 27%, 46%, 1); border-color: hsla(296, 29%, 20%, 1);" v-on:click="queryCSV('Players',{ selected })">
-        <h2 class ='card-type' style="color: hsla(296, 29%, 20%, 1);" >Players</h2>
+        <h2 id="Players0" class ='card-type' style="color: hsla(296, 29%, 20%, 1);" >Players</h2>
         <div class="card-text">
-        <p id="Players0">for</p>
+        <p id="Players1">for</p>
         <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
-        <p id="Players1">players</p>
+        <p id="Players2">players</p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(193, 100%, 38%, 1); border-color: hsla(194, 100%, 20%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
-        <h2 class ='card-type' style="color: hsla(194, 100%, 20%, 1);" >Motivation</h2>
+        <h2 id="Motivation0" class ='card-type' style="color: hsla(194, 100%, 20%, 1);" >Motivation</h2>
         <div class="card-text">
-        <p id="Motivation0">which is played for</p>
+        <p id="Motivation1">which is played for</p>
         <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
-          <p id="Motivation1">&nbsp;</p>
+          <p id="Motivation2">&nbsp;</p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(35, 100%, 45%, 1); border-color: hsla(35, 98%, 20%, 1);" v-on:click="queryCSV('Location',{ selected })">
-        <h2 class ='card-type' style="color: hsla(35, 98%, 20%, 1);" >Location</h2>
+        <h2 id="Location0" class ='card-type' style="color: hsla(35, 98%, 20%, 1);" >Location</h2>
         <div class="card-text">
-        <p id="Location0">&nbsp;</p>
+        <p id="Location1">&nbsp;</p>
         <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
-        <p id="Location1">What is it?</p>
+        <p id="Location2">What is it?</p>
           <p >&nbsp;</p>
         </div>
       </button>
@@ -80,7 +81,7 @@ export default {
   el: '...',
   data () {
     return {
-      selected: '',
+      selected: 'English',
     }},
   props: {
     msg: String,
@@ -93,20 +94,19 @@ export default {
       }
     },
     chooseLanguage(language) {
-      console.log(language)
       const d3 = require("d3");
       let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/interface' + language.selected + '.csv'
       d3.csv(file).then(function (data) {
         let cols = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
         for (const col in cols) {
-          for (const row in data) {
-            console.log(cols[col] + col)
-            document.getElementById(cols[col] + col).innerHTML = data[row][cols[col]];
+          for (let row=0; row < data.length; row++) {
+            document.getElementById(cols[col] + row).innerHTML = data[row][cols[col]];
           }
         }})
     },
     queryCSV(text_id,option) {
       const d3 = require("d3");
+      console.log(option)
       let file_id = ''
       switch(option.selected) {
         case 'Classic':
@@ -131,7 +131,7 @@ export default {
         default:
           file_id = 'tgftf';
       }
-      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + '.csv'
+      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + option.selected + '.csv'
       d3.csv(file).then(function (data) {
         let flag = true;
         let inner_flag;
@@ -161,9 +161,9 @@ export default {
                 flag = false;
                 document.getElementById(text_id).innerHTML = output;
                 if (text_id == 'Players' && output == 'one'){
-                  document.getElementById('players2').innerHTML = 'player';
+                  document.getElementById('Players2').innerHTML = 'player';
                 } else{
-                  document.getElementById('players2').innerHTML = 'players';
+                  document.getElementById('Players2').innerHTML = 'players';
                 }
               }
           }
@@ -202,18 +202,16 @@ button {
 
 #selections{
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
 
-#selector{
-  width: 250px;
-}
-
 #generate{
-  padding: 20px;
-  width: 250px;
+  padding: 10px;
+  width: 200px;
   border-radius: 10px;
+  /*margin-top: 25px;*/
 }
 
 #Time{
@@ -237,6 +235,7 @@ button {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  margin: 50px 0px;
 }
 
 .card{
