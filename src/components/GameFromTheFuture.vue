@@ -7,41 +7,50 @@
     </select>
     <div class="card-holder">
       <button class="card" style="background: hsla(86, 53%, 47%, 1); border-color: hsla(95, 43%, 35%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
+        <h2 class ='card-type' style="color: hsla(95, 43%, 35%, 1);" >Future</h2>
+        <div class="card-text">
         <p>In a </p>
-        <div class="break"/>
-        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future-Time'>&nbsp;</p></div>
-        <div class="break"/>
+        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><h1 id='Future'>&nbsp;</h1></div>
         <p>future</p>
+        </div>
+       <p id='Time'>&nbsp;</p>
       </button>
       <button class="card" style="background: hsla(353, 85%, 66%, 1); border-color: hsla(353, 79%, 37%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
+        <h2 class ='card-type' style="color: hsla(353, 79%, 37%, 1);" >Conflict</h2>
+        <div class="card-text">
         <p>There is a</p>
-        <div class="break"/>
-        <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
-        <div class="break"/>
+        <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><h1 id='Conflict'>&nbsp;</h1></div>
         <p>brain game</p>
+        </div>
+        <p >&nbsp;</p>
       </button>
       <button class="card" style="background: hsla(299, 27%, 57%, 1); border-color: hsla(299, 27%, 37%, 1);" v-on:click="queryCSV('Players',{ selected })">
+        <h2 class ='card-type' style="color: hsla(299, 27%, 37%, 1);" >Players</h2>
+        <div class="card-text">
         <p >for</p>
-        <div class="break"/>
-        <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
-        <div class="break"/>
+        <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><h1 id='Players'>&nbsp;</h1></div>
         <p>player[s]</p>
+        </div>
+        <p >&nbsp;</p>
       </button>
     </div>
     <div class="card-holder">
       <button class="card" style="background: hsla(193, 100%, 43%, 1); border-color: hsla(194, 99%, 31%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
+        <h2 class ='card-type' style="color: hsla(194, 99%, 31%, 1);" >Motivation</h2>
+        <div class="card-text">
         <p >which is played for</p>
-        <div class="break"/>
-        <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
-        <div class="break"/>
-        <p>&nbsp;</p>
+        <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><h1 id='Motivation'>&nbsp;</h1></div>
+        </div>
+        <p >&nbsp;</p>
       </button>
       <button class="card" style="background: hsla(36, 100%, 50%, 1); border-color: hsla(36, 100%, 36%, 1);" v-on:click="queryCSV('Location',{ selected })">
+        <h2 class ='card-type' style="color: hsla(36, 100%, 36%, 1);" >Location</h2>
+        <div class="card-text">
         <p >&nbsp;</p>
-        <div class="break"/>
-        <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
-        <div class="break"/>
+        <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><h1 id='Location'>&nbsp;</h1></div>
         <p>What is it?</p>
+        </div>
+        <p >&nbsp;</p>
       </button>
     </div>
     <div>
@@ -65,50 +74,63 @@ export default {
   methods: {
     queryCSV(text_id,option) {
       const d3 = require("d3");
-      console.log(option.selected)
       let file_id = ''
       switch(option.selected) {
         case 'Classic':
           switch(text_id){
-            case 'future':
-              file_id = 'tgftf'
-              break
-            case 'conflict':
-              file_id = 'tgftf'
-              break
-            case 'players':
-              file_id = 'tgftf'
-              break
-            case 'motivation':
-              file_id = 'tgftf'
-              break
-            case 'location':
-              file_id = 'tgftf'
-              break
+            case 'Future-Time':
+              file_id = 'tgftf';
+              break;
+            case 'Conflict':
+              file_id = 'tgftf';
+              break;
+            case 'Players':
+              file_id = 'tgftf';
+              break;
+            case 'Motivation':
+              file_id = 'tgftf';
+              break;
+            case 'Location':
+              file_id = 'tgftf';
+              break;
           }
           break;
         default:
-          file_id = 'tgftf'
+          file_id = 'tgftf';
       }
       let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + '.csv'
       console.log(file)
       d3.csv(file).then(function (data) {
-        let row = Math.floor(Math.random() * data.length);
+        let flag = true;
+        let inner_flag;
+        let row;
         let str = text_id.split('-');
-        console.log(str)
-        let choice = []
-        let output
-        if (choice.length > 1){
-          for (const col in str)
-            choice.push(data[row][col])
-            console.log(choice)
-          output = choice.join(', ')
-        } else {
-          output = data[row][str[0]]
+        let output;
+          if (str.length > 1) {
+            for (const col in str) {
+              inner_flag = true;
+              while (inner_flag) {
+                row = Math.floor(Math.random() * data.length);
+                output = data[row][str[col]];
+                if (output != '') {
+                  inner_flag = false;
+                  if (str[col] == 'Time'){
+                    output += ' from now'
+                  }
+                  document.getElementById(str[col]).innerHTML = output;
+                }
+              }
+            }
+          } else {
+            while (flag) {
+            row = Math.floor(Math.random() * data.length);
+            output = data[row][str[0]]
+              if (output != '') {
+                flag = false;
+                document.getElementById(text_id).innerHTML = output;
+              }
+          }
         }
-        console.log(output)
-        console.log(text_id)
-        document.getElementById(text_id).innerHTML = output;
       })},
   }
 }
@@ -117,9 +139,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
+  h2{
+    width: 100%;
+    height: 5px;
+  }
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -133,11 +157,25 @@ p{
   width: 100%;
 }
 
-button{
+button {
   font-family: Montserrat, sans-serif;
   text-align: center;
-  color: #222222;
   font-weight: 500;
+}
+
+#Time{
+  font-weight: bold;
+}
+
+.card-type{
+  text-transform: uppercase;
+  color: #222222;
+}
+
+.card-text{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .card-holder{
@@ -152,7 +190,7 @@ button{
   margin: 25px;
   height: 250px;
   width: 200px;
-  padding: 25px 0px;
+  padding: 0px 0px;
   border: 2px solid;
   border-radius: 15px;
   color: white;
@@ -165,12 +203,11 @@ button{
 }
 
   .blank{
-    height: 50px;
     background: white;
     flex-grow: 1;
-    display: table-cell;
-    vertical-align: middle;
     color: black;
+    display: inline-block;
+    height: 100%;
   }
 
 </style>
