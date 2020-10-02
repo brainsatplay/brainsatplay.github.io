@@ -12,50 +12,50 @@
     <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
     </div>
     <div class="card-holder">
-      <button class="card" style="background: hsla(86, 53%, 47%, 1); border-color: hsla(95, 43%, 35%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
-        <h2 class ='card-type' style="color: hsla(95, 43%, 35%, 1);" >Future</h2>
+      <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
+        <h2 class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h2>
         <div class="card-text">
-        <p>In a </p>
-        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><h1 id='Future'>&nbsp;</h1></div>
+        <p>In a</p>
+        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
         <p>future</p>
+          <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
         </div>
-        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
       </button>
-      <button class="card" style="background: hsla(353, 85%, 66%, 1); border-color: hsla(353, 79%, 37%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
-        <h2 class ='card-type' style="color: hsla(353, 79%, 37%, 1);" >Conflict</h2>
+      <button class="card" style="background: hsla(338, 85%, 43%, 1); border-color: hsla(355, 87%, 20%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
+        <h2 class ='card-type' style="color: hsla(355, 87%, 20%, 1);" >Conflict</h2>
         <div class="card-text">
         <p>There is a</p>
-        <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><h1 id='Conflict'>&nbsp;</h1></div>
+        <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
         <p>brain game</p>
-        </div>
-        <p >&nbsp;</p>
-      </button>
-      <button class="card" style="background: hsla(299, 27%, 57%, 1); border-color: hsla(299, 27%, 37%, 1);" v-on:click="queryCSV('Players',{ selected })">
-        <h2 class ='card-type' style="color: hsla(299, 27%, 37%, 1);" >Players</h2>
-        <div class="card-text">
-        <p >for</p>
-        <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><h1 id='Players'>&nbsp;</h1></div>
-        <p id="player_text">players</p>
-        </div>
-        <p >&nbsp;</p>
-      </button>
-      <button class="card" style="background: hsla(193, 100%, 43%, 1); border-color: hsla(194, 99%, 31%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
-        <h2 class ='card-type' style="color: hsla(194, 99%, 31%, 1);" >Motivation</h2>
-        <div class="card-text">
-        <p >which is played for</p>
-        <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><h1 id='Motivation'>&nbsp;</h1></div>
           <p >&nbsp;</p>
         </div>
-        <p >&nbsp;</p>
       </button>
-      <button class="card" style="background: hsla(36, 100%, 50%, 1); border-color: hsla(36, 100%, 36%, 1);" v-on:click="queryCSV('Location',{ selected })">
-        <h2 class ='card-type' style="color: hsla(36, 100%, 36%, 1);" >Location</h2>
+      <button class="card" style="background: hsla(297, 27%, 46%, 1); border-color: hsla(296, 29%, 20%, 1);" v-on:click="queryCSV('Players',{ selected })">
+        <h2 class ='card-type' style="color: hsla(296, 29%, 20%, 1);" >Players</h2>
+        <div class="card-text">
+        <p >for</p>
+        <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
+        <p id="player_text">players</p>
+          <p >&nbsp;</p>
+        </div>
+      </button>
+      <button class="card" style="background: hsla(193, 100%, 38%, 1); border-color: hsla(194, 100%, 20%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
+        <h2 class ='card-type' style="color: hsla(194, 100%, 20%, 1);" >Motivation</h2>
+        <div class="card-text">
+        <p >which is played for</p>
+        <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
+          <p >&nbsp;</p>
+          <p >&nbsp;</p>
+        </div>
+      </button>
+      <button class="card" style="background: hsla(35, 100%, 45%, 1); border-color: hsla(35, 98%, 20%, 1);" v-on:click="queryCSV('Location',{ selected })">
+        <h2 class ='card-type' style="color: hsla(35, 98%, 20%, 1);" >Location</h2>
         <div class="card-text">
         <p >&nbsp;</p>
-        <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><h1 id='Location'>&nbsp;</h1></div>
+        <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
         <p>What is it?</p>
+          <p >&nbsp;</p>
         </div>
-        <p >&nbsp;</p>
       </button>
     </div>
     <div>
@@ -195,10 +195,9 @@ button {
 }
 
 #Time{
-  font-weight: bold;
   color: #222222;
-  font-size: 13px;
-}
+  font-size: 15px;
+ }
 
 .card-type{
   text-transform: uppercase;
@@ -222,7 +221,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   margin: 25px;
-  height: 250px;
+  height: 300px;
   width: 200px;
   padding: 0px 0px;
   border: 2px solid;
@@ -241,8 +240,7 @@ button {
     background: white;
     flex-grow: 1;
     color: black;
-    display: inline-block;
-    height: 100%;
+    min-height: 50px;
   }
 
 </style>
