@@ -22,47 +22,47 @@
     </div>
     <div class="card-holder">
       <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
-        <h2 class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >μέλλον</h2>
+        <h2 class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h2>
         <div class="card-text">
-        <p>In a</p>
+        <p id="Future0">In a</p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
-        <p>μέλλον</p>
+        <p id="Future1">future</p>
           <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
         </div>
       </button>
       <button class="card" style="background: hsla(338, 85%, 43%, 1); border-color: hsla(355, 87%, 20%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
         <h2 class ='card-type' style="color: hsla(355, 87%, 20%, 1);" >Conflict</h2>
         <div class="card-text">
-        <p>There is a</p>
+        <p id="Conflict0">There is a</p>
         <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
-        <p>brain game</p>
+        <p id="Conflict1">brain game</p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(297, 27%, 46%, 1); border-color: hsla(296, 29%, 20%, 1);" v-on:click="queryCSV('Players',{ selected })">
         <h2 class ='card-type' style="color: hsla(296, 29%, 20%, 1);" >Players</h2>
         <div class="card-text">
-        <p >for</p>
+        <p id="Players0">for</p>
         <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
-        <p id="player_text">players</p>
+        <p id="Players1">players</p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(193, 100%, 38%, 1); border-color: hsla(194, 100%, 20%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
         <h2 class ='card-type' style="color: hsla(194, 100%, 20%, 1);" >Motivation</h2>
         <div class="card-text">
-        <p >which is played for</p>
+        <p id="Motivation0">which is played for</p>
         <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
-          <p >&nbsp;</p>
+          <p id="Motivation1">&nbsp;</p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(35, 100%, 45%, 1); border-color: hsla(35, 98%, 20%, 1);" v-on:click="queryCSV('Location',{ selected })">
         <h2 class ='card-type' style="color: hsla(35, 98%, 20%, 1);" >Location</h2>
         <div class="card-text">
-        <p >&nbsp;</p>
+        <p id="Location0">&nbsp;</p>
         <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
-        <p>What is it?</p>
+        <p id="Location1">What is it?</p>
           <p >&nbsp;</p>
         </div>
       </button>
@@ -100,6 +100,7 @@ export default {
         let cols = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
         for (const col in cols) {
           for (const row in data) {
+            console.log(cols[col] + col)
             document.getElementById(cols[col] + col).innerHTML = data[row][cols[col]];
           }
         }})
@@ -160,9 +161,9 @@ export default {
                 flag = false;
                 document.getElementById(text_id).innerHTML = output;
                 if (text_id == 'Players' && output == 'one'){
-                  document.getElementById('player_text').innerHTML = 'player';
+                  document.getElementById('players2').innerHTML = 'player';
                 } else{
-                  document.getElementById('player_text').innerHTML = 'players';
+                  document.getElementById('players2').innerHTML = 'players';
                 }
               }
           }
