@@ -1,23 +1,32 @@
 <template>
   <div>
     <div id="selections">
-      <div id="selector">
-        <label for="modes">Choose a card deck</label>
-    <div class="break"></div>
-      <select name="modes"  id="modes" v-model="selected">
-      <option disabled value="">Please select one</option>
-      <option >Classic</option>
-    </select>
+      <div id="language_select">
+        <label for="languages">Choose a language</label>
+        <div class="break"></div>
+        <select name="languages"  id="languages" v-model="selected" @change="chooseLanguage({ selected })">
+          <option disabled value="">Please select one</option>
+          <option >English</option>
+          <option >Greek</option>
+        </select>
       </div>
+<!--      <div id="selector">-->
+<!--        <label for="modes">Choose a card deck</label>-->
+<!--    <div class="break"></div>-->
+<!--      <select name="modes"  id="modes" v-model="selected">-->
+<!--      <option disabled value="">Please select one</option>-->
+<!--      <option >Classic</option>-->
+<!--    </select>-->
+<!--      </div>-->
     <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
     </div>
     <div class="card-holder">
       <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
-        <h2 class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h2>
+        <h2 class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >μέλλον</h2>
         <div class="card-text">
         <p>In a</p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
-        <p>future</p>
+        <p>μέλλον</p>
           <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
         </div>
       </button>
@@ -71,7 +80,7 @@ export default {
   el: '...',
   data () {
     return {
-      selected: 'Original Version',
+      selected: '',
     }},
   props: {
     msg: String,
@@ -82,6 +91,18 @@ export default {
       for (const ind in all) {
         this.queryCSV(all[ind],option)
       }
+    },
+    chooseLanguage(language) {
+      console.log(language)
+      const d3 = require("d3");
+      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/interface' + language.selected + '.csv'
+      d3.csv(file).then(function (data) {
+        let cols = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
+        for (const col in cols) {
+          for (const row in data) {
+            document.getElementById(cols[col] + col).innerHTML = data[row][cols[col]];
+          }
+        }})
     },
     queryCSV(text_id,option) {
       const d3 = require("d3");

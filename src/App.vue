@@ -22,7 +22,7 @@
   }
 
   .head{
-    background:black;
+    background:#111111;
     color: white;
     padding: 25px;
   }

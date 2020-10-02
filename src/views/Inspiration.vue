@@ -12,15 +12,17 @@
     </div>
     <section>
     <div id="examples">
-        <h1>Examples</h1>
         <div class="example">
+            <div class="example_text">
+                <h2>BRAINPONG</h2>
+                <h3>Dimitris Grammenos</h3>
+                <p>A single player meditation game, where players
+                    experience being the ball in a ping pong game
+                    against themselves taking place inside their head.
+                    The game exercises mindfulness, focus and getting into
+                    a flow state.</p>
+            </div>
             <img alt="Brain Pong" src="@/assets/BrainPong.jpg">
-            <p><strong>BRAINPONG</strong> | Dimitris Grammenos</p>
-            <p>A single player meditation game, where players
-                experience being the ball in a ping pong game
-                against themselves taking place inside their head.
-                The game exercises mindfulness, focus and getting into
-                a flow state.</p>
         </div>
     </div>
     </section>
@@ -40,12 +42,26 @@
 
 <style scoped>
 
-    #tgftf{
+    section{
         color: white;
         background: black;
     }
 
+    #examples{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .example{
-        width: 100%;
+        width: 75%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .example_text{
+        margin: 50px;
+        text-align: left
     }
 </style>
