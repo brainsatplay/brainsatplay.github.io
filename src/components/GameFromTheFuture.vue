@@ -1,10 +1,16 @@
 <template>
   <div>
-    <label for="modes">Choose a card deck: </label>
-    <select name="modes"  id="modes" v-model="selected">
+    <div id="selections">
+      <div id="selector">
+        <label for="modes">Choose a card deck</label>
+    <div class="break"></div>
+      <select name="modes"  id="modes" v-model="selected">
       <option disabled value="">Please select one</option>
       <option >Classic</option>
     </select>
+      </div>
+    <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
+    </div>
     <div class="card-holder">
       <button class="card" style="background: hsla(86, 53%, 47%, 1); border-color: hsla(95, 43%, 35%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
         <h2 class ='card-type' style="color: hsla(95, 43%, 35%, 1);" >Future</h2>
@@ -13,7 +19,7 @@
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><h1 id='Future'>&nbsp;</h1></div>
         <p>future</p>
         </div>
-       <p id='Time'>&nbsp;</p>
+        <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
       </button>
       <button class="card" style="background: hsla(353, 85%, 66%, 1); border-color: hsla(353, 79%, 37%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
         <h2 class ='card-type' style="color: hsla(353, 79%, 37%, 1);" >Conflict</h2>
@@ -29,17 +35,16 @@
         <div class="card-text">
         <p >for</p>
         <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><h1 id='Players'>&nbsp;</h1></div>
-        <p>player[s]</p>
+        <p id="player_text">players</p>
         </div>
         <p >&nbsp;</p>
       </button>
-    </div>
-    <div class="card-holder">
       <button class="card" style="background: hsla(193, 100%, 43%, 1); border-color: hsla(194, 99%, 31%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
         <h2 class ='card-type' style="color: hsla(194, 99%, 31%, 1);" >Motivation</h2>
         <div class="card-text">
         <p >which is played for</p>
         <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><h1 id='Motivation'>&nbsp;</h1></div>
+          <p >&nbsp;</p>
         </div>
         <p >&nbsp;</p>
       </button>
@@ -72,6 +77,12 @@ export default {
     msg: String,
   },
   methods: {
+    allQueries(option){
+      let all = ['Future-Time','Conflict','Players','Motivation','Location']
+      for (const ind in all) {
+        this.queryCSV(all[ind],option)
+      }
+    },
     queryCSV(text_id,option) {
       const d3 = require("d3");
       let file_id = ''
@@ -99,7 +110,6 @@ export default {
           file_id = 'tgftf';
       }
       let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + '.csv'
-      console.log(file)
       d3.csv(file).then(function (data) {
         let flag = true;
         let inner_flag;
@@ -128,6 +138,11 @@ export default {
               if (output != '') {
                 flag = false;
                 document.getElementById(text_id).innerHTML = output;
+                if (text_id == 'Players' && output == 'one'){
+                  document.getElementById('player_text').innerHTML = 'player';
+                } else{
+                  document.getElementById('player_text').innerHTML = 'players';
+                }
               }
           }
         }
@@ -143,7 +158,6 @@ export default {
     width: 100%;
     height: 5px;
   }
-
 ul {
   list-style-type: none;
   padding: 0;
@@ -155,6 +169,7 @@ li {
 
 p{
   width: 100%;
+  font-size: 17px;
 }
 
 button {
@@ -163,8 +178,26 @@ button {
   font-weight: 500;
 }
 
+#selections{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#selector{
+  width: 250px;
+}
+
+#generate{
+  padding: 20px;
+  width: 250px;
+  border-radius: 10px;
+}
+
 #Time{
   font-weight: bold;
+  color: #222222;
+  font-size: 13px;
 }
 
 .card-type{
@@ -180,6 +213,7 @@ button {
 
 .card-holder{
   display:flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
@@ -195,6 +229,7 @@ button {
   border-radius: 15px;
   color: white;
   font-weight: 500;
+  overflow: hidden;
 }
 
 .break{
