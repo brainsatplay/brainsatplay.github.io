@@ -1,42 +1,41 @@
 ﻿Future,Time,Conflict,Players,Motivation,Location
-a few years,a few years,competitive (1),one,fun,at home
-a decade,a decade,cooperative (1),two,thrill,in a stadium
-a generation,a generation,conflict-free (1),two to four,learning,in a lab
-two generations,two generations,semi-cooperative (1),up to eight,fame,on the move
-a century,a century,,a small group of,money,outdoors
-a millennium,a millennium,,teams of,survival,in a pub
-,,,a crowd of,enlightenment,in a spaceship
-,,,an unlimited number of,therapy,in space
-,,,,rehabilitation,in vehicles
-,,,,socializing,anywhere
-,,,,role-playing,in a field
-,,,,escapism,in a theater
-,,,,discovery,on the street
-,,,,challenge,in a cave
-,,,,power,in the city
-,,,,mastery,on a roof
-,,,,leisure,in a plane
-,,,,exercise,at the office
-,,,,mental stimulation,in a warehouse
-,,,,meditation,underwater
-,,,,mindfulness,on a boat
-,,,,empathy,on a bike
+beautiful,a few years,competitive (6),one (2),fun,at home
+better,a decade,cooperative (2),two (6),thrill,in a stadium
+bizarre,a generation,conflict-free,two to four (4),learning,in a lab
+bright,two generations,semi-cooperative,up to  eight,fame,on the move
+brilliant,a century,,a small group of,money,outdoors
+depressing,a millennium,,teams of (4),survival,in a pub
+desirable,,,a crowd of,enlightenment,in a spaceship
+green,,,an unlimited number of,therapy,in space
+hilarious,,,,rehabilitation,in vehicles
+horrible,,,,socializing,anywhere
+happy,,,,role-playing,in a field
+dark,,,,escapism,in a theater
+playful,,,,discovery,on the street
+peaceful,,,,challenge,in a cave
+sad,,,,power,in the city
+scary,,,,mastery,on a roof
+selfish,,,,leisure,in a plane
+wise,,,,exercise,at the office
+creative,,,,mental stimulation,in a warehouse
+utopian,,,,meditation,underwater
+post-apocalyptic,,,,mindfulness,on a boat
+undesirable,,,,empathy,on a bike
 ,,,,pain relief,on a skateboard
 ,,,,making friends,in the sea
 ,,,,work,In a special room
 ,,,,popularity,in shops
-,,,,religion,in restaurants
-,,,,bonding,at fun parks
-,,,,art,in arcade rooms
-,,,,celebrating,on TV
-,,,,laughs,on the Internet
-,,,,staying fit,at parties
-,,,,adventure,at playgrounds
-,,,,health,in a submarine
-,,,,food,in the wild
-,,,,environmental protection,at public spaces
-,,,,inspiration,at work
-,,,,hope,
+,,,,bonding,in restaurants
+,,,,art,at fun parks
+,,,,celebrating,in arcade rooms
+,,,,laughs,on TV
+,,,,staying fit,on the Internet
+,,,,adventure,at parties
+,,,,health,at playgrounds
+,,,,food,in a submarine
+,,,,environmental protection,in the wild
+,,,,inspiration,at public spaces
+,,,,hope,at work
 ,,,,relaxing,
 ,,,,knowledge,
 ,,,,skills,
