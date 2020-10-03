@@ -35,7 +35,7 @@
   h3{
     font-size: 20px;
     width: 100%;
-    margin-bottom: 0px;
+    margin: 0px;
   }
 
   .head{

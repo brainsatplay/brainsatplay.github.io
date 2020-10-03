@@ -106,6 +106,7 @@ export default {
             document.getElementById(cols[col] + row).innerHTML = data[row][cols[col]];
           }
         }})
+      this.allQueries(language)
     },
     queryCSV(text_id,option) {
       const d3 = require("d3");
@@ -215,7 +216,8 @@ export default {
               }
           }
         }
-      })},
+      })
+    },
   }
 }
 
@@ -276,12 +278,14 @@ button {
 .card-type{
   text-transform: uppercase;
   color: #222222;
+
 }
 
 .card-text{
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  height: 200px;
 }
 
 .card-holder{
@@ -292,8 +296,6 @@ button {
 }
 
 .card{
-  display: flex;
-  flex-wrap: wrap;
   margin: 25px;
   height: 300px;
   width: 200px;
