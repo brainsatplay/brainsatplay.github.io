@@ -16,11 +16,8 @@
             <div class="example_text">
                 <h2>BRAINPONG</h2>
                 <h3>Dimitris Grammenos</h3>
-                <p>A single player meditation game, where players
-                    experience being the ball in a ping pong game
-                    against themselves taking place inside their head.
-                    The game exercises mindfulness, focus and getting into
-                    a flow state.</p>
+                <p class="prompt">In a <strong>peaceful</strong> future <strong>a generation from now</strong>, there is a <strong>conflict-free</strong> BCI game for <strong>one</strong> player which is played for <strong>mindfulness</strong> <strong>at home</strong>.</p>
+                <p>BRAINPONG is meditation game, where players experience being the ball in a ping pong game against themselves taking place inside their head. The game exercises mindfulness, focus and getting into a flow state.</p>
             </div>
             <img alt="Brain Pong" src="@/assets/BrainPong.jpg">
         </div>
@@ -36,7 +33,7 @@
         name: 'Home',
         components: {
             GameFromTheFuture
-        }
+        },
     }
 </script>
 
@@ -65,5 +62,11 @@
         margin: 50px;
         width: 400px;
         text-align: left
+    }
+
+    .prompt{
+        border-left: 2px solid #222222;
+        margin: 20px;
+        padding: 20px;
     }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div id="game">
       <div>
-      <h2>The Game from the Future</h2>
+      <h2 id="Name0"></h2>
       </div>
-    <p>Design a brain-controlled game from the future</p>
+    <p id="Description0"></p>
       <div id="selections">
       <div id="language_select">
         <label for="languages">Choose a language</label>
@@ -11,7 +11,7 @@
         <select name="languages"  id="languages" v-model="selected" @change="chooseLanguage({ selected })">
           <option disabled value="">Please select one</option>
           <option >English</option>
-          <option >Greek</option>
+          <option >Ελληνικά</option>
         </select>
       </div>
 <!--      <div class="break"></div>-->
@@ -27,47 +27,47 @@
     <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
     <div class="card-holder">
       <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
-        <h3 id="Future0" class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h3>
+        <h3 id="Future0" class ='card-type' style="color: hsla(99, 39%, 20%, 1);" ></h3>
         <div class="card-text">
-        <p id="Future1">In a</p>
+        <p id="Future1"></p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
-        <p id="Future2">future</p>
+        <p id="Future2"></p>
           <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
         </div>
       </button>
       <button class="card" style="background: hsla(338, 85%, 43%, 1); border-color: hsla(355, 87%, 20%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
-        <h3 id="Conflict0" class ='card-type' style="color: hsla(355, 87%, 20%, 1);" >Conflict</h3>
+        <h3 id="Conflict0" class ='card-type' style="color: hsla(355, 87%, 20%, 1);" ></h3>
         <div class="card-text">
-        <p id="Conflict1">There is a</p>
+        <p id="Conflict1"></p>
         <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
-        <p id="Conflict2">brain game</p>
+        <p id="Conflict2"></p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(297, 27%, 46%, 1); border-color: hsla(296, 29%, 20%, 1);" v-on:click="queryCSV('Players',{ selected })">
-        <h3 id="Players0" class ='card-type' style="color: hsla(296, 29%, 20%, 1);" >Players</h3>
+        <h3 id="Players0" class ='card-type' style="color: hsla(296, 29%, 20%, 1);" ></h3>
         <div class="card-text">
-        <p id="Players1">for</p>
+        <p id="Players1"></p>
         <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
-        <p id="Players2">players</p>
+        <p id="Players2"></p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(193, 100%, 38%, 1); border-color: hsla(194, 100%, 20%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
-        <h3 id="Motivation0" class ='card-type' style="color: hsla(194, 100%, 20%, 1);" >Motivation</h3>
+        <h3 id="Motivation0" class ='card-type' style="color: hsla(194, 100%, 20%, 1);" ></h3>
         <div class="card-text">
-        <p id="Motivation1">which is played for</p>
+        <p id="Motivation1"></p>
         <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
-          <p id="Motivation2">&nbsp;</p>
+          <p id="Motivation2"></p>
           <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(35, 100%, 45%, 1); border-color: hsla(35, 98%, 20%, 1);" v-on:click="queryCSV('Location',{ selected })">
-        <h3 id="Location0" class ='card-type' style="color: hsla(35, 98%, 20%, 1);" >Location</h3>
+        <h3 id="Location0" class ='card-type' style="color: hsla(35, 98%, 20%, 1);" ></h3>
         <div class="card-text">
-        <p id="Location1">&nbsp;</p>
+        <p id="Location1"></p>
         <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
-        <p id="Location2">What is it?</p>
+        <p id="Location2"></p>
           <p >&nbsp;</p>
         </div>
       </button>
@@ -89,6 +89,12 @@ export default {
   props: {
     msg: String,
   },
+  mounted() {
+    let language = {};
+    language.selected = 'English';
+    this.chooseLanguage(language)
+    console.log('mounted')
+  },
   methods: {
     allQueries(option){
       let all = ['Future-Time','Conflict','Players','Motivation','Location']
@@ -97,20 +103,31 @@ export default {
       }
     },
     chooseLanguage(language) {
+      if (language.selected == 'Ελληνικά'){
+      language.selected = 'Greek'
+      }
+
       const d3 = require("d3");
       let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/interface' + language.selected + '.csv'
       d3.csv(file).then(function (data) {
-        let cols = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
-        for (const col in cols) {
-          for (let row=0; row < data.length; row++) {
-            document.getElementById(cols[col] + row).innerHTML = data[row][cols[col]];
-          }
+        let headers = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
+        for (const header in headers) {
+              document.getElementById(headers[header]+0).innerHTML = data[0][headers[header]];
+              for (let row=0; row < data.length; row++) {
+                if ((headers[header] != "Name" && headers[header] != "Description")){
+                  document.getElementById(headers[header] + (row)).innerHTML = data[row][headers[header]];
+                }
+              }
         }})
       this.allQueries(language)
     },
     queryCSV(text_id,option) {
       const d3 = require("d3");
       let file_id = ''
+      if (option.selected == 'Ελληνικά'){
+        option.selected = 'Greek'
+      }
+
       switch(option.selected) {
         case 'Classic':
           switch(text_id){
@@ -191,7 +208,7 @@ export default {
                 if (text_id == 'Players') {
                   console.log(option)
                   switch (option.selected) {
-                    case 'Greek':
+                    case 'Ελληνικά':
                       switch (output) {
                         case 'one': // 'έναν':
                           document.getElementById('Players2').innerHTML = 'παίκτης';
