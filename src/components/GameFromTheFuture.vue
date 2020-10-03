@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <div id="selections">
+  <div id="game">
+      <div>
+      <h2>The Game from the Future</h2>
+      </div>
+    <p>Design a brain-controlled game from the future</p>
+      <div id="selections">
 <!--      <div id="language_select">-->
 <!--        <label for="languages">Choose a language</label>-->
 <!--        <div class="break"></div>-->
@@ -19,11 +23,11 @@
 <!--      <option >Classic</option>-->
 <!--    </select>-->
 <!--      </div>-->
-    <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
     </div>
+    <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
     <div class="card-holder">
       <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
-        <h2 id="Future0" class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h2>
+        <h3 id="Future0" class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h3>
         <div class="card-text">
         <p id="Future1">In a</p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
@@ -32,7 +36,7 @@
         </div>
       </button>
       <button class="card" style="background: hsla(338, 85%, 43%, 1); border-color: hsla(355, 87%, 20%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
-        <h2 id="Conflict0" class ='card-type' style="color: hsla(355, 87%, 20%, 1);" >Conflict</h2>
+        <h3 id="Conflict0" class ='card-type' style="color: hsla(355, 87%, 20%, 1);" >Conflict</h3>
         <div class="card-text">
         <p id="Conflict1">There is a</p>
         <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
@@ -41,7 +45,7 @@
         </div>
       </button>
       <button class="card" style="background: hsla(297, 27%, 46%, 1); border-color: hsla(296, 29%, 20%, 1);" v-on:click="queryCSV('Players',{ selected })">
-        <h2 id="Players0" class ='card-type' style="color: hsla(296, 29%, 20%, 1);" >Players</h2>
+        <h3 id="Players0" class ='card-type' style="color: hsla(296, 29%, 20%, 1);" >Players</h3>
         <div class="card-text">
         <p id="Players1">for</p>
         <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
@@ -50,7 +54,7 @@
         </div>
       </button>
       <button class="card" style="background: hsla(193, 100%, 38%, 1); border-color: hsla(194, 100%, 20%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
-        <h2 id="Motivation0" class ='card-type' style="color: hsla(194, 100%, 20%, 1);" >Motivation</h2>
+        <h3 id="Motivation0" class ='card-type' style="color: hsla(194, 100%, 20%, 1);" >Motivation</h3>
         <div class="card-text">
         <p id="Motivation1">which is played for</p>
         <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
@@ -59,7 +63,7 @@
         </div>
       </button>
       <button class="card" style="background: hsla(35, 100%, 45%, 1); border-color: hsla(35, 98%, 20%, 1);" v-on:click="queryCSV('Location',{ selected })">
-        <h2 id="Location0" class ='card-type' style="color: hsla(35, 98%, 20%, 1);" >Location</h2>
+        <h3 id="Location0" class ='card-type' style="color: hsla(35, 98%, 20%, 1);" >Location</h3>
         <div class="card-text">
         <p id="Location1">&nbsp;</p>
         <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
@@ -68,9 +72,8 @@
         </div>
       </button>
     </div>
-    <div>
-      <p><strong>Note:</strong> The Game from the Future is a derivative of <a href="http://situationlab.org/project/the-thing-from-the-future/">The Thing From The Future</a> by Jeff Watson and <a href="http://situationlab.org/">The Situation Lab</a></p>
-    </div>
+    <p class="'left">Created by Dimitris Grammenos, Marientina Gotsis, and Garrett Flynn</p>
+    <p class="'left">Based on <a href="http://situationlab.org/project/the-thing-from-the-future/">The Thing From The Future</a> by Jeff Watson and <a href="http://situationlab.org/">The Situation Lab</a></p>
   </div>
 </template>
 
@@ -106,7 +109,6 @@ export default {
     },
     queryCSV(text_id,option) {
       const d3 = require("d3");
-      console.log(option)
       let file_id = ''
       switch(option.selected) {
         case 'Classic':
@@ -138,11 +140,33 @@ export default {
         let row;
         let str = text_id.split('-');
         let output;
+        let freq;
+
+
           if (str.length > 1) {
             for (const col in str) {
               inner_flag = true;
+
+              // Create bag of words (to account for frequency)
+              let bag = [];
+              let data_;
+              let word;
+              let components;
+              for (const r in data) {
+                data_ = data[r][str[col]]
+                components = data_.split(' (')
+                word = components[0];
+                freq = components[1].split(')')[0]
+                for (let i = 0; i < freq; i++){
+                  bag.push(word)
+                }
+              }
+
+              console.log(bag)
+
               while (inner_flag) {
                 row = Math.floor(Math.random() * data.length);
+                console.log(data[row][str[col]])
                 output = data[row][str[col]];
                 if (output != '') {
                   inner_flag = false;
@@ -176,10 +200,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h2{
-    width: 100%;
-    height: 5px;
-  }
 ul {
   list-style-type: none;
   padding: 0;
@@ -198,20 +218,31 @@ button {
   font-family: Montserrat, sans-serif;
   text-align: center;
   font-weight: 500;
+  border: none;
 }
 
+
+  #game-header{
+    display:flex;
+    flex-wrap: wrap;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+  }
 #selections{
   display: flex;
+  flex-grow: 1;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+
 }
 
 #generate{
   padding: 10px;
+  margin: 25px 0px;
   width: 200px;
   border-radius: 10px;
-  /*margin-top: 25px;*/
 }
 
 #Time{
@@ -235,7 +266,6 @@ button {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  margin: 50px 0px;
 }
 
 .card{

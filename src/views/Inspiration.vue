@@ -1,7 +1,7 @@
 <template>
     <div class="head">
-        <h1>The Game from the Future</h1>
-        <p>A Brainstorming Game for the #BCIGameJam</p>
+        <h1>Inspiration</h1>
+        <p>Brainstorming Exercises for the #BCIGameJam</p>
     </div>
     <section id="tgftf">
         <GameFromTheFuture/>
@@ -54,7 +54,7 @@
     }
 
     .example{
-        width: 75%;
+        width: 100%;
         display: flex;
         flex-wrap:wrap-reverse;
         align-items: center;
