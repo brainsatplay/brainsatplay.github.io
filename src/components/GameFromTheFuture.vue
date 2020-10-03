@@ -146,27 +146,8 @@ export default {
           if (str.length > 1) {
             for (const col in str) {
               inner_flag = true;
-
-              // Create bag of words (to account for frequency)
-              let bag = [];
-              let data_;
-              let word;
-              let components;
-              for (const r in data) {
-                data_ = data[r][str[col]]
-                components = data_.split(' (')
-                word = components[0];
-                freq = components[1].split(')')[0]
-                for (let i = 0; i < freq; i++){
-                  bag.push(word)
-                }
-              }
-
-              console.log(bag)
-
               while (inner_flag) {
                 row = Math.floor(Math.random() * data.length);
-                console.log(data[row][str[col]])
                 output = data[row][str[col]];
                 if (output != '') {
                   inner_flag = false;
@@ -178,9 +159,31 @@ export default {
               }
             }
           } else {
+
+            // Create bag of words (to account for frequency)
+            let bag = [];
+            let data_;
+            let word;
+            let components;
+            for (const r in data) {
+              data_ = data[r][str[0]]
+              if (data_ != undefined && data_ != []) {
+                if (data_.split(' (').length == 2) {
+                  components = data_.split(' (')
+                  word = components[0];
+                  freq = components[1].split(')')[0]
+                  for (let i = 0; i < freq; i++) {
+                    bag.push(word)
+                  }
+                } else{
+                  bag.push(data_)
+                }
+              }
+            }
+
             while (flag) {
-            row = Math.floor(Math.random() * data.length);
-            output = data[row][str[0]]
+            row = Math.floor(Math.random() * bag.length);
+            output = bag[row]
               if (output != '') {
                 flag = false;
                 document.getElementById(text_id).innerHTML = output;
