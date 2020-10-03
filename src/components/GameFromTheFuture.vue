@@ -31,7 +31,7 @@
         <div class="card-text">
         <p id="Future1">In a future</p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
-        <p id="Future2">&nbsp;</p>
+        <p id="Future2">from now</p>
           <h3>&nbsp;</h3>
         </div>
       </button>
@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     allQueries(option){
-      let all = ['Future-Time','Conflict','Players','Motivation','Location']
+      let all = ['Future','Conflict','Players','Motivation','Location']
       for (const ind in all) {
         this.queryCSV(all[ind],option)
       }
@@ -136,30 +136,10 @@ export default {
       let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + option.selected + '.csv'
       d3.csv(file).then(function (data) {
         let flag = true;
-        let inner_flag;
         let row;
         let str = text_id.split('-');
         let output;
         let freq;
-
-
-          if (str.length > 1) {
-            for (const col in str) {
-              inner_flag = true;
-              while (inner_flag) {
-                row = Math.floor(Math.random() * data.length);
-                output = data[row][str[col]];
-                if (output != '') {
-                  inner_flag = false;
-                  if (str[col] == 'Time'){
-                    output += ' from now'
-                  }
-                  document.getElementById(str[col]).innerHTML = output;
-                }
-              }
-            }
-          } else {
-
             // Create bag of words (to account for frequency)
             let bag = [];
             let data_;
@@ -194,7 +174,6 @@ export default {
                 }
               }
           }
-        }
       })},
   }
 }
