@@ -26,13 +26,13 @@
     </div>
     <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
     <div class="card-holder">
-      <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
+      <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future',{ selected })">
         <h3 id="Future0" class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h3>
         <div class="card-text">
-        <p id="Future1">In a</p>
+        <p id="Future1">In a future</p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
-        <p id="Future2">future</p>
-          <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
+        <p id="Future2">&nbsp;</p>
+          <h3>&nbsp;</h3>
         </div>
       </button>
       <button class="card" style="background: hsla(338, 85%, 43%, 1); border-color: hsla(355, 87%, 20%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
@@ -41,7 +41,7 @@
         <p id="Conflict1">There is a</p>
         <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
         <p id="Conflict2">brain game</p>
-          <p >&nbsp;</p>
+          <h3>&nbsp;</h3>
         </div>
       </button>
       <button class="card" style="background: hsla(297, 27%, 46%, 1); border-color: hsla(296, 29%, 20%, 1);" v-on:click="queryCSV('Players',{ selected })">
@@ -50,7 +50,7 @@
         <p id="Players1">for</p>
         <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
         <p id="Players2">players</p>
-          <p >&nbsp;</p>
+          <h3>&nbsp;</h3>
         </div>
       </button>
       <button class="card" style="background: hsla(193, 100%, 38%, 1); border-color: hsla(194, 100%, 20%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
@@ -59,7 +59,7 @@
         <p id="Motivation1">which is played for</p>
         <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
           <p id="Motivation2">&nbsp;</p>
-          <p >&nbsp;</p>
+          <h3>&nbsp;</h3>
         </div>
       </button>
       <button class="card" style="background: hsla(35, 100%, 45%, 1); border-color: hsla(35, 98%, 20%, 1);" v-on:click="queryCSV('Location',{ selected })">
@@ -68,7 +68,7 @@
         <p id="Location1">&nbsp;</p>
         <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
         <p id="Location2">What is it?</p>
-          <p >&nbsp;</p>
+          <h3>&nbsp;</h3>
         </div>
       </button>
     </div>
