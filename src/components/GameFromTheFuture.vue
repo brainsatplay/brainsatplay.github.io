@@ -187,10 +187,18 @@ export default {
               if (output != '') {
                 flag = false;
                 document.getElementById(text_id).innerHTML = output;
-                if (text_id == 'Players2' && output == 'one'){
-                  document.getElementById('Players2').innerHTML = 'player';
-                } else{
-                  document.getElementById('Players2').innerHTML = 'players';
+                if (text_id == 'Players2') {
+                  switch (output) {
+                    case 'one':
+                      document.getElementById('Players2').innerHTML = 'player';
+                      break;
+                    case 'έναν':
+                      document.getElementById('Players2').innerHTML = 'παίκτης';
+                      break;
+                    default:
+                      document.getElementById('Players2').innerHTML = 'players';
+                      break;
+                  }
                 }
               }
           }
