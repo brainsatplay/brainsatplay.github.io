@@ -187,16 +187,28 @@ export default {
               if (output != '') {
                 flag = false;
                 document.getElementById(text_id).innerHTML = output;
-                if (text_id == 'Players2') {
-                  switch (output) {
-                    case 'one':
-                      document.getElementById('Players2').innerHTML = 'player';
-                      break;
-                    case 'έναν':
-                      document.getElementById('Players2').innerHTML = 'παίκτης';
-                      break;
-                    default:
-                      document.getElementById('Players2').innerHTML = 'players';
+                if (text_id == 'Players') {
+                  console.log(option)
+                  switch (option.selected) {
+                    case 'Greek':
+                      switch (output) {
+                        case 'one': // 'έναν':
+                          document.getElementById('Players2').innerHTML = 'παίκτης';
+                          break;
+                        default:
+                          document.getElementById('Players2').innerHTML = 'παίκτες';
+                          break;
+                      }
+                      break
+                    case 'English':
+                      switch (output) {
+                        case 'one':
+                          document.getElementById('Players2').innerHTML = 'player';
+                          break;
+                        default:
+                          document.getElementById('Players2').innerHTML = 'players';
+                          break;
+                      }
                       break;
                   }
                 }
