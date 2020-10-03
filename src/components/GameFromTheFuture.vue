@@ -5,15 +5,15 @@
       </div>
     <p>Design a brain-controlled game from the future</p>
       <div id="selections">
-<!--      <div id="language_select">-->
-<!--        <label for="languages">Choose a language</label>-->
-<!--        <div class="break"></div>-->
-<!--        <select name="languages"  id="languages" v-model="selected" @change="chooseLanguage({ selected })">-->
-<!--          <option disabled value="">Please select one</option>-->
-<!--          <option >English</option>-->
-<!--          <option >Greek</option>-->
-<!--        </select>-->
-<!--      </div>-->
+      <div id="language_select">
+        <label for="languages">Choose a language</label>
+        <div class="break"></div>
+        <select name="languages"  id="languages" v-model="selected" @change="chooseLanguage({ selected })">
+          <option disabled value="">Please select one</option>
+          <option >English</option>
+          <option >Greek</option>
+        </select>
+      </div>
 <!--      <div class="break"></div>-->
 <!--      <div id="selector">-->
 <!--        <label for="modes">Choose a card deck</label>-->
@@ -26,13 +26,13 @@
     </div>
     <button id="generate" v-on:click="allQueries({ selected })">Generate Random Game</button>
     <div class="card-holder">
-      <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future',{ selected })">
+      <button class="card" style="background: hsla(80, 100%, 30%, 1); border-color: hsla(99, 39%, 20%, 1);" v-on:click="queryCSV('Future-Time',{ selected })">
         <h3 id="Future0" class ='card-type' style="color: hsla(99, 39%, 20%, 1);" >Future</h3>
         <div class="card-text">
-        <p id="Future1">In a future</p>
+        <p id="Future1">In a</p>
         <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Future'>&nbsp;</p></div>
-        <p id="Future2">from now</p>
-          <h3>&nbsp;</h3>
+        <p id="Future2">future</p>
+          <div class="blank" style="background: hsla(86, 48%, 75%, 1);"><p id='Time'>&nbsp;</p></div>
         </div>
       </button>
       <button class="card" style="background: hsla(338, 85%, 43%, 1); border-color: hsla(355, 87%, 20%, 1);" v-on:click="queryCSV('Conflict',{ selected })">
@@ -41,7 +41,7 @@
         <p id="Conflict1">There is a</p>
         <div class="blank" style="background: hsla(352, 83%, 84%, 1);"><p id='Conflict'>&nbsp;</p></div>
         <p id="Conflict2">brain game</p>
-          <h3>&nbsp;</h3>
+          <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(297, 27%, 46%, 1); border-color: hsla(296, 29%, 20%, 1);" v-on:click="queryCSV('Players',{ selected })">
@@ -50,7 +50,7 @@
         <p id="Players1">for</p>
         <div class="blank" style="background: hsla(294, 29%, 80%, 1);"><p id='Players'>&nbsp;</p></div>
         <p id="Players2">players</p>
-          <h3>&nbsp;</h3>
+          <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(193, 100%, 38%, 1); border-color: hsla(194, 100%, 20%, 1);" v-on:click="queryCSV('Motivation',{ selected })">
@@ -59,7 +59,7 @@
         <p id="Motivation1">which is played for</p>
         <div class="blank" style="background: hsla(193, 75%, 73%, 1);"><p id='Motivation'>&nbsp;</p></div>
           <p id="Motivation2">&nbsp;</p>
-          <h3>&nbsp;</h3>
+          <p >&nbsp;</p>
         </div>
       </button>
       <button class="card" style="background: hsla(35, 100%, 45%, 1); border-color: hsla(35, 98%, 20%, 1);" v-on:click="queryCSV('Location',{ selected })">
@@ -68,7 +68,7 @@
         <p id="Location1">&nbsp;</p>
         <div class="blank" style="background: hsla(36, 100%, 76%, 1);"><p id='Location'>&nbsp;</p></div>
         <p id="Location2">What is it?</p>
-          <h3>&nbsp;</h3>
+          <p >&nbsp;</p>
         </div>
       </button>
     </div>
@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     allQueries(option){
-      let all = ['Future','Conflict','Players','Motivation','Location']
+      let all = ['Future-Time','Conflict','Players','Motivation','Location']
       for (const ind in all) {
         this.queryCSV(all[ind],option)
       }
@@ -136,10 +136,30 @@ export default {
       let file = 'https://raw.githubusercontent.com/GarrettMFlynn/BCIGameJam/master/src/assets/' + file_id + option.selected + '.csv'
       d3.csv(file).then(function (data) {
         let flag = true;
+        let inner_flag;
         let row;
         let str = text_id.split('-');
         let output;
         let freq;
+
+
+          if (str.length > 1) {
+            for (const col in str) {
+              inner_flag = true;
+              while (inner_flag) {
+                row = Math.floor(Math.random() * data.length);
+                output = data[row][str[col]];
+                if (output != '') {
+                  inner_flag = false;
+                  if (str[col] == 'Time'){
+                    output += ' from now'
+                  }
+                  document.getElementById(str[col]).innerHTML = output;
+                }
+              }
+            }
+          } else {
+
             // Create bag of words (to account for frequency)
             let bag = [];
             let data_;
@@ -167,13 +187,14 @@ export default {
               if (output != '') {
                 flag = false;
                 document.getElementById(text_id).innerHTML = output;
-                if (text_id == 'Players' && output == 'one'){
+                if (text_id == 'Players2' && output == 'one'){
                   document.getElementById('Players2').innerHTML = 'player';
                 } else{
                   document.getElementById('Players2').innerHTML = 'players';
                 }
               }
           }
+        }
       })},
   }
 }
