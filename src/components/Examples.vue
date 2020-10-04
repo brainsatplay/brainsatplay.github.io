@@ -77,7 +77,7 @@
           When back to the safety of the cave, they try to outpower and outwit each
           other, to get the lion's share of the collected goods.</p>
       </div>
-      <!--      <img alt="Thought for Food" src="@/assets/THOUGHTFORFOOD.jpg">-->
+            <img alt="Thought for Food" src="@/assets/THOUGHTFORFOOD.jpg">
     </div>
   </div>
 </template>
