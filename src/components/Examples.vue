@@ -8,8 +8,10 @@
         <p>Two connected players play a ping pong game inside their brains.
           After a hit, the hitting player becomes the ball and tries to
           land on the other player’s paddle. The goal of the game is for
-          players to experience being part of a “well-played game”.  B
-          rainpong is inspired by an experience described by <a href="https://www.deepfun.com/remembering-bill/">Bernie DeKoven</a> that led him to writing “The Well-Played Game” book.</p>
+          players to experience being part of a “well-played game”.
+          Brainpong is inspired by an experience described by
+          <a href="https://www.deepfun.com/remembering-bill/">Bernie DeKoven</a> that
+          led him to writing “The Well-Played Game” book.</p>
       </div>
       <img alt="Brain Pong" src="@/assets/BrainPong.jpg">
     </div>
@@ -85,7 +87,7 @@
 <script>
 
 export default {
-  name: 'HelloWorld',
+  name: 'Examples',
 }
 </script>
 

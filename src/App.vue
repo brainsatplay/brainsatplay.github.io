@@ -2,13 +2,20 @@
   <div id="nav">
     <router-link to="/">Home</router-link>
     <router-link to="/about">About</router-link>
-    <router-link to="/rules">Rules</router-link>
-    <router-link to="/inspiration">Inspiration</router-link>
+    <router-link to="/jam">Jam</router-link>
     <router-link to="/curriculum">Curriculum</router-link>
-    <router-link to="/submit">Submit</router-link>
   </div>
   <router-view/>
 </template>
+
+<script>
+
+  export default {
+    name: 'App',
+    components: {
+    }
+  }
+</script>
 
 <style>
   body,html {margin: 0px;}

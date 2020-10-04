@@ -1,14 +1,14 @@
 <template>
     <div class="head">
         <h1>Inspiration</h1>
-        <p>Brainstorming Exercises for the #BCIGameJam</p>
+        <p>Brainstorming Exercises for the Multi-Brain Game Jam</p>
     </div>
     <section id="tgftf">
         <GameFromTheFuture/>
     </section>
     <div class="head">
         <h1>Example Games</h1>
-        <p>Designed by the #BCIGameJam Team</p>
+        <p>Designed by the Multi-Brain Game Jam Team</p>
     </div>
     <section>
         <Examples/>
@@ -22,7 +22,7 @@
 
 
     export default {
-        name: 'Home',
+        name: 'Inspiration',
         components: {
             GameFromTheFuture,
             Examples
