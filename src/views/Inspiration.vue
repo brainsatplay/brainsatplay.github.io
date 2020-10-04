@@ -11,28 +11,21 @@
         <p>Designed by the #BCIGameJam Team</p>
     </div>
     <section>
-    <div id="examples">
-        <div class="example">
-            <div class="example_text">
-                <h2>BRAINPONG</h2>
-                <h3>Dimitris Grammenos</h3>
-                <p class="prompt">In a <strong>peaceful</strong> future <strong>a generation from now</strong>, there is a <strong>conflict-free</strong> BCI game for <strong>one</strong> player which is played for <strong>mindfulness</strong> <strong>at home</strong>.</p>
-                <p>BRAINPONG is meditation game, where players experience being the ball in a ping pong game against themselves taking place inside their head. The game exercises mindfulness, focus and getting into a flow state.</p>
-            </div>
-            <img alt="Brain Pong" src="@/assets/BrainPong.jpg">
-        </div>
-    </div>
+        <Examples/>
     </section>
 </template>
 
 <script>
     // @ is an alias to /src
     import GameFromTheFuture from '@/components/GameFromTheFuture.vue'
+    import Examples from '@/components/Examples.vue'
+
 
     export default {
         name: 'Home',
         components: {
-            GameFromTheFuture
+            GameFromTheFuture,
+            Examples
         },
     }
 </script>
@@ -42,31 +35,5 @@
     section{
         color: white;
         background: black;
-    }
-
-    #examples{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .example{
-        width: 100%;
-        display: flex;
-        flex-wrap:wrap-reverse;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .example_text{
-        margin: 50px;
-        width: 400px;
-        text-align: left
-    }
-
-    .prompt{
-        border-left: 2px solid #222222;
-        margin: 20px;
-        padding: 20px;
     }
 </style>

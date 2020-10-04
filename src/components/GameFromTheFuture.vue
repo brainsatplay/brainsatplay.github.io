@@ -169,7 +169,7 @@ export default {
                 output = data[row][str[col]];
                 if (output != '') {
                   inner_flag = false;
-                  if (str[col] == 'Time'){
+                  if (str[col] == 'Time' && option.selected == 'English'){
                     output += ' from now'
                   }
                   document.getElementById(str[col]).innerHTML = output;
@@ -209,30 +209,28 @@ export default {
                   console.log(option)
                   switch (option.selected) {
                     case 'Ελληνικά':
-                      switch (output) {
-                        case 'one': // 'έναν':
-                          document.getElementById('Players2').innerHTML = 'παίκτης';
-                          break;
-                        default:
+                      // switch (output) {
+                      //   case 'one': // 'έναν':
+                      //     document.getElementById('Players2').innerHTML = 'παίκτης';
+                      //     break;
+                      //   default:
                           document.getElementById('Players2').innerHTML = 'παίκτες';
-                          break;
-                      }
+                          // break;
                       break
                     case 'English':
-                      switch (output) {
-                        case 'one':
-                          document.getElementById('Players2').innerHTML = 'player';
-                          break;
-                        default:
+                      // switch (output) {
+                      //   case 'one':
+                      //     document.getElementById('Players2').innerHTML = 'player';
+                      //     break;
+                      //   default:
                           document.getElementById('Players2').innerHTML = 'players';
-                          break;
+                          // break;
                       }
                       break;
                   }
                 }
               }
           }
-        }
       })
     },
   }
