@@ -1,7 +1,7 @@
 <template>
   <div class="head">
-    <h1>Multi-Brain Games</h1>
-    <p>Empowering Multi-Brain Experiences</p>
+    <h1>Game List</h1>
+    <p>Multi-Brain Games</p>
   </div>
   <section>
     <p>More information coming soon...</p>
