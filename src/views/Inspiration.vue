@@ -1,14 +1,14 @@
 <template>
     <div class="head">
         <h1>Inspiration</h1>
-        <p>Brainstorming Exercises for the Multi-Brain Game Jam</p>
+        <p>Brainstorming Exercises for the Brains & Games Competition</p>
     </div>
     <section id="tgftf">
         <GameFromTheFuture/>
     </section>
     <div class="head">
         <h1>Example Games</h1>
-        <p>Designed by the Multi-Brain Game Jam Team</p>
+        <p>Designed by the Brains & Games Competition Organizers</p>
     </div>
     <section>
         <Examples/>

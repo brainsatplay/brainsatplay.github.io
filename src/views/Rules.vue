@@ -1,7 +1,7 @@
 <template>
   <div class="head">
     <h1>Rules</h1>
-    <p>Multi-Brain Games Jam</p>
+    <p>Brains & Games Competition</p>
   </div>
   <section>
     <p>More information coming soon...</p>

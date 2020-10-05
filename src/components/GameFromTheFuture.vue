@@ -107,7 +107,7 @@ export default {
       }
 
       const d3 = require("d3");
-      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/multibrain-games/master/src/assets/interface' + language.selected + '.csv'
+      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/brains-and-games/master/src/assets/interface' + language.selected + '.csv'
       d3.csv(file).then(function (data) {
         let headers = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
         for (const header in headers) {
@@ -150,7 +150,7 @@ export default {
         default:
           file_id = 'tgftf';
       }
-      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/multibrain-games/master/src/assets/' + file_id + option.selected + '.csv'
+      let file = 'https://raw.githubusercontent.com/GarrettMFlynn/brains-and-games/master/src/assets/' + file_id + option.selected + '.csv'
       d3.csv(file).then(function (data) {
         let flag = true;
         let inner_flag;

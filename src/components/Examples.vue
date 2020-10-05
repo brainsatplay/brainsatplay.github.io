@@ -13,7 +13,7 @@
           <a href="https://www.deepfun.com/remembering-bill/">Bernie DeKoven</a> that
           led him to writing “The Well-Played Game” book.</p>
       </div>
-      <a href="https://raw.githubusercontent.com/GarrettMFlynn/multibrain-games/master/src/assets/BrainPong.jpg" target="_blank">
+      <a href="https://raw.githubusercontent.com/GarrettMFlynn/brains-and-games/master/src/assets/BrainPong.jpg" target="_blank">
       <img alt="Brain Pong" src="@/assets/BrainPong.jpg">
       </a>
     </div>
@@ -29,7 +29,7 @@
           enhanced athletes. Due to the repeated banging of the players’ heads,
           brain implants often malfunction with unpredictable consequences.</p>
       </div>
-      <a href="https://raw.githubusercontent.com/GarrettMFlynn/multibrain-games/master/src/assets/BRAINBALL.jpg" target="_blank">
+      <a href="https://raw.githubusercontent.com/GarrettMFlynn/brains-and-games/master/src/assets/BRAINBALL.jpg" target="_blank">
       <img alt="Brainball" src="@/assets/BRAINBALL.jpg">
       </a>
     </div>
@@ -47,7 +47,7 @@
           bug- hostile buildings and predator- filled areas,
           without being exterminated.</p>
       </div>
-      <a href="https://raw.githubusercontent.com/GarrettMFlynn/multibrain-games/master/src/assets/ROACHATHON.jpg" target="_blank">
+      <a href="https://raw.githubusercontent.com/GarrettMFlynn/brains-and-games/master/src/assets/ROACHATHON.jpg" target="_blank">
       <img alt="Roachathon" src="@/assets/ROACHATHON.jpg">
       </a>
     </div>
@@ -67,7 +67,7 @@
           Darkroom is an adaptation of a game included in Bernie
           DeKoven’s <a href="https://www.deepfun.com/darkroom/">Deep Fun</a>.</p>
       </div>
-      <a href="https://raw.githubusercontent.com/GarrettMFlynn/multibrain-games/master/src/assets/DARKROOM.jpg" target="_blank">
+      <a href="https://raw.githubusercontent.com/GarrettMFlynn/brains-and-games/master/src/assets/DARKROOM.jpg" target="_blank">
       <img alt="Darkroom" src="@/assets/DARKROOM.jpg">
       </a>
     </div>
@@ -87,7 +87,7 @@
           When back to the safety of the cave, they try to outpower and outwit each
           other, to get the lion's share of the collected goods.</p>
       </div>
-      <a href="https://raw.githubusercontent.com/GarrettMFlynn/multibrain-games/master/src/assets/THOUGHTFORFOOD.jpg" target="_blank">
+      <a href="https://raw.githubusercontent.com/GarrettMFlynn/brains-and-games/master/src/assets/THOUGHTFORFOOD.jpg" target="_blank">
             <img alt="Thought for Food" src="@/assets/THOUGHTFORFOOD.jpg">
       </a>
     </div>
