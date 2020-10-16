@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/site.css">
+    <title>Submit - Brains and Games</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script type="text/javascript" src="js/site.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="app">
+    <div id="nav" class="bar">
+        <a href="index.html" class="current">Home</a>
+        <a href="about.html">About</a>
+        <a href="game-list.html">Game List</a>
+        <a href="competition.html">Competition</a>
+        <a href="curriculum.html">Curriculum</a>
+    </div>
+    <div class="head bar">
+        <h1>Submit</h1>
+        <h3>Let's see what you came up with!</h3>
+    </div>
+    <section>
+        <div id="preamble">
+            <div>
+                <h3>Rules</h3>
+                <p>Entrants must apply as teams of 2 - 4 members.</p>
+                <p>Each team will compete in the category corresponding to the age of its oldest member.</p>
+            </div>
+        </div>
+        <form id="submission">
+        <div id="team_sub" class="form-section">
+            <h2>Competition</h2>
+            <div class="break"></div>
+            <select id="competition" name="competition">
+                <option value="greek">Greek</option>
+                <option value="international">International</option>
+            </select>
+            <div class="break"></div>
+            <h2>The Team</h2>
+            <div class="break"></div>
+            <h4>Team Name</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Members' First Names</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Members' Ages</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Country</h4>
+            <div class="break"></div>
+            <input type="text"/>
+        </div>
+        <div id="contact_sub" class="form-section">
+            <h2>Contact</h2>
+            <div class="break"></div>
+            <i>Contact details of the person submitting the entry (must be at least 17 years old)</i>
+            <div class="break"></div>
+            <h4>First Name</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Last Name</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Email</h4>
+            <div class="break"></div>
+            <input type="text"/>
+        </div>
+
+        <div id="game_sub" class="form-section">
+            <h2>The Game</h2>
+            <div class="break"></div>
+            <h3>Overview</h3>
+            <div class="break"></div>
+            <h4>Game name</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Image</h4>
+            <div class="break"></div>
+            <i>Representing the game. Max size: 1920x1080</i>
+            <div class="break"></div>
+            <input type="file" name="game-image" id="game-image" class="inputfile" />
+            <label for="game-image">Choose a file</label>
+            <div class="break"></div>
+            <h4>One-line pitch</h4>
+            <div class="break"></div>
+            <i>Why is your game great?</i>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Short description</h4>
+            <div class="break"></div>
+            <i>Max 300 characters</i>
+            <div class="break"></div>
+            <textarea rows="2" maxlength="300" cols="20" name="short-description" wrap="hard"></textarea>
+            <div class="break"></div>
+            <h4>Game From The Future prompt</h4>
+            <div class="break"></div>
+            <i>If you have used the “The Game from the Future” online tool,
+                please paste here the generated sentence that you are going to use</i>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <div class="break"></div>
+            <h4>How far in the future does your game take place?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>In what type of future does your game take place?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+
+
+            <!--     Players      -->
+            <h3>Players</h3>
+            <divh class="break"></divh>
+            <h4>How many players?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Who are the players?</h4>
+            <div class="break"></div>
+            <i>Do they share any common characteristics? Are players with specific characteristics excluded / unable to play?</i>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Except human brains, are there other types of brains involved?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Where are players located while playing the game?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Why are they playing?</h4>
+            <div class="break"></div>
+            <i>What do they expect to get out of your game?</i>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Which is the main theme of the game?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Where does it take place?</h4>
+            <div class="break"></div>
+            <i>How is the game world? What is happening there?</i>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+
+
+            <!--     Rules / Gameplay      -->
+            <h3>Rules / Gameplay</h3>
+            <div class="break"></div>
+            <h4>What kind of conflict does the game support?</h4>
+            <div class="break"></div>
+            <i>Competitive / Cooperative / Semi-cooperative / Conflict-free</i>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>What players can (or cannot) do?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>How they can (or cannot) do it?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>What are the win/lose conditions—-if any?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+
+            <!--     Ethical Issues      -->
+            <h3>Ethical Issues</h3>
+            <divh class="break"></divh>
+            <h4>What are the major ethical issues that might be raised by the game?</h4>
+            <i>e.g. brain privacy, receiver autonomy, right to mental integrity, accountability, reliability of senders, brain hacking, etc.</i>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+            <h4>Do you have any specific safeguards to protect players against them?</h4>
+            <div class="break"></div>
+            <input type="text"/>
+            <div class="break"></div>
+
+            <!--     Ethical Issues      -->
+            <h3>Additional Materials</h3>
+            <divh class="break"></divh>
+            <h4>Is there anything else you would like to say about the game?</h4>
+            <div class="break"></div>
+            <i>Max 600 characters</i>
+            <div class="break"></div>
+            <textarea rows="2" maxlength="600" cols="20" name="short-description" wrap="hard"></textarea>
+            <div class="break"></div>
+            <h4>Optional image submission</h4>
+            <div class="break"></div>
+            <i>Up to 5 images</i>
+            <div class="break"></div>
+            <input type="file" name="image-files" id="image-files" class="inputfile" data-multiple-caption="{count} files selected" multiple />
+            <label for="image-files">Choose a file</label>
+            <div class="break"></div>
+            <h4>Optional video submission</h4>
+            <div class="break"></div>
+            <i>Max 5 minutes</i>
+            <div class="break"></div>
+            <input type="file" name="video-file" id="video-file" class="inputfile" />
+            <label for="video-file">Choose a file</label>
+            <div class="break"></div>
+        </div>
+
+        <div id="rules_sub" class="form-section">
+            <h3>To submit your game design you need to agree to the Competition Rules by selecting the following check-box:</h3>
+            <div id="agree">
+            <input type="checkbox"/><p> I agree to the Competition Rules</p>
+            </div>
+        </div>
+        </form>
+        <button id="SubmitGame" type="submit" form="submission" value="Submit Game"><div class="icon"><i class="fas fa-paper-plane fa-2x"></i></div>Submit Game</button>
+    </section>
+</div>
+<script>
+
+    var inputs = document.querySelectorAll( '.inputfile' );
+
+
+    Array.prototype.forEach.call( inputs, function( input )
+    {
+        var label	 = input.nextElementSibling,
+            labelVal = label.innerHTML;
+        input.addEventListener( 'change', function( e )
+        {
+            var fileName = '';
+            if( this.files && this.files.length > 1 )
+                fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+            else
+                fileName = e.target.value.split( "\\" ).pop();
+
+            if( fileName )
+                label.innerHTML = fileName;
+
+            else
+                label.innerHTML = labelVal;
+        });
+    });
+
+
+
+</script>
+</body>
+</html>
