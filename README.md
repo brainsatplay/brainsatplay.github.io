@@ -1,2 +1,2 @@
-# Brains & Games
-*More brains are better than one*
+# brains-at-play.github.io
+Our front-end website for the Brains@Play Futures Initiative
