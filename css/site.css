@@ -29,6 +29,10 @@ p{
     font-family: Roboto, sans-serif;
 }
 
+.small{
+    font-size: 80%;
+}
+
 h1{
     font-size: 50px;
     margin-bottom: 25px;
