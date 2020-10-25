@@ -394,12 +394,425 @@ hr {
    outline: none;
 }
 
+#SubmitGame{
+     /*padding: 10px;*/
+     /*margin: 25px 0px;*/
+     width: 300px;
+     border-radius: 10px;
+     color: white;
+     background: #111111;
+     cursor: pointer;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+    transition: .5s;
+ }
+
+#SubmitGame:hover{
+    background: #222222;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+p{
+    width: 100%;
+    font-size: 17px;
+}
+
+button {
+    text-align: center;
+    font-weight: 500;
+    border: none;
+}
+
+body,html {margin: 0px;    font-family: Montserrat, sans-serif;
+}
+
+img{
+    height: 200px;
+}
+
+p{
+    font-family: Roboto, sans-serif;
+}
+
+.small{
+    font-size: 80%;
+}
+
+h1{
+    font-size: 50px;
+    margin-bottom: 25px;
+}
+
+h2{
+    font-size: 35px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+h3{
+    font-size: 20px;
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+h4 {
+    margin: 0px;
+}
+
+.head{
+    background:#111111;
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.head h3,h1 {
+    margin: 0px;
+}
+
+.head h3{
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+section{
+    width: 75%;
+    padding: 50px;
+}
+a {
+    color: black;
+    text-decoration: underline;
+}
+
+#app {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.bar {
+    width: 100vw;
+}
+
+#nav {
+    padding-right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: black;
+    color: white;
+    position: sticky;
+    top:0;
+    left:0;
+}
+#nav a {
+    font-weight: normal;
+    color: white;
+    text-decoration: none;
+    padding: 20px;
+}
+#nav .current {
+    color: darkgray;
+}
+
+#tgftf{
+    width: 90%;
+    text-align: center;
+}
+
+/*#example-section{*/
+/*    color: white;*/
+/*    background: black;*/
+/*}*/
+
+select {
+    width: 100%;
+    max-width: 500px;
+    /*height: 30px;*/
+    padding: 10px;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    margin: 15px 0px 40px 0px;
+    color: #222222
+}
+
+#language_select{
+    width: 300px;
+}
+
+#game-options{
+    display: flex;
+    flex-wrap:wrap;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 75%;
+}
+
+.option {
+    text-align: left;
+    margin: 0px 25px;
+}
+
+#game{
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#game-header{
+    display:flex;
+    flex-wrap: wrap;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove{
+    display: none;
+}
+
+#button-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 25px 0px;
+    flex-wrap: wrap;
+}
+
+#button-nav button{
+    padding: 15px;
+    margin-bottom: 25px;
+    width: 300px;
+    border-radius: 10px;
+    color: white;
+    background: #111111;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .5s;
+}
+
+#Generate0{
+    padding: 10px;
+    margin-bottom: 25px;
+    width: 300px;
+    border-radius: 10px;
+    color: white;
+    background: #111111;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .5s;
+}
+
+#Generate0:hover{
+    background: #333333
+}
+
+#Generate0:focus{
+    outline: none;
+}
+
+.icon{
+    margin: 20px 20px 20px 0px;
+}
+
+#Time{
+    color: #222222;
+    font-size: 15px;
+}
+
+.card-type{
+    text-transform: uppercase;
+    color: #222222;
+
+}
+
+.card-text{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    height: 200px;
+}
+
+.card-holder{
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.card{
+    margin: 25px;
+    height: 300px;
+    width: 200px;
+    padding: 0px 0px;
+    border: 2px solid;
+    border-radius: 15px;
+    color: white;
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.card h3 {
+    margin: 0;
+}
+
+.card p{
+    font-family: Montserrat, sans-serif;
+}
+
+.card:focus{
+    outline: none;
+}
+
+.break{
+    flex-basis: 100%;
+    height: 0;
+}
+
+.blank{
+    background: white;
+    flex-grow: 1;
+    color: black;
+    min-height: 50px;
+}
+
+#examples{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.example{
+    width: 100%;
+    display: flex;
+    flex-wrap:wrap-reverse;
+    align-items: center;
+    justify-content: center;
+}
+.example_text{
+    margin: 50px;
+    width: 400px;
+    text-align: left
+}
+
+.prompt{
+    border-left: 2px solid #222222;
+    margin-left: 20px;
+    padding: 20px;
+}
+
+hr {
+    border: 1px solid lightgray;
+    flex-grow: 1;
+}
+
+#preamble{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#preamble div{
+    max-width: 500px;
+}
+#preamble h3{
+    text-align: center;
+}
+
+
+.form-section{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: left;
+    margin-top: 50px;
+}
+
+.form-section i{
+    flex-grow: 1;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.form-section h1{
+    flex-grow: 1;
+    margin-bottom: 10px;
+}
+
+#agree {
+    margin: 20px 0px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.form-section h3{
+    flex-grow: 1;
+    margin: 25px 0px 0px 0px;
+}
+
+.form-section h4{
+    flex-grow: 1;
+    margin: 25px 0px 10px 0px;
+}
+
+.form-section input[type="text"]{
+    width: 100%;
+    max-width: 500px;
+    height: 25px;
+    margin-bottom: 25px;
+    padding: 10px;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+}
+
+.form-section textarea{
+    font-family: Roboto, sans-serif;
+    width: 100%;
+    max-width: 500px;
+    height: 150px;
+    margin-bottom: 25px;
+    padding: 10px;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+}
+
+.form-section textarea:focus{
+    outline: none;
+}
+
+.form-section input[type='checkbox']{
+    margin-right: 20px;
+}
+
+.form-section input:focus{
+   outline: none;
+}
+
 .inputfile {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
     overflow: hidden;
-    position: absolute;
+    /*position: absolute;*/
     z-index: -1;
 }
 

@@ -99,7 +99,7 @@
                         type="file"
                         name="game-image"
                         id="game-image"
-                        class="form-control-file border"
+                        class="inputfile"
                 />
                 <label for="game-image">Choose a file</label>
                 <div class="break"></div>
@@ -224,20 +224,17 @@
                 <input
                         type="file"
                         name="additional-images"
-                        multiple
                         id="additional-images"
-                        class="form-control-file border"
+                        class="inputfile"
+                        data-multiple-caption="{count} files selected" multiple
                 />
                 <label for="additional-images">Choose a file</label>
                 <div class="break"></div>
                 <h4>Optional video submission</h4>
                 <div class="break"></div>
-                <i>Max 5 minutes</i>
+                <i>Max 5 minutes. Please upload your video to YouTube/Vimeo and provide the embed code here.</i>
                 <div class="break"></div>
-                <p>Please email your video to <a href="mailto:contact@brainsatplay.com">contact@brainsatplay.com</a></p>
-                <!--            <input type="file" name="video-file" id="additional-video" class="inputfile" />-->
-                <!--            <label for="additional-video">Choose a file</label>-->
-                <!--            <div class="break"></div>-->
+                <input type="text" name="video-link" value=""/>
             </div>
         </form>
         <div id="rules_sub" class="form-section">
@@ -248,6 +245,7 @@
         </div>
         </form>
         <button id="SubmitGame" type="submit" form="submission" value="Submit Game"><div class="icon"><i class="fas fa-paper-plane fa-2x"></i></div>Submit Game</button>
+        <p id="submit_status"></p>
     </section>
 </div>
 <script>
@@ -285,7 +283,9 @@
 
 
     // Submit to MongoDB
-    $("#SubmitGame").click(function(){
+    $("#SubmitGame").click(function() {
+
+        document.getElementById('submit_status').innerHTML = 'Submission in progress. Please wait.'
 
         let jsonObj = {}
         var formData = new FormData();
@@ -293,7 +293,7 @@
 
         formData.append("game-image", document.getElementById('game-image').files[0]);
         let additional_files = document.getElementById('additional-images').files;
-        for (let i in additional_files){
+        for (let i in additional_files) {
             formData.append("additional-images", additional_files[i]);
         }
         fetch(url + '/upload', {
@@ -309,10 +309,23 @@
             body: formData, // body data type must match "Content-Type" header
         })
 
+        // Get form inputs
         var sub = $('#submission').serializeArray()
-        for (var i = 0 ; i < sub.length; i++) {
+        for (var i = 0; i < sub.length; i++) {
             jsonObj[sub[i].name] = sub[i].value;
         }
+
+        // Organize form filenames
+        var inputs = document.querySelectorAll('.inputfile');
+        let fileName;
+        jsonObj['game-image'] = []
+        jsonObj['additional-images'] = []
+
+        Array.prototype.forEach.call(inputs, function (input) {
+            Array.from(input.files).forEach(file => {
+                jsonObj[input.id].push(file.name);
+            })
+        })
 
         fetch(url + '/submit', {
             method: 'POST', // Using POST request to create a new resource in the database
@@ -325,8 +338,18 @@
             redirect: 'follow', // manual, *follow, error
             referrer: 'no-referrer', // no-referrer, *client
             body: JSON.stringify(jsonObj), // body data type must match "Content-Type" header
-        })
-    });
+        }).then(response => {
+                response.text().then(function (text) {
+                    if (text == 'Submission has been received.') {
+                        $("#SubmitGame").remove();
+                        document.getElementById('submit_status').innerHTML = text
+                    } else {
+                        document.getElementById('submit_status').innerHTML = 'Submission failed. Please try again,'
+                    }
+                });
+            }
+        )
+    })
 </script>
 </body>
 </html>
