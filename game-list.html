@@ -8,8 +8,11 @@
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="css/site.css">
     <title>Games List — Brains@Play</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 </head>
-<body>
+<body onload='displaySubmissions()'>
 <div id="app">
     <div id="nav" class="bar">
         <a href="index.html">Home</a>
@@ -24,11 +27,116 @@
         <h3>Brains@Play</h3>
     </div>
     <div class="break"></div>
-    <section>
-        <h2>Coming Soon...</h2>
-        <p>Preview our upcoming competition <a href="competition.html">here</a></p>
+    <section id='content'>
+        <form id='submission'
+              enctype="multipart/form-data"
+        >
+            <div id="submitted-games"></div>
+            <div id="get_img" class="form-section">
+                <h4>Get Submission</h4>
+                <div class="break"></div>
+                <input type="text" id="gameinput" name="gameinput" value="" placeholder='Try "DARKROOM"'/>
+            </div>
+            <button id="SubmitGame" type="submit" form="submission" value="GetFile"><div class="icon"><i class="fas fa-paper-plane fa-2x"></i></div>Get Submission</button>
+        </form>
     </section>
 </div>
+
+<script>
+
+    let url = "https://brainsatplay.azurewebsites.net"
+    // let url = "http://localhost"
+
+    // Dispay Submissions
+    function displaySubmissions(){
+
+        jsonOBJ = {'request': 'all'}
+
+        fetch(url + '/getsubmissions', {
+            method: 'POST',
+            mode: 'cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
+        }).then(response => {
+            response.json().then(function (json) {
+                Object.keys(json).forEach(function(key) {
+                    $('#submitted-games').prepend('<h1>Submitted Games</h1><h3>' + json[key] + ' by ' + key + '</h3>')
+                })
+            })
+    })
+    }
+
+    let form = document.getElementById("submission")
+    $('#submission').submit(function(e) {
+        e.preventDefault();
+    });
+
+    // Submit to MongoDB
+    $("#SubmitGame").click(function(){
+        let game = document.getElementById('gameinput').value
+        $('#submission').empty()
+        $('#submission').prepend('<h1>' + 'Grabbing files. Please wait...' + '</h1>')
+        getSubmissions(game)
+    });
+
+    // Grab submissions
+    function getSubmissions(name) {
+
+        jsonOBJ = {'gamename': name}
+
+        fetch(url + '/getsubmissions', {
+            method: 'POST',
+            mode: 'cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
+        }).then(response => {
+            response.json().then(function (json) {
+                    $('#submission').remove()
+                    if (json.error){
+                        $('#content').prepend('<h1>' + json.error + '</h1>')
+                    } else {
+                        $('#content').prepend(
+                            "<h1 id='game-name'></h1>"+
+                            "<h3 id='team-name'></h1>"+
+                            "<i id='team-members'></i>"+
+                            "<p id='game-prompt'></p>"+
+                            "<p id='game-description'></p>"+
+                            "<img id='game-image'>"+
+                            "<div id='additional-images'></div>"
+                        )
+
+                        Object.keys(json).forEach(function(key) {
+                            var doc = json[key];
+                            document.getElementById("team-name").innerHTML=doc["team-name"];
+                            document.getElementById("team-members").innerHTML=doc["team-members"];
+                            document.getElementById("game-name").innerHTML=doc["game-name"];
+                            document.getElementById("game-prompt").innerHTML=doc["game-prompt"];
+                            document.getElementById("game-description").innerHTML=doc["game-description"];
+                            document.getElementById("game-image").src=doc["game-image"];
+                            for (img in doc["additional-images"]){
+                                $('#additional-images').prepend('<img src=' + doc["additional-images"][img] + ' />')
+                            }
+                        });
+                    }
+                }
+            )
+        });
+    };
+
+
+</script>
 
 </body>
 </html>
