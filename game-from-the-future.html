@@ -15,7 +15,7 @@
 
 
 
-<body onload="chooseLanguage('English')">
+<body onload="reset(mod,mods,'English')">
 <noscript>
     <strong>We're sorry but The Game from the Future doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
 </noscript>
@@ -124,7 +124,8 @@
             overrides: {}
         },
         'VR + Neurotech + Health':{
-            overrides: { 'Conflict2': 'brain-controlled VR game', 'Motivation':'health'}
+            overrides: { 'Conflict2': {'English': 'brain-controlled VR game', 'Greek':'παιχνίδι εικονικής πραγματικότητας με διάδραση μεταξύ εγκεφάλων'},
+                'Motivation':{'English': 'health', 'Greek': 'υγεία'}}
         },
     }
 
@@ -141,7 +142,7 @@
 
     modEl.addEventListener('change', (event) => {
         mod = event.target.value;
-        chooseMod(mod, mods);
+        reset(mod, mods, language);
     });
 
     const langEl = document.getElementById('languages');
@@ -149,7 +150,7 @@
 
     langEl.addEventListener('change', (event) => {
             language = event.target.value;
-            chooseLanguage(language);
+            reset(mod, mods,language);
     });
 
 </script>

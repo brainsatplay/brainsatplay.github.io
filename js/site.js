@@ -6,7 +6,7 @@ function allQueries(option){
     }
 }
 
-const chooseMod = async (mod,mods) => {
+const chooseMod = async (mod,mods,language) => {
     let params = mods[mod]
     let overrides = Object.keys(params.overrides);
     let all = ['Future','Time','Conflict','Players','Motivation','Location']
@@ -23,14 +23,19 @@ const chooseMod = async (mod,mods) => {
     }
 
     for (let override in overrides){
-        document.getElementById(overrides[override]).innerHTML = params.overrides[overrides[override]]
+        document.getElementById(overrides[override]).innerHTML = params.overrides[overrides[override]][language]
         document.getElementById(overrides[override]).className = 'lock'
     }
+}
 
-    allQueries(language)
+function reset(mod,mods, language){
+    if (language == 'Ελληνικά'){
+        language = 'Greek'
+    }
+    chooseLanguage(language)
+    chooseMod(mod,mods, language)
     resetInterface(language)
-
-
+    allQueries(language)
 }
 
 function resetInterface(language){
@@ -52,10 +57,6 @@ function resetInterface(language){
 }
 
 function chooseLanguage(language) {
-    if (language == 'Ελληνικά'){
-        language = 'Greek'
-    }
-
     let selector = document.getElementById("language-selection")
     if (selector.className != 'remove') {
         if (language == 'Greek') {
@@ -65,8 +66,6 @@ function chooseLanguage(language) {
         }
     }
 
-    resetInterface(language)
-    allQueries(language)
     populateExamples(language)
 }
 
