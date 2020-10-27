@@ -9,6 +9,7 @@
     <title>The Game from the Future - Brains@Play</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script type="text/javascript" src="js/site.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -33,16 +34,24 @@
 <section id="tgftf">
     <div id="game">
         <div id="game-options">
-        <div id="selections" class="option">
+        <div id="language-selection" class="option">
             <div id="language_select">
                 <h4 id="language">Language</h4>
                 <div class="break"></div>
-                <select name="languages"  id="languages">
+                <select name="languages"  id="languages" class="select">
                     <option selected>English</option>
                     <option >Ελληνικά</option>
                 </select>
             </div>
         </div>
+            <div id="mod-selection" class="option">
+            <div id="mod_select">
+                <h4 id="mod">Choose a Mod</h4>
+                <div class="break"></div>
+                <select name="mods"  id="mods" class="select">
+                </select>
+            </div>
+            </div>
         <button id="Generate0" class="option" onclick=allQueries(language)></button>
         </div>
         <div class="card-holder">
@@ -111,10 +120,34 @@
 </div>
 
 <script>
-    const selectElement = document.getElementById('languages');
+    let mods = {'Original':{
+            overrides: {}
+        },
+        'VR + Neurotech + Health':{
+            overrides: { 'Conflict2': 'brain-controlled VR game', 'Motivation':'health'}
+        },
+    }
+
+    const modEl = document.getElementById('mods');
+    let options = Object.keys(mods);
+    for (let option in options) {
+        if (option == 0) {
+            $('#mods').append(`<option selected>` + options[option] + `</option>`)
+        } else{
+            $('#mods').append(`<option>` + options[option] + `</option>`)
+        }
+    }
+    let mod = document.getElementById('mods').value;
+
+    modEl.addEventListener('change', (event) => {
+        mod = event.target.value;
+        chooseMod(mod, mods);
+    });
+
+    const langEl = document.getElementById('languages');
     var language = document.getElementById('languages').value;
 
-        selectElement.addEventListener('change', (event) => {
+    langEl.addEventListener('change', (event) => {
             language = event.target.value;
             chooseLanguage(language);
     });

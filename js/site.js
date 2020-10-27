@@ -6,15 +6,58 @@ function allQueries(option){
     }
 }
 
+const chooseMod = async (mod,mods) => {
+    let params = mods[mod]
+    let overrides = Object.keys(params.overrides);
+    let all = ['Future','Time','Conflict','Players','Motivation','Location']
+
+    // Reset cards
+    for (let ind in all) {
+        [1,2,3].forEach(function(i) {
+            if ((i) != 3 && all[ind] != 'Time') {
+                document.getElementById(all[ind] + (i)).className = ''
+            } else{
+                document.getElementById(all[ind]).className = ''
+            }
+        });
+    }
+
+    for (let override in overrides){
+        document.getElementById(overrides[override]).innerHTML = params.overrides[overrides[override]]
+        document.getElementById(overrides[override]).className = 'lock'
+    }
+
+    allQueries(language)
+    resetInterface(language)
+
+
+}
+
+function resetInterface(language){
+    let file = 'assets/interface' + language + '.csv'
+    let el;
+    d3.csv(file).then(function (data) {
+        let headers = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
+        for (const header in headers) {
+            document.getElementById(headers[header]+0).innerHTML = data[0][headers[header]];
+            if ((headers[header] != "Name" && headers[header] != "Description" && headers[header] != "Generate" && headers[header] != "Creators" && headers[header] != "Attribution")){
+                for (let row=0; row < data.length; row++) {
+                    el = document.getElementById(headers[header] + (row))
+                    if (el.className != 'lock') {
+                        el.innerHTML = data[row][headers[header]];
+                    }
+                }
+            }
+        }})
+}
+
 function chooseLanguage(language) {
     if (language == 'Ελληνικά'){
         language = 'Greek'
     }
 
-    let selector = document.getElementById("selections")
-    console.log(selector.className)
+    let selector = document.getElementById("language-selection")
     if (selector.className != 'remove') {
-        console.log(selector.className)
         if (language == 'Greek') {
             document.getElementById('language').innerHTML = 'Επιλέξτε τη γλώσσα σας'
         } else {
@@ -22,17 +65,7 @@ function chooseLanguage(language) {
         }
     }
 
-    let file = 'assets/interface' + language + '.csv'
-    d3.csv(file).then(function (data) {
-        let headers = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
-        for (const header in headers) {
-            document.getElementById(headers[header]+0).innerHTML = data[0][headers[header]];
-            if ((headers[header] != "Name" && headers[header] != "Description" && headers[header] != "Generate" && headers[header] != "Creators" && headers[header] != "Attribution")){
-                for (let row=0; row < data.length; row++) {
-                    document.getElementById(headers[header] + (row)).innerHTML = data[row][headers[header]];
-                }
-            }
-        }})
+    resetInterface(language)
     allQueries(language)
     populateExamples(language)
 }
@@ -112,10 +145,13 @@ function queryCSV(text_id,option) {
                     output = data[row][str[col]];
                     if (output != '') {
                         inner_flag = false;
-                        if (str[col] == 'Time' && option == 'English'){
+                        if (str[col] == 'Time' && option == 'English') {
                             output += ' from now'
                         }
-                        document.getElementById(str[col]).innerHTML = output;
+                        let el = document.getElementById(str[col])
+                        if (el.className != 'lock') {
+                            el.innerHTML = output;
+                        }
                     }
                 }
             }
@@ -147,28 +183,31 @@ function queryCSV(text_id,option) {
                 output = bag[row]
                 if (output != '') {
                     flag = false;
-                    document.getElementById(text_id).innerHTML = output;
-                    if (text_id == 'Players') {
-                        switch (option) {
-                            case 'Ελληνικά':
-                                // switch (output) {
-                                //   case 'one': // 'έναν':
-                                //     document.getElementById('Players2').innerHTML = 'παίκτης';
-                                //     break;
-                                //   default:
-                                document.getElementById('Players2').innerHTML = 'παίκτες';
+                    let el = document.getElementById(text_id)
+                    if (el.className != 'lock') {
+                        el.innerHTML = output;
+                        if (text_id == 'Players') {
+                            switch (option) {
+                                case 'Ελληνικά':
+                                    // switch (output) {
+                                    //   case 'one': // 'έναν':
+                                    //     document.getElementById('Players2').innerHTML = 'παίκτης';
+                                    //     break;
+                                    //   default:
+                                    document.getElementById('Players2').innerHTML = 'παίκτες';
+                                    // break;
+                                    break
+                                case 'English':
+                                    // switch (output) {
+                                    //   case 'one':
+                                    //     document.getElementById('Players2').innerHTML = 'player';
+                                    //     break;
+                                    //   default:
+                                    document.getElementById('Players2').innerHTML = 'players';
                                 // break;
-                                break
-                            case 'English':
-                                // switch (output) {
-                                //   case 'one':
-                                //     document.getElementById('Players2').innerHTML = 'player';
-                                //     break;
-                                //   default:
-                                document.getElementById('Players2').innerHTML = 'players';
-                            // break;
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
