@@ -7,8 +7,10 @@ function allQueries(option){
 }
 
 const chooseMod = async (mod,mods,language) => {
-    let params = mods[mod]
+    mod = modEl.value;
+    let params = mods[language][mod]
     let overrides = Object.keys(params.overrides);
+
     let all = ['Future','Time','Conflict','Players','Motivation','Location']
 
     // Reset cards
@@ -23,22 +25,23 @@ const chooseMod = async (mod,mods,language) => {
     }
 
     for (let override in overrides){
-        document.getElementById(overrides[override]).innerHTML = params.overrides[overrides[override]][language]
+        document.getElementById(overrides[override]).innerHTML = params.overrides[overrides[override]]
         document.getElementById(overrides[override]).className = 'lock'
     }
 }
 
-function reset(mod,mods, language){
+function reset(mod, mods, language){
     if (language == 'Ελληνικά'){
         language = 'Greek'
     }
-    chooseLanguage(language)
+    resetInterface(mods,language)
     chooseMod(mod,mods, language)
-    resetInterface(language)
     allQueries(language)
 }
 
-function resetInterface(language){
+function resetInterface(mods,language){
+
+    // Reset Cards and Non-Selector Interface Elements
     let file = 'assets/interface' + language + '.csv'
     let el;
     d3.csv(file).then(function (data) {
@@ -54,9 +57,10 @@ function resetInterface(language){
                 }
             }
         }})
-}
 
-function chooseLanguage(language) {
+    populateExamples(language)
+
+    // Reset Language Selector
     let selector = document.getElementById("language-selection")
     if (selector.className != 'remove') {
         if (language == 'Greek') {
@@ -66,7 +70,26 @@ function chooseLanguage(language) {
         }
     }
 
-    populateExamples(language)
+    // Reset Mod Selector
+    mod = modEl.value;
+
+    $("#mods").empty()
+    if ($("#mod-selection").className != 'remove') {
+        if (language == 'Greek') {
+            document.getElementById('mod').innerHTML = 'Επιλογή έκδοσης'
+        } else {
+            document.getElementById('mod').innerHTML = 'Choose a Mod'
+        }
+    }
+
+    let options = Object.keys(mods[language]);
+    for (let option in options) {
+        if (options[option] == mod) {
+            $('#mods').append(`<option selected>` + options[option] + `</option>`)
+        } else{
+            $('#mods').append(`<option>` + options[option] + `</option>`)
+        }
+    }
 }
 
 function populateExamples(language) {
