@@ -9,22 +9,21 @@ function allQueries(option){
 const chooseMod = async (mods,language) => {
 
     let mod_eng;
+    let flag = true;
 
-    if (language == 'Greek'){
+    if (language != 'English'){
         let options = Object.keys(mods[language]);
         // Get English translation of mod
         for (let option in options) {
             if (mods[language][options[option]].translation == mod) {
-                console.log('English Mod: ' + options[option])
                 mod_eng = options[option]
+                flag = false;
             }
         }
     } else {
         mod_eng = mod;
     }
 
-    console.log(mods[language])
-    console.log('mod = ' + mod)
     let params = mods[language][mod_eng]
 
     let overrides = Object.keys(params.overrides);
@@ -52,7 +51,6 @@ async function reset(mod, mods, language){
     if (language == 'Ελληνικά'){
         language = 'Greek'
     }
-    console.log(language)
 
     resetInterface(mods,language)
     chooseMod(mods, language)
@@ -104,20 +102,20 @@ function resetInterface(mods,language){
     let blank;
     let comparison
 
-    // Get English translation of selected element
-    for (let option in options) {
-        if (mods[language][options[option]].translation  == mod){
-            comparison = mods[language][options[option]].translation
-        }
-    }
-
     // Dynamically generate a new mod selector
     for (let option in options) {
+
+        // Get English translation of selected element
         if (language != 'English'){
             blank = mods[language][options[option]].translation
+            if (mods[language][options[option]].translation  == mod){
+                comparison = mods[language][options[option]].translation
+            } else{
+                comparison = options[option]
+            }
         } else {
-            comparison = options[option]
             blank = options[option]
+            comparison = options[option]
         }
 
         if (comparison == mod) {
