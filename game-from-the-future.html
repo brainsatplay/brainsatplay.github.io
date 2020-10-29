@@ -121,11 +121,14 @@
 
 <script>
 
-    let mods = {'Greek':{'υγεία':{
+    let mods = {'Greek':{'Original':{
+                translation: 'Αρχική',
                 overrides: {}
             },
-            'παιχνίδι εικονικής πραγματικότητας με διάδραση μεταξύ εγκεφάλων':{
-                overrides: { 'Conflict2': 'παιχνίδι εικονικής πραγματικότητας με διάδραση μεταξύ εγκεφάλων',
+            'VR + Neurotech + Health':{
+                translation: 'Εικονική Πραγματικότητα + Νευροτεχνολογία + Υγεία',
+                overrides: {
+                    'Conflict2': 'παιχνίδι εικονικής πραγματικότητας με διάδραση μεταξύ εγκεφάλων',
                     'Motivation': 'υγεία'}
             }},
         'English':{'Original':{
@@ -153,11 +156,12 @@
     let mod = modEl.value;
 
     modEl.addEventListener('change', (event) => {
+        mod = $('#mods').val()
         reset(mod, mods, language);
     });
 
     langEl.addEventListener('change', (event) => {
-            language = event.target.value;
+            language = $('#languages').val()
             reset(mod, mods,language);
     });
 

@@ -6,9 +6,27 @@ function allQueries(option){
     }
 }
 
-const chooseMod = async (mod,mods,language) => {
-    mod = modEl.value;
-    let params = mods[language][mod]
+const chooseMod = async (mods,language) => {
+
+    let mod_eng;
+
+    if (language == 'Greek'){
+        let options = Object.keys(mods[language]);
+        // Get English translation of mod
+        for (let option in options) {
+            if (mods[language][options[option]].translation == mod) {
+                console.log('English Mod: ' + options[option])
+                mod_eng = options[option]
+            }
+        }
+    } else {
+        mod_eng = mod;
+    }
+
+    console.log(mods[language])
+    console.log('mod = ' + mod)
+    let params = mods[language][mod_eng]
+
     let overrides = Object.keys(params.overrides);
 
     let all = ['Future','Time','Conflict','Players','Motivation','Location']
@@ -30,12 +48,14 @@ const chooseMod = async (mod,mods,language) => {
     }
 }
 
-function reset(mod, mods, language){
+async function reset(mod, mods, language){
     if (language == 'Ελληνικά'){
         language = 'Greek'
     }
+    console.log(language)
+
     resetInterface(mods,language)
-    chooseMod(mod,mods, language)
+    chooseMod(mods, language)
     allQueries(language)
 }
 
@@ -71,8 +91,6 @@ function resetInterface(mods,language){
     }
 
     // Reset Mod Selector
-    mod = modEl.value;
-
     $("#mods").empty()
     if ($("#mod-selection").className != 'remove') {
         if (language == 'Greek') {
@@ -83,13 +101,32 @@ function resetInterface(mods,language){
     }
 
     let options = Object.keys(mods[language]);
+    let blank;
+    let comparison
+
+    // Get English translation of selected element
     for (let option in options) {
-        if (options[option] == mod) {
-            $('#mods').append(`<option selected>` + options[option] + `</option>`)
-        } else{
-            $('#mods').append(`<option>` + options[option] + `</option>`)
+        if (mods[language][options[option]].translation  == mod){
+            comparison = mods[language][options[option]].translation
         }
     }
+
+    // Dynamically generate a new mod selector
+    for (let option in options) {
+        if (language != 'English'){
+            blank = mods[language][options[option]].translation
+        } else {
+            comparison = options[option]
+            blank = options[option]
+        }
+
+        if (comparison == mod) {
+            $('#mods').append(`<option selected>` + blank + `</option>`)
+        } else{
+            $('#mods').append(`<option>` + blank + `</option>`)
+        }
+    }
+    mod = $('#mods').val()
 }
 
 function populateExamples(language) {
