@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link rel=icon href=assets/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="components/nav.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+    <title>Brain@Play | Contribute</title>
+</head>
+<body>
+<noscript>
+    <strong>We're sorry but Brain@Play doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
+<div id=app>
+    <!--Navbar-->
+    <nav-bar id="nav" class="nav-transparent">
+    </nav-bar>
+
+<!--    &lt;!&ndash;Header&ndash;&gt;-->
+<!--    <div id="contribute-header" class="header">-->
+<!--        <h1>Contribute</h1>-->
+<!--    </div>-->
+
+    <section class="fullscreen">
+        <div class="full-center">
+            <h2><strong>Contribute</strong></h2>
+
+            <p>Brain@Play is looking for <strong>neuroethicists, neuroscientists, and neural engineers</strong>
+                (PhD candidates welcome!) to facilitate a 1-hour breakout discussion during <a href="livewire.html" class="link">Livewire: A Stimulating Night of Neurotechnology.</a></p>
+
+            <button onclick="window.location.href='http://eepurl.com/ha1i79'">Sign Up as a Facilitator</button>
+        </div>
+    </section>
+
+    <!--Footer-->
+    <footer-bar>
+    </footer-bar>
+
+</div>
+
+<script>
+    let myNav = document.getElementById('nav');
+    window.onscroll = function () {
+        "use strict";
+        if (document.body.scrollTop >= 100 || document.documentElement.scrollTop >= 100 ){
+            myNav.classList.add("nav-colored");
+            myNav.classList.remove("nav-transparent");
+        }
+        else {
+            myNav.classList.add("nav-transparent");
+            myNav.classList.remove("nav-colored");
+        }
+    };
+</script>
+
+</body>
+</html>

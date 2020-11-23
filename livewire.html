@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link rel=icon href=assets/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="components/nav.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+
+    <title>Brains@Play | Livewire</title>
+</head>
+<body>
+<noscript>
+    <strong>We're sorry but Brains@Play doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
+<div id=app>
+    <!--Navbar-->
+    <nav-bar id="nav" class="nav-transparent">
+    </nav-bar>
+
+    <!--Header-->
+    <div id="livewire-header" class="header">
+        <h2>Livewire</h2>
+    </div>
+
+    <!--Content-->
+    <section class="fullscreen">
+        <div>
+            <h2>The Event</h2>
+            <p>Livewire is a <strong>virtual entertainment event</strong> that combines neuroscience,
+                neuroethics, and interactive media for participatory technology design.</p>
+        </div>
+        <iframe src="https://player.vimeo.com/video/467405213" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    </section>
+
+    <!--Footer-->
+    <footer-bar>
+    </footer-bar>
+
+</div>
+
+<script>
+    let myNav = document.getElementById('nav');
+    window.onscroll = function () {
+        "use strict";
+        if (document.body.scrollTop >= 100 || document.documentElement.scrollTop >= 100 ){
+            myNav.classList.add("nav-colored");
+            myNav.classList.remove("nav-transparent");
+        }
+        else {
+            myNav.classList.add("nav-transparent");
+            myNav.classList.remove("nav-colored");
+        }
+    };
+</script>
+
+</body>
+</html>

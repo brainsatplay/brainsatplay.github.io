@@ -5,30 +5,28 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/site.css">
-    <title>Competition — Brains@Play</title>
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="components/nav.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+    <title>Brains@Play | Competition</title>
 </head>
 <body>
 <div id="app">
-    <div id="nav" class="bar">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="game-list.html">Game List</a>
-        <a href="competition.html" class="current">Competition</a>
-        <a href="curriculum.html">Curriculum</a>
-    </div>
-    <div class="break"></div>
-    <div class="head bar">
-        <h1>Brains & Games</h1>
+    <!--Navbar-->
+    <nav-bar id="nav" class="nav-transparent">
+    </nav-bar>
+
+    <div id="competition-header" class="header">
+        <h1>Brains and Games</h1>
         <h3>International Design Fiction Competition</h3>
     </div>
-    <div class="break"></div>
+
     <section>
         <h2>Welcome Gamers!</h2>
         <p>We are hosting Brains and Games, an international design fiction competition where anyone can
         present their idea for a compelling multi-brain experience.</p>
-        <div id="preamble">
+        <div>
             <div>
             <h3>Competition Divisions</h3>
             <p><strong>Greek Competition:</strong> For students of all ages. Entries in Greek. Prizes per age group. </p>
@@ -36,8 +34,8 @@
             </div>
         </div>
         <div id="button-nav">
-            <a href="game-from-the-future.html"><button>The Game from the Future</button></a>
-            <a href="submit.html"><button>Submit</button></a>
+            <button onclick="window.location.href='game-from-the-future.html'" rel="noopener">The Game from the Future</button>
+            <button onclick="window.location.href='submit.html'" rel="noopener">Submit</button>
         </div>
         <div>
             <h2>Workshops</h2>
@@ -47,7 +45,7 @@
         <i>Teams of students at school or children at home.</i>
         <p>The last part of this workshop will include a brief design task
             to come up with and present a game name and brief description
-            using <a href="game-from-the-future.html">The Game from the Future</a> prompt generator</p>
+            using <a href="game-from-the-future.html" class="text">The Game from the Future</a> prompt generator</p>
         </div>
 
         <div>
@@ -76,7 +74,26 @@
             <h3>OpenBCI? Facebook Reality Labs?</h3>
         </div>
     </section>
+
+    <!--Footer-->
+    <footer-bar>
+    </footer-bar>
 </div>
+
+<script>
+    let myNav = document.getElementById('nav');
+    window.onscroll = function () {
+        "use strict";
+        if (document.body.scrollTop >= 100 || document.documentElement.scrollTop >= 100 ){
+            myNav.classList.add("nav-colored");
+            myNav.classList.remove("nav-transparent");
+        }
+        else {
+            myNav.classList.add("nav-transparent");
+            myNav.classList.remove("nav-colored");
+        }
+    };
+</script>
 
 </body>
 </html>

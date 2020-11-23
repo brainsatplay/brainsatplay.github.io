@@ -5,7 +5,7 @@
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
     <link rel=icon href=assets/favicon.ico>
-    <link rel="stylesheet" type="text/css" href="css/mousai.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
 <!--    <script src="https://d3js.org/d3.v6.min.js"></script>-->
     <script type="text/javascript" src="js/webgl.js" defer></script>
     <script type="text/javascript" src="js/utils.js" defer></script>
@@ -31,7 +31,7 @@
     <!--Navbar-->
     <div id="app-menu">
         <div id="menu-toggle" class="toggle"><div class="icon"><i class="fas fa-angle-right fa-3x"></i></div></div>
-        <div class="icon menuicon"><a href="./index.html" class="img"><img alt="Mousai Neurotechnologies" src="assets/logo_long.png"></a></div>
+        <div class="icon menuicon"><a href="./index.html" class="logo"><h3>Brains@Play</h3></a></div>
         </a>
         <div class="icon menuicon" onclick="state = 1">
             <a><i class="fas fa-home fa-2x"></i></a><p>Main UI</p>
@@ -45,15 +45,15 @@
         <div class="icon menuicon" onclick="window.open('https://github.com/Mousai-Neurotechnologies/brainstorm-client','mywindow');">
             <a><i class="fab fa-python fa-2x"></i></a><p>Download Python Client</p>
         </div>
-        <div class="icon menuicon" id="login">
-            <a><i class="fas fa-arrow fa-2x"></i></a><p>Login</p>
-        </div>
-        <div class="icon menuicon" id="wsButton">
-            <a><i class="fas fa-arrow fa-2x"></i></a><p>Open Websocket</p>
-        </div>
-        <div class="icon menuicon" id="logout">
-            <a><i class="fas fa-arrow fa-2x"></i></a><p>Logout</p>
-        </div>
+<!--        <div class="icon menuicon" id="login">-->
+<!--            <a><i class="fas fa-arrow fa-2x"></i></a><p>Login</p>-->
+<!--        </div>-->
+<!--        <div class="icon menuicon" id="wsButton">-->
+<!--            <a><i class="fas fa-arrow fa-2x"></i></a><p>Open Websocket</p>-->
+<!--        </div>-->
+<!--        <div class="icon menuicon" id="logout">-->
+<!--            <a><i class="fas fa-arrow fa-2x"></i></a><p>Logout</p>-->
+<!--        </div>-->
     </div>
 
     <!-- Chat Bar-->
@@ -150,9 +150,9 @@
     // const ws = new WebSocket('wss://echo.websocket.org');
     // const ws = new WebSocket('ws://' + url);
 
-    const login = document.querySelector('#login');
-    const logout = document.querySelector('#logout');
-    const wsButton = document.querySelector('#wsButton');
+    // const login = document.querySelector('#login');
+    // const logout = document.querySelector('#logout');
+    // const wsButton = document.querySelector('#wsButton');
 
     function showMessage(res) {
         console.log(`\n${res}`);
@@ -208,17 +208,17 @@
         };
     }
 
-    login.onclick = function () {
-        clientAction('/login','POST');
-    };
-
-    logout.onclick = function () {
-        clientAction('/logout','POST');
-    };
-
-    wsButton.onclick = function () {
-        establishWebsocketConnection();
-    };
+    // login.onclick = function () {
+    //     clientAction('/login','POST');
+    // };
+    //
+    // logout.onclick = function () {
+    //     clientAction('/logout','POST');
+    // };
+    //
+    // wsButton.onclick = function () {
+    //     establishWebsocketConnection();
+    // };
 
     let numUsers = 4; // Currently hardcoded; derive dynamically from server later
 

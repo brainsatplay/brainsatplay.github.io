@@ -1,36 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang=en>
 <head>
-    <meta charset="UTF-8">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/site.css">
-    <title>Brains@Play</title>
+  <meta charset=utf-8>
+  <meta http-equiv=X-UA-Compatible content="IE=edge">
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <link rel=icon href=assets/favicon.ico>
+  <link rel="stylesheet" type="text/css" href="css/style.css"/>
+  <script src="components/nav.js" type="text/javascript" defer></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+
+  <title>Brains@Play | Home</title>
 </head>
 <body>
-<div id="app">
-    <div id="nav" class="bar">
-        <a href="index.html" class="current">Home</a>
-        <a href="about.html">About</a>
-        <a href="game-list.html">Game List</a>
-        <a href="competition.html">Competition</a>
-        <a href="curriculum.html">Curriculum</a>
-    </div>
-    <div class="break"></div>
-    <div class="head bar">
-        <h1>Brains@Play Futures Initative</h1>
-        <h3>More Brains Are Better Than One</h3>
-    </div>
-    <div class="break"></div>
-    <section>
-        <h2>Coming Soon...</h2>
-        <p>Preview our upcoming competition <a href="competition.html">here</a></p>
-        <p>Preview our web app <a href="brainstorm.html">here</a></p>
+<noscript>
+  <strong>We're sorry but Brains@Play doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
+<div id=app>
 
-    </section>
+  <!--Navbar-->
+  <nav-bar id="nav" class="nav-transparent">
+  </nav-bar>
+  <!--Content-->
+  <div>
+    <div>
+      <div id= "hero1" class="hero">
+        <section class="hero-content" style="{textAlign: 'left'}">
+          <h1>Brains@Play</h1>
+          <p>Ensuring the responsible development of brain-responsive entertainment experiences</p>
+          <div class="buttons">
+            <button onclick="window.location.href='futures.html'" rel="noopener">Futures Initiative</button>
+            <button onclick="window.location.href='games.html'" rel="noopener">Games List</button>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div>
+      <div id= "hero2" class="hero" style="{ backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(' + './assets/images/brain.gif' + ')' }">
+        <section class="hero-content" style="{textAlign: 'left'}">
+          <h1>Get Involved</h1>
+          <h3>Livewire: A Stimulating Night of Neurotechnology</h3>
+          <p>Experience a social neurotechnology platform that enables you to
+            couple with other minds across social, cultural, and political boundaries.</p>
+          <div class="buttons">
+            <button onclick="window.location.href='livewire.html'" rel="noopener">The Event</button>
+            <button onclick="window.location.href='brainstorm.html'" rel="noopener">Enter the Brainstorm</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!--Footer-->
+  <footer-bar>
+  </footer-bar>
+
 </div>
+
+<script>
+  let myNav = document.getElementById('nav');
+  window.onscroll = function () {
+    "use strict";
+    if (document.body.scrollTop >= 100 || document.documentElement.scrollTop >= 100 ){
+      myNav.classList.add("nav-colored");
+      myNav.classList.remove("nav-transparent");
+    }
+    else {
+      myNav.classList.add("nav-transparent");
+      myNav.classList.remove("nav-colored");
+    }
+  };
+</script>
 
 </body>
 </html>
+

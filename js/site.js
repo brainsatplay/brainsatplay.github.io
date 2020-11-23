@@ -60,7 +60,7 @@ async function reset(mod, mods, language){
 function resetInterface(mods,language){
 
     // Reset Cards and Non-Selector Interface Elements
-    let file = 'assets/interface' + language + '.csv'
+    let file = 'assets/futures/interface' + language + '.csv'
     let el;
     d3.csv(file).then(function (data) {
         let headers = Object.keys( data[0] ) // then taking the first row object and getting an array of the keys
@@ -132,7 +132,7 @@ function populateExamples(language) {
         language = 'Greek'
     }
 
-    let file = 'assets/examples' + language + '.csv'
+    let file = 'assets/futures/examples' + language + '.csv'
     d3.csv(file).then(function (data) {
         let headers = Object.keys(data[0]) // then taking the first row object and getting an array of the keys
         document.getElementById('exampleName').innerHTML = data[0]['Name'];
@@ -146,8 +146,8 @@ function populateExamples(language) {
                 "                <p class=\"prompt\">" + data[game]['Prompt']+ "</p>\n" +
                 "                <p>" + data[game]['Details'] + "</p>\n" +
                 "            </div>\n" +
-                "            <a href=\"./assets/" + data[game]['Game'].replace(/\s/g, '') + ".jpg\" target=\"_blank\">\n" +
-                "                <img alt=data[game]['Game'] src=\"./assets/" + data[game]['Game'].replace(/\s/g, '') + ".jpg\">\n" +
+                "            <a href=\"./assets/futures/" + data[game]['Game'].replace(/\s/g, '') + ".jpg\" target=\"_blank\">\n" +
+                "                <img alt=data[game]['Game'] src=\"./assets/futures/" + data[game]['Game'].replace(/\s/g, '') + ".jpg\">\n" +
                 "            </a>\n" +
                 "        </div>" +
                 "<hr/>"
@@ -184,7 +184,8 @@ function queryCSV(text_id,option) {
         default:
             file_id = 'tgftf';
     }
-    let file = 'assets/' + file_id + option + '.csv'
+    let file = 'assets/futures/' + file_id + option + '.csv'
+    console.log(option)
     d3.csv(file).then(function (data) {
         let flag = true;
         let inner_flag;

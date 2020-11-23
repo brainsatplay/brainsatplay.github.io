@@ -5,8 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/site.css">
-    <title>Submit - Brains@Play</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="components/nav.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+
+    <title>Brains@Play | Submit</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
@@ -14,17 +17,15 @@
 
 <body>
 <div id="app">
-    <div id="nav" class="bar">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="game-list.html">Game List</a>
-        <a href="competition.html">Competition</a>
-        <a href="curriculum.html">Curriculum</a>
-    </div>
-    <div class="head bar">
+    <!--Navbar-->
+    <nav-bar id="nav" class="nav-transparent">
+    </nav-bar>
+
+    <div id="submit-header" class="header">
         <h1>Submit</h1>
         <h3>Let's see what you came up with!</h3>
     </div>
+
     <section>
         <div id="preamble">
             <div>
@@ -244,9 +245,14 @@
             </div>
         </div>
         </form>
-        <button id="SubmitGame" type="submit" form="submission" value="Submit Game"><div class="icon"><i class="fas fa-paper-plane fa-2x"></i></div>Submit Game</button>
+        <button id="SubmitGame" type="submit" form="submission" value="Submit Game">Submit Game</button>
         <p id="submit_status"></p>
     </section>
+
+    <!--Footer-->
+    <footer-bar>
+    </footer-bar>
+
 </div>
 <script>
 
@@ -351,5 +357,21 @@
         )
     })
 </script>
+
+<script>
+    let myNav = document.getElementById('nav');
+    window.onscroll = function () {
+        "use strict";
+        if (document.body.scrollTop >= 100 || document.documentElement.scrollTop >= 100 ){
+            myNav.classList.add("nav-colored");
+            myNav.classList.remove("nav-transparent");
+        }
+        else {
+            myNav.classList.add("nav-transparent");
+            myNav.classList.remove("nav-colored");
+        }
+    };
+</script>
+
 </body>
 </html>

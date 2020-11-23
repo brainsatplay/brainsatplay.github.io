@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link rel=icon href=assets/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="components/nav.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+    <title>Brains@Play | SDK</title>
+</head>
+<body>
+
+<!--Navbar-->
+<nav-bar id="nav" class="nav-transparent">
+</nav-bar>
+
+<section>
+    <h2><strong>Web Brain SDK</strong></h2>
+
+    <p>Welcome to the Web Brain SDK!</p>
+
+    <p>Here is thorough documentation of how our code works.</p>
+
+    <h3>Brainstorm</h3>
+    <p>This tool was created to help game developers rapdily introduce
+    a simple multi-brain BCI sytem on the web. Brainstorm has been written
+    for integration into a BCI processing pipeline using Brainflow-compatible
+        headsets to synchronize events occuring in the game with specific brain activity.</p>
+
+    <h4>Getting Started</h4>
+    <p>To get started, you simply need to use our API in your Javascript code. This includes
+    all the necessary back-end components required for including data from multiple brains
+        into your project.</p>
+
+    <h4>Usage</h4>
+    <p>Coming soon...</p>
+
+    <h4>Built With</h4>
+    <ul>
+        <li><p>Brainflow</p></li>
+        <li><p>BCI.js</p></li>
+        <li><p>WebGL</p></li>
+    </ul>
+
+    <h4>Contributing</h4>
+    <p>Please contact <a href="mailto:gflynn@usc.edu" class="text">Garrett Flynn</a> for details on our code of conduct, and the process for submitting pull requests to us.</p>
+
+    <h4>Authors</h4>
+    <ul>
+        <li><p><strong>Garrett Flynn</strong> - Project Coordinator</p></li>
+        <li><p><strong>Samir Ghosh</strong> - Original Contributor</p></li>
+
+    </ul>
+
+    <h4>License</h4>
+    <p>This project has been licensed under the MIT license.</p>
+
+</section>
+<!--Footer-->
+<footer-bar>
+</footer-bar>
+
+
+<script>
+    let myNav = document.getElementById('nav');
+    window.onscroll = function () {
+        "use strict";
+        if (document.body.scrollTop >= 100 || document.documentElement.scrollTop >= 100 ){
+            myNav.classList.add("nav-colored");
+            myNav.classList.remove("nav-transparent");
+        }
+        else {
+            myNav.classList.add("nav-transparent");
+            myNav.classList.remove("nav-colored");
+        }
+    };
+</script>
+
+
+</body>
+</html>
