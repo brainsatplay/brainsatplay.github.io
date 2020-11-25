@@ -1,5 +1,7 @@
 /*App and Nav*/
-
+* {
+    box-sizing: border-box;
+}
 body{
     margin: 0px;
     background: black;
@@ -495,13 +497,19 @@ input:focus{
 }
 
 /*Projects*/
+.item {
+    margin: 5px;
+}
 
 #projects{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    /*width: 100%;*/
+    padding: 5px;
+    /*background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/livewire.png')*/
+
 }
 
 #projects a{
@@ -517,7 +525,7 @@ input:focus{
     align-items: center;
     /*width: 300px;*/
     height: 100vh;
-    width: calc(100% - 100px);
+    width: 100%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -532,17 +540,6 @@ input:focus{
     text-decoration: none;
 }
 
-.livewire{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/livewire.png')
-}
-
-.bandg{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/muse_pink.png')
-}
-
-.memory{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/devices/HMP.jpg')
-}
 
 /* Event */
 #event {
@@ -659,15 +656,16 @@ footer-bar a {
 /* Contact */
 .contact{
     display: flex;
-    height:calc(100vh);
+    height:100vh;
     justify-content: center;
     align-items: center;
 }
 
 .fullscreen{
-    display: flex;
+    /*display: flex;*/
     flex-wrap: wrap;
-    height:calc(100vh - 150px);
+    padding: 50px 0px;
+    min-height:calc(100vh - 150px);
     justify-content: center;
     align-items: center;
 }
