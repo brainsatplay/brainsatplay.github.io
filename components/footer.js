@@ -23,7 +23,7 @@ connectedCallback() {
     </div>
     <div id="footer-links">
       <div id="footer-links1" class="right-footer">
-        <p class="footer-text"><a class ='link' href="/about.html" target="_blank">About</a></p>
+        <p class="footer-text"><a class ='link' href="/futures-initiative.html" target="_blank">Futures Initiative</a></p>
         <p class="footer-text"><a class ='link' href="mailto:gflynn@usc.edu" target="_blank">Contact</a></p>
       </div>
       <div id="footer-links2" class="right-footer">
