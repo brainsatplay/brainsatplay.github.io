@@ -514,7 +514,7 @@ input:focus{
     pointer-events: none;
 }
 
-#projects{
+.gallery{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -1053,18 +1053,17 @@ button i {
 }
 
 /*Futures Initiative*/
-#futures-section{
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    justify-content:space-between;
+#futures h2{
+    margin-top: 50px;
 }
 
-#futures-section div{
-    margin: 0px 50px;
-    flex-grow: 1;
+#person{
+    margin-top: 25px;
 }
 
+#person h3{
+    margin: 0px 0px 5px 0px;
+}
 
 .flex-center{
     justify-content:center
@@ -1091,7 +1090,7 @@ button i {
     margin-top: 50px;
 }
 
-.form-section i{
+.form-section i {
     flex-grow: 1;
     font-size: 14px;
     margin-bottom: 10px;
