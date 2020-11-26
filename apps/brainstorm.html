@@ -4,8 +4,8 @@
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <link rel=icon href=../assets/favicon.ico>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel=icon href=favicons/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/brainstorm.css"/>
 <!--    <script src="https://d3js.org/d3.v6.min.js"></script>-->
     <script type="text/javascript" src="js/webgl.js" defer></script>
     <script type="text/javascript" src="js/utils.js" defer></script>
@@ -31,7 +31,7 @@
     <!--Navbar-->
     <div id="app-menu">
         <div id="menu-toggle" class="toggle"><div class="icon"><i class="fas fa-angle-right fa-3x"></i></div></div>
-        <div class="icon menuicon"><a href="../index.html" class="logo"><h3>Brains@Play</h3></a></div>
+        <div class="icon menuicon"><a href="https://brainsatplay.com" class="logo"><h3>Brains@Play</h3></a></div>
         </a>
         <div class="icon menuicon" onclick="state = 1">
             <a><i class="fas fa-home fa-2x"></i></a><p>Main UI</p>
@@ -42,9 +42,9 @@
         <div class="icon menuicon" onclick="openTutorial()">
             <a><i class="fas fa-book-open fa-2x"></i></a><p>Tutorial</p>
         </div>
-        <div class="icon menuicon" onclick="window.open('https://github.com/Mousai-Neurotechnologies/brainstorm-client','mywindow');">
-            <a><i class="fab fa-python fa-2x"></i></a><p>Download Python Client</p>
-        </div>
+<!--        <div class="icon menuicon" onclick="window.open('https://github.com/Mousai-Neurotechnologies/brainstorm-client','mywindow');">-->
+<!--            <a><i class="fab fa-python fa-2x"></i></a><p>Download Python Client</p>-->
+<!--        </div>-->
 <!--        <div class="icon menuicon" id="login">-->
 <!--            <a><i class="fas fa-arrow fa-2x"></i></a><p>Login</p>-->
 <!--        </div>-->
@@ -325,11 +325,19 @@
 
     function initialize() {
 
+        establishWebsocketConnection();
+
         $('#canvas-message').animate({'opacity': 0}, 100, function(){
-            $(this).html('loading...').animate({'opacity': 1}, 0);
+            $(this).html(`
+loading...
+<!--<div>-->
+<!--<h3>Welcome to the Brainstorm</h3>-->
+<!--<p>Experience a social neurotechnology platform that enables you to manage your brain data and couple with other minds across social, cultural, and political boundaries.</p>-->
+<!--</div>-->
+`).animate({'opacity': 1}, 0);
         });
 
-        establishWebsocketConnection();
+        setTimeout(() => {}, 50000);
         particleBrain()
     }
 
