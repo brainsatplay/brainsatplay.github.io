@@ -16,7 +16,7 @@
 
 
 
-<body onload="reset(mod,mods,'English')">
+<body onload="resetInterface(mods,language)">
 <noscript>
     <strong>We're sorry but The Game from the Future doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
 </noscript>
@@ -396,7 +396,6 @@
                 file_id = 'tgftf';
         }
         let file = './sheets/' + file_id + option + '.csv'
-        console.log(option)
         d3.csv(file).then(function (data) {
             let flag = true;
             let inner_flag;
