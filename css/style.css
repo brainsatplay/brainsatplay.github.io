@@ -47,7 +47,8 @@ h4{
     font-weight: normal;
 }
 
-button {width: 200px; min-height: 50px; cursor: pointer; color: whitesmoke;
+button {
+    width: 200px; min-height: 50px; cursor: pointer; color: whitesmoke;
     font-family : inherit;
     display: flex;
     justify-content: center;
@@ -57,11 +58,12 @@ button {width: 200px; min-height: 50px; cursor: pointer; color: whitesmoke;
     border: 1px solid whitesmoke;
     padding: 10px 20px;
     border-radius: 5px;
-    transition: 0.5s;}
+    transition: 0.5s;
+}
 
 button:hover{
-    color: #FF76E9;
-    border-color: #FF76E9;
+    color: lightgray;
+    border-color: lightgray;
 }
 
 .debug {
