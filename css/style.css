@@ -883,7 +883,7 @@ select {
     flex-wrap:wrap;
     align-items: center;
     justify-content: center;
-    flex-basis: 75%;
+    flex-basis: 100%;
 }
 
 .option {
