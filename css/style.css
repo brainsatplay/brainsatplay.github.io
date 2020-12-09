@@ -677,7 +677,7 @@ footer-bar a {
 }
 
 .fullscreen{
-    /*display: flex;*/
+    display: flex;
     flex-wrap: wrap;
     padding: 50px 0px;
     min-height:calc(100vh - 150px);
@@ -687,6 +687,10 @@ footer-bar a {
 
 .full-center{
     max-width: 500px;
+}
+
+.full-center-80{
+    max-width: 80%;
 }
 
 /*Games List*/
@@ -835,6 +839,18 @@ select {
 }
 
 /*Competition*/
+.button-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 25px 0px;
+    flex-wrap: wrap;
+}
+
+.button-nav button{
+    width: 100%;
+}
+
 #button-nav {
     display: flex;
     align-items: center;
@@ -1011,4 +1027,8 @@ hr {
 
 .small{
     font-size: 80%;
+}
+
+.bottom-margin{
+    margin-bottom: 75px;
 }
