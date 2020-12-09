@@ -11,7 +11,7 @@ connectedCallback() {
 <!--      <a href="about.html" class="link">Our Story</a>-->
       <a href="https://brainsatplay.azurewebsites.net" class="link">App</a>
 <!--      <a href="./games.html" class="link">Games</a>-->
-      <a href="/futures-initiative.html" class="link">Futures Initiative</a>
+      <a href="/futures.html" class="link">Futures Initiative</a>
 <!--      <a href="projects.html" class="link">Projects</a>-->
 <!--      <a href="contact.html" class="link">Contact</a>-->
     </div>
