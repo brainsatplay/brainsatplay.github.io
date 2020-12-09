@@ -28,11 +28,14 @@ connectedCallback() {
       </div>
       <div id="footer-links2" class="right-footer">
         <p class="footer-text"><a class ='link' href="/contribute.html" target="_blank">Contribute</a></p>
-        <p class ='footer-text'><a class ='link' href="/rules.html">Rules</a></p>
+<!--        <p class ='footer-text'><a class ='link' href="/rules.html">Rules</a></p>-->
+        <p class ='footer-text link unavailable'>Rules</p>
       </div>
       <div id="footer-links3" class="right-footer">
-        <p class ='footer-text'><a class ='link' href="/terms.html">Terms</a></p>
-        <p class ='footer-text'><a class ='link' href="/privacy.html">Privacy</a></p>
+            <p class ='footer-text link unavailable'>Terms</p>
+            <p class ='footer-text link unavailable'>Privacy</p>
+<!--        <p class ='footer-text'><a class ='link' href="/terms.html">Terms</a></p>-->
+<!--        <p class ='footer-text'><a class ='link' href="/privacy.html">Privacy</a></p>-->
       </div>
     </div>
     <div class="center-footer">
