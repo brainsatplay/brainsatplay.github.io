@@ -26,9 +26,11 @@
     <section>
         <div class="content">
         <div id="game"></div>
-        <div id="available-games"></div>
+        <div id="available-games" class='gallery'></div>
         <h2 id="temp-message"></h2>
-        <div id="back"></div>
+            <button id="back" style="display:none;" onclick="window.location.href='../projects.html'">
+                Back to Games List
+            </button>
         </div>
 </section>
 
@@ -39,8 +41,8 @@
 
 <script>
 
-    let url = "https://brainsatplay.azurewebsites.net"
-    // let url = "http://localhost"
+    // let url = "https://brainsatplay.azurewebsites.net"
+    let url = "http://localhost"
 
     // Dispay Submissions
     function displaySubmissions(){
@@ -59,30 +61,32 @@
             referrer: 'no-referrer', // no-referrer, *client
             body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
         }).then(response => {
-            // $('#available-games').prepend('<h1>Available Games</h1>')
             let gameTag;
             response.json().then(function (json) {
                 Object.keys(json).forEach(function(key) {
-                    gameTag = `<a id="${json[key]}" class="link"><h3>${json[key]}</h3></a><i>${key}</i>`
+                    gameTag = `<div id="${json[key]}" class="item" style="
+cursor: pointer;
+width: 100%;
+padding: 0px 50px;
+
+background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${json[key]["game-image"]});
+background-position: center;
+background-size: cover;
+background-attachment: scroll;
+
+"><h3>${key}</h3></div>`
                     $('#available-games').append(gameTag);
-                    document.getElementById(`${json[key]}`).addEventListener('click', function() {getSubmissions(json[key])});
+                    document.getElementById(`${json[key]}`).addEventListener('click', function() {getSubmissions(key)});
             })
             })
     })
     }
 
-    // // Submit to MongoDB
-    // $("#SubmitGame").click(function(){
-    //     let game = document.getElementById('gameinput').value
-    //     $('#submission').empty()
-    //     $('#submission').prepend('<h1>' + 'Grabbing files. Please wait...' + '</h1>')
-    //     getSubmissions(game)
-    // });
     document.getElementById('back').addEventListener('click', function() {goBack()});
 
     function goBack() {
         document.getElementById('game').innerHTML = '';
-        document.getElementById('back').innerHTML = '';
+        document.getElementById('back').style.display = 'none';
         document.getElementById('available-games').style.display = 'block';
     }
 
@@ -113,29 +117,94 @@
                         $('#game').prepend('<h1>' + json.error + '</h1>')
                     } else {
                         $('#game').prepend(
-                            "<h1 id='game-name'></h1>"+
-                            "<h3 id='team-name'></h1>"+
-                            "<i id='team-members'></i>"+
-                            "<p id='game-prompt'></p>"+
-                            "<p id='game-description'></p>"+
-                            "<img id='game-image'>"+
-                            "<div id='additional-images'></div>"
-                        )
+                            `
+
+<div>
+<div>
+<h1 id='game-name'></h1>
+<i id='game-pitch'></i>
+<br/>
+<div id='game-image' class="header"></div>
+<div class="center">
+    <i id='game-prompt' class="small"></i>
+</div>
+<p id='game-description'></p>
+<h2>Additional Information</h2>
+<p id='additional-info'></p>
+
+<h3>The Team</h3>
+<h4 id='team-name'></h4>
+<p id='team-members'><strong>Members:</strong> </p>
+<p id='team-ages'><strong>Ages:</strong> </p>
+<p id='team-country'><strong>Country:</strong> </p>
+<p class="small" id='contact'>For inquiries, please contact </p>
+
+<h3>Video</h3>
+<div id="video-link"></div>
+<h3>Additional Images</h3>
+<div id='additional-images' class='gallery'>
+</div>
+<br/>
+<h2>Game Details</h2>
+<br/>
+<h3>How far in the future does your game take place?</h3>
+<p id='game-futuretime'></p>
+<h3>In what type of future does your game take place?</h3>
+<p id='game-futuretype'></p>
+<br/>
+<h3>How many players?</h3>
+<p id="players-number"></p>
+<h3>Who are the players?</h3>
+<p id="players-characteristics"></p>
+<h3>Except human brains, are there other types of brains involved?</h3>
+<p id="players-nonhuman"></p>
+<h3>Where are players located while playing the game?</h3>
+<p id="players-location"></p>
+<h3>Why are they playing?</h3>
+<p id="players-motivation"></p>
+<h3>Which is the main theme of the game?</h3>
+<p id="players-theme"></p>
+<h3>Where does it take place?</h3>
+<p id="players-world"></p>
+<br/>
+<h3>What kind of conflict does the game support?</h3>
+<p id="rules-conflict"></p>
+<h3>What players can (or cannot) do?</h3>
+<p id="rules-what"></p>
+<h3>How they can (or cannot) do it?</h3>
+<p id="rules-how"></p>
+<h3>What are the win/lose conditions—-if any?</h3>
+<p id="rules-conditions"></p>
+<br/>
+<h3>What are the major ethical issues that might be raised by the game?</h3>
+<p id="ethical-issues"></p>
+<h3>Do you have any specific safeguards to protect players against them?</h3>
+<p id="ethical-safeguards"></p>
+</div>
+</div>
+`)
 
                         Object.keys(json).forEach(function(key) {
                             var doc = json[key];
-                            document.getElementById("team-name").innerHTML=doc["team-name"];
-                            document.getElementById("team-members").innerHTML=doc["team-members"];
-                            document.getElementById("game-name").innerHTML=doc["game-name"];
-                            document.getElementById("game-prompt").innerHTML=doc["game-prompt"];
-                            document.getElementById("game-description").innerHTML=doc["game-description"];
-                            document.getElementById("game-image").src=doc["game-image"];
-                            for (img in doc["additional-images"]){
-                                $('#additional-images').prepend('<img src=' + doc["additional-images"][img] + ' />')
+
+                            document.getElementById("contact").innerHTML+= `${doc['contact-fn']} ${doc['contact-ln']} at ${doc['contact-email']}.`;
+                            document.getElementById("game-image").style.backgroundImage=`url(${doc["game-image"]})`;
+                            document.getElementById("game-image").style.backgroundPosition=`center`;
+                            document.getElementById("game-image").style.backgroundSize=`contain`;
+                            document.getElementById("game-image").style.backgroundAttachment=`scroll`;
+
+                            for (let img in doc["additional-images"]){
+                                $('#additional-images').prepend('<img class="item" src=' + doc["additional-images"][img] + ' />')
                             }
+
+                            Object.keys(doc).forEach(function(field) {
+                                if (!['_id','additional-images', 'game-image','contact-fn','contact-ln','contact-email','competition'].includes(field)) {
+                                    document.getElementById(field).innerHTML += doc[field];
+                                }
+                            })
                         });
                     }
-                document.getElementById('back').innerHTML = 'Go Back';
+                    document.getElementById('back').style.display = 'block';
                 }
             )
         });

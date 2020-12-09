@@ -696,7 +696,10 @@ footer-bar a {
 /*Games List*/
 
 #back {
-    margin-top: 25px;
+    position:fixed;
+    bottom: 0;
+    right: 50px;
+    background-color: black;
 }
 
 /*Futures Initiative*/
