@@ -5,7 +5,7 @@ class Nav extends HTMLElement {
 
 connectedCallback() {
     this.innerHTML = `
-      <a href="/" class="logo"><h3>Brains@Play</h3></a>
+      <a href="/" class="logo"><h4>Brains@Play</h4></a>
     <div id="links" class="stretch">
       <a href="/" class="link">Home</a>
 <!--      <a href="about.html" class="link">Our Story</a>-->

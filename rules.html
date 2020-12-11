@@ -13,7 +13,7 @@
 <body>
 
 <!--Navbar-->
-<nav-bar id="nav" class="nav-transparent">
+<nav-bar id="nav">
 </nav-bar>
 
 <section class="fullscreen">
@@ -31,22 +31,6 @@
 <!--Footer-->
 <footer-bar>
 </footer-bar>
-
-
-<script>
-    let myNav = document.getElementById('nav');
-    window.onscroll = function () {
-        "use strict";
-        if (document.body.scrollTop >= 100 || document.documentElement.scrollTop >= 100 ){
-            myNav.classList.add("nav-colored");
-            myNav.classList.remove("nav-transparent");
-        }
-        else {
-            myNav.classList.add("nav-transparent");
-            myNav.classList.remove("nav-colored");
-        }
-    };
-</script>
 
 
 </body>
