@@ -327,6 +327,10 @@ a.link .current{
     /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/contribute.jpg')*/
 }
 
+#sdk-header{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/sdk.jpg')
+}
+
 #contribute .about-right{
     justify-content: center;
     align-items: center;
