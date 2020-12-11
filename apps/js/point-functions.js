@@ -36,71 +36,85 @@ function createPointCloud(pointFunction, pointCount) {
     if (pointFunction == 'brain') {
         pointCloud = getBrain()
     } else if (pointFunction == 'brains'){
-        let oneBrain = reducePointCount(brainVertices, Math.floor((brainVertices.length/3)/numUsers))
-        let dim_size = Math.ceil(Math.sqrt(numUsers));
-        let delta = (2*INNER_Z)/(dim_size-1)
-        let row = 0;
-        let col = -1;
-
-        let tempBrain;
-        for (let i = 0; i < numUsers; i++) {
-            tempBrain = [...oneBrain];
-            if (i % dim_size == 0) {
-                row = 0;
-                col++;
+            let oneBrain = reducePointCount(brainVertices, Math.floor((brainVertices.length/3)/brains.users.size))
+            let dim_size = Math.ceil(Math.sqrt(brains.users.size));
+    
+            if (dim_size == 1){delta = 0; z_window = 0} else{
+                z_window = 1;
+                delta = (2*1)/(dim_size-1)
             }
-            for (let point = 0; point < (oneBrain.length/3); point++){
-                tempBrain[3*point] /= dim_size;
-                tempBrain[3*point+1] /= dim_size;
-                tempBrain[3*point+2] /= dim_size;
-
-                tempBrain[3*point+1] += -INNER_Z + (delta) * col;
-                tempBrain[3*point+2] += -INNER_Z + (delta) * row;
-        }
-            pointCloud.push(...tempBrain);
-            row++
-        }
-    }
-    else if (pointFunction == 'voltage') {
-        pointCloud = getVoltages(pointCloud,pointCount,numUsers)
-    } else if (pointFunction == shapes.sphereShells) {
-        let dim_size = Math.ceil(Math.sqrt(numUsers));
-        let delta = (2*INNER_Z)/(dim_size-1)
-        let row = 0;
-        let col = -1;
-        for (let i = 0; i < numUsers; i++) {
-            if (i % dim_size == 0) {
-                row = 0;
-                col++;
+            let row = 0;
+            let col = -1;
+    
+            let tempBrain;
+            for (let i = 0; i < brains.users.size; i++) {
+                tempBrain = [...oneBrain];
+                if (i % dim_size == 0) {
+                    row = 0;
+                    col++;
+                }
+                for (let point = 0; point < (oneBrain.length/3); point++){
+                    tempBrain[3*point] /= dim_size;
+                    tempBrain[3*point+1] /= dim_size;
+                    tempBrain[3*point+2] /= dim_size;
+    
+                    tempBrain[3*point+1] += -z_window + (delta) * col;
+                    tempBrain[3*point+2] += -z_window + (delta) * row;
             }
-            for (let j = 0; j < Math.floor(pointCount / numUsers); j++) {
-                const r = () => (Math.random() - 0.5);
-                let point = pointFunction(r(), r(), r());
-
-                // Reduce point radius
-                point[0] /= dim_size;
-                point[1] /= dim_size;
-                point[2] /= dim_size;
-
-                // Shift spheres
-                point[1] += -INNER_Z + (delta) * col;
-                point[2] += -INNER_Z + (delta) * row;
-
+    
+    
+            if (brains.users.size == 1) {
+                pointCloud = tempBrain;
+            } else {
+                pointCloud = pointCloud.concat(tempBrain);
+            }
+                row++
+            }
+        }
+        else if (pointFunction == 'voltage') {
+            pointCloud = getVoltages(pointCloud,pointCount,brains.users.size)
+        } else if (pointFunction == shapes.sphereShells) {
+            let dim_size = Math.ceil(Math.sqrt(brains.users.size));
+            if (dim_size == 1){delta = 0; z_window = 0} else{
+                z_window = INNER_Z;
+                delta = (2*INNER_Z)/(dim_size-1)
+            }
+            let row = 0;
+            let col = -1;
+            for (let i = 0; i < brains.users.size; i++) {
+                if (i % dim_size == 0) {
+                    row = 0;
+                    col++;
+                }
+                for (let j = 0; j < Math.floor(pointCount / brains.users.size); j++) {
+                    const r = () => (Math.random() - 0.5);
+                    let point = pointFunction(r(), r(), r());
+    
+                    // Reduce point radius
+                    point[0] /= dim_size;
+                    point[1] /= dim_size;
+                    point[2] /= dim_size;
+    
+                    // Shift spheres
+                    point[1] += -z_window + (delta) * col;
+                    point[2] += -z_window + (delta) * row;
+    
+                    pointCloud.push(...point);
+                }
+                row++
+            }
+        }
+        else{
+                for (let i = 0; i < pointCount; i++) {
+                const r = () => Math.random() - 0.5;
+                const point = shapes[pointFunction](r(), r(), r());
                 pointCloud.push(...point);
             }
-            row++
         }
+        
+        // return pointCloud
+        return pointCloud;
     }
-    else{
-            for (let i = 0; i < pointCount; i++) {
-            const r = () => Math.random() - 0.5;
-            const point = pointFunction(r(), r(), r());
-            pointCloud.push(...point);
-        }
-    }
-
-    return pointCloud;
-}
 
 const shapes = {
 
@@ -262,8 +276,8 @@ async function getBrain() {
     for(var i = 0, length = vertices.length; i < length; i++){
         vertices[i] = vertices[i]/75;
         }
-
-    return vertices
+        
+    return brainpoints
 }
 
 
@@ -271,11 +285,12 @@ function getVoltages(pointCloud, pointCount, numUsers) {
 
     let channel_inds = [0];
     let usr_inds = [0];
-    let factor = (pointCount/(2*numUsers*channels))
+    let factor = (pointCount/((VOLTAGE_Z_OFFSET)*numUsers*channels))
     let user = -1;
     let z;
-    let y = -factor/2;
-    let point;
+    let y = -(VOLTAGE_Z_OFFSET/4)*factor;
+    let point1;
+    let point2;
 
     let shift_trigger = Math.floor(pointCount/(2*numUsers*channels));
     let user_trigger = Math.floor(pointCount/(2*numUsers));
@@ -284,23 +299,25 @@ function getVoltages(pointCloud, pointCount, numUsers) {
 
         if (i % shift_trigger == 0) {
                 channel_inds.push(i * 3);
-                z += INNER_Z / (channels);
-                y = -factor / 2;
+                z += 1.5;
+                y = -(VOLTAGE_Z_OFFSET/4)*factor;
         }
 
         if (i % user_trigger == 0){
             if (channels == 1){
-                z = (INNER_Z/2);
+                z = 0;
             } else {
-                z = -(INNER_Z/2) + INNER_Z / (channels);
+                z = -1.5*(channels/2);
             }
-            y = -factor / 2;
+            y = -(VOLTAGE_Z_OFFSET/4)*factor;
             usr_inds.push(i * 3)
             user++;
         }
 
-        point1 = [user*.01, (y) / (factor / 4), z - INNER_Z / (2 * channels)];
-        point2 = [user*.01, ((y+1)) / (factor / 4), z - INNER_Z / (2 * channels)];
+        point1 = [user*.01,                                 // Separate Each User
+                    (y) / (factor / VOLTAGE_Z_OFFSET),  // Length of Voltage Display
+                    z];    // Move to Correct Channel Position
+        point2 = [user*.01, ((y+1)) / (factor / VOLTAGE_Z_OFFSET), z];
         pointCloud.push(...point1);
         pointCloud.push(...point2);
         y++;

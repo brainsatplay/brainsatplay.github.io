@@ -112,6 +112,16 @@ button:hover{
     cursor: pointer;
 }
 
+#app-menu p{
+    font-size: 10px;
+}
+
+.user-info{
+    padding: 20px 25px;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
 
 #menu-toggle{
     left: 200px;
@@ -213,7 +223,6 @@ button i {
 
 .icon p{
     margin-left: 10px;
-    font-size: 10px;
 }
 
 .icon a:visited{
@@ -373,6 +382,7 @@ button i {
     position: absolute;
     display: flex;
     flex-wrap: wrap;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
     top: 0;
     left: 0;
     height: 100%;

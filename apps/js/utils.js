@@ -19,9 +19,76 @@
 //     return data
 // }
 
-function sum(a,b){
-    return a + b
+function sum(acc,cur){
+    return acc + cur
 }
+
+function normalize(min, max) {
+    var delta = max - min;
+    return function (val) {
+        return (val - min) / delta;
+    };
+}
+
+
+function innerLengths(nestedArrays){
+    return nestedArrays.map((innerArray) => {
+        return innerArray.length;
+    }
+    )
+}
+
+function max(arr){
+    return arr.reduce((acc,cur) => {
+        return Math.max(acc,cur);
+    })
+}
+
+function min(arr){
+    return arr.reduce((acc,cur) => {
+        return Math.min(acc,cur);
+    })
+}
+
+
+
+function squareDiffs(data){
+    let avg = average(data)
+    let sqD = data.map(val => {
+        var diff = val - avg;
+        return diff * diff;
+  })
+  return(sqD)
+}
+
+function power(acc,cur){
+    return acc + ((cur*cur)/2)
+}
+
+function average(data){
+    return data.reduce(sum, 0) / data.length;
+  }
+
+  function averagePower(data){
+    return (data.reduce(power, 0))/data.length;
+  }
+
+  function standardDeviation(values){
+    let sqD = squareDiffs(values)
+    var aSqD = average(sqD);
+    var stdDev = Math.sqrt(aSqD);
+    return stdDev;
+  }
+  
+
+function makeArr(startValue, stopValue, cardinality) {
+    var arr = [];
+    var step = (stopValue - startValue) / (cardinality - 1);
+    for (var i = 0; i < cardinality; i++) {
+      arr.push(startValue + (step * i));
+    }
+    return arr;
+  }
 
 
 function closeTutorial() {
@@ -137,10 +204,6 @@ elements.forEach(function(element) {
         }
     }});
 
-function passSignal(msg) {
-    other_signal = msg.ts_filtered
-}
-
     // Plot Bands
     // let power;
     // let label;
@@ -170,17 +233,17 @@ function passSignal(msg) {
 function resetDisplacement(){
     let displacement = [];
     let user;
-    let perUser = Math.floor(resolution/(numUsers*channels))
-    for(user=0; user < numUsers; user++){
+    let perUser = Math.floor(pointCount/(brains.users.size*channels))
+    for(user=0; user < brains.users.size; user++){
         displacement.push(new Array())
         for(let chan=0; chan < channels; chan++){
             displacement[user].push(new Array(perUser).fill(0.0));
         }
     }
 
-    let remainder = resolution - channels*numUsers*perUser
+    let remainder = pointCount - channels*brains.users.size*perUser
         for (let chan = 0; chan < channels; chan++) {
-            for (user = 0; user < numUsers; user++)
+            for (user = 0; user < brains.users.size; user++)
                 if (remainder > 0) {
                     remainder--;
                     displacement[user][chan].push(0.0)
@@ -206,54 +269,22 @@ function generateSignal(generate, channels){
 }
 
 function sendSignal(channels) {
-    // Generate 1 second of sample data at 512 Hz
-    // Contains 8 μV / 8 Hz and 4 μV / 17 Hz
-
-    let len = duration // seconds
-    let base_freq = document.getElementById("freqRange").value
-
-    signal = new Array(channels);
+    let signal = new Array(channels);
     for (let channel =0; channel < channels; channel++) {
-        signal[channel] = bci.generateSignal([(INNER_Z/2)/(2*channels)], [base_freq], samplerate, len);
+        signal[channel] = bci.generateSignal([1], [base_freq+(channel)], samplerate, (1/base_freq));
     }
+    let startTime = Date.now()
+    let time = makeArr(startTime,startTime+(1/base_freq),(1/base_freq)*samplerate)
 
     let data = {
-        ts_filtered: signal,
+        type: 'ts_filtered',
+        signal: signal,
+        time: time
     }
-    if (!ws) {
-        showMessage('No WebSocket connection');
-        return;
-    } else {
-        ws.send(JSON.stringify({'destination':'bci',
-                'data': data
-            })
-        );
-    }
+    brains.users.get("me").streamIntoBuffer(data)
 }
 
-function updateDisplacement(displacement,signal,user){
-    let val;
-
-        for (let chan in displacement[user]) {
-
-            val = 0;
-
-            if (signal[chan] != undefined) {
-                if (signal[chan].length > 0) {
-                    val = signal[chan].shift()
-                }
-            }
-
-            for (let count = 0; count < Math.floor(signal_sustain); count++) {
-                displacement[user][chan].shift();
-                displacement[user][chan].push(val);
-            }
-        }
-
-    return displacement
-}
-
-function switchToVoltage(resolution){
+function switchToVoltage(pointCount){
     // Reset View Matrix
     let viewMatrix = mat4.create();
     mat4.rotateX(viewMatrix, viewMatrix, Math.PI / 2);
@@ -261,14 +292,14 @@ function switchToVoltage(resolution){
     mat4.translate(viewMatrix, viewMatrix, [0, 0, INITIAL_Z_OFFSET]);
     mat4.invert(viewMatrix, viewMatrix);
 
+    let vertexHome;
     // Create signal dashboard
-    let vertexHome = getVoltages([],resolution,numUsers);
+    vertexHome = getVoltages([],pointCount,brains.users.size);
     let ease = true;
     let rotation = false;
     let zoom = false;
 
     return [vertexHome, viewMatrix, ease, rotation, zoom]
-
 }
 
 function distortToggle(){
@@ -300,10 +331,9 @@ function stateManager(animState){
     // reset displacement if leaving voltage visualization
 
     if (shape_array[prevState][animState] == 'voltage') {
-        displacement = resetDisplacement();
-        disp_flat = [...displacement.flat(2)]
+        brains.initializeUserBuffers();
         gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(disp_flat), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLBuffer(), gl.DYNAMIC_DRAW);
     }
 
     // set up variables for new state
@@ -312,26 +342,14 @@ function stateManager(animState){
         ease = true;
         rotation = true;
         zoom = true;
-    }
+    } 
 
     if (shape_array[state][animState] == 'voltage'){
 
-        channels = document.getElementById('channels').value;
+        [vertexHome, viewMatrix, ease, rotation, zoom] = switchToVoltage(pointCount)
 
-        [vertexHome, viewMatrix, ease, rotation, zoom] = switchToVoltage(resolution)
-
-        signal = new Array(channels);
-        other_signal = new Array(channels);
-
-        for (let chan = 0; chan < channels; chan++) {
-            signal[chan] = new Array(REDUCE_POINT_DISPLAY_FACTOR).fill(0);
-            other_signal[chan] = new Array(REDUCE_POINT_DISPLAY_FACTOR).fill(0);
-        }
-
-        displacement = resetDisplacement();
-        disp_flat = [...displacement.flat(2)]
-        signal_sustain = (Math.round(resolution/channels))/(numUsers*REDUCE_POINT_DISPLAY_FACTOR);
-        cameraHome = VOLTAGE_Z_OFFSET;
+        brains.initializeUserBuffers();
+        cameraHome = VOLTAGE_Z_OFFSET; 
     }
     else {
         viewMatrix = mat4.create();
@@ -343,7 +361,7 @@ function stateManager(animState){
     }
 
     if (shape_array[state][animState] != 'brain' && shape_array[state][animState] != 'voltage'){
-        vertexHome = createPointCloud(shape_array[state][animState], resolution);
+        vertexHome = createPointCloud(shape_array[state][animState], pointCount);
         ease = true;
         rotation = false;
         zoom = false;
@@ -353,4 +371,94 @@ function stateManager(animState){
         diff_x = 0;
         diff_y = 0;
     }
+
+    // Show Message
+    
+if (message_array[state][animState] != '') {
+    $('#canvas-message').animate({'opacity': 0}, 400, function(){
+        $(this).html(message_array[state][animState]).animate({'opacity': 1}, 400);
+    });
+} else {
+    $('#canvas-message').animate({'opacity': 0}, 400)
+}
+}
+
+
+function announceUsers(diff){
+    let message ;
+    if (diff > 0){
+        if (diff == 1){
+            message = diff + ' brain joined the brainstorm';
+        } else{
+            message = diff + ' brains joined the brainstorm';
+        }
+    } else if (diff < 0){
+        if (brains.users.size == 0){
+            message = 'all brains left the brainstorm';
+        }
+        else if (diff == -1){
+            message = -diff + ' brain left the brainstorm';
+        } else {
+            message = -diff + ' brains left the brainstorm';
+        }
+    }
+    announcement(message)
+}
+
+function announcement(message){
+    $('#canvas-message').animate({'opacity': 0}, 2000, function(){
+        $(this).html(message).animate({'opacity': 1}, 2000, function() {
+            $(this).html(message).animate({'opacity': 0}, 2000, function() {
+            });
+        });
+    });
+}
+
+function updateChannels(newChannels) {
+        
+        if (channels != newChannels) {
+            channels = newChannels;
+        SIGNAL_SUSTAIN = Math.round(SIGNAL_SUSTAIN_ORIGINAL/channels)
+
+        if (SIGNAL_SUSTAIN%2 == 0){
+            SIGNAL_SUSTAIN += 1;
+        }
+
+        if (shape_array[state][animState] == 'voltage') {
+            [vertexHome, , ease, rotation, zoom] = switchToVoltage(pointCount)
+        }
+
+        passedEEGCoords = eegCoords.map((arr,ind) => {
+            if (ind >= channels){
+                return [NaN,NaN,NaN]
+            } else {
+                return arr
+            } 
+        })
+
+        gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
+
+
+        brains.initializeUserBuffers();
+    } else {
+        channels = newChannels;
+    }
+}
+
+
+function bindChatSubmissionEvent(){
+    document.getElementById('chat-form').addEventListener('submit',function(e) {
+        e.preventDefault();
+        if (!ws) {
+            showMessage('No WebSocket connection');
+            return;
+        }
+        ws.send(JSON.stringify({'destination':'chat',
+            'msg': document.getElementById('message').value
+        })
+            );
+            document.getElementById('message').value = '';
+        return false;
+    })
+
 }
