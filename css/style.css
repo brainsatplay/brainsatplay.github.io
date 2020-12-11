@@ -62,8 +62,8 @@ button {
 }
 
 button:hover{
-    color: lightgray;
-    border-color: lightgray;
+    color: #6a8eb0;
+    border-color: #6a8eb0;
 }
 
 .debug {
@@ -77,23 +77,6 @@ button:hover{
 .wrap{
     flex-wrap: wrap;
 }
-
-.purple-button{
-    border-color: #7373FF;
-    color: #7373FF;
-}
-
-.blue-button{
-    border-color: #50B5FF;
-    color: #50B5FF;
-}
-
-.gray-button{
-    border: 1px solid #888888;
-    color: #888888;
-}
-
-
 
 section{
     color: white;
@@ -145,7 +128,7 @@ nav-bar {
 }
 
 .nav-colored{
-    background: #16151A;
+    background: #0c0b0c;
 }
 
 .nav-transparent{
@@ -168,7 +151,7 @@ nav-bar a img{
 }
 
 a.text {
-    color: #FF76E9;
+    color: #6a8eb0;
     text-decoration: none;
 }
 
@@ -191,11 +174,11 @@ a.link {
 }
 
 a.link:hover {
-    color: #FF76E9;
+    color: #6a8eb0;
 }
 
 a.link .current{
-    color: #FF76E9;
+    color: #6a8eb0;
 }
 
 /*a.link:before {*/
@@ -358,7 +341,7 @@ a.link .current{
     align-items: flex-end;
     flex-wrap: wrap;
     border-radius: 10px;
-    background: #24232A;
+    background: #201e20;
     padding: 20px;
     text-align: left;
 }
@@ -386,7 +369,7 @@ input:focus{
     align-items: center;
     border-radius: 5px;
     flex-grow: 8;
-    background: #16151A;
+    background: #0c0b0c;
     color: gray;
     font-size: 10px;
     font-family: Roboto, sans-serif;
@@ -398,13 +381,13 @@ input:focus{
 
 .email-in{
     background: transparent;
-    color: darkgray;
+    color: whitesmoke;
     border: none;
     flex-grow: 2;
 }
 
 .email-in::placeholder {
-    color: gray;
+    color: #544d54;
 }
 
 .form-submit{
@@ -422,8 +405,8 @@ input:focus{
 }
 
 .form-submit:hover {
-    border-color: #FF76E9;
-    color: #FF76E9;
+    border-color: #6a8eb0;
+    color: #6a8eb0;
 }
 
 .break{
@@ -595,7 +578,7 @@ footer-bar {
     margin: auto;
     flex-wrap: wrap;
     padding: 25px 50px;
-    background: #16151A;
+    background: #0c0b0c;
 }
 
 footer-bar a {
@@ -647,7 +630,7 @@ footer-bar a {
 }
 
 .social a:hover svg {
-    fill: #FF76E9;
+    fill: #6a8eb0;
 }
 
 /*.social a:before {*/
@@ -668,7 +651,7 @@ footer-bar a {
 /*}*/
 
 .unavailable{
-    color: #777777;
+    color: #544d54;
     cursor: default;
 }
 
@@ -822,7 +805,7 @@ footer-bar a {
     max-width: 500px;
     border-radius: 10px;
     color: white;
-    background: #16151A;
+    background: #0c0b0c;
     cursor: pointer;
     display: flex;
     align-items: center;
