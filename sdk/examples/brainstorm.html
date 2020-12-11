@@ -58,9 +58,9 @@
         <div class="icon menuicon" onclick="state = 4">
             <a><i class="fas fa-users-cog fa-2x"></i></a><p>Inspect Group Synchrony</p>
         </div>
-        <div class="icon menuicon" onclick="window.open(`/downloadapp`)"">
-            <a><i class="fas fa-desktop fa-2x"></i></a><p>Download Desktop App</p>
-        </div>
+<!--        <div class="icon menuicon" onclick="window.open(`${url}downloadapp`)">-->
+<!--            <a><i class="fas fa-desktop fa-2x"></i></a><p>Download Desktop App</p>-->
+<!--        </div>-->
         <div class="user-info">
             <h4>Your Info</h4>
             <p id=userId></p>
@@ -183,7 +183,7 @@
     if (option  === 'local'){
         url = new URL('http://localhost');
     } else if (option === 'server'){
-        url = new URL('https://brainsatplay.azurewebsites.net/');
+        url = new URL('https://brainsatplay.azurewebsites.net');
     }
     let brains;
     let userId = undefined;

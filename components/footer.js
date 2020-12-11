@@ -66,7 +66,7 @@ connectedCallback() {
         <!--                    </svg>-->
         <!--                </a>-->
       </div>
-      <p class="footer-text center unavailable">© 2020 Brains at Play</p>
+      <p class="footer-text center unavailable">© 2020 Brains@Play</p>
     </div>
     `;
 }
