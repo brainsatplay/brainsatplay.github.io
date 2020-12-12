@@ -75,6 +75,10 @@ button:hover{
     flex-wrap: wrap;
 }
 
+.bar {
+    width: 100vw;
+}
+
 section{
     color: white;
     margin: 75px;
@@ -117,20 +121,13 @@ nav-bar {
     align-items: center;
     height: 50px;
     padding: 0px 50px;
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
+    background: #0c0b0c;
+    z-index: 2;
     transition: 0.5s;
-    background: #0c0b0c;
-}
-
-.nav-colored{
-    background: #0c0b0c;
-}
-
-.nav-transparent{
-    background: transparent;
 }
 
 nav-bar img{
@@ -216,7 +213,7 @@ a.link .current{
 /* Hero */
 
 #hero1{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/interaction.jpg')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/brainsatplay.png')
 }
 #hero2{
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/livewire.png')
@@ -227,7 +224,7 @@ a.link .current{
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100vh;
+    height: calc(100vh - 50px - 25vh);
     width: 100vw;
     display:table-cell;
     vertical-align: middle;
@@ -493,6 +490,7 @@ input:focus{
 
 /*Projects*/
 .item {
+    cursor: pointer;
     margin: 5px;
 }
 
@@ -682,7 +680,7 @@ footer-bar a {
 
 #back {
     position:fixed;
-    bottom: 0;
+    bottom: 10px;
     right: 50px;
     background-color: black;
 }
@@ -830,25 +828,14 @@ select {
 .button-nav {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin: 25px 0px;
+    justify-content: center;
+    margin: 10px 0px;
     flex-wrap: wrap;
 }
 
 .button-nav button{
-    width: 100%;
-}
-
-#button-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    margin: 25px 0px;
-    flex-wrap: wrap;
-}
-
-#button-nav button{
     width: 300px;
+    margin: 10px 10px;
 }
 
 
@@ -1019,4 +1006,95 @@ hr {
 
 .bottom-margin{
     margin-bottom: 75px;
+}
+
+
+/* App List */
+
+#game-nav {
+    display: flex;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 50px;
+    z-index: 2;
+
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background: #201e20;
+    font-size: 14px;
+    transition: 0.5s;
+}
+
+.game-option {
+    flex-grow: 1;
+    text-align: center;
+    color: #544d54;
+    cursor: pointer;
+    transition: .5s;
+    padding: 0px 25px;
+}
+
+.game-option-unavailable {
+    flex-grow: 1;
+    text-align: center;
+    color: #544d54;
+    cursor: default;
+}
+
+.game-option:hover {
+    color: #6a8eb0;
+}
+
+.selected {
+    color: white;
+    font-weight: normal;
+}
+
+.game {
+    position: relative;
+    display: flex;
+    height: 250px;
+    flex: 1 1 0;
+    width: 0;
+    min-width: 40vw;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+}
+
+.game-mask{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 50%;
+    transition: .5s;
+    z-index: 0;
+}
+
+.game:hover .game-mask {
+    opacity: 30%;
+}
+
+.game-text {
+    margin: 50px;
+    z-index: 1;
+
+}
+
+.game-text h3{
+    margin-bottom: 0px;
+}
+
+
+.game-feature {
+    width: 100%;
+    max-width: 750px;
+    height: auto;
+    margin: 10px 0px;
 }
