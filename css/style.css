@@ -362,7 +362,7 @@ input:focus{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     flex-grow: 8;
     background: #0c0b0c;
     color: gray;
@@ -371,7 +371,12 @@ input:focus{
     height: 40px;
     border: 0;
     margin-bottom: 10px;
-    padding: 0px 20px;
+    border-bottom: 1px solid white;
+    transition: 0.5s;
+}
+
+.input-cont:focus-within {
+    border-bottom: 1px solid #6a8eb0
 }
 
 .email-in{
@@ -382,26 +387,22 @@ input:focus{
 }
 
 .email-in::placeholder {
-    color: #544d54;
+    color: gray;
 }
 
 .form-submit{
-    font-family : inherit;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: transparent;
-    border: 1px solid whitesmoke;
     cursor: pointer;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: 0.5s;
-    margin: 10px 0px;
+    border:none;
+    width: auto;
+    margin: 0px;
 }
 
-.form-submit:hover {
-    border-color: #6a8eb0;
-    color: #6a8eb0;
+.form-submit:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .break{
@@ -1025,25 +1026,21 @@ hr {
 .game-option {
     flex-grow: 1;
     text-align: center;
-    color: #544d54;
+    color: gray;
     cursor: pointer;
     transition: .5s;
     padding: 0px 25px;
-}
-
-.game-option-unavailable {
-    flex-grow: 1;
-    text-align: center;
-    color: #544d54;
-    cursor: default;
+    border-bottom: 1px solid transparent;
 }
 
 .game-option:hover {
-    color: #6a8eb0;
+    color: white;
+    /*border-bottom-color: #6a8eb0;*/
 }
 
 .selected {
     color: white;
+    border-bottom-color: #6a8eb0;
     font-weight: normal;
 }
 
@@ -1093,4 +1090,20 @@ hr {
     max-width: 750px;
     height: auto;
     margin: 10px 0px;
+}
+
+
+
+/*Arrows*/
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    border-color: white;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }

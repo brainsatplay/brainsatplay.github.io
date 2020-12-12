@@ -6,20 +6,17 @@ class Footer extends HTMLElement {
 connectedCallback() {
     this.innerHTML = `
     <div class="form-cont">
-      <div id="newsletter-form">
-        <h4>Subscribe to our Newsletter</h4>
-        <div class="break"></div>
         <form class="input-div" action="https://mousaineuro.us17.list-manage.com/subscribe/post" method="POST">
           <div class="input-cont">
 
             <input type="hidden" name="u" value="5dd6754c08218c368ab0c8cd0"/>
             <input type="hidden" name="id" value="d842fccc18"/>
             <input class="email-in" type="email" autoCapitalize="off" autoCorrect="off" name="MERGE0" id="MERGE0"
-                   size="25" placeholder="Enter your email address"/>
+                   size="25" placeholder="Enter email address for updates"/>
+                   <button type="submit" class="form-submit" name="submit"><i class="arrow right"></i></button>
           </div>
-          <button type="submit" class="form-submit" name="submit">Subscribe</button>
+      
         </form>
-      </div>
     </div>
     <div id="footer-links">
       <div id="footer-links1" class="right-footer">
