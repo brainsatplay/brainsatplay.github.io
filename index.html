@@ -72,12 +72,12 @@
 
   let switched = false;
   let state = 'available'
-  // let url = "http://localhost"
-  let url = "https://brainsatplay.azurewebsites.net"
+  let url = "http://localhost"
+  // let url = "https://brainsatplay.azurewebsites.net"
   let jsonOBJ = {'request': 'all'}
   let submittedGamesJSON;
 
-  document.getElementById('submitted-option').style.opacity = '0%'
+  document.getElementById('submitted-option').style.display = 'none'
 
   fetch(url + '/getsubmissions', {
     method: 'POST',
@@ -94,7 +94,7 @@
     response.json().then(function (json) {
       submittedGamesJSON = json;
       document.getElementById('submitted-option').addEventListener('click', function() {switchToSubmittedGames()});
-      document.getElementById('submitted-option').style.opacity = '100%'
+      document.getElementById('submitted-option').style.display = 'block'
       document.getElementById('submitted-option').className = 'game-option'
     })
   })
