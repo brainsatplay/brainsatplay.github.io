@@ -24,6 +24,7 @@ function backToTeam(){
 function switchToAvailableGames(){
 
     if (state != 'available') {
+        goBack()
         document.getElementById("available-option").className = 'game-option selected'
         document.getElementById("submitted-option").className = 'game-option'
         document.getElementById("available").style.display = 'block'
