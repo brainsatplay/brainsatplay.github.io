@@ -10,11 +10,7 @@ connectedCallback() {
             <button id="back" style="display:none;">
                 Back to Games List
             </button>
-            <div id="submitted-game-gallery" class="gallery">
-            </div>
-            <div id="call-to-submit" class="button-nav">            
-            <button onclick="window.location.href='/futures/brainsandgames/submit'">Submit Your Game Ideas Here</button>
-            </div>
+            <div id="submitted-game-gallery" class="gallery"></div>
     `;
 }
 }
