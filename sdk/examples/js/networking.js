@@ -20,6 +20,7 @@ function showMessage(res) {
     if (res.userId != undefined){
         document.getElementById('userId').innerHTML = 'Client ID: ' + res.userId
         userId = res.userId;
+        setCookie('userId',userId, 30)
         initializeWebsocket();
     } else {
         console.log(`\n${res}`);
@@ -67,6 +68,7 @@ function initializeWebsocket(){
             if (obj.n != 0){
                 generate = false;
                 brains.users.delete('me');
+                brains.users.delete('other');
             }
 
             for (newUser = 0; newUser < obj.n; newUser++){
@@ -82,9 +84,10 @@ function initializeWebsocket(){
             // let reallocationInd;
             update = obj.n;
             if (update == 1){
-                if ((brains.users.size == 1 && brains.users.keys().next().value == "me")){
+                if ((brains.users.size == 2 && brains.users.keys().next().value == "me" || brains.users.keys().next().value == "other" )){
                     generate = false;
                     brains.users.delete('me');
+                    brains.users.delete('other');
                     brains.addBrain(obj.id)
                 }  else {
                     brains.addBrain(obj.id)
@@ -108,6 +111,7 @@ function initializeWebsocket(){
             // add your own brain back if there are no more left
             if (brains.users.size == 0){
                 brains.addBrain('me');
+                brains.addBrain('other');
                 generate = true;
             }
 

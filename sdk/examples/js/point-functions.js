@@ -40,8 +40,8 @@ function createPointCloud(pointFunction, pointCount) {
             let dim_size = Math.ceil(Math.sqrt(brains.users.size));
     
             if (dim_size == 1){delta = 0; z_window = 0} else{
-                z_window = 1;
-                delta = (2*1)/(dim_size-1)
+                z_window = zoom_array[state][animState]/2;
+                delta = (2*z_window)/(dim_size-1)
             }
             let row = 0;
             let col = -1;
@@ -106,9 +106,9 @@ function createPointCloud(pointFunction, pointCount) {
         }
         else{
                 for (let i = 0; i < pointCount; i++) {
-                const r = () => Math.random() - 0.5;
+                const r = () => (Math.random() - 0.5);
                 const point = shapes[pointFunction](r(), r(), r());
-                pointCloud.push(...point);
+                pointCloud.push(...point.map((val) => {return val*zoom_array[state][animState]/1.5}));
             }
         }
         
@@ -157,11 +157,11 @@ const shapes = {
     },
 
     sphereShell(...position) {
-        return vec3.normalize(vec3.create(), position);
+        return vec3.normalize(vec3.create(), position.map)
     },
 
     sphereShells(...position) {
-        return vec3.normalize(vec3.create(), position);
+        return vec3.normalize(vec3.create(), position)
     },
 
     sphereShell2(...position) {
@@ -285,10 +285,11 @@ function getVoltages(pointCloud, pointCount, numUsers) {
 
     let channel_inds = [0];
     let usr_inds = [0];
-    let factor = (pointCount/((VOLTAGE_Z_OFFSET)*numUsers*channels))
+    let factor = (pointCount/((window.innerWidth)*numUsers*channels))
     let user = -1;
     let z;
-    let y = -(VOLTAGE_Z_OFFSET/4)*factor;
+    let z_iter = ((window.innerHeight/6)/(channels/2))
+    let y;
     let point1;
     let point2;
 
@@ -299,25 +300,21 @@ function getVoltages(pointCloud, pointCount, numUsers) {
 
         if (i % shift_trigger == 0) {
                 channel_inds.push(i * 3);
-                z += 1.5;
-                y = -(VOLTAGE_Z_OFFSET/4)*factor;
+                z += z_iter;
+                y = -((window.innerWidth)/4)*factor;
         }
 
         if (i % user_trigger == 0){
-            if (channels == 1){
-                z = 0;
-            } else {
-                z = -1.5*(channels/2);
-            }
-            y = -(VOLTAGE_Z_OFFSET/4)*factor;
+            z = -(z_iter)*(channels/2) + z_iter/4;
+            y = -((window.innerWidth)/4)*factor;
             usr_inds.push(i * 3)
             user++;
         }
 
         point1 = [user*.01,                                 // Separate Each User
-                    (y) / (factor / VOLTAGE_Z_OFFSET),  // Length of Voltage Display
+                    (y) / (factor/.8),  // Length of Voltage Display
                     z];    // Move to Correct Channel Position
-        point2 = [user*.01, ((y+1)) / (factor / VOLTAGE_Z_OFFSET), z];
+        point2 = [user*.01, ((y+1)) / (factor/.8), z];
         pointCloud.push(...point1);
         pointCloud.push(...point2);
         y++;

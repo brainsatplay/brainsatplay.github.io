@@ -6,14 +6,14 @@ class BrainsAtPlay {
             this.userBuffers = []
         } else{
             this.addBrain(input)
-            this.initializeUserBuffers();
-        }
+         }
     }
 
     addBrain(id) {
             // Create Brain
             let brain = new Brain(id)
             this.users.set(id, brain)
+            this.initializeUserBuffers();
     }
 
     getMaxChannelNumber(){
@@ -181,7 +181,8 @@ class BrainsAtPlay {
             return userData.map((channelData) => {
                 let chanMax = max(channelData)
                 let chanMin = min(channelData)
-                return channelData.map(normalize(chanMin,chanMax))
+                let scaling = (window.innerHeight/6)/channels;
+                return channelData.map(normalize(chanMin,chanMax,scaling))
                 })
         })
         return _temp

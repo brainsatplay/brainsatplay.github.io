@@ -15,6 +15,7 @@ body::-webkit-scrollbar {
 body {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+    overflow: hidden;
 }
 
 h1{
@@ -85,7 +86,7 @@ button:hover{
     color: white;
 }
 
-#app-menu {
+.menu {
     height: 100%;
     width: 200px;
     display: flex;
@@ -94,7 +95,9 @@ button:hover{
     align-items: flex-start;
     align-content: flex-start;
     z-index:2;
+}
 
+#app-menu{
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
     position: fixed;
     top: 0;
@@ -107,12 +110,12 @@ button:hover{
 }
 
 
-#app-menu img{
+.menu img{
     padding: 20px 0px 10px 0px;
     cursor: pointer;
 }
 
-#app-menu p{
+.menu p{
     font-size: 10px;
 }
 
@@ -356,7 +359,19 @@ button i {
 }
 
 
-/* WebGL Canvas */
+/* WebGL UI */
+canvas {
+    /* background: linear-gradient(rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0.6));; */
+    position: fixed;
+    right:0;
+    top:0;
+    transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
+}
+
 #visualization-options{
     display: flex;
     position: absolute;
@@ -374,8 +389,9 @@ button i {
     pointer-events: auto;
 }
 
-#canvas-container {
-    position: relative;
+#ui-container {
+    width: 100vw;
+    height: 100vh;
 }
 
 #canvas-message{
@@ -384,14 +400,19 @@ button i {
     flex-wrap: wrap;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
     top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
+    right: 0;
+    height: 100vh;
+    width: 100vw;
     justify-content:center;
     align-items: center;
     text-align: center;
     z-index:1;
     pointer-events: none;
+    transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
 }
 
 #canvas-message div{
@@ -403,16 +424,17 @@ button i {
     height: 0;
 }
 
-/*!*#canvas-container canvas, #overlay {*!*/
-/*!*    position: absolute;*!*/
-/*!*}*!*/
-
-/*canvas {*/
-/*    position: absolute;*/
-/*    width: 100vw;*/
-/*    height: 100vh;*/
-/*}*/
-
+#developer-tools {
+    width: 200px; background: #000000;
+    position: fixed; top: 0; left: -200px;
+    display: flex; flex-wrap: wrap; justify-content:center;
+    align-items: flex-start; z-index:2;
+    transition: left 0.5s ease-in-out;
+    -o-transition: left 0.5s ease-in-out;
+    -ms-transition: left 0.5s ease-in-out;
+    -moz-transition: left 0.5s ease-in-out;
+    -webkit-transition: left 0.5s ease-in-out;
+}
 
 /* Chat */
 
@@ -462,5 +484,3 @@ button i {
 }
 #messages li { flex-grow: 1; padding: 5px 10px; color: whitesmoke;}
 #messages li:nth-child(odd) { background: linear-gradient(rgba(50, 50, 50, 0.6), rgba(50, 50, 50, 0.6))}
-
-

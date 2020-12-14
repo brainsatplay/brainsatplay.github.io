@@ -23,10 +23,10 @@ function sum(acc,cur){
     return acc + cur
 }
 
-function normalize(min, max) {
+function normalize(min, max,scaling) {
     var delta = max - min;
     return function (val) {
-        return (val - min) / delta;
+        return scaling * ((val - min) / delta);
     };
 }
 
@@ -269,27 +269,36 @@ function generateSignal(generate, channels){
 }
 
 function sendSignal(channels) {
-    let signal = new Array(channels);
-    for (let channel =0; channel < channels; channel++) {
-        signal[channel] = bci.generateSignal([1], [base_freq+(channel)], samplerate, (1/base_freq));
-    }
-    let startTime = Date.now()
-    let time = makeArr(startTime,startTime+(1/base_freq),(1/base_freq)*samplerate)
 
-    let data = {
-        type: 'ts_filtered',
-        signal: signal,
-        time: time
-    }
-    brains.users.get("me").streamIntoBuffer(data)
+    for (let user = 0; user < 2; user++){
+        let signal = new Array(channels);
+        for (let channel =0; channel < channels; channel++) {
+            signal[channel] = bci.generateSignal([Math.random()], [base_freq+(channel)], samplerate, (1/base_freq));
+        }
+        let startTime = Date.now()
+        let time = makeArr(startTime,startTime+(1/base_freq),(1/base_freq)*samplerate)
+
+        let data = {
+            type: 'ts_filtered',
+            signal: signal,
+            time: time
+        }
+        if (user == 0) {
+        brains.users.get("me").streamIntoBuffer(data)
+        } else {        
+            brains.users.get("other").streamIntoBuffer(data)
+        }
+
+}
 }
 
 function switchToVoltage(pointCount){
     // Reset View Matrix
-    let viewMatrix = mat4.create();
+    viewMatrix = mat4.create();
+    cameraHome = zoom_array[state][animState];
     mat4.rotateX(viewMatrix, viewMatrix, Math.PI / 2);
     mat4.rotateY(viewMatrix, viewMatrix, Math.PI / 2);
-    mat4.translate(viewMatrix, viewMatrix, [0, 0, INITIAL_Z_OFFSET]);
+    mat4.translate(viewMatrix, viewMatrix, [0, 0, cameraCurr]);
     mat4.invert(viewMatrix, viewMatrix);
 
     let vertexHome;
@@ -345,19 +354,24 @@ function stateManager(animState){
     } 
 
     if (shape_array[state][animState] == 'voltage'){
-
+        cameraHome = zoom_array[state][animState];
         [vertexHome, viewMatrix, ease, rotation, zoom] = switchToVoltage(pointCount)
 
         brains.initializeUserBuffers();
-        cameraHome = VOLTAGE_Z_OFFSET; 
+        if (uniformLocations != undefined){
+            gl.uniform1i(uniformLocations.ambientNoiseToggle, 0);
+        }
     }
     else {
         viewMatrix = mat4.create();
-        cameraHome = INITIAL_Z_OFFSET;
+        cameraHome = zoom_array[state][animState];
         mat4.rotateX(viewMatrix, viewMatrix, Math.PI / 2);
         mat4.rotateY(viewMatrix, viewMatrix, Math.PI / 2);
         mat4.translate(viewMatrix, viewMatrix, [0, 0, cameraCurr]);
         mat4.invert(viewMatrix, viewMatrix);
+        if (uniformLocations != undefined){
+            gl.uniform1i(uniformLocations.ambientNoiseToggle, 1);
+        }
     }
 
     if (shape_array[state][animState] != 'brain' && shape_array[state][animState] != 'voltage'){
@@ -462,3 +476,43 @@ function bindChatSubmissionEvent(){
     })
 
 }
+
+
+
+function toggleDevTools(){
+    devTools = !devTools; 
+    
+    if (devTools){
+        document.getElementById('developer-tools').style.left = '0'
+        canvas.width = window.innerWidth - 200
+    } else {
+        document.getElementById('developer-tools').style.left = '-200px'
+        canvas.width = window.innerWidth
+    }
+    document.getElementById('canvas-message').style.width = `${canvas.width}px`;
+}
+
+window.onresize = function() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    if (devTools){
+        canvas.width -= 200;
+    }
+    document.getElementById('canvas-message').style.width = `${canvas.width}px`;
+}
+
+function resize(canvas) {
+    // Lookup the size the browser is displaying the canvas.
+    var displayWidth  = canvas.clientWidth;
+    var displayHeight = canvas.clientHeight;
+   
+    // Check if the canvas is not the same size.
+    if (canvas.width  != displayWidth ||
+        canvas.height != displayHeight) {
+   
+      // Make the canvas the same size
+      canvas.width  = displayWidth;
+      canvas.height = displayHeight;
+    }
+  }
