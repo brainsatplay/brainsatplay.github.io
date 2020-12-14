@@ -19,10 +19,11 @@
     <meta name="twitter:description" content="Brainstorm - Multiplayer Neurotechnology on the Web">
     <meta name="twitter:image:src" content="http://twgljs.org/examples/screenshots/twgl-cube.png">
     <title>Brains@Play | Brainstorm</title>
-
+    
     <link rel=icon href=favicons/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/brainstorm.css"/>
-    <script type="text/javascript" src="js/bigbrainpoints.js"></script>
+    <script type="text/javascript" src="js/visbrain.js"></script>
+    <!-- <script type="text/javascript" src="js/bigbrainpoints.js"></script> -->
     <script type="text/javascript" src="classes/Brain.js"></script>
     <script type="text/javascript" src="classes/nBrains.js"></script>
     <script type="text/javascript" src="js/interaction.js"></script>
@@ -36,13 +37,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bcijs@1.8.0/dist/bci.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-
 </head>
 
 <body onstyle="overflow: hidden">
 
 <div id=app>
-    <div id="app-menu">
+    <div id="app-menu" class="menu">
         <div id="menu-toggle" class="toggle"><div class="icon"><i class="fas fa-angle-right fa-3x"></i></div></div>
         <div class="icon menuicon"><a href="https://brainsatplay.com" class="logo"><h3>Brains@Play</h3></a></div>
         </a>
@@ -56,11 +56,14 @@
             <a><i class="fas fa-users fa-2x"></i></a><p>View Users</p>
         </div>
         <div class="icon menuicon" onclick="state = 4">
-            <a><i class="fas fa-users-cog fa-2x"></i></a><p>Inspect Group Synchrony</p>
+            <a><i class="fas fa-users-cog fa-2x"></i></a><p>View Group Synchrony</p>
         </div>
-<!--        <div class="icon menuicon" onclick="window.open(`${url}downloadapp`)">-->
-<!--            <a><i class="fas fa-desktop fa-2x"></i></a><p>Download Desktop App</p>-->
-<!--        </div>-->
+        <!-- <div class="icon menuicon" onclick="toggleDevTools()">
+            <a><i class="fas fa-desktop fa-2x"></i></a><p>Toggle Developer Tools</p>
+        </div> -->
+        <!-- <div class="icon menuicon" onclick="window.open(`/downloadapp`)">
+            <a><i class="fas fa-desktop fa-2x"></i></a><p>Download Desktop App</p>
+        </div> -->
         <div class="user-info">
             <h4>Your Info</h4>
             <p id=userId></p>
@@ -76,8 +79,24 @@
         </form>
     </div>
 
+    <div id="developer-tools" class="menu">
+        <div class="icon menuicon" onclick="state = 1">
+            <a><i class="fas fa-brain fa-2x"></i></a><p>View your Brain Activity</p>
+        </div>
+        <div class="icon menuicon" onclick="state = 2">
+            <a><i class="fas fa-wave-square fa-2x"></i></a><p>Inspect Raw Voltages</p>
+        </div>
+        <div class="icon menuicon" onclick="state = 3">
+            <a><i class="fas fa-users fa-2x"></i></a><p>View Users</p>
+        </div>
+        <div class="icon menuicon" onclick="state = 4">
+            <a><i class="fas fa-users-cog fa-2x"></i></a><p>View Group Synchrony</p>
+        </div>
+        <div class="icon menuicon" onclick="toggleDevTools()"><p>Exit Developer Tools</p></div>
+    </div>
+
     <div id="brainstorm">
-        <div id="canvas-container">
+        <div id="ui-container">
             <canvas id='webgl'></canvas>
         </div>
         <div class="message-container">
@@ -98,11 +117,13 @@
     let gl = canvas.getContext('webgl')
 
     // Set Visualization Controls
-    let shape_array = [['sphereShells','brains'], ['brain'], ['voltage'],['brains'],['brain']]
+    let shape_array = [['sphereShells','brain'], ['brain'], ['voltage'],['brains'],['brain']]
     let anim_array = [[5.0,3.0],[false],[false],[false],[false]] // In seconds; false has no animation
     let render_array = [[gl.POINTS, gl.POINTS],[gl.POINTS],[gl.LINES],[gl.POINTS],[gl.POINTS]];
     let message_array = [['scanning your brain...', 'welcome to the brainstorm'], [''], [''], [''], ['']];
     let ease_array = [[.1, .1],[.1], [.1], [.1], [.1]];
+    let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])
+    let zoom_array = [[GENERIC_ZOOM, GENERIC_ZOOM],[GENERIC_ZOOM], [GENERIC_ZOOM], [GENERIC_ZOOM], [GENERIC_ZOOM]];
     let effects = [false, 'signals','synchrony'] // Order used in Shaders.js code
     let effect_array = [[false,false],['signals'],[false],[false],['synchrony']] // Must be specified in effects
     
@@ -110,32 +131,30 @@
     let DESIRED_POINTS = 1e5/2; // 80000
     let SIGNAL_SUSTAIN_ORIGINAL = 100;
     let AUTO_ROTATION_X = 0.0;
-    let INITIAL_Z_OFFSET = 1.7;
-    let VOLTAGE_Z_OFFSET = 10.0;
     let SYNCHRONY_BUFFER_SIZE = 100;
     let DAMPING = .1;
     let epsilon = .001;
 
     let eegCoords = [
-        [-0.25,0.75,-0.25], // 1 Fp1
-        [0.25,0.75,-0.25], // 2 Fp2
-        [-0.25,0.00,.75], // 3 C3
-        [0.25,0.00,.75], // 4 C4
-        [-0.75,-0.65,-0.10], // 5 P7
-        [0.75,-0.65,-0.10], // 6 P8
-        [-0.25,-1.25,0.00], // 7 O1
-        [0.25,-1.25,0.00], // 8 O2
-        [-0.75,0.35,-0.20], // 9 F7
-        [0.75,0.35,-0.20], // 10 F8
-        [-0.25,0.60,.50], // 11
-        [0.25,0.60,.50], // 12
-        [-0.75,-0.15,-0.15], // 13 T7
-        [0.75,-0.15,-0.15], // 14 T8
-        [-0.25,-0.75,.60], // 15
-        [0.25,-0.75,.60], // 16
+        [10.0,-37.0,76.0],// [-25.0,75.0,-25.0], // 1 Fp1
+        [25.0,75.0,-25.0], // 2 Fp2
+        [-25.0,0.00,75.0], // 3 C3
+        [25.0,0.00,75.0], // 4 C4
+        [-75.0,-65.0,-10.0], // 5 P7
+        [75.0,-65.0,-10.0], // 6 P8
+        [-25.0,-125.0,0.00], // 7 O1
+        [25.0,-125.0,0.00], // 8 O2
+        [-75.0,35.0,-20], // 9 F7
+        [75.0,35.0,-20], // 10 F8
+        [-25.0,60.0,50.0], // 11
+        [25.0,60.0,50.0], // 12
+        [-75.0,-15.0,-15.0], // 13 T7
+        [75.0,-15.0,-15.0], // 14 T8
+        [-25.0,-75.0,60.0], // 15
+        [25.0,-75.0,60.0], // 16
     ]
+    // eegCoords = eegCoords.map((val) => {return val*100})
     let passedEEGCoords = eegCoords
-
 
     // Declare Global Visualization Variables
     let state = 0;
@@ -150,6 +169,11 @@
     let vertexCurr;
     let vertexVel;
     let viewMatrix;
+    let projectionMatrix;
+
+    let originalAspectX;
+    let originalAspectY;
+
     let positionBuffer;
     let dispBuffer;
     let colorBuffer;
@@ -161,8 +185,8 @@
     let pointCount;
     let color;
     let synchrony = new Array(SYNCHRONY_BUFFER_SIZE).fill(0);
-    let cameraHome = INITIAL_Z_OFFSET;
-    let cameraCurr = INITIAL_Z_OFFSET;
+    let cameraHome = zoom_array[state][animState];
+    let cameraCurr = zoom_array[state][animState];
     let t = 0.0;
     let diff_x = 0;
     let diff_y = 0;
@@ -183,7 +207,7 @@
     if (option  === 'local'){
         url = new URL('http://localhost');
     } else if (option === 'server'){
-        url = new URL('https://brainsatplay.azurewebsites.net');
+        url = new URL('https://brainsatplay.azurewebsites.net/');
     }
     let brains;
     let userId = undefined;
@@ -203,6 +227,8 @@
     let forceSink;
 
     // Set User Interactions
+    let devTools = false;
+
     canvas.onmousedown = mouseDown;
     canvas.onmouseup = mouseUp
     canvas.onmousemove = mouseMove
@@ -213,11 +239,14 @@
     // Reduce Point Count
     brainVertices = reducePointCount(brainpoints, DESIRED_POINTS);
     pointCount = brainVertices.length / 3;
+    
     // Start the Process of Establishing a Websocket Connection
     establishWebsocketConnection();
-    
-    // // Instantiate a Default Brain
+
+    // // Instantiate a Default Set of Brain
     brains = newBrains('me');
+    brains.addBrain('other');
+
     generate = true;
     sendSignal(channels)
 
