@@ -52,7 +52,7 @@ function particleCloud() {
         noiseCoeff: gl.getUniformLocation(program, `u_noiseCoeff`),
         synchrony: gl.getUniformLocation(program, `synchrony`),
         eeg_coords: gl.getUniformLocation(program,`eeg_coords`),
-        eeg_power: gl.getUniformLocation(program,`eeg_power`),
+        eeg_signal: gl.getUniformLocation(program,`eeg_signal`),
         ambientNoiseToggle: gl.getUniformLocation(program,'u_ambientNoiseToggle'),
         aspectChange: gl.getUniformLocation(program,'aspectChange'),
     };
@@ -68,7 +68,7 @@ function particleCloud() {
 
     // initialize uniforms that don't change on every draw loop
     gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
-    gl.uniform1i(uniformLocations.effect, effects.indexOf(effect_array[state][animState]));
+    gl.uniform1i(uniformLocations.effect, effects.indexOf(visualizations[state].effect));
     gl.uniform1i(uniformLocations.ambientNoiseToggle, 1);
 
 
@@ -105,7 +105,7 @@ function particleCloud() {
 
 
         // Allow auto-rotation
-        if (shape_array[state][animState] != 'voltage'){
+        if (!visualizations[state].shapes.includes('channels')){
             diff_x += AUTO_ROTATION_X;
         }
 
@@ -114,26 +114,15 @@ function particleCloud() {
         if (state != prevState){
             animState = 0;
             stateManager(animState);
-            gl.uniform1i(uniformLocations.effect, effects.indexOf(effect_array[state][animState]));
+            gl.uniform1i(uniformLocations.effect, effects.indexOf(visualizations[state].effect));
             animStart = Date.now()
         }
 
         // Update Animation
-        if (anim_array[state][animState] && ((Date.now() - animStart)/1000 > anim_array[state][animState])){
-
-
-            // If there is a shape within the current state to animate to
-            if ((anim_array[state].length-1) > animState){
-                animState += 1;
-            }
-            // Else animate into next state
-            else {
-                animState = 0;
-                state += 1;
-            }
-
+        if (visualizations[state].timer && ((Date.now() - animStart)/1000 > visualizations[state].timer)){
+            state += 1;
             stateManager(animState);
-            gl.uniform1i(uniformLocations.effect, effects.indexOf(effect_array[state][animState]));
+            gl.uniform1i(uniformLocations.effect, effects.indexOf(visualizations[state].effect));
             animStart = Date.now()
         }
 
@@ -148,23 +137,26 @@ function particleCloud() {
             }}
 
 
-        // Append voltage stream to array
-        brains.updateUserBuffers()
+        // Append channels stream to array
+        if (brains.users.size > 0){
+            brains.updateUserBuffers()
+        }
 
-        // Push voltage stream to displacement buffer
-        if (shape_array[state][animState] == 'voltage') {
+        // Push channels stream to displacement buffer
+        if (visualizations[state].shapes.includes('channels')) {
             gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
-            gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLVoltageDisplacementBuffer(), gl.DYNAMIC_DRAW);
-        } 
+            gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLChannelDisplacementBuffer(), gl.DYNAMIC_DRAW);
+        }
+
         // Update rotation speeds
         moveStatus = false;
-        diff_x *= (1-ease_array[state][animState]);
-        diff_y *= (1-ease_array[state][animState]);
+        diff_x *= (1-visualizations[state].ease);
+        diff_y *= (1-visualizations[state].ease);
 
         // Modify Distortion
         if (distortFlag) {
             if (Math.sign(distortIter) == -1){
-                distortIter =+ ease_array[state][animState]*(-distortion)
+                distortIter =+ visualizations[state].ease*(-distortion)
             }
             if (distortion >= 0){
                 distortion += distortIter;
@@ -172,7 +164,7 @@ function particleCloud() {
         }
 
         // Get synchrony
-        if (effect_array[state][animState] == 'synchrony') {
+        if (visualizations[state].effect == 'synchrony') {
             // Synchrony of you and other users
 
             if (brains.users.size > 1){
@@ -250,7 +242,7 @@ function particleCloud() {
                 relPowers[channel] = pow;
             }
         }
-        gl.uniform1fv(uniformLocations.eeg_power, new Float32Array(relPowers));
+        gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relPowers));
 
 
         // Ease camera
@@ -265,7 +257,7 @@ function particleCloud() {
             if (Math.abs(diff) <= epsilon) {
                 cameraCurr = cameraHome;
             } else {
-                cameraCurr += ease_array[state][animState] * diff;
+                cameraCurr += visualizations[state].ease * diff;
             }
 
             // Move to new position
@@ -284,7 +276,7 @@ function particleCloud() {
                             vertexCurr[3 * point + ind] = vertexHome[3 * point + ind];
                             count++
                         } else {
-                            vertexCurr[3 * point + ind] += ease_array[state][animState] * diff;
+                            vertexCurr[3 * point + ind] += visualizations[state].ease * diff;
                         }
                     }}
 
@@ -300,14 +292,17 @@ function particleCloud() {
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexCurr), gl.DYNAMIC_DRAW);
                     
             // Change rendering method with some delay if switching to lines
-            if (render_array[state][animState] == gl.LINES){
-                if (count >= vertexHome.length/3 && (renderState != state || animState != renderAnimState)){
-                    renderState = state
-                    renderAnimState = animState
+            if (visualizations[state].render == gl.LINES){
+                if (renderLagStart == undefined){
+                    renderLagStart = Date.now();
                 }
-            } else if (renderState != state || animState != renderAnimState){
+                if (Date.now() - renderLagStart >= 2000){
+                    renderState = state
+                    renderLagStart = undefined;
+                }
+            } else if (renderState != state){
                 renderState = state
-                renderAnimState = animState
+                renderLagStart = undefined;
             }
             
             if (count == vertexHome.length){
@@ -317,11 +312,19 @@ function particleCloud() {
         }
 
         // Draw
-        gl.drawArrays(render_array[renderState][renderAnimState], 0, vertexCurr.length / 3);
+        gl.drawArrays(visualizations[renderState].render, 0, vertexCurr.length / 3);
 
         // Update states for next animation loop
         prevState = state;
         t++;
+
+        // Remove message if not for the state itself
+        if ((messageStartTime != undefined) && (visualizations[state].message == '') && (Date.now() - messageStartTime >= 2000)){
+            messageStartTime = undefined;
+            document.getElementById('canvas-message').style.opacity = 0;
+        }
+
+
     };
     animate()
 }

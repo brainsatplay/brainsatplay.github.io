@@ -1,14 +1,36 @@
+// Connection Management
+function toggleConnection(){
+    if (ws == undefined){
+        establishWebsocketConnection();
+        document.getElementById("connection-button").innerHTML = 'Leave the Brainstorm';
+        brains.users.delete('other');
+        brains.users.delete('me');
+        brains.addBrain('me');
+        stateManager()
+        generate = false;
+    } else {
+        ws.close()
+        document.getElementById("connection-button").innerHTML = 'Enter the Brainstorm'; 
+        document.getElementById('userId').innerHTML = 'Simulation'
+        brains = newBrains('me');
+        brains.addBrain('other');
+        stateManager()
+        generate = true;
+    }
+}
+
 // Request Handling
-function clientAction(destination,method){
-    fetch(url + destination, { method: method,
+async function clientAction(destination,method){
+    return await fetch(url + destination, { method: method,
         mode: 'cors',
         credentials: 'include'
-    }).then(handleResponse)
-        .then(showMessage)
+    }).then((res) => handleResponse(res))
+        .then((message) => {
+            showMessage(message); 
+            return message.userId})
         .catch(function (err) {
             showMessage(err.message);
-        });
-}
+        });}
 
 function handleResponse(res) {
     return res.ok
@@ -16,14 +38,11 @@ function handleResponse(res) {
         : Promise.reject(new Error('Unexpected response'));
 }
 
-function showMessage(res) {
-    if (res.userId != undefined){
-        document.getElementById('userId').innerHTML = 'Client ID: ' + res.userId
-        userId = res.userId;
-        setCookie('userId',userId, 30)
-        initializeWebsocket();
+function showMessage(message) {
+    if (message.userId != undefined){
+    // console.log(`\n${message.userId} assigned`);
     } else {
-        console.log(`\n${res}`);
+        console.log(`\n${message}`);
     }
 }
 
@@ -46,11 +65,10 @@ function initializeWebsocket(){
 
     ws.onerror = function () {
         showMessage('WebSocket error');
+        announcement('WebSocket error.\n Please refresh your browser and try again.');
     };
 
-    ws.onopen = function () {
-        showMessage('WebSocket connection established');
-    };
+    ws.onopen = function () {showMessage('WebSocket connection established')};
 
     ws.onmessage = function (msg) {
         let obj = JSON.parse(msg.data);
@@ -65,12 +83,6 @@ function initializeWebsocket(){
 
         } else if (obj.destination == 'init'){
 
-            if (obj.n != 0){
-                generate = false;
-                brains.users.delete('me');
-                brains.users.delete('other');
-            }
-
             for (newUser = 0; newUser < obj.n; newUser++){
                 if (brains.users.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
                     brains.addBrain(obj.ids[newUser])
@@ -78,21 +90,29 @@ function initializeWebsocket(){
             }
             
             brains.initializeUserBuffers()
+
+            // Announce number of brains currently online
+            if (obj.n > 0 && brains.users.get('me') != undefined){
+                brains.users.delete('me')
+                announcement(`<div>welcome to the brainstorm
+                                <p class="small">${brains.users.size} brains online</p></div>`)
+            } else {
+                announcement(`<div>welcome to the brainstorm
+                                <p class="small">No brains online</p></div>`)
+            }
+
         }
         else if (obj.destination == 'BrainsAtPlay'){
 
             // let reallocationInd;
             update = obj.n;
+            if (update > 0 && brains.users.get('me') != undefined){
+                brains.users.delete('me')
+            }
+
             if (update == 1){
-                if ((brains.users.size == 2 && brains.users.keys().next().value == "me" || brains.users.keys().next().value == "other" )){
-                    generate = false;
-                    brains.users.delete('me');
-                    brains.users.delete('other');
-                    brains.addBrain(obj.id)
-                }  else {
-                    brains.addBrain(obj.id)
-                    reallocationInd = brains.users.size - 1
-                }
+                brains.addBrain(obj.id)
+                reallocationInd = brains.users.size - 1
 
             } else if (update == -1){
                 // get index of removed id
@@ -105,15 +125,13 @@ function initializeWebsocket(){
                 })
                 // delete id from map
                 brains.users.delete(obj.id)
-            }
-            announceUsers(update)
 
-            // add your own brain back if there are no more left
-            if (brains.users.size == 0){
-                brains.addBrain('me');
-                brains.addBrain('other');
-                generate = true;
+                if (brains.users.size == 0){
+                    brains.addBrain('me')
+                }
             }
+
+            announceUsers(update)
 
             if (state != 0){
                 stateManager(animState)
@@ -129,7 +147,6 @@ function initializeWebsocket(){
 
     ws.onclose = function () {
         showMessage('WebSocket connection closed');
-        // document.getElementById('app').innerHTML = 'Websocket closed'
         ws = null;
     };
 }
@@ -140,7 +157,14 @@ function establishWebsocketConnection() {
     setCookie('connectionType','interfaces', 30)
 
     // Validate Yourself or Be Assigned a UserID
-    clientAction('login','POST'); // THIS CALLS ANOTHER FUNCTION IN showMessage()
+    clientAction('login','POST').then(id => {
+        if (id != undefined){
+            document.getElementById('userId').innerHTML = id
+            userId = id;
+            setCookie('id',userId, 30)
+            initializeWebsocket();
+        }
+    });
 }
 
 

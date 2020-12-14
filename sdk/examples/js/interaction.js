@@ -48,7 +48,7 @@ function wheelMove(ev) {
 
 // Keyboard Shortcuts
 function keyboardShortcuts(ev){
-    let key_events = [37, 38, 39, 40];
+    let key_events = [37, 38, 39, 40,73];
     if (key_events.includes(ev.keyCode)){
         if (ev.keyCode == '38') {
             distortFlag = true;
@@ -57,16 +57,20 @@ function keyboardShortcuts(ev){
             }
             distortIter = 1;
         } else if (ev.keyCode == '40') {
-            distortIter =+ ease_array[state][animState]*(-distortion);
+            distortIter =+ visualizations[state].ease*(-distortion);
         } else if (ev.keyCode == '39' || ev.keyCode == '37') {
 
-                if (ev.keyCode == '39' && state < (shape_array.length-1))
+                if (ev.keyCode == '39' && state < (visualizations.length-1))
                 {
                     state += 1
                 }
-                else if (ev.keyCode == '37' && state > 1) {
+                else if (ev.keyCode == '37' && visualizations[state-1].type != 'intro') {
                     state -= 1
                 }
+        } 
+        // Key "i" opens developer tools
+        else if (ev.keyCode == '73'){
+            toggleDevTools()
         }
     }
 }

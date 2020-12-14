@@ -119,7 +119,7 @@ class BrainsAtPlay {
                         buffer[user][chan].push(0.0)
                     }
             }
-        
+
         this.userBuffers = buffer;
     }
 
@@ -171,7 +171,7 @@ class BrainsAtPlay {
         return new Float32Array([...this.userBuffers.flat(2)])
     }
 
-    WebGLVoltageDisplacementBuffer(){
+    WebGLChannelDisplacementBuffer(){
         let _temp = this.normalizeUserBuffers();
         return new Float32Array([..._temp.flat(2)])
     }
@@ -182,8 +182,13 @@ class BrainsAtPlay {
                 let chanMax = max(channelData)
                 let chanMin = min(channelData)
                 let scaling = (window.innerHeight/6)/channels;
-                return channelData.map(normalize(chanMin,chanMax,scaling))
-                })
+                if (chanMin != chanMax){
+                    return channelData.map(normalize(chanMin,chanMax,scaling))
+                } else{
+                    return channelData.map((val) => {return val*scaling})
+                }
+                
+            })
         })
         return _temp
     }

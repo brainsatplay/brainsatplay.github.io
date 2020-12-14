@@ -40,7 +40,7 @@ function createPointCloud(pointFunction, pointCount) {
             let dim_size = Math.ceil(Math.sqrt(brains.users.size));
     
             if (dim_size == 1){delta = 0; z_window = 0} else{
-                z_window = zoom_array[state][animState]/2;
+                z_window = visualizations[state].zoom/2;
                 delta = (2*z_window)/(dim_size-1)
             }
             let row = 0;
@@ -71,8 +71,8 @@ function createPointCloud(pointFunction, pointCount) {
                 row++
             }
         }
-        else if (pointFunction == 'voltage') {
-            pointCloud = getVoltages(pointCloud,pointCount,brains.users.size)
+        else if (pointFunction == 'channels') {
+            pointCloud = getChannels(pointCloud,pointCount,brains.users.size)
         } else if (pointFunction == shapes.sphereShells) {
             let dim_size = Math.ceil(Math.sqrt(brains.users.size));
             if (dim_size == 1){delta = 0; z_window = 0} else{
@@ -108,7 +108,7 @@ function createPointCloud(pointFunction, pointCount) {
                 for (let i = 0; i < pointCount; i++) {
                 const r = () => (Math.random() - 0.5);
                 const point = shapes[pointFunction](r(), r(), r());
-                pointCloud.push(...point.map((val) => {return val*zoom_array[state][animState]/1.5}));
+                pointCloud.push(...point.map((val) => {return val*visualizations[state].zoom/1.5}));
             }
         }
         
@@ -281,7 +281,7 @@ async function getBrain() {
 }
 
 
-function getVoltages(pointCloud, pointCount, numUsers) {
+function getChannels(pointCloud, pointCount, numUsers) {
 
     let channel_inds = [0];
     let usr_inds = [0];
@@ -312,7 +312,7 @@ function getVoltages(pointCloud, pointCount, numUsers) {
         }
 
         point1 = [user*.01,                                 // Separate Each User
-                    (y) / (factor/.8),  // Length of Voltage Display
+                    (y) / (factor/.8),  // Length of Channels Display
                     z];    // Move to Correct Channel Position
         point2 = [user*.01, ((y+1)) / (factor/.8), z];
         pointCloud.push(...point1);

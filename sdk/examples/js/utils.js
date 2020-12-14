@@ -270,10 +270,12 @@ function generateSignal(generate, channels){
 
 function sendSignal(channels) {
 
-    for (let user = 0; user < 2; user++){
+
+    brains.users.forEach((user) => {
         let signal = new Array(channels);
+        // let amp = Math.random()
         for (let channel =0; channel < channels; channel++) {
-            signal[channel] = bci.generateSignal([Math.random()], [base_freq+(channel)], samplerate, (1/base_freq));
+            signal[channel] = bci.generateSignal([1], [base_freq+(channel)], samplerate, (1/base_freq));
         }
         let startTime = Date.now()
         let time = makeArr(startTime,startTime+(1/base_freq),(1/base_freq)*samplerate)
@@ -283,19 +285,15 @@ function sendSignal(channels) {
             signal: signal,
             time: time
         }
-        if (user == 0) {
-        brains.users.get("me").streamIntoBuffer(data)
-        } else {        
-            brains.users.get("other").streamIntoBuffer(data)
-        }
 
-}
+            user.streamIntoBuffer(data)
+        })
 }
 
-function switchToVoltage(pointCount){
+function switchToChannels(pointCount){
     // Reset View Matrix
     viewMatrix = mat4.create();
-    cameraHome = zoom_array[state][animState];
+    cameraHome = visualizations[state].zoom;
     mat4.rotateX(viewMatrix, viewMatrix, Math.PI / 2);
     mat4.rotateY(viewMatrix, viewMatrix, Math.PI / 2);
     mat4.translate(viewMatrix, viewMatrix, [0, 0, cameraCurr]);
@@ -303,7 +301,7 @@ function switchToVoltage(pointCount){
 
     let vertexHome;
     // Create signal dashboard
-    vertexHome = getVoltages([],pointCount,brains.users.size);
+    vertexHome = getChannels([],pointCount,brains.users.size);
     let ease = true;
     let rotation = false;
     let zoom = false;
@@ -323,7 +321,7 @@ function distortToggle(){
     }
 
     if (!distort) {
-        distortIter =+ ease_array[state][animState] * (-distortion);
+        distortIter =+ visualizations[state].ease * (-distortion);
     }
 
     if ( distort ){
@@ -336,26 +334,26 @@ function distortToggle(){
 }
 
 
-function stateManager(animState){
-    // reset displacement if leaving voltage visualization
+function stateManager(){
+    // reset displacement if leaving channels visualization
 
-    if (shape_array[prevState][animState] == 'voltage') {
+    if (visualizations[prevState].shapes.includes('channels')) {
         brains.initializeUserBuffers();
         gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
         gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLBuffer(), gl.DYNAMIC_DRAW);
     }
 
     // set up variables for new state
-    if (shape_array[state][animState] == 'brain'){
+    if (visualizations[state].shapes.includes('brain')){
         vertexHome = [...brainVertices];
         ease = true;
         rotation = true;
         zoom = true;
     } 
 
-    if (shape_array[state][animState] == 'voltage'){
-        cameraHome = zoom_array[state][animState];
-        [vertexHome, viewMatrix, ease, rotation, zoom] = switchToVoltage(pointCount)
+    if (visualizations[state].shapes.includes('channels')){
+        cameraHome = visualizations[state].zoom;
+        [vertexHome, viewMatrix, ease, rotation, zoom] = switchToChannels(pointCount)
 
         brains.initializeUserBuffers();
         if (uniformLocations != undefined){
@@ -364,7 +362,7 @@ function stateManager(animState){
     }
     else {
         viewMatrix = mat4.create();
-        cameraHome = zoom_array[state][animState];
+        cameraHome = visualizations[state].zoom;
         mat4.rotateX(viewMatrix, viewMatrix, Math.PI / 2);
         mat4.rotateY(viewMatrix, viewMatrix, Math.PI / 2);
         mat4.translate(viewMatrix, viewMatrix, [0, 0, cameraCurr]);
@@ -374,8 +372,8 @@ function stateManager(animState){
         }
     }
 
-    if (shape_array[state][animState] != 'brain' && shape_array[state][animState] != 'voltage'){
-        vertexHome = createPointCloud(shape_array[state][animState], pointCount);
+    if (!visualizations[state].shapes.includes('brain') && !visualizations[state].shapes.includes('channels')){
+        vertexHome = createPointCloud(visualizations[state].shapes, pointCount);
         ease = true;
         rotation = false;
         zoom = false;
@@ -387,14 +385,15 @@ function stateManager(animState){
     }
 
     // Show Message
-    
-if (message_array[state][animState] != '') {
-    $('#canvas-message').animate({'opacity': 0}, 400, function(){
-        $(this).html(message_array[state][animState]).animate({'opacity': 1}, 400);
-    });
-} else {
-    $('#canvas-message').animate({'opacity': 0}, 400)
-}
+    document.getElementById('state').innerHTML = `${visualizations[state].name}`
+
+
+    if (visualizations[state].message != '') {
+        document.getElementById('canvas-message').innerHTML = visualizations[state].message;
+        document.getElementById('canvas-message').style.opacity = 1;
+    } else if (document.getElementById('canvas-message').style.opacity != 0) {
+        document.getElementById('canvas-message').style.opacity = 0;
+    }
 }
 
 
@@ -416,16 +415,14 @@ function announceUsers(diff){
             message = -diff + ' brains left the brainstorm';
         }
     }
+    console.log(message)
     announcement(message)
 }
 
 function announcement(message){
-    $('#canvas-message').animate({'opacity': 0}, 2000, function(){
-        $(this).html(message).animate({'opacity': 1}, 2000, function() {
-            $(this).html(message).animate({'opacity': 0}, 2000, function() {
-            });
-        });
-    });
+    document.getElementById('canvas-message').innerHTML = message;
+    document.getElementById('canvas-message').style.opacity = 1;
+    messageStartTime = Date.now();
 }
 
 function updateChannels(newChannels) {
@@ -438,8 +435,8 @@ function updateChannels(newChannels) {
             SIGNAL_SUSTAIN += 1;
         }
 
-        if (shape_array[state][animState] == 'voltage') {
-            [vertexHome, , ease, rotation, zoom] = switchToVoltage(pointCount)
+        if (visualizations[state].shapes.includes('channels')) {
+            [vertexHome, , ease, rotation, zoom] = switchToChannels(pointCount)
         }
 
         passedEEGCoords = eegCoords.map((arr,ind) => {
@@ -485,13 +482,28 @@ function toggleDevTools(){
     if (devTools){
         document.getElementById('developer-tools').style.left = '0'
         canvas.width = window.innerWidth - 200
+        document.getElementById('top-bar').style.width = `calc(100vw - 200px)`;
     } else {
         document.getElementById('developer-tools').style.left = '-200px'
         canvas.width = window.innerWidth
+        document.getElementById('top-bar').style.width = `100vw`;
     }
     document.getElementById('canvas-message').style.width = `${canvas.width}px`;
+    // document.getElementById('top-info').style.transform = `translate(calc(-50% + 300px));`;
 }
 
+function toggleChat(){
+    chat = !chat; 
+    
+    if (chat){
+        document.getElementById('chat').style.right = '0'
+    } else {
+        document.getElementById('chat').style.right = '-300px'
+    }
+}
+
+
+// Resizing
 window.onresize = function() {
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
@@ -516,3 +528,4 @@ function resize(canvas) {
       canvas.height = displayHeight;
     }
   }
+  

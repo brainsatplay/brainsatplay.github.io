@@ -19,7 +19,7 @@ uniform float synchrony;
 uniform float u_time;
 uniform int u_ambientNoiseToggle;
 uniform vec3 eeg_coords[16];
-uniform float eeg_power[16];
+uniform float eeg_signal[16];
 uniform vec2 aspectChange;
 
 float sync_scaling = 0.5+((0.5*synchrony)*0.5); 
@@ -129,14 +129,14 @@ void main() {
         vColor = vec3(1.0,1.0,1.0);
         for (int i = 0; i < 16; i++){
             if (abs(distance(eeg_coords[i],position)) <= 75.0){
-                if (eeg_power[i] > 0.0){
-                    vColor.y -= 0.5*(eeg_power[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
-                    vColor.z -= 0.2*(eeg_power[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
-                } else if (eeg_power[i] < 0.0){
-                    vColor.x += 0.5*(eeg_power[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
-                    vColor.y += 0.2*(eeg_power[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
+                if (eeg_signal[i] > 0.0){
+                    vColor.y -= 0.5*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
+                    vColor.z -= 0.2*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
+                } else if (eeg_signal[i] < 0.0){
+                    vColor.x += 0.5*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
+                    vColor.y += 0.2*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
                 }
-            }  else if (eeg_power[i] == 0.0){
+            }  else if (eeg_signal[i] == 0.0){
                 vColor = vec3(0.5,0.5,0.5);
             }
         }

@@ -42,57 +42,35 @@
 <body onstyle="overflow: hidden">
 
 <div id=app>
-    <div id="app-menu" class="menu">
+    <!-- <div id="app-menu" class="menu">
         <div id="menu-toggle" class="toggle"><div class="icon"><i class="fas fa-angle-right fa-3x"></i></div></div>
-        <div class="icon menuicon"><a href="https://brainsatplay.com" class="logo"><h3>Brains@Play</h3></a></div>
-        </a>
-        <div class="icon menuicon" onclick="state = 1">
-            <a><i class="fas fa-brain fa-2x"></i></a><p>View your Brain Activity</p>
-        </div>
-        <div class="icon menuicon" onclick="state = 2">
-            <a><i class="fas fa-wave-square fa-2x"></i></a><p>Inspect Raw Voltages</p>
-        </div>
-        <div class="icon menuicon" onclick="state = 3">
-            <a><i class="fas fa-users fa-2x"></i></a><p>View Users</p>
-        </div>
-        <div class="icon menuicon" onclick="state = 4">
-            <a><i class="fas fa-users-cog fa-2x"></i></a><p>View Group Synchrony</p>
-        </div>
-        <!-- <div class="icon menuicon" onclick="toggleDevTools()">
-            <a><i class="fas fa-desktop fa-2x"></i></a><p>Toggle Developer Tools</p>
-        </div> -->
-        <!-- <div class="icon menuicon" onclick="window.open(`/downloadapp`)">
+        <div class="icon menuicon" onclick="window.open(`/downloadapp`)">
             <a><i class="fas fa-desktop fa-2x"></i></a><p>Download Desktop App</p>
-        </div> -->
-        <div class="user-info">
-            <h4>Your Info</h4>
-            <p id=userId></p>
         </div>
-    </div>
+    </div> -->
 
     <div id="chat">
-        <div id="chat-toggle" class="toggle"><div class="icon"><i class="fas fa-paper-plane fa-2x"></i></div></div>
         <ul id="messages"></ul>
         <form id="chat-form" action="">
             <label for="message"></label>
-            <input type="text" id="message" autocomplete="off" placeholder="Type message here..."/>
+            <input type="text" id="message" autocomplete="off" placeholder="Say hello..."/>
         </form>
     </div>
 
     <div id="developer-tools" class="menu">
-        <div class="icon menuicon" onclick="state = 1">
+        <div class="icon" onclick="state = 2">
             <a><i class="fas fa-brain fa-2x"></i></a><p>View your Brain Activity</p>
         </div>
-        <div class="icon menuicon" onclick="state = 2">
+        <div class="icon" onclick="state = 3">
             <a><i class="fas fa-wave-square fa-2x"></i></a><p>Inspect Raw Voltages</p>
         </div>
-        <div class="icon menuicon" onclick="state = 3">
+        <div class="icon" onclick="state = 4">
             <a><i class="fas fa-users fa-2x"></i></a><p>View Users</p>
         </div>
-        <div class="icon menuicon" onclick="state = 4">
+        <div class="icon" onclick="function(this) {console.log(this); state = 5; console.log(5);his.className = 'icon menuicon selected'}">
             <a><i class="fas fa-users-cog fa-2x"></i></a><p>View Group Synchrony</p>
         </div>
-        <div class="icon menuicon" onclick="toggleDevTools()"><p>Exit Developer Tools</p></div>
+        <div class="icon" onclick="toggleDevTools()"><p>Exit Developer Tools</p></div>
     </div>
 
     <div id="brainstorm">
@@ -102,6 +80,47 @@
         <div class="message-container">
             <span id="canvas-message"></span>
         </div>
+
+        <div id="top-bar">
+            <div id="top-info">
+        <div class="title">
+            <h4>Brainstorm</h4>
+            <p>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
+        </div>
+        <div class=icongrid>
+            <div class="menuicon" onclick="state = 1">
+                <i class="fas fa-brain fa-1x"></i>
+            </div>
+            <div class="menuicon" onclick="state = 2">
+                <i class="fas fa-wave-square fa-1x"></i>
+            </div>
+            <div class="menuicon" onclick="state = 3">
+                <i class="fas fa-users fa-1x"></i>
+            </div>
+            <div class="menuicon" onclick="state = 4;">
+                <i class="fas fa-users-cog fa-1x"></i>
+            </div>
+        </div>
+        <div class="params">
+            <h5>State</h5>
+            <p id="state" class="small">State:</p>
+            <h5>ID</h5>
+            <p id="userId" class="small">Simulation</p>
+        </div>
+        <div class="filler">
+            <button id="connection-button" onclick="toggleConnection()">Enter the Brainstorm</button>
+        </div>
+        <!-- <div class=icongrid>
+            <div class="menuicon" onclick="toggleChat()">
+                <i class="fas fa-comment"></i>
+            </div>
+            <div class="menuicon" onclick="toggleDevTools()">
+                <i class="fas fa-desktop fa-1x"></i>
+            </div>
+        </div> -->
+        </div>
+    </div>
+    </div>
     </div>
 </div>
 
@@ -117,16 +136,85 @@
     let gl = canvas.getContext('webgl')
 
     // Set Visualization Controls
-    let shape_array = [['sphereShells','brain'], ['brain'], ['voltage'],['brains'],['brain']]
-    let anim_array = [[5.0,3.0],[false],[false],[false],[false]] // In seconds; false has no animation
-    let render_array = [[gl.POINTS, gl.POINTS],[gl.POINTS],[gl.LINES],[gl.POINTS],[gl.POINTS]];
-    let message_array = [['scanning your brain...', 'welcome to the brainstorm'], [''], [''], [''], ['']];
-    let ease_array = [[.1, .1],[.1], [.1], [.1], [.1]];
     let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])
-    let zoom_array = [[GENERIC_ZOOM, GENERIC_ZOOM],[GENERIC_ZOOM], [GENERIC_ZOOM], [GENERIC_ZOOM], [GENERIC_ZOOM]];
-    let effects = [false, 'signals','synchrony'] // Order used in Shaders.js code
-    let effect_array = [[false,false],['signals'],[false],[false],['synchrony']] // Must be specified in effects
-    
+    let effects = [false, 'projection','synchrony'] // Order used in Shaders.js code
+
+    let visualizations = [{
+        name: 'Intro', 
+        shapes: ['sphereShells'], // shape of points
+        render: gl.POINTS,
+        type: 'intro',
+        timer: 3.0, // display time in seconds; false has no animation
+        message: 'scanning your brain...',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: false
+    },
+    // {
+    //     shapes: ['brain'],
+    //     render: gl.POINTS,
+    //     type: 'intro',
+    //     timer: 3.0, 
+    //     message: 'welcome to the brainstorm',
+    //     ease: 0.1,
+    //     zoom: GENERIC_ZOOM,
+    //     effect: false
+    // },
+    {
+        name: 'Brain | Voltage', 
+        shapes: ['brain'],
+        type: 'main',
+        render: gl.POINTS,
+        timer: false, 
+        message: '',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: 'projection',
+        signaltype: 'voltage'
+    },{
+        name: 'Channels | Voltage', 
+        shapes: ['channels'],
+        type: 'main',
+        render: gl.LINES,
+        timer: false,
+        message: '',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: false
+    },{
+        name: 'Group Brains', 
+        shapes: ['brains'],
+        type: 'main',
+        render: gl.POINTS,
+        timer: false,
+        message: '',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: false
+    },{
+        name: 'Group Synchrony', 
+        shapes: ['brain'],
+        type: 'main',
+        render: gl.POINTS,
+        timer: false,
+        message: '',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: 'synchrony'
+    },
+    // {
+    //     shapes: ['brain'],
+    //     type: 'main',
+    //     render: gl.POINTS,
+    //     timer: false, 
+    //     message: '',
+    //     ease: 0.1,
+    //     zoom: GENERIC_ZOOM,
+    //     effect: 'projection',
+    //     signaltype: 'synchrony'
+    // },
+]
+
     let channels = 16;
     let DESIRED_POINTS = 1e5/2; // 80000
     let SIGNAL_SUSTAIN_ORIGINAL = 100;
@@ -161,7 +249,7 @@
     let prevState = 0;
     let animState = 0;
     let renderState = state;
-    let renderAnimState = animState;
+    let renderLagStart;
     let animStart = Date.now();
     let brainVertices;
     let brainMesh;
@@ -185,8 +273,8 @@
     let pointCount;
     let color;
     let synchrony = new Array(SYNCHRONY_BUFFER_SIZE).fill(0);
-    let cameraHome = zoom_array[state][animState];
-    let cameraCurr = zoom_array[state][animState];
+    let cameraHome = visualizations[state].zoom;
+    let cameraCurr = visualizations[state].zoom;
     let t = 0.0;
     let diff_x = 0;
     let diff_y = 0;
@@ -211,7 +299,8 @@
     }
     let brains;
     let userId = undefined;
-    let ws;
+    let ws = undefined;
+    let welcomed = false;
 
     // Set User Interactions
     let holdStatus = false;
@@ -225,9 +314,11 @@
     let diff;
     let diff_total;
     let forceSink;
+    let messageStartTime = undefined;
 
     // Set User Interactions
     let devTools = false;
+    let chat = false;
 
     canvas.onmousedown = mouseDown;
     canvas.onmouseup = mouseUp
@@ -239,9 +330,6 @@
     // Reduce Point Count
     brainVertices = reducePointCount(brainpoints, DESIRED_POINTS);
     pointCount = brainVertices.length / 3;
-    
-    // Start the Process of Establishing a Websocket Connection
-    establishWebsocketConnection();
 
     // // Instantiate a Default Set of Brain
     brains = newBrains('me');
