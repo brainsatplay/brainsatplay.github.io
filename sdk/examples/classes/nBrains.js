@@ -89,12 +89,16 @@ class BrainsAtPlay {
                 var step4 = Math.sqrt(step2 * step3);
                 var answer = step1 / step4;
 
-                synchrony.push(answer)
+                if (channel >= synchrony.length){
+                    synchrony.push([answer])
+                } else {
+                    synchrony[channel].push(answer)
+                }
             }
             })
         }
 
-        return synchrony.reduce(sum, 0) / synchrony.length
+        return synchrony.map((channelData) => {return channelData.reduce(sum, 0) / channelData.length})
     }
 
     initializeUserBuffers() {
@@ -167,11 +171,11 @@ class BrainsAtPlay {
         })
     }
 
-    WebGLBuffer(){
+    WebGLChannelDisplacementBuffer(){
         return new Float32Array([...this.userBuffers.flat(2)])
     }
 
-    WebGLChannelDisplacementBuffer(){
+    WebGLChannelDisplacementBuffer_Normalized(){
         let _temp = this.normalizeUserBuffers();
         return new Float32Array([..._temp.flat(2)])
     }

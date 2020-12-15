@@ -40,7 +40,7 @@ function particleCloud() {
     const dispLocation = gl.getAttribLocation(program, `z_displacement`);
     gl.enableVertexAttribArray(dispLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLBuffer(), gl.DYNAMIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLChannelDisplacementBuffer(), gl.DYNAMIC_DRAW);
     gl.vertexAttribPointer(dispLocation, 1, gl.FLOAT, false, 0, 0);
 
 // Set Uniform Locations
@@ -145,7 +145,7 @@ function particleCloud() {
         // Push channels stream to displacement buffer
         if (visualizations[state].shapes.includes('channels')) {
             gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
-            gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLChannelDisplacementBuffer(), gl.DYNAMIC_DRAW);
+            gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLChannelDisplacementBuffer_Normalized(), gl.DYNAMIC_DRAW);
         }
 
         // Update rotation speeds
@@ -164,7 +164,7 @@ function particleCloud() {
         }
 
         // Get synchrony
-        if (visualizations[state].effect == 'synchrony') {
+        if (visualizations[state].signaltype == 'synchrony') {
             // Synchrony of you and other users
 
             if (brains.users.size > 1){
@@ -172,14 +172,14 @@ function particleCloud() {
             keys = brains.users.keys()
             let edgeArray = [];
             let currentEdge = []
-            currentEdge.push(keys.next().value)
-            currentEdge.push(keys.next().value)
+            currentEdge.push(keys.next().value) // Brain 1
+            currentEdge.push(keys.next().value) // Brain 2
             edgeArray.push(currentEdge)
             new_sync = brains.synchrony('pcc',edgeArray)
             // Slowly ease to the newest synchrony value
             synchrony.shift()
-            if (!isNaN(new_sync)) {
-                synchrony.push(new_sync)
+            if (!isNaN(average(new_sync))) {
+                synchrony.push(average(new_sync))
             } else {
                 synchrony.push(0)
             }
@@ -216,33 +216,51 @@ function particleCloud() {
 
         // Update 3D brain color with your data
         let user = 0;
+        if (visualizations[state].effect === 'projection'){
         for (let [key] of brains.users) {
             if (key == userId || key == 'me'){
                 for (let channel = 0; channel < eegCoords.length; channel++){
                     if (brains.userBuffers[user].length > channel){
-                        avg.push(averagePower(brains.userBuffers[user][channel]));
-                        } else {
-                            avg.push(0);
-                        }
+                        if (visualizations[state].signaltype == 'voltage'){
+                            avg.push(averagePower(brains.userBuffers[user][channel]));
+                        } 
+                        else if (visualizations[state].signaltype == 'synchrony') {
+                            avg.push(new_sync[channel]);
+                        } else if (['delta','theta','alpha','beta','gamma'].includes(visualizations[state].signaltype)){
+                            try {
+                                // NOTE: Not going to be correct with real-time sample rate
+                                avg.push(bci.bandpower(brains.userBuffers[user][channel], samplerate, visualizations[state].signaltype, {relative: true}));
+                            } catch {
+                                console.log('sample rate too low')
+                            }
+                    } else {
+                        avg.push(0);
+                    }
                     }
                 }
                 user++
             }
+        }
 
         let totalAvg = average(avg);
         let std = standardDeviation(avg);
 
-        let relPowers = new Array(eegCoords.length).fill(0)
-        let pow;
+        let relSignal = new Array(eegCoords.length).fill(0)
+        let sig;
         for (let channel = 0; channel < avg.length; channel++){
-            pow = (avg[channel] - totalAvg)/std;
-            if (isNaN(pow)){
-                relPowers[channel] = 0;
-            } else {
-                relPowers[channel] = pow;
+            sig = (avg[channel] - totalAvg)/std;
+            if (isNaN(sig) && visualizations[state].signaltype == 'voltage'){
+                relSignal[channel] = 0;
+            } else if (isNaN(sig) && ['synchrony','delta','theta','alpha','beta','gamma'].includes(visualizations[state].signaltype)) {
+                relSignal[channel] = avg[channel];
+            }
+            else {
+                relSignal[channel] = sig;
             }
         }
-        gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relPowers));
+
+        gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
+    }
 
 
         // Ease camera
@@ -296,7 +314,7 @@ function particleCloud() {
                 if (renderLagStart == undefined){
                     renderLagStart = Date.now();
                 }
-                if (Date.now() - renderLagStart >= 2000){
+                if (Date.now() - renderLagStart >= 1000){
                     renderState = state
                     renderLagStart = undefined;
                 }
@@ -324,7 +342,12 @@ function particleCloud() {
             document.getElementById('canvas-message').style.opacity = 0;
         }
 
-
+        // Remove projection options if effect is not projection
+        if (visualizations[state].effect == 'projection' && document.getElementById('projection-options').style.opacity != '100%'){
+            document.getElementById('projection-options').style.opacity = '100%'
+        } else {
+            document.getElementById('projection-options').style.opacity = '0%'
+        }
     };
     animate()
 }

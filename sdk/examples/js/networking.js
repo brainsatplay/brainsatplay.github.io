@@ -2,7 +2,7 @@
 function toggleConnection(){
     if (ws == undefined){
         establishWebsocketConnection();
-        document.getElementById("connection-button").innerHTML = 'Leave the Brainstorm';
+        document.getElementById("connection-button").innerHTML = 'Exit the Brainstorm';
         brains.users.delete('other');
         brains.users.delete('me');
         brains.addBrain('me');
@@ -94,13 +94,15 @@ function initializeWebsocket(){
             // Announce number of brains currently online
             if (obj.n > 0 && brains.users.get('me') != undefined){
                 brains.users.delete('me')
-                announcement(`<div>welcome to the brainstorm
+                announcement(`<div>Welcome to the Brainstorm
                                 <p class="small">${brains.users.size} brains online</p></div>`)
+                document.getElementById('nBrains').innerHTML = `${brains.users.size}`
             } else {
-                announcement(`<div>welcome to the brainstorm
+                announcement(`<div>Welcome to the Brainstorm
                                 <p class="small">No brains online</p></div>`)
-            }
+                document.getElementById('nBrains').innerHTML = `0`
 
+            }
         }
         else if (obj.destination == 'BrainsAtPlay'){
 
@@ -134,10 +136,11 @@ function initializeWebsocket(){
             announceUsers(update)
 
             if (state != 0){
-                stateManager(animState)
+                stateManager()
                 // brains.reallocateUserBuffers(reallocationInd);
             }
             brains.initializeUserBuffers()
+            document.getElementById('nBrains').innerHTML = `${brains.users.size}`
             }
 
         else {
@@ -148,6 +151,9 @@ function initializeWebsocket(){
     ws.onclose = function () {
         showMessage('WebSocket connection closed');
         ws = null;
+        announcement(`<div>Exiting the Brainstorm
+        <p class="small">Thank you for playing!</p></div>`)
+        document.getElementById('nBrains').innerHTML = `not connected`
     };
 }
 

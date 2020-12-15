@@ -81,12 +81,23 @@
             <span id="canvas-message"></span>
         </div>
 
-        <div id="top-bar">
-            <div id="top-info">
+        <div id="projection-options">
+            <button onclick="visualizations[state].signaltype = 'voltage'; document.getElementById('signal-type').innerHTML = 'voltage'">Voltage</button>
+            <button onclick="visualizations[state].signaltype = 'synchrony'; document.getElementById('signal-type').innerHTML = 'synchrony'">Synchrony</button>
+            <button onclick="visualizations[state].signaltype = 'delta'; document.getElementById('signal-type').innerHTML = 'delta'">Delta</buttion>
+            <button onclick="visualizations[state].signaltype = 'theta'; document.getElementById('signal-type').innerHTML = 'theta'">Theta</buttion>
+            <button onclick="visualizations[state].signaltype = 'alpha'; document.getElementById('signal-type').innerHTML = 'alpha'">Alpha</buttion>
+            <button onclick="visualizations[state].signaltype = 'beta'; document.getElementById('signal-type').innerHTML = 'beta'">Beta</buttion>
+            <button onclick="visualizations[state].signaltype = 'gamma'; document.getElementById('signal-type').innerHTML = 'gamma'">Gamma</buttion>
+        </div>
+
+        <div id="bottom-bar">
+            <div id="bottom-info">
         <div class="title">
             <h4>Brainstorm</h4>
             <p>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
         </div>
+        <div>
         <div class=icongrid>
             <div class="menuicon" onclick="state = 1">
                 <i class="fas fa-brain fa-1x"></i>
@@ -101,14 +112,23 @@
                 <i class="fas fa-users-cog fa-1x"></i>
             </div>
         </div>
+        </div>
         <div class="params">
             <h5>State</h5>
-            <p id="state" class="small">State:</p>
+            <p id="state" class="small"></p>
             <h5>ID</h5>
             <p id="userId" class="small">Simulation</p>
         </div>
-        <div class="filler">
+        <div class="params">
+            <h5>Signal</h5>
+            <p id="signal-type" class="small"></p>
+            <h5>nBrains</h5>
+            <p id="nBrains" class="small">not connected</p>
+        </div>
+        <div class="params">
             <button id="connection-button" onclick="toggleConnection()">Enter the Brainstorm</button>
+        </div>
+        <div class="filler">
         </div>
         <!-- <div class=icongrid>
             <div class="menuicon" onclick="toggleChat()">
@@ -136,32 +156,23 @@
     let gl = canvas.getContext('webgl')
 
     // Set Visualization Controls
-    let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])
+    let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])*2
     let effects = [false, 'projection','synchrony'] // Order used in Shaders.js code
 
     let visualizations = [{
-        name: 'Intro', 
+        name: 'Scan Phase', 
         shapes: ['sphereShells'], // shape of points
         render: gl.POINTS,
         type: 'intro',
         timer: 3.0, // display time in seconds; false has no animation
-        message: 'scanning your brain...',
+        message: 'scanning...',
         ease: 0.1,
         zoom: GENERIC_ZOOM,
-        effect: false
+        effect: false,
+        signaltype: undefined
     },
-    // {
-    //     shapes: ['brain'],
-    //     render: gl.POINTS,
-    //     type: 'intro',
-    //     timer: 3.0, 
-    //     message: 'welcome to the brainstorm',
-    //     ease: 0.1,
-    //     zoom: GENERIC_ZOOM,
-    //     effect: false
-    // },
     {
-        name: 'Brain | Voltage', 
+        name: '3D Brain', 
         shapes: ['brain'],
         type: 'main',
         render: gl.POINTS,
@@ -172,7 +183,7 @@
         effect: 'projection',
         signaltype: 'voltage'
     },{
-        name: 'Channels | Voltage', 
+        name: 'Data Streams', 
         shapes: ['channels'],
         type: 'main',
         render: gl.LINES,
@@ -180,9 +191,10 @@
         message: '',
         ease: 0.1,
         zoom: GENERIC_ZOOM,
-        effect: false
+        effect: false,
+        signaltype: 'voltage'
     },{
-        name: 'Group Brains', 
+        name: 'User Information', 
         shapes: ['brains'],
         type: 'main',
         render: gl.POINTS,
@@ -190,9 +202,10 @@
         message: '',
         ease: 0.1,
         zoom: GENERIC_ZOOM,
-        effect: false
+        effect: false,
+        signaltype: undefined
     },{
-        name: 'Group Synchrony', 
+        name: 'You vs. Group', 
         shapes: ['brain'],
         type: 'main',
         render: gl.POINTS,
@@ -200,19 +213,9 @@
         message: '',
         ease: 0.1,
         zoom: GENERIC_ZOOM,
-        effect: 'synchrony'
-    },
-    // {
-    //     shapes: ['brain'],
-    //     type: 'main',
-    //     render: gl.POINTS,
-    //     timer: false, 
-    //     message: '',
-    //     ease: 0.1,
-    //     zoom: GENERIC_ZOOM,
-    //     effect: 'projection',
-    //     signaltype: 'synchrony'
-    // },
+        effect: 'synchrony',
+        signaltype: 'synchrony'
+    }
 ]
 
     let channels = 16;
@@ -224,7 +227,7 @@
     let epsilon = .001;
 
     let eegCoords = [
-        [10.0,-37.0,76.0],// [-25.0,75.0,-25.0], // 1 Fp1
+        [-25.0,75.0,-25.0],// [// 1 Fp1
         [25.0,75.0,-25.0], // 2 Fp2
         [-25.0,0.00,75.0], // 3 C3
         [25.0,0.00,75.0], // 4 C4

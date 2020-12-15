@@ -22,13 +22,12 @@ uniform vec3 eeg_coords[16];
 uniform float eeg_signal[16];
 uniform vec2 aspectChange;
 
-float sync_scaling = 0.5+((0.5*synchrony)*0.5); 
-
-float ambient_noise_multiplier = (0.5-sync_scaling);
+float sync_scaled = ((0.5*synchrony)); 
 
 vec3 distortion_noise;
 vec3 ambient_noise;
 
+vec3 positionTransforms;
 vec4 positionProjected;
 vec2 currentScreen;
 
@@ -109,16 +108,10 @@ float cnoise(vec3 P){
 
 void main() {
 
-    if (synchrony > 0.0) {
-        ambient_noise_multiplier = 0.0;
-    }
-    float x = position.x;
-     float y = position.y;
-     float z = position.z;
-     distortion_noise = 100.0*vec3(0,0,u_noiseCoeff) * cnoise(vec3(x/100.0 + u_distortion, y/100.0 + u_distortion,z/100.0 + u_distortion));
+     distortion_noise = 100.0*vec3(0,0,u_noiseCoeff) * cnoise(vec3(position.x/100.0 + u_distortion, position.y/100.0 + u_distortion,position.z/100.0 + u_distortion));
      
      if (u_ambientNoiseToggle == 1){
-        ambient_noise = 100.0*vec3(0.01,0.01+5.0*ambient_noise_multiplier,0.01+5.0*ambient_noise_multiplier) * cnoise(vec3(x/100.0 + u_time, y/100.0 + u_time,z/100.0 + u_time));
+        ambient_noise = 100.0*vec3(0.01,0.01+5.0*sync_scaled,0.01+5.0*sync_scaled) * cnoise(vec3(position.x/100.0 + u_time, position.y/100.0 + u_time, position.z/100.0 + u_time));
      } 
      
      // Initialize color at zero
@@ -148,8 +141,15 @@ void main() {
          }
      } 
 
-     positionProjected = matrix * vec4((x+distortion_noise.x+ambient_noise.x),(y+distortion_noise.y+ambient_noise.y),(z+distortion_noise.z+z_displacement+ambient_noise.z),1) * vec4(sync_scaling,sync_scaling,sync_scaling,1.0);
-    //  currentScreen = positionProjected.xy / positionProjected.w;
+
+     positionTransforms = position + distortion_noise + ambient_noise;
+     positionTransforms.z += z_displacement;
+     
+     if (effect == 2){
+        positionTransforms *= 1.0-sync_scaled;
+     }
+     
+     positionProjected = matrix * vec4(positionTransforms,1.0);
     positionProjected.x /= aspectChange.x;
     positionProjected.y /= aspectChange.y;
 
