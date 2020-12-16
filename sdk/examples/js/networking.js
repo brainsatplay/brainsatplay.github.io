@@ -83,13 +83,15 @@ function initializeWebsocket(){
 
         } else if (obj.destination == 'init'){
 
+            console.log(obj)
+
             for (newUser = 0; newUser < obj.n; newUser++){
                 if (brains.users.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
                     brains.addBrain(obj.ids[newUser])
                 }
             }
             
-            brains.initializeUserBuffers()
+            brains.initializeBuffer(buffer='userVoltageBuffer')
 
             // Announce number of brains currently online
             if (obj.n > 0 && brains.users.get('me') != undefined){
@@ -105,6 +107,9 @@ function initializeWebsocket(){
             }
         }
         else if (obj.destination == 'BrainsAtPlay'){
+
+            console.log('new brain')
+            console.log(obj)
 
             // let reallocationInd;
             update = obj.n;
@@ -139,7 +144,7 @@ function initializeWebsocket(){
                 stateManager()
                 // brains.reallocateUserBuffers(reallocationInd);
             }
-            brains.initializeUserBuffers()
+            brains.initializeBuffer(buffer='userVoltageBuffer')
             document.getElementById('nBrains').innerHTML = `${brains.users.size}`
             }
 
@@ -164,6 +169,7 @@ function establishWebsocketConnection() {
 
     // Validate Yourself or Be Assigned a UserID
     clientAction('login','POST').then(id => {
+
         if (id != undefined){
             document.getElementById('userId').innerHTML = id
             userId = id;

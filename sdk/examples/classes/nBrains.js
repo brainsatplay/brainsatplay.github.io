@@ -3,17 +3,28 @@ class BrainsAtPlay {
     constructor(input) {
         this.users = new Map();
         if (input == undefined){
-            this.userBuffers = []
+            this.userVoltageBuffers = []
+            this.userOtherBuffers = []
         } else{
             this.addBrain(input)
          }
+    }
+
+    getMe(){
+        let user = 0;
+        for (let [key] of this.users) {
+            if (key == userId || key == 'me'){
+                this.me = user;
+            }
+            user++
+        }
     }
 
     addBrain(id) {
             // Create Brain
             let brain = new Brain(id)
             this.users.set(id, brain)
-            this.initializeUserBuffers();
+            this.initializeBuffer();
     }
 
     getMaxChannelNumber(){
@@ -101,87 +112,113 @@ class BrainsAtPlay {
         return synchrony.map((channelData) => {return channelData.reduce(sum, 0) / channelData.length})
     }
 
-    initializeUserBuffers() {
+    initializeBuffer(buffer=undefined) {
 
-        let buffer = [];
+        let b = [];
         let user;
+        let users;
+        if (buffer == 'userOtherBuffers'){
+            users = 1;
+        } else {
+            users = this.users.size;
 
-        let perUser = Math.floor(pointCount/(this.users.size*channels))
+        }
 
-        for(user=0; user < this.users.size; user++){
-            buffer.push([])
+        let perUser = Math.floor(pointCount/(users*channels))
+
+        for(user=0; user < users; user++){
+            b.push([])
             for(let chan=0; chan < channels; chan++){
-                buffer[user].push(new Array(perUser).fill(0.0));
+                b[user].push(new Array(perUser).fill(0.0));
             }
         }
 
-        let remainder = pointCount - channels*this.users.size*perUser
+        let remainder = pointCount - channels*users*perUser
             for (let chan = 0; chan < channels; chan++) {
-                for (user = 0; user < this.users.size; user++)
+                for (user = 0; user < users; user++)
                     if (remainder > 0) {
                         remainder--;
-                        buffer[user][chan].push(0.0)
+                        b[user][chan].push(0.0)
                     }
             }
-
-        this.userBuffers = buffer;
-    }
-
-    reallocateUserBuffers(ind) {
-
-        console.log('reallocating')
-        let currUsers = this.userBuffers.length
-        let targetUsers = this.users.size     
-        let perUser = Math.floor(pointCount/(targetUsers*channels))
-
-        if (targetUsers - currUsers > 0){
-
-            this.userBuffers.forEach((userData, user) => {
-                this.userBuffers[user].splice(0,this.userBuffers[user].length - perUser)
-            })
-            
-            this.userBuffers.push(new Array(perUser).fill(0))
-
+        
+        if (buffer != undefined){
+            this[buffer] = b;
         } else {
-            this.userBuffers.splice(ind,1)
-            this.userBuffers.forEach((userData, user) => {
-                this.userBuffers[user].push(new Array(perUser - this.userBuffers[user].length).fill(0))
-            })
+            this.userVoltageBuffers = b;
+            this.userOtherBuffers = b
         }
     }
 
-    updateUserBuffers(){
-        let userInd = 0
-        this.users.forEach((brain) => {
-            brain.buffer.forEach((channelData, channel) => {
-                if(this.userBuffers[userInd][channel] != undefined){
-                if (channelData.length != 0){
-                    this.userBuffers[userInd][channel].splice(0,SIGNAL_SUSTAIN)
-                    channelData = new Array(SIGNAL_SUSTAIN).fill(brain.buffer[channel].shift())
-                    this.userBuffers[userInd][channel].push(...channelData)
-                } else {
-                    channelData = new Array(SIGNAL_SUSTAIN).fill(0)
-                    this.userBuffers[userInd][channel].splice(0,SIGNAL_SUSTAIN)
-                    this.userBuffers[userInd][channel].push(...channelData)
+    // reallocateUserBuffers(ind) {
+
+    //     console.log('reallocating')
+    //     let currUsers = this.userVoltageBuffers.length
+    //     let targetUsers = this.users.size     
+    //     let perUser = Math.floor(pointCount/(targetUsers*channels))
+
+    //     if (targetUsers - currUsers > 0){
+
+    //         this.userVoltageBuffers.forEach((userData, user) => {
+    //             this.userVoltageBuffers[user].splice(0,this.userVoltageBuffers[user].length - perUser)
+    //         })
+            
+    //         this.userVoltageBuffers.push(new Array(perUser).fill(0))
+
+    //     } else {
+    //         this.userVoltageBuffers.splice(ind,1)
+    //         this.userVoltageBuffers.forEach((userData, user) => {
+    //             this.userVoltageBuffers[user].push(new Array(perUser - this.userVoltageBuffers[user].length).fill(0))
+    //         })
+    //     }
+    // }
+
+    updateBuffer(source='brains',buffer='userVoltageBuffers'){
+        let userInd;
+
+        if (source == 'brains'){
+            userInd = 0;
+            this.users.forEach((brain) => {
+                brain.buffer.forEach((channelData, channel) => {
+                    if(this[buffer][userInd][channel] != undefined){
+                    if (channelData.length != 0){
+                        channelData = new Array(SIGNAL_SUSTAIN).fill(brain.buffer[channel].shift())
+                    } else {
+                        channelData = new Array(SIGNAL_SUSTAIN).fill(0)
+                    }
+                    this[buffer][userInd][channel].splice(0,SIGNAL_SUSTAIN)
+                    this[buffer][userInd][channel].push(...channelData)
                 }
-            }
-            }
-            )
-            userInd++;
-        })
+                }
+                )
+                userInd++;
+            })
+        } else {
+                userInd = this.me         
+                let userData = this[buffer][userInd]
+                userData.forEach((channelData,channel) => {
+                    if (channelData.length != 0){
+                        channelData = new Array(SIGNAL_SUSTAIN).fill(source[channel])
+                    } else {
+                        channelData = new Array(SIGNAL_SUSTAIN).fill(0)
+                    }
+                    this[buffer][userInd][channel].splice(0,SIGNAL_SUSTAIN)
+                    this[buffer][userInd][channel].push(...channelData)
+                })
+        }
     }
 
-    WebGLChannelDisplacementBuffer(){
-        return new Float32Array([...this.userBuffers.flat(2)])
+    BufferToWebGL(buffer='userVoltageBuffers'){
+            return new Float32Array([...this[buffer].flat(2)])
     }
 
-    WebGLChannelDisplacementBuffer_Normalized(){
-        let _temp = this.normalizeUserBuffers();
+    BufferToWebGL_Normalized(buffer='userVoltageBuffers'){
+        let _temp = this.normalizeUserBuffers(this[buffer]);
         return new Float32Array([..._temp.flat(2)])
     }
 
-    normalizeUserBuffers() {
-        let _temp = this.userBuffers.map((userData) => {
+    normalizeUserBuffers(buffer) {
+        let _temp = buffer.map((userData) => {
             return userData.map((channelData) => {
                 let chanMax = max(channelData)
                 let chanMin = min(channelData)

@@ -40,7 +40,7 @@ function particleCloud() {
     const dispLocation = gl.getAttribLocation(program, `z_displacement`);
     gl.enableVertexAttribArray(dispLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLChannelDisplacementBuffer(), gl.DYNAMIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, brains.BufferToWebGL(), gl.DYNAMIC_DRAW);
     gl.vertexAttribPointer(dispLocation, 1, gl.FLOAT, false, 0, 0);
 
 // Set Uniform Locations
@@ -55,6 +55,8 @@ function particleCloud() {
         eeg_signal: gl.getUniformLocation(program,`eeg_signal`),
         ambientNoiseToggle: gl.getUniformLocation(program,'u_ambientNoiseToggle'),
         aspectChange: gl.getUniformLocation(program,'aspectChange'),
+        mousePos: gl.getUniformLocation(program,'mousePos'),
+        colorToggle: gl.getUniformLocation(program,'colorToggle'),
     };
 
     // only pass EEG coordinates for existing channels
@@ -70,7 +72,7 @@ function particleCloud() {
     gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
     gl.uniform1i(uniformLocations.effect, effects.indexOf(visualizations[state].effect));
     gl.uniform1i(uniformLocations.ambientNoiseToggle, 1);
-
+    gl.uniform1i(uniformLocations.colorToggle, 1);
 
 // Create Model, View, and ProjectionMatrices
     const modelMatrix = mat4.create();
@@ -102,7 +104,7 @@ function particleCloud() {
         resize(gl.canvas);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         mouseState()
-
+        brains.getMe()
 
         // Allow auto-rotation
         if (!visualizations[state].shapes.includes('channels')){
@@ -135,18 +137,6 @@ function particleCloud() {
             } else {
                 count += 1
             }}
-
-
-        // Append channels stream to array
-        if (brains.users.size > 0){
-            brains.updateUserBuffers()
-        }
-
-        // Push channels stream to displacement buffer
-        if (visualizations[state].shapes.includes('channels')) {
-            gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
-            gl.bufferData(gl.ARRAY_BUFFER, brains.WebGLChannelDisplacementBuffer_Normalized(), gl.DYNAMIC_DRAW);
-        }
 
         // Update rotation speeds
         moveStatus = false;
@@ -211,56 +201,74 @@ function particleCloud() {
         gl.uniform1f(uniformLocations.u_time, t/200);
         gl.uniform1f(uniformLocations.synchrony, average(synchrony));
         gl.uniform2fv(uniformLocations.aspectChange, [(canvas.width)/(originalAspectX),(canvas.height)/(originalAspectY)]);
-        
-        let avg = [];
+
+        if (mouseDistort){
+        gl.uniform2fv(uniformLocations.mousePos, [(x - (canvas.width/2))/2,((canvas.height/2) - y)/2]);
+        } else {
+            gl.uniform2fv(uniformLocations.mousePos, [NaN,NaN]);
+        }
+
+        // Update Voltages Unless No Brains
+        if (brains.users.size > 0){
+            brains.updateBuffer(source='brains')
+        }
 
         // Update 3D brain color with your data
-        let user = 0;
-        if (visualizations[state].effect === 'projection'){
-        for (let [key] of brains.users) {
-            if (key == userId || key == 'me'){
+        let projectionData = [];
+        if (['projection','z_displacement'].includes(visualizations[state].effect)){
+
+            if (visualizations[state].signaltype == 'synchrony') {
+                projectionData = new_sync;
+            } else {
                 for (let channel = 0; channel < eegCoords.length; channel++){
-                    if (brains.userBuffers[user].length > channel){
+                    if (brains.userVoltageBuffers[brains.me].length > channel){
                         if (visualizations[state].signaltype == 'voltage'){
-                            avg.push(averagePower(brains.userBuffers[user][channel]));
-                        } 
-                        else if (visualizations[state].signaltype == 'synchrony') {
-                            avg.push(new_sync[channel]);
+                            projectionData.push(averagePower(brains.userVoltageBuffers[brains.me][channel]));
                         } else if (['delta','theta','alpha','beta','gamma'].includes(visualizations[state].signaltype)){
                             try {
                                 // NOTE: Not going to be correct with real-time sample rate
-                                avg.push(bci.bandpower(brains.userBuffers[user][channel], samplerate, visualizations[state].signaltype, {relative: true}));
+                                projectionData.push(bci.bandpower(brains.userVoltageBuffers[brains.me][channel], samplerate, visualizations[state].signaltype, {relative: false}));
                             } catch {
                                 console.log('sample rate too low')
                             }
                     } else {
-                        avg.push(0);
+                        projectionData.push(0);
                     }
                     }
                 }
-                user++
             }
-        }
 
-        let totalAvg = average(avg);
-        let std = standardDeviation(avg);
+        let totalAvg = average(projectionData);
+        let std = standardDeviation(projectionData);
 
         let relSignal = new Array(eegCoords.length).fill(0)
         let sig;
-        for (let channel = 0; channel < avg.length; channel++){
-            sig = (avg[channel] - totalAvg)/std;
-            if (isNaN(sig) && visualizations[state].signaltype == 'voltage'){
+        for (let channel = 0; channel < projectionData.length; channel++){
+            sig = (projectionData[channel] - totalAvg)/std;
+            if (isNaN(sig) && ['voltage','delta','theta','alpha','beta','gamma'].includes(visualizations[state].signaltype)){
                 relSignal[channel] = 0;
-            } else if (isNaN(sig) && ['synchrony','delta','theta','alpha','beta','gamma'].includes(visualizations[state].signaltype)) {
-                relSignal[channel] = avg[channel];
+            } else if (isNaN(sig) && ['synchrony'].includes(visualizations[state].signaltype)) {
+                relSignal[channel] = projectionData[channel];
             }
             else {
                 relSignal[channel] = sig;
             }
         }
 
-        gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
-    }
+        if (['projection'].includes(visualizations[state].effect)){
+            gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
+        } 
+        
+        if (['z_displacement'].includes(visualizations[state].effect)) {
+                gl.bindBuffer(gl.ARRAY_BUFFER, dispBuffer)
+                if (visualizations[state].signaltype == 'voltage'){
+                    gl.bufferData(gl.ARRAY_BUFFER, brains.BufferToWebGL_Normalized(), gl.DYNAMIC_DRAW);
+                } else {
+                    brains.updateBuffer(source=relSignal,buffer='userOtherBuffers')
+                    gl.bufferData(gl.ARRAY_BUFFER, brains.BufferToWebGL(buffer='userOtherBuffers'), gl.DYNAMIC_DRAW);
+                }
+        }
+    } 
 
 
         // Ease camera
@@ -314,7 +322,7 @@ function particleCloud() {
                 if (renderLagStart == undefined){
                     renderLagStart = Date.now();
                 }
-                if (Date.now() - renderLagStart >= 1000){
+                if (Date.now() - renderLagStart >= 500){
                     renderState = state
                     renderLagStart = undefined;
                 }
@@ -343,10 +351,10 @@ function particleCloud() {
         }
 
         // Remove projection options if effect is not projection
-        if (visualizations[state].effect == 'projection' && document.getElementById('projection-options').style.opacity != '100%'){
-            document.getElementById('projection-options').style.opacity = '100%'
+        if (['projection','z_displacement'].includes(visualizations[state].effect) && document.getElementById('signaltypes').style.opacity != '100%'){
+            document.getElementById('signaltypes').style.opacity = '100%'
         } else {
-            document.getElementById('projection-options').style.opacity = '0%'
+            document.getElementById('signaltypes').style.opacity = '0%'
         }
     };
     animate()

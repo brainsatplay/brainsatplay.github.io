@@ -57,7 +57,7 @@
         </form>
     </div>
 
-    <div id="developer-tools" class="menu">
+    <!-- <div id="developer-tools" class="menu">
         <div class="icon" onclick="state = 2">
             <a><i class="fas fa-brain fa-2x"></i></a><p>View your Brain Activity</p>
         </div>
@@ -71,7 +71,7 @@
             <a><i class="fas fa-users-cog fa-2x"></i></a><p>View Group Synchrony</p>
         </div>
         <div class="icon" onclick="toggleDevTools()"><p>Exit Developer Tools</p></div>
-    </div>
+    </div> -->
 
     <div id="brainstorm">
         <div id="ui-container">
@@ -81,14 +81,14 @@
             <span id="canvas-message"></span>
         </div>
 
-        <div id="projection-options">
-            <button onclick="visualizations[state].signaltype = 'voltage'; document.getElementById('signal-type').innerHTML = 'voltage'">Voltage</button>
-            <button onclick="visualizations[state].signaltype = 'synchrony'; document.getElementById('signal-type').innerHTML = 'synchrony'">Synchrony</button>
-            <button onclick="visualizations[state].signaltype = 'delta'; document.getElementById('signal-type').innerHTML = 'delta'">Delta</buttion>
-            <button onclick="visualizations[state].signaltype = 'theta'; document.getElementById('signal-type').innerHTML = 'theta'">Theta</buttion>
-            <button onclick="visualizations[state].signaltype = 'alpha'; document.getElementById('signal-type').innerHTML = 'alpha'">Alpha</buttion>
-            <button onclick="visualizations[state].signaltype = 'beta'; document.getElementById('signal-type').innerHTML = 'beta'">Beta</buttion>
-            <button onclick="visualizations[state].signaltype = 'gamma'; document.getElementById('signal-type').innerHTML = 'gamma'">Gamma</buttion>
+        <div id='signaltypes'>
+            <button onclick="visualizations[state].signaltype = 'voltage'; document.getElementById('signal-type').innerHTML = 'voltage'; stateManager()">Voltage</button>
+            <button onclick="visualizations[state].signaltype = 'synchrony'; document.getElementById('signal-type').innerHTML = 'synchrony'; stateManager()">Synchrony</button>
+            <button onclick="visualizations[state].signaltype = 'delta'; document.getElementById('signal-type').innerHTML = 'delta'; stateManager()">Delta</button>
+            <button onclick="visualizations[state].signaltype = 'theta'; document.getElementById('signal-type').innerHTML = 'theta'; stateManager()">Theta</button>
+            <button onclick="visualizations[state].signaltype = 'alpha'; document.getElementById('signal-type').innerHTML = 'alpha'; stateManager()">Alpha</button>
+            <button onclick="visualizations[state].signaltype = 'beta'; document.getElementById('signal-type').innerHTML = 'beta'; stateManager()">Beta</button>
+            <button onclick="visualizations[state].signaltype = 'gamma'; document.getElementById('signal-type').innerHTML = 'gamma'; stateManager()">Gamma</button>
         </div>
 
         <div id="bottom-bar">
@@ -126,7 +126,10 @@
             <p id="nBrains" class="small">not connected</p>
         </div>
         <div class="params">
-            <button id="connection-button" onclick="toggleConnection()">Enter the Brainstorm</button>
+            <button id="connection-button" onclick="toggleConnection();">Enter the Brainstorm</button>
+        </div>
+        <div class="params">
+            <button id="connection-button" onclick="mouseDistort = !mouseDistort;">Toggle Mouse Distort</button>
         </div>
         <div class="filler">
         </div>
@@ -157,18 +160,18 @@
 
     // Set Visualization Controls
     let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])*2
-    let effects = [false, 'projection','synchrony'] // Order used in Shaders.js code
+    let effects = [false, 'projection','synchrony','scan'] // Order used in Shaders.js code
 
     let visualizations = [{
         name: 'Scan Phase', 
         shapes: ['sphereShells'], // shape of points
         render: gl.POINTS,
         type: 'intro',
-        timer: 3.0, // display time in seconds; false has no animation
+        timer: 5.0, // display time in seconds; false has no animation
         message: 'scanning...',
         ease: 0.1,
         zoom: GENERIC_ZOOM,
-        effect: false,
+        effect: 'scan',
         signaltype: undefined
     },
     {
@@ -191,7 +194,7 @@
         message: '',
         ease: 0.1,
         zoom: GENERIC_ZOOM,
-        effect: false,
+        effect: 'z_displacement',
         signaltype: 'voltage'
     },{
         name: 'User Information', 
@@ -322,6 +325,7 @@
     // Set User Interactions
     let devTools = false;
     let chat = false;
+    let mouseDistort = false;
 
     canvas.onmousedown = mouseDown;
     canvas.onmouseup = mouseUp

@@ -494,14 +494,12 @@ canvas {
 }
 
 /* Top Menu */
-#projection-options{
+#signaltypes{
     position: fixed;
     top: 0;
     left:0;
     opacity: 0%;
     padding: 25px;
-    height: 150px;
-    width: 200px;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
 
     transition: 0.5s ease-in-out;
@@ -511,7 +509,7 @@ canvas {
     -webkit-transition: 0.5s ease-in-out;
 }
 
-#projection-options button {
+#signaltypes button {
     width: 100px;
     padding: 10px 0px;
     font-size: 80%;

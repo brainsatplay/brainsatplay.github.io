@@ -288,7 +288,7 @@ function getChannels(pointCloud, pointCount, numUsers) {
     let factor = (pointCount/((window.innerWidth)*numUsers*channels))
     let user = -1;
     let z;
-    let z_iter = ((window.innerHeight/6)/(channels/2))
+    let z_iter = ((window.innerHeight/4)/(channels/2))
     let y;
     let point1;
     let point2;
@@ -305,16 +305,16 @@ function getChannels(pointCloud, pointCount, numUsers) {
         }
 
         if (i % user_trigger == 0){
-            z = -(z_iter)*(channels/2) + z_iter/4;
+            z = -(z_iter)*(channels/2) + z_iter/2;
             y = -((window.innerWidth)/4)*factor;
             usr_inds.push(i * 3)
             user++;
         }
 
-        point1 = [user*.01,                                 // Separate Each User
+        point1 = [user*1,                                 // Separate Each User
                     (y) / (factor/.8),  // Length of Channels Display
                     z];    // Move to Correct Channel Position
-        point2 = [user*.01, ((y+1)) / (factor/.8), z];
+        point2 = [user*1, ((y+1)) / (factor/.8), z];
         pointCloud.push(...point1);
         pointCloud.push(...point2);
         y++;
