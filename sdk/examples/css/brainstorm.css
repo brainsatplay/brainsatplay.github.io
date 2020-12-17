@@ -652,7 +652,7 @@ canvas {
         display: flex;
         flex-direction: column;
         align-items: center; 
-        justify-content:center;
+        justify-content:flex-start;
         text-align: center;
         transition: 0.5s ease-in-out;
         -o-transition: 0.5s ease-in-out;
@@ -660,13 +660,16 @@ canvas {
         -moz-transition: 0.5s ease-in-out;
         -webkit-transition: 0.5s ease-in-out;
     }
-    
+
     #signaltypes button {
-        flex-grow: 1;
-        max-height: 25px;
+        /* height: 10px; */
         width: 100%;
+        padding: 10px;
+        height: 30px;
+        min-height: auto;
         margin-right: 0px;
         font-size: 80%;
+        padding: 0;
     }
     
     #signaltypes h4 {

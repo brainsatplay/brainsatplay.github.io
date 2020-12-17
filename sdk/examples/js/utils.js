@@ -215,10 +215,11 @@ function stateManager(){
 
     if (shapes.includes('channels')){
         cameraHome = visualizations[state].zoom;
-        [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
         if (visualizations[state].signaltype != 'voltage'){
+            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
             brains.initializeBuffer(buffer='userOtherBuffers');
         } else {
+            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
             brains.initializeBuffer(buffer='userOtherBuffers')
             brains.initializeBuffer(buffer='userVoltageBuffers')
         }
@@ -297,10 +298,11 @@ function updateChannels(newChannels) {
         }
 
         if (shapes.includes('channels')) {
-            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
             if (visualizations[state].signaltype != 'voltage'){
+                [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
                 brains.initializeBuffer(buffer='userOtherBuffers');
             } else {
+                [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
                 brains.initializeBuffer(buffer='userOtherBuffers')
                 brains.initializeBuffer(buffer='userVoltageBuffers')
             }
