@@ -53,7 +53,7 @@ function wheelMove(ev) {
 
 // Keyboard Shortcuts
 function keyboardShortcuts(ev){
-    let key_events = [37, 38, 39, 40,73];
+    let key_events = [37, 38, 39, 40, 73];
     if (key_events.includes(ev.keyCode)){
         // if (ev.keyCode == '38') {
         //     distortFlag = true;
@@ -76,7 +76,8 @@ function keyboardShortcuts(ev){
         } 
         // Key "i" opens developer tools
         // else if (ev.keyCode == '73'){
-        //     toggleDevTools()
-        // }
+        //     console.log('debugging')
+        //     debugFlag != debugFlag;
+        // } 
     }
 }

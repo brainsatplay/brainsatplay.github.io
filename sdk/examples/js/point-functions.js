@@ -282,7 +282,6 @@ async function getBrain() {
 
 
 function getChannels(pointCloud, pointCount, numUsers) {
-
     let channel_inds = [0];
     let usr_inds = [0];
     let factor = (pointCount/((window.innerWidth)*numUsers*channels))

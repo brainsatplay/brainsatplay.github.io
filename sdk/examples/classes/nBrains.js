@@ -6,25 +6,43 @@ class BrainsAtPlay {
             this.userVoltageBuffers = []
             this.userOtherBuffers = []
         } else{
-            this.addBrain(input)
+            this.add(input)
          }
     }
 
     getMe(){
         let user = 0;
-        for (let [key] of this.users) {
+        let gotMe = false;
+
+        this.users.forEach((_,key) => {
             if (key == userId || key == 'me'){
                 this.me = user;
+                gotMe = true;
             }
             user++
+        })
+
+        if (!gotMe){
+            this.me = undefined;
         }
     }
 
-    addBrain(id) {
-            // Create Brain
-            let brain = new Brain(id)
-            this.users.set(id, brain)
-            this.initializeBuffer();
+    add(id,channelNames) {
+        let brain; 
+        if (channelNames == undefined){
+            brain = new Brain(id)
+        } else {
+            brain = new Brain(id,channelNames)
+        }
+        this.users.set(id, brain)
+        this.initializeBuffer('userOtherBuffers')
+        this.initializeBuffer('userVoltageBuffers')
+    }
+
+    remove(id){
+        this.users.delete(id)
+        this.initializeBuffer('userOtherBuffers')
+        this.initializeBuffer('userVoltageBuffers')
     }
 
     getMaxChannelNumber(){
@@ -121,7 +139,6 @@ class BrainsAtPlay {
             users = 1;
         } else {
             users = this.users.size;
-
         }
 
         let perUser = Math.floor(pointCount/(users*channels))
@@ -144,9 +161,6 @@ class BrainsAtPlay {
         
         if (buffer != undefined){
             this[buffer] = b;
-        } else {
-            this.userVoltageBuffers = b;
-            this.userOtherBuffers = b
         }
     }
 
@@ -180,13 +194,19 @@ class BrainsAtPlay {
             userInd = 0;
             this.users.forEach((brain) => {
                 brain.buffer.forEach((channelData, channel) => {
+                    let sustain;
                     if(this[buffer][userInd][channel] != undefined){
+                        if (this[buffer][userInd][channel].every(item => item === 0)){
+                            sustain = this[buffer][userInd][channel].length;
+                        } else {
+                            sustain = SIGNAL_SUSTAIN
+                        }
                     if (channelData.length != 0){
-                        channelData = new Array(SIGNAL_SUSTAIN).fill(brain.buffer[channel].shift())
+                        channelData = new Array(sustain).fill(brain.buffer[channel].shift())
                     } else {
-                        channelData = new Array(SIGNAL_SUSTAIN).fill(0)
+                        channelData = new Array(sustain).fill(0)
                     }
-                    this[buffer][userInd][channel].splice(0,SIGNAL_SUSTAIN)
+                    this[buffer][userInd][channel].splice(0,sustain)
                     this[buffer][userInd][channel].push(...channelData)
                 }
                 }

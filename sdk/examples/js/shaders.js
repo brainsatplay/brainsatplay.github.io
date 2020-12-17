@@ -18,8 +18,8 @@ uniform float u_noiseCoeff;
 uniform float synchrony;
 uniform float u_time;
 uniform int u_ambientNoiseToggle;
-uniform vec3 eeg_coords[16];
-uniform float eeg_signal[16];
+uniform vec3 eeg_coords[65];
+uniform float eeg_signal[65];
 uniform vec2 aspectChange;
 uniform vec2 mousePos;
 uniform int colorToggle;
@@ -114,7 +114,7 @@ void main() {
      distortion_noise = 100.0*vec3(0,0,u_noiseCoeff) * cnoise(vec3(position.x/100.0 + u_distortion, position.y/100.0 + u_distortion,position.z/100.0 + u_distortion));
      
      if (u_ambientNoiseToggle == 1){
-        if (effect == 2){
+        if (effect == 2 && sync_scaled < 0.0){
             ambient_noise = 100.0*vec3(0.01,0.01+5.0*sync_scaled,0.01+5.0*sync_scaled) * cnoise(vec3(position.x/100.0 + u_time, position.y/100.0 + u_time, position.z/100.0 + u_time));
         } else{
             ambient_noise = 100.0*vec3(0.01,0.01,0.01) * cnoise(vec3(position.x/100.0 + u_time, position.y/100.0 + u_time, position.z/100.0 + u_time));
@@ -127,8 +127,8 @@ void main() {
      // Add color effects
      if (colorToggle == 1){
         if (effect == 1){
-            for (int i = 0; i < 16; i++){
-                if (abs(distance(eeg_coords[i],position)) <= 75.0){
+            for (int i = 0; i < 65; i++){
+                if (abs(distance(eeg_coords[i],position)) <= 60.0){
                     if (eeg_signal[i] > 0.0){
                         vColor.y -= 0.5*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
                         vColor.z -= 0.2*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
@@ -137,9 +137,6 @@ void main() {
                         vColor.y += 0.2*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
                     }
                 }  
-                // else if (eeg_signal[i] == 0.0){
-                //     vColor = vec3(0.5,0.5,0.5);
-                // }
             }
         } 
         else if (effect == 2){

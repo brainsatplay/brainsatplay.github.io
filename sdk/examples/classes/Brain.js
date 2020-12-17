@@ -2,11 +2,12 @@ let maxTime = 10000; // 10 seconds
 let maxSize = 1000
 
 class Brain {
-    constructor(userId) {
+    constructor(userId, channelNames = 'Fz,C3,Cz,C4,Pz,PO7,Oz,PO8,F5,F7,F3,F1,F2,F4,F6,F8') {
     this.id = userId;
-    this.numChannels = 0;
-    this.buffer = [[]]
-    this.times = []
+    this.channelNames = channelNames.split(',')
+    this.numChannels = this.channelNames.length;
+    this.buffer = [[]];
+    this.times = [];
     }
 
     streamIntoBuffer(data) {
@@ -19,8 +20,8 @@ class Brain {
             if (channel >= this.buffer.length){
                 this.buffer.push([])
             }
-    
-            if (channelData != undefined) {
+            
+            if (Array.isArray(channelData) && channelData.length) {
                 if (channelData.length > 0) {
                     this.buffer[channel].push(...channelData);
                     this.times.push(...time);
@@ -29,7 +30,18 @@ class Brain {
         })
 
         // this.trimBufferByTime()
-        this.numChannels = signal.length
+
+        // Background subtraction
+        //     this.buffer = this.buffer.map((channelData, channel) => {
+        //     let mean = average(channelData);
+        //     if (channelData.length > 1 && channel == 0){
+        //     console.log(channelData.length)
+        //     }
+        //     channelData = channelData.map((val) => {
+        //         return val - mean;
+        //     })
+        //     return channelData
+        // })
         this.trimBufferBySize()
     }
     

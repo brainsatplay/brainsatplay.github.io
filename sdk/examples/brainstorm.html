@@ -23,7 +23,7 @@
     <link rel=icon href=favicons/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/brainstorm.css"/>
     <script type="text/javascript" src="js/visbrain.js"></script>
-    <!-- <script type="text/javascript" src="js/bigbrainpoints.js"></script> -->
+    <script type="text/javascript" src="js/eegCoordinates.js"></script>
     <script type="text/javascript" src="classes/Brain.js"></script>
     <script type="text/javascript" src="classes/nBrains.js"></script>
     <script type="text/javascript" src="js/interaction.js"></script>
@@ -73,6 +73,18 @@
         <div class="icon" onclick="toggleDevTools()"><p>Exit Developer Tools</p></div>
     </div> -->
 
+    <div id="info-card">
+        <h4>Brainstorm</h4>
+        <p class='small'>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
+        <p>A multiplayer neurotechnology game for coupling minds across geographic, social, and cultural boundaries.</p>
+        <h5>Instructions</h5>
+        <p>Use the bottom toolbar to view different visualizations of brain activity—both individual and collective. Toggle between these on the right side of the screen.</p>
+        <ol>
+        <li><p>You start the experience by viewing a synthetic stream of two brains. Press <strong>Enter the Brainstorm</strong> to connect to a network of real users.</p></li>
+        <li><p>Copy your <strong>ID</strong> to our Python streamer and view your own data from OpenBCI or Neurosity headsets.</p></li>
+    </ol>
+    </div>
+
     <div id="brainstorm">
         <div id="ui-container">
             <canvas id='webgl'></canvas>
@@ -82,6 +94,8 @@
         </div>
 
         <div id='signaltypes'>
+            <h4>Signal Types</h4>
+            <p id="signal-type" class="small"></p>
             <button onclick="visualizations[state].signaltype = 'voltage'; document.getElementById('signal-type').innerHTML = 'voltage'; stateManager()">Voltage</button>
             <button onclick="visualizations[state].signaltype = 'synchrony'; document.getElementById('signal-type').innerHTML = 'synchrony'; stateManager()">Synchrony</button>
             <button onclick="visualizations[state].signaltype = 'delta'; document.getElementById('signal-type').innerHTML = 'delta'; stateManager()">Delta</button>
@@ -91,14 +105,12 @@
             <button onclick="visualizations[state].signaltype = 'gamma'; document.getElementById('signal-type').innerHTML = 'gamma'; stateManager()">Gamma</button>
         </div>
 
-        <div id="bottom-bar">
-            <div id="bottom-info">
-        <div class="title">
-            <h4>Brainstorm</h4>
-            <p>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
-        </div>
-        <div>
-        <div class=icongrid>
+        <div id="bottom-info">
+            <div class="info-holder-outer">
+                <h4>States</h4>
+                <p id="state" class="small">&nbsp;</p>
+        <div class="info-holder-inner">
+            <div class=icongrid>
             <div class="menuicon" onclick="state = 1">
                 <i class="fas fa-brain fa-1x"></i>
             </div>
@@ -113,24 +125,40 @@
             </div>
         </div>
         </div>
-        <div class="params">
-            <h5>State</h5>
-            <p id="state" class="small"></p>
+        </div>
+
+        <div class="info-holder-outer">
+            <h4>Connection Info</h4>
+            <p class="small">&nbsp;</p>
+            <div class="info-holder-inner">
+                <div class="params">
             <h5>ID</h5>
             <p id="userId" class="small">Simulation</p>
-        </div>
-        <div class="params">
-            <h5>Signal</h5>
-            <p id="signal-type" class="small"></p>
+          </div>
+
+          <div class="params">
             <h5>nBrains</h5>
             <p id="nBrains" class="small">not connected</p>
         </div>
         <div class="params">
-            <button id="connection-button" onclick="toggleConnection();">Enter the Brainstorm</button>
+
+        <h5>nInterfaces</h5>
+            <p id="nInterfaces" class="small">not connected</p>
+            </div>
+            <div class="params">
+                <button id="connection-button" onclick="toggleConnection();">Enter the Brainstorm</button>
+            </div>
+            </div>
         </div>
+        <div class="info-holder-outer">
+            <h4>Toggles</h4>
+            <p class="small">&nbsp;</p>
+        <div class="info-holder-inner">
         <div class="params">
-            <button id="connection-button" onclick="mouseDistort = !mouseDistort;">Toggle Mouse Distort</button>
+            <button onclick="mouseDistort = !mouseDistort;">Toggle Mouse Distort</button>
         </div>
+    </div>
+</div>
         <div class="filler">
         </div>
         <!-- <div class=icongrid>
@@ -144,13 +172,13 @@
         </div>
     </div>
     </div>
-    </div>
 </div>
 
 <script>
 
     // Set Deployment Controls
     let option = 'server';
+    let debugFlag = true;
 
     // Initialize WebGL Canvas
     let canvas = document.getElementById('webgl');
@@ -221,6 +249,13 @@
     }
 ]
 
+    let passedEEGCoords = new Array(eegCoordinates.length);
+    let eegChannelsOfInterest;
+
+    Object.keys(eegCoordinates).forEach((name,ind) => {
+        passedEEGCoords[ind] = eegCoordinates[name]
+    })
+
     let channels = 16;
     let DESIRED_POINTS = 1e5/2; // 80000
     let SIGNAL_SUSTAIN_ORIGINAL = 100;
@@ -228,27 +263,6 @@
     let SYNCHRONY_BUFFER_SIZE = 100;
     let DAMPING = .1;
     let epsilon = .001;
-
-    let eegCoords = [
-        [-25.0,75.0,-25.0],// [// 1 Fp1
-        [25.0,75.0,-25.0], // 2 Fp2
-        [-25.0,0.00,75.0], // 3 C3
-        [25.0,0.00,75.0], // 4 C4
-        [-75.0,-65.0,-10.0], // 5 P7
-        [75.0,-65.0,-10.0], // 6 P8
-        [-25.0,-125.0,0.00], // 7 O1
-        [25.0,-125.0,0.00], // 8 O2
-        [-75.0,35.0,-20], // 9 F7
-        [75.0,35.0,-20], // 10 F8
-        [-25.0,60.0,50.0], // 11
-        [25.0,60.0,50.0], // 12
-        [-75.0,-15.0,-15.0], // 13 T7
-        [75.0,-15.0,-15.0], // 14 T8
-        [-25.0,-75.0,60.0], // 15
-        [25.0,-75.0,60.0], // 16
-    ]
-    // eegCoords = eegCoords.map((val) => {return val*100})
-    let passedEEGCoords = eegCoords
 
     // Declare Global Visualization Variables
     let state = 0;
@@ -307,6 +321,7 @@
     let userId = undefined;
     let ws = undefined;
     let welcomed = false;
+    let nInterfaces = undefined;
 
     // Set User Interactions
     let holdStatus = false;
@@ -340,7 +355,9 @@
 
     // // Instantiate a Default Set of Brain
     brains = newBrains('me');
-    brains.addBrain('other');
+    brains.add('other');
+
+    eegChannelsOfInterest = updateEEGChannelsOfInterest()
 
     generate = true;
     sendSignal(channels)
