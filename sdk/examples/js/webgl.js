@@ -49,8 +49,6 @@ function particleCloud() {
         effect: gl.getUniformLocation(program,`effect`),
         matrix: gl.getUniformLocation(program, `matrix`),
         u_time: gl.getUniformLocation(program, `u_time`),
-        distortion: gl.getUniformLocation(program, `u_distortion`),
-        noiseCoeff: gl.getUniformLocation(program, `u_noiseCoeff`),
         synchrony: gl.getUniformLocation(program, `synchrony`),
         eeg_coords: gl.getUniformLocation(program,`eeg_coords`),
         eeg_signal: gl.getUniformLocation(program,`eeg_signal`),
@@ -135,16 +133,6 @@ function particleCloud() {
         diff_x *= (1-visualizations[state].ease);
         diff_y *= (1-visualizations[state].ease);
 
-        // Modify Distortion
-        if (distortFlag) {
-            if (Math.sign(distortIter) == -1){
-                distortIter =+ visualizations[state].ease*(-distortion)
-            }
-            if (distortion >= 0){
-                distortion += distortIter;
-            }
-        }
-
         // Get synchrony
         if (visualizations[state].signaltype == 'synchrony') {
             
@@ -188,8 +176,6 @@ function particleCloud() {
 
         // Update Uniforms
         gl.uniformMatrix4fv(uniformLocations.matrix, false, mvpMatrix)
-        gl.uniform1f(uniformLocations.noiseCoeff,distortion/5);
-        gl.uniform1f(uniformLocations.distortion, distortion/100);
         gl.uniform1f(uniformLocations.u_time, t/200);
         gl.uniform1f(uniformLocations.synchrony, average(synchrony));
         gl.uniform2fv(uniformLocations.aspectChange, [(canvas.width)/(originalAspectX),(canvas.height)/(originalAspectY)]);

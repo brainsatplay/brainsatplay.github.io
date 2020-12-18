@@ -13,8 +13,6 @@ varying vec3 vColor;
 
 uniform int effect;
 uniform mat4 matrix;
-uniform float u_distortion;
-uniform float u_noiseCoeff;
 uniform float synchrony;
 uniform float u_time;
 uniform int u_ambientNoiseToggle;
@@ -26,7 +24,6 @@ uniform int colorToggle;
 
 float sync_scaled = ((0.5*synchrony)); 
 
-vec3 distortion_noise;
 vec3 ambient_noise;
 float dist;
 
@@ -110,8 +107,6 @@ float cnoise(vec3 P){
 }
 
 void main() {
-
-     distortion_noise = 100.0*vec3(0,0,u_noiseCoeff) * cnoise(vec3(position.x/100.0 + u_distortion, position.y/100.0 + u_distortion,position.z/100.0 + u_distortion));
      
      if (u_ambientNoiseToggle == 1){
         if (effect == 2 && sync_scaled < 0.0){
@@ -167,7 +162,7 @@ void main() {
 
     }
 
-     positionTransforms = position + distortion_noise + ambient_noise;
+     positionTransforms = position + ambient_noise;
      positionTransforms.z += z_displacement;
      
      if (effect == 2){

@@ -56,28 +56,33 @@ function keyboardShortcuts(ev){
     let key_events = [37, 38, 39, 40, 73];
     if (key_events.includes(ev.keyCode)){
         // if (ev.keyCode == '38') {
-        //     distortFlag = true;
-        //     if (distortIter == -1) {
-        //         distortion = 0;
-        //     }
-        //     distortIter = 1;
         // } else if (ev.keyCode == '40') {
-        //     distortIter =+ visualizations[state].ease*(-distortion);
         // } 
-        if (ev.keyCode == '39' || ev.keyCode == '37') {
+        // if (ev.keyCode == '39' || ev.keyCode == '37') {
 
-                if (ev.keyCode == '39' && state < (visualizations.length-1))
-                {
-                    state += 1
-                }
-                else if (ev.keyCode == '37' && visualizations[state-1].type != 'intro') {
-                    state -= 1
-                }
-        } 
-        // Key "i" opens developer tools
-        // else if (ev.keyCode == '73'){
-        //     console.log('debugging')
-        //     debugFlag != debugFlag;
+        //         if (ev.keyCode == '39' && state < (visualizations.length-1))
+        //         {
+        //             state += 1
+        //         }
+        //         else if (ev.keyCode == '37' && visualizations[state-1].type != 'intro') {
+        //             state -= 1
+        //         }
         // } 
+
+        // Key "i" opens developer tools
+        if (ev.keyCode == '73'){
+           toggleDevTools()
+        } 
     }
+}
+
+
+function toggleUI(){
+    showUI = !showUI;
+
+    if (showUI){
+        document.getElementById('ui-elements').style.display = 'block'
+        } else {
+            document.getElementById('ui-elements').style.display = 'none'
+        }
 }

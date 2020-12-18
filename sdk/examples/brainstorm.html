@@ -42,56 +42,25 @@
 <body onstyle="overflow: hidden">
 
 <div id=app>
-    <!-- <div id="app-menu" class="menu">
-        <div id="menu-toggle" class="toggle"><div class="icon"><i class="fas fa-angle-right fa-3x"></i></div></div>
-        <div class="icon menuicon" onclick="window.open(`/downloadapp`)">
+
+    <div id="developer-tools" class="menu">
+        <div class="icon" onclick="toggleUI()">
+            <p>Toggle UI</p>
+        </div>
+        <!-- <div class="icon menuicon" onclick="window.open(`/downloadapp`)">
             <a><i class="fas fa-desktop fa-2x"></i></a><p>Download Desktop App</p>
-        </div>
-    </div> -->
-
-    <div id="chat">
-        <ul id="messages"></ul>
-        <form id="chat-form" action="">
-            <label for="message"></label>
-            <input type="text" id="message" autocomplete="off" placeholder="Say hello..."/>
-        </form>
-    </div>
-
-    <!-- <div id="developer-tools" class="menu">
-        <div class="icon" onclick="state = 2">
-            <a><i class="fas fa-brain fa-2x"></i></a><p>View your Brain Activity</p>
-        </div>
-        <div class="icon" onclick="state = 3">
-            <a><i class="fas fa-wave-square fa-2x"></i></a><p>Inspect Raw Voltages</p>
-        </div>
-        <div class="icon" onclick="state = 4">
-            <a><i class="fas fa-users fa-2x"></i></a><p>View Users</p>
-        </div>
-        <div class="icon" onclick="function(this) {console.log(this); state = 5; console.log(5);his.className = 'icon menuicon selected'}">
-            <a><i class="fas fa-users-cog fa-2x"></i></a><p>View Group Synchrony</p>
-        </div>
-        <div class="icon" onclick="toggleDevTools()"><p>Exit Developer Tools</p></div>
-    </div> -->
-
-    <div id="info-card">
-        <h4>Brainstorm</h4>
-        <p class='small'>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
-        <p>A multiplayer neurotechnology game for coupling minds across geographic, social, and cultural boundaries.</p>
-        <h5>Instructions</h5>
-        <p>Use the <strong>States</strong> panel to view different visualizations of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>
-        <ol>
-        <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Enter the Brainstorm</strong> to connect with a network of real users and their brains.</p></li>
-        <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and view your data from OpenBCI or Neurosity headsets.</p></li>
-    </ol>
+        </div> -->
     </div>
 
     <div id="brainstorm">
-        <div id="ui-container">
+        <div id="canvas-container">
             <canvas id='webgl'></canvas>
         </div>
         <div class="message-container">
             <span id="canvas-message"></span>
         </div>
+
+        <div id="ui-elements">
 
         <div id='signaltypes'>
             <h4>Signal Types</h4>
@@ -108,7 +77,9 @@
         <div id="bottom-info">
             <div class="info-holder-outer">
                 <h4>States</h4>
+                <div class="under-header-info">
                 <p id="state" class="small">&nbsp;</p>
+                </div>
         <div class="info-holder-inner">
             <div class=icongrid>
             <div class="menuicon" onclick="state = 1">
@@ -129,33 +100,39 @@
 
         <div class="info-holder-outer">
             <h4>Connection Info</h4>
-            <p class="small">&nbsp;</p>
+
+            <div id="access-mode-div" class="under-header-info">
+                <p id="access-mode" class="small">Not Connected</p>
+            </div>
+
             <div class="info-holder-inner">
-                <div class="params">
+                <div id="id-params" class="params" style="display:none">
             <h5>ID</h5>
-            <p id="userId" class="small">Simulation</p>
+            <p id="userId" class="small"></p>
           </div>
 
-          <div class="params">
+          <div id="nBrains-params" class="params" style="display:none">
             <h5>nBrains</h5>
-            <p id="nBrains" class="small">not connected</p>
+            <p id="nBrains" class="small"></p>
         </div>
-        <div class="params">
+        <div id="nInterfaces-params" class="params" style="display:none">
 
         <h5>nInterfaces</h5>
-            <p id="nInterfaces" class="small">not connected</p>
+            <p id="nInterfaces" class="small"></p>
             </div>
-            <div class="params">
-                <button id="connection-button" onclick="toggleConnection();">Enter the Brainstorm</button>
+            <div id="connection-toggle" class="params">
+                <button id="connection-button" onclick="toggleConnection();">Connect</button>
             </div>
             </div>
         </div>
         <div class="info-holder-outer">
             <h4>Effects</h4>
-            <p class="small">&nbsp;</p>
+            <div class="under-header-info">
+                <p id="effect-status" class="small">Off</p>
+            </div>
         <div class="info-holder-inner">
         <div class="params">
-            <button onclick="mouseDistort = !mouseDistort;">Toggle Mouse Distort</button>
+            <button onclick="distortToggle()">Toggle Mouse Distort</button>
         </div>
     </div>
 </div>
@@ -168,15 +145,38 @@
             </div>
         </div> -->
         </div>
+
+        <div id="info-card">
+            <h4>Brainstorm</h4>
+            <p class='small'>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
+            <p>A multiplayer neurotechnology game for coupling minds across geographic, social, and cultural boundaries.</p>
+            <h5>Instructions</h5>
+            <p>Use the <strong>States</strong> panel to view different visualizations of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>
+            <ol>
+            <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Enter the Brainstorm</strong> to connect with a network of real users and their brains.</p></li>
+            <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and send your data using OpenBCI or Neurosity headsets.</p></li>
+        </ol>
+        </div>
+
+    <div id="chat">
+        <ul id="messages"></ul>
+        <form id="chat-form" action="">
+            <label for="message"></label>
+            <input type="text" id="message" autocomplete="off" placeholder="Say hello..."/>
+        </form>
+    </div>
+
+
+
     </div>
     </div>
+</div>
 </div>
 
 <script>
 
     // Set Deployment Controls
     let option = 'server';
-    let debugFlag = true;
 
     // Initialize WebGL Canvas
     let canvas = document.getElementById('webgl');
@@ -188,13 +188,14 @@
     let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])*2
     let effects = [false, 'projection','synchrony','scan'] // Order used in Shaders.js code
 
-    let visualizations = [{
+    let visualizations = [
+        {
         name: 'Scan Phase', 
         shapes: ['sphereShells'], // shape of points
         render: gl.POINTS,
         type: 'intro',
         timer: 5.0, // display time in seconds; false has no animation
-        message: 'scanning...',
+        message: ``,
         ease: 0.1,
         zoom: GENERIC_ZOOM,
         effect: 'scan',
@@ -234,7 +235,7 @@
         effect: false,
         signaltype: undefined
     },{
-        name: 'You vs. Group', 
+        name: 'Group Dynamics', 
         shapes: ['brain'],
         type: 'main',
         render: gl.POINTS,
@@ -304,10 +305,6 @@
     let samplerate = 125;
     let generate_interval = Math.round(samplerate*(1/base_freq))
     let count = 0;
-    let distort = false;
-    let distortion = 0;
-    let distortFlag = false;
-    let distortIter = 1;
     let messages = []
     let url;
     if (option  === 'local'){
@@ -337,8 +334,10 @@
 
     // Set User Interactions
     let devTools = false;
+    let showUI = true;
     let chat = false;
     let mouseDistort = false;
+    let public = true;
 
     canvas.onmousedown = mouseDown;
     canvas.onmouseup = mouseUp

@@ -81,6 +81,12 @@ button:hover{
     border-color: #FF76E9;
 }
 
+.flex {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* App Nav */
 .logo {
     color: white;
@@ -320,7 +326,7 @@ button i {
 
 }
 
-.slider {
+/* .slider {
     -webkit-appearance: none;
     width: 200px;
     height: 25px;
@@ -362,7 +368,7 @@ button i {
 
 .slider::-moz-range-thumb:hover {
     background: #FF76E9;
-}
+} */
 
 
 /* WebGL UI */
@@ -371,6 +377,15 @@ canvas {
     position: fixed;
     right:0;
     top:0;
+    transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
+}
+
+#ui-elements {
+    opacity: 0;
     transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     -ms-transition: 0.5s ease-in-out;
@@ -395,7 +410,7 @@ canvas {
     pointer-events: auto;
 }
 
-#ui-container {
+#canvas-container {
     width: 100vw;
     height: 100vh;
 }
@@ -537,7 +552,6 @@ canvas {
 #bottom-info .params {
     width: 100px;
     margin: 0px 10px; 
-    /* height: 100%; */
 }
 
 #bottom-info .filler{
@@ -586,9 +600,86 @@ canvas {
     margin: 10px;
     height: 100px;
     align-items: center; 
+    justify-content: center;
+}
+
+  /* Slider */
+  /* The switch - the box around the slider */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: calc(60px / 2);
+    height: calc(34px / 2);
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: calc(26px / 2);
+    width: calc(26px / 2);
+    left: calc(4px / 2);
+    bottom: calc(4px / 2);
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(calc(26px / 2));
+    -ms-transform: translateX(calc(26px / 2));
+    transform: translateX(calc(26px / 2));
+  }
+  
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  #connection-toggle {
+    width: 150px;
+}
+
+.under-header-info{
+    display: flex;
+    align-items: center; 
     justify-content:center;
 }
 
+  #access-switch{
+    margin-left: 10px;
+  }
+  
 @media only screen and (min-width: 768px) {
     /* For desktop: */
     #info-card {
@@ -664,7 +755,6 @@ canvas {
     #signaltypes button {
         /* height: 10px; */
         width: 100%;
-        padding: 10px;
         height: 30px;
         min-height: auto;
         margin-right: 0px;
@@ -683,4 +773,3 @@ canvas {
     }
 
   }
-  
