@@ -56,8 +56,65 @@
         <div id="canvas-container">
             <canvas id='webgl'></canvas>
         </div>
-        <div class="message-container">
+
+        <div>
             <span id="canvas-message"></span>
+        </div>
+
+        <div id="login-container" class="form-container">
+            <div id="login" class="form-context">
+                <h3>Sign In</h3>
+                <p id="login-message" class="small"></p>
+                <div class='flex'>
+                    <form id="login-form" action="">
+                        <div class="login-element">
+                        <label for="username"></label>
+                        <input type="text" name="username" autocomplete="off" placeholder="Username"/>
+                    </div>
+                    <div class="login-element">
+                        <label for="password"></label>
+                        <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                    </div>
+                    </form>
+                    <div>
+                        <button id="login-button" onclick="login('profile')">Sign In</button>
+                        <button onclick="login('guest')">Guest Access</button>
+                    </div>
+                </div>
+                <div id="login-buttons">
+                    <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Sign Up</button>
+                    <button onclick="toggleLoginScreen()">Go Back</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="signup-container" class="form-container">
+            <div id="signup" class="form-context">
+                <h3>Sign Up</h3>
+                <p id="signup-message" class="small"></p>
+                <div class='flex'>
+                    <form id="signup-form" action="">
+                        <div class="login-element">
+                        <label for="username"></label>
+                        <input type="text" name="username" autocomplete="off" placeholder="Username"/>
+                    </div>
+                    <div class="login-element">
+                        <label for="password"></label>
+                        <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                    </div>
+                    <div class="login-element">
+                        <label for="confirm-password"></label>
+                        <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password"/>
+                    </div>
+                    </form>
+                    <div>
+                        <button id="signup-button" onclick="signup()">Sign Up</button>
+                    </div>
+                </div>
+                <div id="login-buttons">
+                    <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Go Back</button>
+                </div>
+            </div>
         </div>
 
         <div id="ui-elements">
@@ -122,6 +179,7 @@
             </div>
             <div id="connection-toggle" class="params">
                 <button id="connection-button" onclick="toggleConnection();">Connect</button>
+                <!-- <button id="connection-button" onclick="toggleConnection();">Connect</button> -->
             </div>
             </div>
         </div>
@@ -338,6 +396,8 @@
     let chat = false;
     let mouseDistort = false;
     let public = true;
+    let showLogin = false;
+    let showSignUp = false;
 
     canvas.onmousedown = mouseDown;
     canvas.onmouseup = mouseUp

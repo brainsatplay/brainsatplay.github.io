@@ -329,9 +329,7 @@ function bindChatSubmissionEvent(){
             document.getElementById('message').value = '';
         return false;
     })
-
 }
-
 
 
 function toggleDevTools(){
@@ -347,6 +345,30 @@ function toggleDevTools(){
         document.getElementById('bottom-info').style.width = `100vw`;
     }
     document.getElementById('canvas-message').style.width = `${canvas.width}px`;
+}
+
+function toggleLoginScreen(){
+    showLogin = !showLogin; 
+    
+    if (showLogin){
+        document.getElementById('login-container').style.zIndex = '2'
+        document.getElementById('login-container').style.opacity = '1'
+    } else {
+        document.getElementById('login-container').style.opacity = '0'
+        document.getElementById('login-container').style.zIndex = '-1'
+    }
+}
+
+function toggleSignUpScreen(){
+    showSignUp = !showSignUp; 
+    
+    if (showSignUp){
+        document.getElementById('signup-container').style.zIndex = '2'
+        document.getElementById('signup-container').style.opacity = '1'
+    } else {
+        document.getElementById('signup-container').style.opacity = '0'
+        document.getElementById('signup-container').style.zIndex = '0'
+    }
 }
 
 
