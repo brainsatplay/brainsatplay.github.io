@@ -23,7 +23,6 @@
     <link rel=icon href=favicons/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/brainstorm.css"/>
     <script type="text/javascript" src="js/visbrain.js"></script>
-    <script type="text/javascript" src="js/eegCoordinates.js"></script>
     <script type="text/javascript" src="classes/Brain.js"></script>
     <script type="text/javascript" src="classes/nBrains.js"></script>
     <script type="text/javascript" src="js/interaction.js"></script>
@@ -31,7 +30,6 @@
     <script type="text/javascript" src="js/point-functions.js"></script>
     <script type="text/javascript" src="js/networking.js"></script>
     <script type="text/javascript" src="js/gl-matrix-min.js"></script>
-    <script type="text/javascript" src="js/webgl.js"></script>
     <script type="text/javascript" src="js/shaders.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
@@ -122,13 +120,13 @@
         <div id='signaltypes'>
             <h4>Signal Types</h4>
             <p id="signal-type" class="small"></p>
-            <button onclick="visualizations[state].signaltype = 'voltage'; document.getElementById('signal-type').innerHTML = 'voltage'; stateManager()">Voltage</button>
-            <button onclick="visualizations[state].signaltype = 'synchrony'; document.getElementById('signal-type').innerHTML = 'synchrony'; stateManager()">Synchrony</button>
-            <button onclick="visualizations[state].signaltype = 'delta'; document.getElementById('signal-type').innerHTML = 'delta'; stateManager()">Delta</button>
-            <button onclick="visualizations[state].signaltype = 'theta'; document.getElementById('signal-type').innerHTML = 'theta'; stateManager()">Theta</button>
-            <button onclick="visualizations[state].signaltype = 'alpha'; document.getElementById('signal-type').innerHTML = 'alpha'; stateManager()">Alpha</button>
-            <button onclick="visualizations[state].signaltype = 'beta'; document.getElementById('signal-type').innerHTML = 'beta'; stateManager()">Beta</button>
-            <button onclick="visualizations[state].signaltype = 'gamma'; document.getElementById('signal-type').innerHTML = 'gamma'; stateManager()">Gamma</button>
+            <button onclick="updateSignalType(this)">Voltage</button>
+            <button onclick="updateSignalType(this)">Synchrony</button>
+            <button onclick="updateSignalType(this)">Delta</button>
+            <button onclick="updateSignalType(this)">Theta</button>
+            <button onclick="updateSignalType(this)">Alpha</button>
+            <button onclick="updateSignalType(this)">Beta</button>
+            <button onclick="updateSignalType(this)">Gamma</button>
         </div>
 
         <div id="bottom-info">
@@ -139,16 +137,16 @@
                 </div>
         <div class="info-holder-inner">
             <div class=icongrid>
-            <div class="menuicon" onclick="state = 1">
+            <div id="brain" class="menuicon" onclick="state = 1">
                 <i class="fas fa-brain fa-1x"></i>
             </div>
-            <div class="menuicon" onclick="state = 2">
+            <div id="channels" class="menuicon" onclick="state = 2">
                 <i class="fas fa-wave-square fa-1x"></i>
             </div>
-            <div class="menuicon" onclick="state = 3">
+            <div id="userinfo" class="menuicon" onclick="state = 3">
                 <i class="fas fa-users fa-1x"></i>
             </div>
-            <div class="menuicon" onclick="state = 4;">
+            <div id="groupdynamics" class="menuicon" onclick="state = 4;">
                 <i class="fas fa-users-cog fa-1x"></i>
             </div>
         </div>
@@ -209,7 +207,7 @@
             <p class='small'>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
             <p>A multiplayer neurotechnology game for coupling minds across geographic, social, and cultural boundaries.</p>
             <h5>Instructions</h5>
-            <p>Use the <strong>States</strong> panel to view different visualizations of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>
+            <p>Use the <strong>States</strong> panel to view different scenes of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>
             <ol>
             <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Enter the Brainstorm</strong> to connect with a network of real users and their brains.</p></li>
             <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and send your data using OpenBCI or Neurosity headsets.</p></li>
@@ -246,7 +244,7 @@
     let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])*2
     let effects = [false, 'projection','synchrony','scan'] // Order used in Shaders.js code
 
-    let visualizations = [
+    let scenes = [
         {
         name: 'Scan Phase', 
         shapes: ['sphereShells'], // shape of points
@@ -278,7 +276,7 @@
         timer: false,
         message: '',
         ease: 0.1,
-        zoom: GENERIC_ZOOM,
+        zoom: 1.2*GENERIC_ZOOM,
         effect: 'z_displacement',
         signaltype: 'voltage'
     },{
@@ -306,13 +304,6 @@
     }
 ]
 
-    let passedEEGCoords = new Array(eegCoordinates.length);
-    let eegChannelsOfInterest;
-
-    Object.keys(eegCoordinates).forEach((name,ind) => {
-        passedEEGCoords[ind] = eegCoordinates[name]
-    })
-
     let channels = 16;
     let DESIRED_POINTS = 1e5/2; // 80000
     let SIGNAL_SUSTAIN_ORIGINAL = 100;
@@ -324,7 +315,6 @@
     // Declare Global Visualization Variables
     let state = 0;
     let prevState = 0;
-    let animState = 0;
     let renderState = state;
     let renderLagStart;
     let animStart = Date.now();
@@ -349,10 +339,9 @@
     }
     let pointCount;
     let color;
-    let synchrony = new Array(SYNCHRONY_BUFFER_SIZE).fill(0);
-    let cameraHome = visualizations[state].zoom;
-    let cameraCurr = visualizations[state].zoom;
-    let t = 0.0;
+    let cameraHome = scenes[state].zoom;
+    let cameraCurr = scenes[state].zoom;
+    let startTime = Date.now()
     let diff_x = 0;
     let diff_y = 0;
     let ease = true;
@@ -371,10 +360,11 @@
         url = new URL('https://brainsatplay.azurewebsites.net/');
     }
     let brains;
-    let userId = undefined;
-    let ws = undefined;
+    let userId;
+    let ws;
     let welcomed = false;
-    let nInterfaces = undefined;
+    let nInterfaces = 0;
+    let newSignalType = false;
 
     // Set User Interactions
     let holdStatus = false;
@@ -388,7 +378,7 @@
     let diff;
     let diff_total;
     let forceSink;
-    let messageStartTime = undefined;
+    let messageStartTime;
 
     // Set User Interactions
     let devTools = false;
@@ -411,16 +401,150 @@
     pointCount = brainVertices.length / 3;
 
     // // Instantiate a Default Set of Brain
-    brains = newBrains('me');
-    brains.add('other');
-
-    eegChannelsOfInterest = updateEEGChannelsOfInterest()
-
+    brains = new BrainsAtPlay()
+    brains.simulate(2);
     generate = true;
-    sendSignal(channels)
 
     // Begin Rendering the Visualization
-    particleCloud()
+    if (!gl) {
+        throw new Error('WebGL not supported')
+    }
+
+    stateManager()
+    vertexCurr = vertexHome;
+    let program;
+    gl, program = programShaders(gl)
+
+// Initialize Vertex Attributes
+    let arrays = {
+        position: {numComponents: 3, data: vertexCurr},
+        z_displacement: {numComponents: 1, data:brains.BufferToWebGL()},
+    }
+    let attribs;
+    gl, program, attribs = initializeAttributes(gl, program, arrays)
+
+// Set Uniform Locations
+    uniformLocations = {
+        effect: gl.getUniformLocation(program,`effect`),
+        matrix: gl.getUniformLocation(program, `matrix`),
+        u_time: gl.getUniformLocation(program, `u_time`),
+        synchrony: gl.getUniformLocation(program, `synchrony`),
+        eeg_coords: gl.getUniformLocation(program,`eeg_coords`),
+        eeg_signal: gl.getUniformLocation(program,`eeg_signal`),
+        ambientNoiseToggle: gl.getUniformLocation(program,'u_ambientNoiseToggle'),
+        aspectChange: gl.getUniformLocation(program,'aspectChange'),
+        mousePos: gl.getUniformLocation(program,'mousePos'),
+        colorToggle: gl.getUniformLocation(program,'colorToggle'),
+    };
+
+    // initialize uniforms that don't change on every draw loop
+    let passedEEGCoords = [];
+    Object.keys(brains.eegChannelCoordinates).forEach((name) => {
+        passedEEGCoords.push(brains.eegChannelCoordinates[name])
+    })
+    gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
+    gl.uniform1i(uniformLocations.effect, effects.indexOf(scenes[state].effect));
+    gl.uniform1i(uniformLocations.ambientNoiseToggle, 1);
+    gl.uniform1i(uniformLocations.colorToggle, 1);
+
+// Create Model, View, and ProjectionMatrices
+    const modelMatrix = mat4.create();
+
+    viewMatrix = mat4.create();
+    mat4.rotateX(viewMatrix, viewMatrix, Math.PI / 2);
+    mat4.rotateY(viewMatrix, viewMatrix, Math.PI / 2);
+    mat4.translate(viewMatrix, viewMatrix, [0, 0, cameraCurr]);
+    mat4.invert(viewMatrix, viewMatrix);
+    originalAspectX = canvas.width
+    originalAspectY = canvas.height
+
+    projectionMatrix = mat4.create();
+    mat4.perspective(projectionMatrix,
+        75 * Math.PI / 180, // vertical field-of-view (angle, radians)
+        originalAspectX/originalAspectY, // aspect W/H
+        1e-4, // near cull distance
+        1e4, // far cull distance
+    );
+
+    const mvMatrix = mat4.create();
+    const mvpMatrix = mat4.create();
+
+
+    
+
+    function animate() {
+        requestAnimationFrame(animate)
+        resize(gl.canvas);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        mouseState()
+        brains.getMe()
+        stateManager();
+
+
+        // Generate signal if specified
+        if (generate) {
+            if (count == generate_interval-1){
+                generateVoltageStream(channels)
+                count = 0;
+            } else {
+                count += 1
+            }}
+
+        // Update rotation speeds
+        moveStatus = false;
+        diff_x *= (1-scenes[state].ease);
+        diff_y *= (1-scenes[state].ease);
+
+        // Get synchrony
+        if (scenes[state].signaltype == 'synchrony') {    
+            brains.getSynchrony('pcc')
+        } else {
+            brains.synchronyBuffer.shift()
+            brains.synchronyBuffer.push(0)
+        }
+
+        // Rotate scene
+        rotate(scenes[state], diff_x,diff_y)
+
+        // Create WebGL matrix
+        mat4.multiply(mvMatrix, viewMatrix, modelMatrix)
+        mat4.multiply(mvpMatrix, projectionMatrix, mvMatrix)
+
+        // Update Uniforms
+        gl.uniformMatrix4fv(uniformLocations.matrix, false, mvpMatrix)
+        gl.uniform1f(uniformLocations.u_time, (Date.now()-startTime)/1000);
+        gl.uniform1f(uniformLocations.synchrony, average(brains.synchronyBuffer));
+        gl.uniform2fv(uniformLocations.aspectChange, [(canvas.width)/(originalAspectX),(canvas.height)/(originalAspectY)]);
+
+        if (mouseDistort){
+        gl.uniform2fv(uniformLocations.mousePos, [(x - (canvas.width/2))/2,((canvas.height/2) - y)/2]);
+        } else {
+            gl.uniform2fv(uniformLocations.mousePos, [NaN,NaN]);
+        }
+
+        // Update Voltages Unless No Brains
+        if (brains.users.size > 0){
+            brains.updateBuffer(source='brains')
+        }
+
+        // Update color based on channel data
+        updateColorsByChannel(brains.synchrony)
+        easeCamera()
+        easeVertices()
+
+        // Draw
+        gl.drawArrays(scenes[renderState].render, 0, vertexCurr.length / 3);
+
+        // Update states for next animation loop
+        prevState = state;
+
+        // Remove message if not for the state itself
+        if ((messageStartTime != undefined) && (scenes[state].message == '') && (Date.now() - messageStartTime >= 2000)){
+            messageStartTime = undefined;
+            document.getElementById('canvas-message').style.opacity = 0;
+        }
+    };
+    animate()
 
 </script>
 

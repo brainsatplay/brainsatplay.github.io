@@ -21,13 +21,13 @@ function toggleConnection(){
           `
         initializeWebsocket();
         brains.users.clear();
-        brains.add('me');
-        stateManager()
         generate = false;
+        state = 3;
     }
     } else {
         ws.close()
         userId = undefined;
+        state = 1;
     }
 }
 
@@ -159,10 +159,16 @@ function initializeWebsocket(){
 
             if (obj.privateBrains && public === false){
                 brains.add(obj.privateInfo.id, obj.privateInfo.channelNames)
-            } else if (public === true){
+            } else {
                 for (newUser = 0; newUser < obj.nBrains; newUser++){
                     if (brains.users.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
-                        brains.add(obj.ids[newUser], obj.channelNames[newUser])
+                        if (public){
+                            brains.add(obj.ids[newUser], obj.channelNames[newUser])
+                        } else {
+                            if (obj.ids[newUser] == userId){
+                                brains.add(obj.ids[newUser], obj.channelNames[newUser])
+                            }
+                        }
                     }
                 }
             }
@@ -170,12 +176,13 @@ function initializeWebsocket(){
             if (brains.users.size == 0){
                 brains.add('me');
             }
-            generate = false;
-            stateManager()
-            brains.initializeBuffer(buffer='userVoltageBuffers')
-            eegChannelsOfInterest = updateEEGChannelsOfInterest()
 
-            nInterfaces = obj.nInterfaces-1;
+            generate = false;
+            stateManager(forceUpdate=true)
+            brains.updateEEGChannelsOfInterest()
+            brains.initializeBuffer(buffer='userVoltageBuffers')
+
+            nInterfaces = obj.nInterfaces;
 
             // Announce number of brains currently online
 
@@ -187,69 +194,79 @@ function initializeWebsocket(){
                 if (obj.privateBrains){
                     document.getElementById('nBrains').innerHTML = `1`
                 } else {
-                    document.getElementById('nBrains').innerHTML = `0`
+                    if (brains.users.has("me")){
+                        document.getElementById('nBrains').innerHTML = `0`
+                    } else {
+                        document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+                    }
                 }
             } else {
                 announcement(`<div>Welcome to the Brainstorm
                                 <p class="small">No brains online</p></div>`)
                 document.getElementById('nBrains').innerHTML = `0`
             }
-            document.getElementById('nInterfaces').innerHTML = `${nInterfaces}`
+            if (public === false) {
+                document.getElementById('nInterfaces').innerHTML = `1`
+            } else {
+                document.getElementById('nInterfaces').innerHTML = `${nInterfaces}`
+            }
         }
 
         else if (obj.destination == 'brains'){
 
             // let reallocationInd;
             update = obj.n;
-            if (update > 0 && (brains.users.get('me') != undefined || brains.users.get(userId)!= undefined)){
-                brains.remove('me')
-            }
-            if (update == 1){
-                    if (public && obj.access === 'public'){
-                        brains.add(obj.id, obj.channelNames)
-                        document.getElementById('nBrains').innerHTML = `${brains.users.size}`
-                    } else if (!public && obj.access === 'private') {
-                        brains.add(obj.id, obj.channelNames)
-                        document.getElementById('nBrains').innerHTML = `1`
-                    }
-                    reallocationInd = brains.users.size - 1
-            } else if (update == -1){
-                // get index of removed id
-                let iter = 0;
-                brains.users.forEach((key) =>{
-                    if (key == obj.id){
-                        reallocationInd = iter
-                    }
-                    iter++
-                })
-                // delete id from map
-                brains.remove(obj.id)
 
-                if (public && obj.access === 'public'){
-                    if (brains.users.get('me') == undefined){
+            // Only update if access matches
+            if ((public) || (!public && obj.access === 'private')){
+                if (update == 1){
+                        if (public){
+                            document.getElementById('nBrains').innerHTML = `${brains.users.size + 1}`
+                            brains.add(obj.id, obj.channelNames)
+                            brains.remove('me')
+                        } else if (!public && obj.access === 'private') {
+                            brains.add(obj.id, obj.channelNames)
+                            document.getElementById('nBrains').innerHTML = `1`
+                            brains.remove('me')
+                        }
+                        reallocationInd = brains.users.size - 1
+                } else if (update == -1){
+                    // get index of removed id
+                    let iter = 0;
+                    brains.users.forEach((key) =>{
+                        if (key == obj.id){
+                            reallocationInd = iter
+                        }
+                        iter++
+                    })
+
+                    if (public){
                         if (brains.users.size == 0){
                             announcement('all users left the brainstorm')
                             document.getElementById('nBrains').innerHTML = `0`
                             brains.add('me')
-                        } else if (!public && obj.access === 'private'){
-                            document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+                        } else {
+                            document.getElementById('nBrains').innerHTML = `${brains.users.size-1}`
                         }
+                    } else if (!public && obj.access === 'private'){
+                        document.getElementById('nBrains').innerHTML = `0`
+                        brains.add('me')
                     }
-                } else {
-                    document.getElementById('nBrains').innerHTML = `0`
-                    brains.add('me')
-                }
-            }
-            if (state != 0){
-                stateManager()
-                // brains.reallocateUserBuffers(reallocationInd);
-            }
-            brains.initializeBuffer(buffer='userVoltageBuffers')
-            eegChannelsOfInterest = updateEEGChannelsOfInterest()
 
+                    // delete id from map
+                    brains.remove(obj.id)
+                }
+                
+                if (state != 0){
+                    stateManager(forceUpdate=true)
+                    // brains.reallocateUserBuffers(reallocationInd);
+                }
+                brains.initializeBuffer(buffer='userVoltageBuffers')
+                brains.updateEEGChannelsOfInterest()
+            }
             } 
             else if (obj.destination == 'interfaces'){
-                    nInterfaces += obj.n;
+                nInterfaces += obj.n;
                 document.getElementById('nInterfaces').innerHTML = `${nInterfaces}`
             } 
             else {
@@ -272,9 +289,8 @@ function initializeWebsocket(){
           `
         nInterfaces = undefined;
         document.getElementById("connection-button").innerHTML = 'Connect'; 
-        brains = newBrains('me');
-        brains.add('other');
-        stateManager();
+        brains.simulate()
+        stateManager(forceUpdate=true)
         generate = true;
     };
 }

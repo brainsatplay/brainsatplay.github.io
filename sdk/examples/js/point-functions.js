@@ -40,7 +40,7 @@ function createPointCloud(pointFunction, pointCount) {
             let dim_size = Math.ceil(Math.sqrt(brains.users.size));
     
             if (dim_size == 1){delta = 0; z_window = 0} else{
-                z_window = visualizations[state].zoom/4;
+                z_window = scenes[state].zoom/4;
                 delta = (2*z_window)/(dim_size-1)
             }
             let row = 0;
@@ -108,7 +108,7 @@ function createPointCloud(pointFunction, pointCount) {
                 for (let i = 0; i < pointCount; i++) {
                 const r = () => (Math.random() - 0.5);
                 const point = shapes[pointFunction](r(), r(), r());
-                pointCloud.push(...point.map((val) => {return val*visualizations[state].zoom/2.5}));
+                pointCloud.push(...point.map((val) => {return val*scenes[state].zoom/2.5}));
             }
         }
         

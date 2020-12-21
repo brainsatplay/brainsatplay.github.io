@@ -107,14 +107,8 @@ float cnoise(vec3 P){
 }
 
 void main() {
-     
-     if (u_ambientNoiseToggle == 1){
-        if (effect == 2 && sync_scaled < 0.0){
-            ambient_noise = 100.0*vec3(0.01,0.01+5.0*sync_scaled,0.01+5.0*sync_scaled) * cnoise(vec3(position.x/100.0 + u_time, position.y/100.0 + u_time, position.z/100.0 + u_time));
-        } else{
-            ambient_noise = 100.0*vec3(0.01,0.01,0.01) * cnoise(vec3(position.x/100.0 + u_time, position.y/100.0 + u_time, position.z/100.0 + u_time));
-        }
-    } 
+
+    vec3 pos_timeoffset = (position/100.0) + u_time / 2.0;
      
      // Initialize color at zero
      vColor = vec3(1.0,1.0,1.0);
@@ -124,12 +118,13 @@ void main() {
         if (effect == 1){
             for (int i = 0; i < 65; i++){
                 if (abs(distance(eeg_coords[i],position)) <= 60.0){
+                    float factor = (eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
                     if (eeg_signal[i] > 0.0){
-                        vColor.y -= 0.5*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
-                        vColor.z -= 0.2*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
+                        vColor.y -= 0.5*factor;
+                        vColor.z -= 0.2*factor;
                     } else if (eeg_signal[i] < 0.0){
-                        vColor.x += 0.5*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
-                        vColor.y += 0.2*(eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
+                        vColor.x += 0.5*factor;
+                        vColor.y += 0.2*factor;
                     }
                 }  
             }
@@ -145,7 +140,7 @@ void main() {
             }
         } 
         else if (effect == 3){
-            dist = abs(distance(150.0*-cos(u_time*9.0),position.z));
+            dist = abs(distance(150.0*-cos(u_time*1.25),position.z));
                 if (dist <= 10.0){
                 vColor.y = 0.0;
                 vColor.z = 0.0;
@@ -162,11 +157,19 @@ void main() {
 
     }
 
-     positionTransforms = position + ambient_noise;
+    positionTransforms = position;
+    if (u_ambientNoiseToggle == 1){
+        if (effect == 2 && sync_scaled < 0.0){
+            positionTransforms = position * (1.0+(cnoise(pos_timeoffset)*sync_scaled*2.0));
+        } else{
+            positionTransforms = position * (1.0+cnoise(pos_timeoffset)/75.0);
+        }
+    } 
+
      positionTransforms.z += z_displacement;
      
      if (effect == 2){
-        positionTransforms *= (1.0+synchrony);
+        positionTransforms *= (1.0+(synchrony/2.0));
      }
      
      positionProjected = matrix * vec4(positionTransforms,1.0);
@@ -182,7 +185,7 @@ void main() {
 
     // Add mouse effects
     if (abs(distance(mousePos,positionProjected.xy)) <= 100.0){
-        positionProjected += 100.0*(100.0/abs(distance(mousePos,positionProjected.xy)))*cnoise(vec3(position.x/100.0 + u_time, position.y/100.0 + u_time, position.z/100.0 + u_time));
+        positionProjected += 100.0*cnoise(pos_timeoffset)*(100.0/(1.0+abs(distance(mousePos,positionProjected.xy))));
     }
 
 
