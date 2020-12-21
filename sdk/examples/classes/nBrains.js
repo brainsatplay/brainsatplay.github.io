@@ -76,16 +76,14 @@ class BrainsAtPlay {
             let keys = brains.users.keys()
             let edgesArray = [];
             let currentEdge = []
+            // pairwise
             currentEdge.push(keys.next().value) // Brain 1
             currentEdge.push(keys.next().value) // Brain 2
             edgesArray.push(currentEdge)
 
             if (method == 'pcc') {
-
-                //
-                // Synchrony Calculation
+                
                 // Source: http://stevegardner.net/2012/06/11/javascript-code-to-calculate-the-pearson-correlation-coefficient/
-                //
 
                 edgesArray.forEach((edge) => {
 

@@ -50,6 +50,14 @@ function min(arr){
     })
 }
 
+function pairwise(list) {
+    if (list.length < 2) { return []; }
+    var first = list[0],
+        rest  = list.slice(1),
+        pairs = rest.map(function (x) { return [first, x]; });
+    return pairs.concat(pairwise(rest));
+  }
+
 
 
 function squareDiffs(data){
@@ -172,7 +180,6 @@ function distortToggle(){
 function stateManager(forceUpdate=false){
     // Do We Have Vertices Defined OR Did State Change OR Is This Animation Over?
     if (forceUpdate || vertexHome == undefined || state != prevState || newSignalType || (scenes[state].timer && ((Date.now() - animStart)/1000 > scenes[state].timer))){
-
     if (scenes[state].timer && ((Date.now() - animStart)/1000 > scenes[state].timer)){
         state++;
     }
@@ -263,36 +270,36 @@ function stateManager(forceUpdate=false){
         document.getElementById('signaltypes').style.opacity = '0%'
     }
 
-    if (ws != undefined){
-        if (public){
-            document.getElementById('brain').style.opacity = '25%'
-            document.getElementById('channels').style.opacity = '25%'
-            document.getElementById('brain').style.pointerEvents = 'none'
-            document.getElementById('channels').style.pointerEvents = 'none'
-            document.getElementById('userinfo').style.opacity = '100%'
-            document.getElementById('groupdynamics').style.opacity = '100%'
-            document.getElementById('userinfo').style.pointerEvents = 'auto'
-            document.getElementById('groupdynamics').style.pointerEvents = 'auto'
-        } else {
-            document.getElementById('brain').style.opacity = '100%'
-            document.getElementById('channels').style.opacity = '100%'
-            document.getElementById('brain').style.pointerEvents = 'auto'
-            document.getElementById('channels').style.pointerEvents = 'auto'
-            document.getElementById('userinfo').style.opacity = '25%'
-            document.getElementById('groupdynamics').style.opacity = '25%'
-            document.getElementById('userinfo').style.pointerEvents = 'none'
-            document.getElementById('groupdynamics').style.pointerEvents = 'none'
-        }
-    } else {
-            document.getElementById('brain').style.opacity = '100%'
-            document.getElementById('channels').style.opacity = '100%'
-            document.getElementById('userinfo').style.opacity = '100%'
-            document.getElementById('groupdynamics').style.opacity = '100%'
-            document.getElementById('brain').style.pointerEvents = 'auto'
-            document.getElementById('channels').style.pointerEvents = 'auto'
-            document.getElementById('userinfo').style.pointerEvents = 'auto'
-            document.getElementById('groupdynamics').style.pointerEvents = 'auto'
-    }
+    // if (ws != undefined){
+    //     if (public){
+    //         document.getElementById('brain').style.opacity = '25%'
+    //         document.getElementById('channels').style.opacity = '25%'
+    //         document.getElementById('brain').style.pointerEvents = 'none'
+    //         document.getElementById('channels').style.pointerEvents = 'none'
+    //         document.getElementById('userinfo').style.opacity = '100%'
+    //         document.getElementById('groupdynamics').style.opacity = '100%'
+    //         document.getElementById('userinfo').style.pointerEvents = 'auto'
+    //         document.getElementById('groupdynamics').style.pointerEvents = 'auto'
+    //     } else {
+    //         document.getElementById('brain').style.opacity = '100%'
+    //         document.getElementById('channels').style.opacity = '100%'
+    //         document.getElementById('brain').style.pointerEvents = 'auto'
+    //         document.getElementById('channels').style.pointerEvents = 'auto'
+    //         document.getElementById('userinfo').style.opacity = '25%'
+    //         document.getElementById('groupdynamics').style.opacity = '25%'
+    //         document.getElementById('userinfo').style.pointerEvents = 'none'
+    //         document.getElementById('groupdynamics').style.pointerEvents = 'none'
+    //     }
+    // } else {
+    //         document.getElementById('brain').style.opacity = '100%'
+    //         document.getElementById('channels').style.opacity = '100%'
+    //         document.getElementById('userinfo').style.opacity = '100%'
+    //         document.getElementById('groupdynamics').style.opacity = '100%'
+    //         document.getElementById('brain').style.pointerEvents = 'auto'
+    //         document.getElementById('channels').style.pointerEvents = 'auto'
+    //         document.getElementById('userinfo').style.pointerEvents = 'auto'
+    //         document.getElementById('groupdynamics').style.pointerEvents = 'auto'
+    // }
 
     // reset z_displacement to zero when not being actively updated
     if (!['z_displacement'].includes(scenes[state].effect) && dispBuffer != undefined){

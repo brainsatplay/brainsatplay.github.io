@@ -473,13 +473,13 @@
     
 
     function animate() {
+
         requestAnimationFrame(animate)
         resize(gl.canvas);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         mouseState()
         brains.getMe()
         stateManager();
-
 
         // Generate signal if specified
         if (generate) {

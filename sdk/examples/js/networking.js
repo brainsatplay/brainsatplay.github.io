@@ -20,9 +20,6 @@ function toggleConnection(){
           </label>
           `
         initializeWebsocket();
-        brains.users.clear();
-        generate = false;
-        state = 3;
     }
     } else {
         ws.close()
@@ -123,8 +120,9 @@ function initializeWebsocket(){
         ws.close();
     }
 
+    console.log('trying to init')
     if (url.protocol == 'http:'){
-    ws = new WebSocket(`ws://` + url.hostname,[userId, 'interfaces']);
+        ws = new WebSocket(`ws://` + url.hostname,[userId, 'interfaces']);
     } else if (url.protocol == 'https:'){
         ws = new WebSocket(`wss://` + url.hostname,[userId, 'interfaces']);
     } else{
@@ -133,6 +131,7 @@ function initializeWebsocket(){
     }
 
     ws.onerror = function () {
+        console.log('error')
         showMessage('WebSocket error');
         announcement('WebSocket error.\n Please refresh your browser and try again.');
     };
@@ -140,9 +139,11 @@ function initializeWebsocket(){
     ws.onopen = function () {
         showMessage('WebSocket connection established')
         initializeBrains()
+        state = 3;
     };
 
     ws.onmessage = function (msg) {
+
         let obj = JSON.parse(msg.data);
         if (obj.destination == 'chat'){
             $('#messages').append($('<li>').text(obj.msg));
@@ -213,7 +214,6 @@ function initializeWebsocket(){
         }
 
         else if (obj.destination == 'brains'){
-
             // let reallocationInd;
             update = obj.n;
 
@@ -293,6 +293,9 @@ function initializeWebsocket(){
         stateManager(forceUpdate=true)
         generate = true;
     };
+    
+    console.log('ws')
+    console.log(ws)
 }
 
 function initializeBrains(){
