@@ -120,13 +120,13 @@
         <div id='signaltypes'>
             <h4>Signal Types</h4>
             <p id="signal-type" class="small"></p>
-            <button onclick="updateSignalType(this)">Voltage</button>
-            <button onclick="updateSignalType(this)">Synchrony</button>
-            <button onclick="updateSignalType(this)">Delta</button>
-            <button onclick="updateSignalType(this)">Theta</button>
-            <button onclick="updateSignalType(this)">Alpha</button>
-            <button onclick="updateSignalType(this)">Beta</button>
-            <button onclick="updateSignalType(this)">Gamma</button>
+            <button id='voltage' onclick="updateSignalType(this)">Voltage</button>
+            <button id='synchrony' onclick="updateSignalType(this)">Synchrony</button>
+            <button id='delta' onclick="updateSignalType(this)">Delta</button>
+            <button id='theta' onclick="updateSignalType(this)">Theta</button>
+            <button id='alpha' onclick="updateSignalType(this)">Alpha</button>
+            <button id='beta' onclick="updateSignalType(this)">Beta</button>
+            <button id='gamma' onclick="updateSignalType(this)">Gamma</button>
         </div>
 
         <div id="bottom-info">
@@ -380,7 +380,7 @@
             SIGNAL_SUSTAIN += 1;
     }
     let url;
-    let option = 'server';
+    let option = 'local';
     if (option  === 'local'){
         url = new URL('http://localhost');
     } else if (option === 'server'){

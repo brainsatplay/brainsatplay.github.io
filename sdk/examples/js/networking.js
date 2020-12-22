@@ -18,11 +18,10 @@ function toggleConnection(){
             <span class="slider round"></span>
           </label>
           `
-        brains.connect(url)
+        brains.connect(url, 'brainstorm')
     }
     } else {
         brains.network.close()
-        state = 1;
     }
 }
 
