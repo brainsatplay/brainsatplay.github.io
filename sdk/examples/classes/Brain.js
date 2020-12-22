@@ -29,19 +29,6 @@ class Brain {
             }
         })
 
-        // this.trimBufferByTime()
-
-        // Background subtraction
-        //     this.buffer = this.buffer.map((channelData, channel) => {
-        //     let mean = average(channelData);
-        //     if (channelData.length > 1 && channel == 0){
-        //     console.log(channelData.length)
-        //     }
-        //     channelData = channelData.map((val) => {
-        //         return val - mean;
-        //     })
-        //     return channelData
-        // })
         this.trimBufferBySize()
     }
     
@@ -49,7 +36,7 @@ class Brain {
     trimBufferByTime(){
         let indexes = this.times.map((elm, idx) => (Date.now()-elm) >= maxTime ? idx : '').filter(String);
         indexes.sort(function(a,b){ return b - a; });
-        this.buffer.forEach((channelData,channel) =>{
+        this.buffer.forEach((_,channel) =>{
         for (var i = indexes.length -1; i >= 0; i--){
             this.buffer[channel].splice(indexes[i],1);
             this.times.splice(indexes[i],1);
@@ -58,7 +45,7 @@ class Brain {
     }
 
     trimBufferBySize() {
-        this.buffer.forEach((channelData,channel) =>{
+        this.buffer.forEach((_,channel) =>{
             let length = this.buffer[channel].length
             if (length-maxSize > 0){
                 this.buffer[channel].splice(maxSize,length);

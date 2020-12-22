@@ -177,7 +177,6 @@
             </div>
             <div id="connection-toggle" class="params">
                 <button id="connection-button" onclick="toggleConnection();">Connect</button>
-                <!-- <button id="connection-button" onclick="toggleConnection();">Connect</button> -->
             </div>
             </div>
         </div>
@@ -209,7 +208,7 @@
             <h5>Instructions</h5>
             <p>Use the <strong>States</strong> panel to view different scenes of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>
             <ol>
-            <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Enter the Brainstorm</strong> to connect with a network of real users and their brains.</p></li>
+            <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Connect</strong> to enter a network of real users and their brains.</p></li>
             <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and send your data using OpenBCI or Neurosity headsets.</p></li>
         </ol>
         </div>
@@ -231,26 +230,23 @@
 
 <script>
 
-    // Set Deployment Controls
-    let option = 'server';
-
-    // Initialize WebGL Canvas
+    // Initialize Visualization Variables
     let canvas = document.getElementById('webgl');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     let gl = canvas.getContext('webgl')
 
-    // Set Visualization Controls
-    let GENERIC_ZOOM = max([1e5/window.innerWidth,1e5/window.innerHeight])*2
+    // visualization controls
+    let GENERIC_ZOOM = Math.max(1e5/window.innerWidth,1e5/window.innerHeight)*2
     let effects = [false, 'projection','synchrony','scan'] // Order used in Shaders.js code
 
     let scenes = [
         {
         name: 'Scan Phase', 
-        shapes: ['sphereShells'], // shape of points
+        shapes: ['sphereShells'],
         render: gl.POINTS,
         type: 'intro',
-        timer: 5.0, // display time in seconds; false has no animation
+        timer: 5.0, 
         message: ``,
         ease: 0.1,
         zoom: GENERIC_ZOOM,
@@ -304,15 +300,11 @@
     }
 ]
 
-    let channels = 16;
+    // global visualization variables
     let DESIRED_POINTS = 1e5/2; // 80000
-    let SIGNAL_SUSTAIN_ORIGINAL = 100;
     let AUTO_ROTATION_X = 0.0;
-    let SYNCHRONY_BUFFER_SIZE = 100;
     let DAMPING = .1;
     let epsilon = .001;
-
-    // Declare Global Visualization Variables
     let state = 0;
     let prevState = 0;
     let renderState = state;
@@ -333,10 +325,6 @@
     let dispBuffer;
     let colorBuffer;
     let uniformLocations;
-    let SIGNAL_SUSTAIN = Math.round(SIGNAL_SUSTAIN_ORIGINAL/channels);
-    if (SIGNAL_SUSTAIN%2 == 0){
-            SIGNAL_SUSTAIN += 1;
-    }
     let pointCount;
     let color;
     let cameraHome = scenes[state].zoom;
@@ -347,23 +335,8 @@
     let ease = true;
     let rotation = true;
     let zoom = true;
-    let generate;
-    let base_freq = 1;
-    let samplerate = 125;
-    let generate_interval = Math.round(samplerate*(1/base_freq))
-    let count = 0;
     let messages = []
-    let url;
-    if (option  === 'local'){
-        url = new URL('http://localhost');
-    } else if (option === 'server'){
-        url = new URL('https://brainsatplay.azurewebsites.net/');
-    }
-    let brains;
-    let userId;
-    let ws;
     let welcomed = false;
-    let nInterfaces = 0;
     let newSignalType = false;
 
     // Set User Interactions
@@ -385,7 +358,6 @@
     let showUI = true;
     let chat = false;
     let mouseDistort = false;
-    let public = true;
     let showLogin = false;
     let showSignUp = false;
 
@@ -400,10 +372,22 @@
     brainVertices = reducePointCount(brainpoints, DESIRED_POINTS);
     pointCount = brainVertices.length / 3;
 
-    // // Instantiate a Default Set of Brain
-    brains = new BrainsAtPlay()
+    // Instantiate BrainsAtPlay Object
+    let channels = 16;
+    let SIGNAL_SUSTAIN_ORIGINAL = 100;
+    let SIGNAL_SUSTAIN = Math.round(SIGNAL_SUSTAIN_ORIGINAL/channels);
+    if (SIGNAL_SUSTAIN%2 == 0){
+            SIGNAL_SUSTAIN += 1;
+    }
+    let url;
+    let option = 'server';
+    if (option  === 'local'){
+        url = new URL('http://localhost');
+    } else if (option === 'server'){
+        url = new URL('https://brainsatplay.azurewebsites.net/');
+    }
+    let brains = new BrainsAtPlay()
     brains.simulate(2);
-    generate = true;
 
     // Begin Rendering the Visualization
     if (!gl) {
@@ -418,7 +402,7 @@
 // Initialize Vertex Attributes
     let arrays = {
         position: {numComponents: 3, data: vertexCurr},
-        z_displacement: {numComponents: 1, data:brains.BufferToWebGL()},
+        z_displacement: {numComponents: 1, data: brains.BufferToWebGL()},
     }
     let attribs;
     gl, program, attribs = initializeAttributes(gl, program, arrays)
@@ -478,30 +462,14 @@
         resize(gl.canvas);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         mouseState()
-        brains.getMe()
         stateManager();
-
-        // Generate signal if specified
-        if (generate) {
-            if (count == generate_interval-1){
-                generateVoltageStream(channels)
-                count = 0;
-            } else {
-                count += 1
-            }}
+        brainDependencies(brains.updateArray);
+        brains.update()
 
         // Update rotation speeds
         moveStatus = false;
         diff_x *= (1-scenes[state].ease);
         diff_y *= (1-scenes[state].ease);
-
-        // Get synchrony
-        if (scenes[state].signaltype == 'synchrony') {    
-            brains.getSynchrony('pcc')
-        } else {
-            brains.synchronyBuffer.shift()
-            brains.synchronyBuffer.push(0)
-        }
 
         // Rotate scene
         rotate(scenes[state], diff_x,diff_y)
@@ -513,7 +481,7 @@
         // Update Uniforms
         gl.uniformMatrix4fv(uniformLocations.matrix, false, mvpMatrix)
         gl.uniform1f(uniformLocations.u_time, (Date.now()-startTime)/1000);
-        gl.uniform1f(uniformLocations.synchrony, average(brains.synchronyBuffer));
+        gl.uniform1f(uniformLocations.synchrony, brains.synchrony);
         gl.uniform2fv(uniformLocations.aspectChange, [(canvas.width)/(originalAspectX),(canvas.height)/(originalAspectY)]);
 
         if (mouseDistort){
@@ -522,13 +490,8 @@
             gl.uniform2fv(uniformLocations.mousePos, [NaN,NaN]);
         }
 
-        // Update Voltages Unless No Brains
-        if (brains.users.size > 0){
-            brains.updateBuffer(source='brains')
-        }
-
         // Update color based on channel data
-        updateColorsByChannel(brains.synchrony)
+        updateColorsByChannel(brains.synchronyChannels)
         easeCamera()
         easeVertices()
 

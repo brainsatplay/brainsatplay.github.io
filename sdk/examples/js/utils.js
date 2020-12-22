@@ -19,132 +19,6 @@
 //     return data
 // }
 
-function sum(acc,cur){
-    return acc + cur
-}
-
-function normalize(min, max,scaling) {
-    var delta = max - min;
-    return function (val) {
-        return scaling * (2*((val - min) / delta) - 1);
-    };
-}
-
-
-function innerLengths(nestedArrays){
-    return nestedArrays.map((innerArray) => {
-        return innerArray.length;
-    }
-    )
-}
-
-function max(arr){
-    return arr.reduce((acc,cur) => {
-        return Math.max(acc,cur);
-    })
-}
-
-function min(arr){
-    return arr.reduce((acc,cur) => {
-        return Math.min(acc,cur);
-    })
-}
-
-function pairwise(list) {
-    if (list.length < 2) { return []; }
-    var first = list[0],
-        rest  = list.slice(1),
-        pairs = rest.map(function (x) { return [first, x]; });
-    return pairs.concat(pairwise(rest));
-  }
-
-
-
-function squareDiffs(data){
-    let avg = average(data)
-    let sqD = data.map(val => {
-        var diff = val - avg;
-        return diff * diff;
-  })
-  return(sqD)
-}
-
-function power(acc,cur){
-    return acc + ((cur*cur)/2)
-}
-
-function average(data){
-    return data.reduce(sum, 0) / data.length;
-  }
-
-  function averagePower(data){
-    return (data.reduce(power, 0))/data.length;
-  }
-
-  function standardDeviation(values){
-    let sqD = squareDiffs(values)
-    var aSqD = average(sqD);
-    var stdDev = Math.sqrt(aSqD);
-    return stdDev;
-  }
-  
-
-function makeArr(startValue, stopValue, cardinality) {
-    var arr = [];
-    var step = (stopValue - startValue) / (cardinality - 1);
-    for (var i = 0; i < cardinality; i++) {
-      arr.push(startValue + (step * i));
-    }
-    return arr;
-  }
-
-    // Plot Bands
-    // let power;
-    // let label;
-    // let band_names = ['delta', 'theta', 'alpha', 'beta', 'gamma']
-    // let band_meaning = ['(1-3 Hz)','(4-7 Hz)','(8-12 Hz)','(13-30 Hz)','(31-50 Hz)']
-    //
-    // for (let band = 0; band < band_names.length; band++) {
-    //     try {
-    //         power = bci.bandpower(y_filtered[0], samplerate, band_names[band], {relative: true});
-    //         label = band_names[band] + ' ' + band_meaning[band]
-    //     } catch {
-    //         label = 'sample rate too low'
-    //         this_band_color = p5.color('#FF76E9');
-    //         power = 1
-    //     }
-    //     power = (p5.height / 2) - (p5.height / 4) * (power)
-    //     squareColor.setAlpha(255 * (power));
-    //     p5.fill(squareColor)
-    //     p5.text(label, (band + .5) * (p5.width / band_names.length), power - 20);
-    //     this_band_color.setAlpha(200 * (power));
-    //     p5.fill(this_band_color)
-    //     p5.rectMode(p5.CORNERS);
-    //     p5.rect(band * (p5.width / (band_names.length)), p5.height / 2, (band + 1) * (p5.width / (band_names.length)), power)
-    // }
-
-function generateVoltageStream(channels) {
-
-    brains.users.forEach((user) => {
-        let signal = new Array(channels);
-        // let amp = Math.random()
-        for (let channel =0; channel < channels; channel++) {
-            signal[channel] = bci.generateSignal([Math.random()], [base_freq+Math.random()*40], samplerate, (1/base_freq));
-        }
-
-        let startTime = Date.now()
-        let time = makeArr(startTime,startTime+(1/base_freq),(1/base_freq)*samplerate)
-
-        let data = {
-            type: 'ts_filtered',
-            signal: signal,
-            time: time
-        }
-
-            user.streamIntoBuffer(data)
-        })
-}
-
 function switchToChannels(pointCount,users){
 
     // Reset View Matrix
@@ -270,36 +144,36 @@ function stateManager(forceUpdate=false){
         document.getElementById('signaltypes').style.opacity = '0%'
     }
 
-    // if (ws != undefined){
-    //     if (public){
-    //         document.getElementById('brain').style.opacity = '25%'
-    //         document.getElementById('channels').style.opacity = '25%'
-    //         document.getElementById('brain').style.pointerEvents = 'none'
-    //         document.getElementById('channels').style.pointerEvents = 'none'
-    //         document.getElementById('userinfo').style.opacity = '100%'
-    //         document.getElementById('groupdynamics').style.opacity = '100%'
-    //         document.getElementById('userinfo').style.pointerEvents = 'auto'
-    //         document.getElementById('groupdynamics').style.pointerEvents = 'auto'
-    //     } else {
-    //         document.getElementById('brain').style.opacity = '100%'
-    //         document.getElementById('channels').style.opacity = '100%'
-    //         document.getElementById('brain').style.pointerEvents = 'auto'
-    //         document.getElementById('channels').style.pointerEvents = 'auto'
-    //         document.getElementById('userinfo').style.opacity = '25%'
-    //         document.getElementById('groupdynamics').style.opacity = '25%'
-    //         document.getElementById('userinfo').style.pointerEvents = 'none'
-    //         document.getElementById('groupdynamics').style.pointerEvents = 'none'
-    //     }
-    // } else {
-    //         document.getElementById('brain').style.opacity = '100%'
-    //         document.getElementById('channels').style.opacity = '100%'
-    //         document.getElementById('userinfo').style.opacity = '100%'
-    //         document.getElementById('groupdynamics').style.opacity = '100%'
-    //         document.getElementById('brain').style.pointerEvents = 'auto'
-    //         document.getElementById('channels').style.pointerEvents = 'auto'
-    //         document.getElementById('userinfo').style.pointerEvents = 'auto'
-    //         document.getElementById('groupdynamics').style.pointerEvents = 'auto'
-    // }
+    if (brains.network != undefined){
+        if (brains.public){
+            document.getElementById('brain').style.opacity = '25%'
+            document.getElementById('channels').style.opacity = '25%'
+            document.getElementById('brain').style.pointerEvents = 'none'
+            document.getElementById('channels').style.pointerEvents = 'none'
+            document.getElementById('userinfo').style.opacity = '100%'
+            document.getElementById('groupdynamics').style.opacity = '100%'
+            document.getElementById('userinfo').style.pointerEvents = 'auto'
+            document.getElementById('groupdynamics').style.pointerEvents = 'auto'
+        } else {
+            document.getElementById('brain').style.opacity = '100%'
+            document.getElementById('channels').style.opacity = '100%'
+            document.getElementById('brain').style.pointerEvents = 'auto'
+            document.getElementById('channels').style.pointerEvents = 'auto'
+            document.getElementById('userinfo').style.opacity = '25%'
+            document.getElementById('groupdynamics').style.opacity = '25%'
+            document.getElementById('userinfo').style.pointerEvents = 'none'
+            document.getElementById('groupdynamics').style.pointerEvents = 'none'
+        }
+    } else {
+            document.getElementById('brain').style.opacity = '100%'
+            document.getElementById('channels').style.opacity = '100%'
+            document.getElementById('userinfo').style.opacity = '100%'
+            document.getElementById('groupdynamics').style.opacity = '100%'
+            document.getElementById('brain').style.pointerEvents = 'auto'
+            document.getElementById('channels').style.pointerEvents = 'auto'
+            document.getElementById('userinfo').style.pointerEvents = 'auto'
+            document.getElementById('groupdynamics').style.pointerEvents = 'auto'
+    }
 
     // reset z_displacement to zero when not being actively updated
     if (!['z_displacement'].includes(scenes[state].effect) && dispBuffer != undefined){
@@ -436,16 +310,25 @@ function toggleChat(){
 }
 
 function toggleAccess(){
-    public = !public;
-    if (public){
+    brains.public = !brains.public;
+    if (brains.public){
         document.getElementById('access-mode').innerHTML = 'Public Mode'
-        state = 3;
-        initializeBrains()
+        brains.network.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
     } else {
-        state = 1;
         document.getElementById('access-mode').innerHTML = 'Isolation Mode'
-        initializeBrains()
+        brains.network.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
     }
+}
+
+
+function toggleUI(){
+    showUI = !showUI;
+
+    if (showUI){
+        document.getElementById('ui-elements').style.display = 'block'
+        } else {
+            document.getElementById('ui-elements').style.display = 'none'
+        }
 }
 
 // Resizing
@@ -598,49 +481,17 @@ function lagDrawMode() {
 }
 
 function updateColorsByChannel(new_sync) {
-    let projectionData = new Array(passedEEGCoords.length).fill(NaN);
-        let dataOfInterest = []
+        let relSignal = new Array(passedEEGCoords.length).fill(NaN);
 
         if (['projection','z_displacement'].includes(scenes[state].effect)){
-            brains.eegChannelsOfInterest.forEach((channel,ind) => {
             if (scenes[state].signaltype == 'synchrony') {
-                projectionData[channel] = new_sync[ind];
-            } else {
-                    if (brains.me != undefined && brains.userVoltageBuffers[brains.me].length > ind){
-                        if (scenes[state].signaltype == 'voltage'){
-                            projectionData[channel] = averagePower(brains.userVoltageBuffers[brains.me][ind]);
-                        } else if (['delta','theta','alpha','beta','gamma'].includes(scenes[state].signaltype)){
-                            try {
-                                // NOTE: Not going to be correct with real-time sample rate
-                                projectionData[channel] = bci.bandpower(brains.userVoltageBuffers[brains.me][ind], samplerate, scenes[state].signaltype, {relative: false});
-                            } catch {
-                                console.log('sample rate too low')
-                            }
-                    } else {
-                        projectionData[channel] = 0;
-                    }
-                    }
+            brains.eegChannelsOfInterest.forEach((channel,ind) => {
+                relSignal[channel] = new_sync[ind]; // absolute
+            })} else if (scenes[state].signaltype == 'voltage'){
+                relSignal = brains.getPower(relative=true) // relative
+            } else if (['delta','theta','alpha','beta','gamma'].includes(scenes[state].signaltype)){
+                relSignal = brains.getBandPower(scenes[state].signaltype, relative=true) // relative
             }
-            dataOfInterest.push(projectionData[channel])
-        })
-
-        let totalAvg = average(dataOfInterest);
-        let std = standardDeviation(dataOfInterest);
-
-        let relSignal = new Array(passedEEGCoords.length).fill(0)
-        let sig;
-        
-        brains.eegChannelsOfInterest.forEach((channel) => {
-            sig = (projectionData[channel] - totalAvg)/std;
-            if (isNaN(sig) && ['voltage','delta','theta','alpha','beta','gamma'].includes(scenes[state].signaltype)){
-                relSignal[channel] = 0;
-            } else if (isNaN(sig) && ['synchrony'].includes(scenes[state].signaltype)) {
-                relSignal[channel] = projectionData[channel];
-            }
-            else {
-                relSignal[channel] = sig;
-            }
-        })
 
         if (['projection'].includes(scenes[state].effect) && brains.me != undefined){
             gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
@@ -674,4 +525,88 @@ function updateSignalType(el){
     scenes[state].signaltype = el.innerHTML.toLowerCase(); 
     document.getElementById('signal-type').innerHTML = el.innerHTML.toLowerCase(); 
     newSignalType = true;
+}
+
+function brainDependencies(updateArray){
+
+    updateArray.forEach((updateObj) => {
+    if (updateObj.destination !== undefined && updateObj.destination.length != 0) {
+    if (updateObj.destination == 'opened'){
+        state = 3;
+    } else if (updateObj.destination == 'error'){
+        console.log('error')
+        announcement('WebSocket error.\n Please refresh your browser and try again.');
+    } else if (updateObj.destination == 'init'){
+        stateManager(true)
+
+        // Announce number of brains currently online
+        if (brains.public === true && (updateObj.nBrains > 0) && brains.users.get('me') == undefined){
+            announcement(`<div>Welcome to the Brainstorm
+                            <p class="small">${brains.users.size} brains online</p></div>`)
+            document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+        } else if (brains.public === false) {
+            if (updateObj.privateBrains){
+                document.getElementById('nBrains').innerHTML = `1`
+            } else {
+                if (brains.users.has("me")){
+                    document.getElementById('nBrains').innerHTML = `0`
+                } else {
+                    document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+                }
+            }
+        } else {
+            announcement(`<div>Welcome to the Brainstorm
+                            <p class="small">No brains online</p></div>`)
+            document.getElementById('nBrains').innerHTML = `0`
+        }
+        if (brains.public === false) {
+            document.getElementById('nInterfaces').innerHTML = `1`
+        } else {
+            document.getElementById('nInterfaces').innerHTML = `${brains.nInterfaces}`
+        }
+    } else if (updateObj.destination == 'brains'){
+        update = updateObj.n;
+
+        if (state != 0){
+            stateManager(true)
+        }
+
+        if ((brains.public) || (!brains.public && updateObj.access === 'private')){
+            if (update == 1){
+                    if (brains.public){
+                        document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+                    } else if (!brains.public && updateObj.access === 'private') {
+                        document.getElementById('nBrains').innerHTML = `1`
+                    }
+            } else if (update == -1){
+                if (brains.public){
+                    if (brains.users.size == 0){
+                        announcement('all users left the brainstorm')
+                        document.getElementById('nBrains').innerHTML = `0`
+                    } else {
+                        document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+                    }
+                } else if (!brains.public && updateObj.access === 'private'){
+                    document.getElementById('nBrains').innerHTML = `0`
+                }
+            }
+        }
+    } else if (updateObj.destination == 'interface'){
+        document.getElementById('nInterfaces').innerHTML = `${brains.nInterfaces}`
+    } else if (updateObj.destination =='closed'){
+        announcement(`<div>Exiting the Brainstorm
+            <p class="small">Thank you for playing!</p></div>`)
+            if (window.innerWidth >= 768) {
+                document.getElementById('id-params').style.display = `none`;
+                document.getElementById('nBrains-params').style.display = `none`;
+                document.getElementById('nInterfaces-params').style.display = `none`;
+            }
+            document.getElementById('access-mode-div').innerHTML = ` 
+            <p id="access-mode" class="small">Not Connected</p>
+            `
+            document.getElementById("connection-button").innerHTML = 'Connect'; 
+            stateManager(true)
+    }
+}
+})
 }

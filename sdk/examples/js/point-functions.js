@@ -35,7 +35,6 @@ function createPointCloud(pointFunction, pointCount) {
     if (pointFunction == 'brain') {
         pointCloud = getBrain()
     } else if (pointFunction == 'brains'){
-            let each = Math.floor((brainVertices.length/3)/brains.users.size);
             let oneBrain = reducePointCount(brainVertices, Math.floor((brainVertices.length/3)/brains.users.size))
             let dim_size = Math.ceil(Math.sqrt(brains.users.size));
     
