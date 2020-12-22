@@ -62,7 +62,7 @@ function stateManager(forceUpdate=false){
 
     // reset displacement if leaving channels visualization
     if (scenes[prevState].shapes.includes('channels')) {
-        brains.initializeBuffer(buffer='userOtherBuffers')
+        brains.initializeBuffer(buffer='focusBuffer')
         brains.initializeBuffer(buffer='userVoltageBuffers')
         updateBufferData(attribs,'z_displacement',brains.BufferToWebGL())
     }
@@ -79,10 +79,10 @@ function stateManager(forceUpdate=false){
         cameraHome = scenes[state].zoom;
         if (scenes[state].signaltype != 'voltage'){
             [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
-            brains.initializeBuffer(buffer='userOtherBuffers');
+            brains.initializeBuffer(buffer='focusBuffer');
         } else {
             [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
-            brains.initializeBuffer(buffer='userOtherBuffers')
+            brains.initializeBuffer(buffer='focusBuffer')
             brains.initializeBuffer(buffer='userVoltageBuffers')
         }
         if (uniformLocations != undefined){
@@ -138,48 +138,13 @@ function stateManager(forceUpdate=false){
     }
 
     // Remove signal options if effect is not compatible
-    if (['projection','z_displacement'].includes(scenes[state].effect) && document.getElementById('signaltypes').style.opacity != '100%'){
-        document.getElementById('signaltypes').style.opacity = '100%'
-    } else {
-        document.getElementById('signaltypes').style.opacity = '0%'
-    }
-
-    if (brains.network != undefined){
-        if (brains.public){
-            document.getElementById('brain').style.opacity = '25%'
-            document.getElementById('channels').style.opacity = '25%'
-            document.getElementById('brain').style.pointerEvents = 'none'
-            document.getElementById('channels').style.pointerEvents = 'none'
-            document.getElementById('userinfo').style.opacity = '100%'
-            document.getElementById('groupdynamics').style.opacity = '100%'
-            document.getElementById('userinfo').style.pointerEvents = 'auto'
-            document.getElementById('groupdynamics').style.pointerEvents = 'auto'
-        } else {
-            document.getElementById('brain').style.opacity = '100%'
-            document.getElementById('channels').style.opacity = '100%'
-            document.getElementById('brain').style.pointerEvents = 'auto'
-            document.getElementById('channels').style.pointerEvents = 'auto'
-            document.getElementById('userinfo').style.opacity = '25%'
-            document.getElementById('groupdynamics').style.opacity = '25%'
-            document.getElementById('userinfo').style.pointerEvents = 'none'
-            document.getElementById('groupdynamics').style.pointerEvents = 'none'
-        }
-    } else {
-            document.getElementById('brain').style.opacity = '100%'
-            document.getElementById('channels').style.opacity = '100%'
-            document.getElementById('userinfo').style.opacity = '100%'
-            document.getElementById('groupdynamics').style.opacity = '100%'
-            document.getElementById('brain').style.pointerEvents = 'auto'
-            document.getElementById('channels').style.pointerEvents = 'auto'
-            document.getElementById('userinfo').style.pointerEvents = 'auto'
-            document.getElementById('groupdynamics').style.pointerEvents = 'auto'
-    }
+    updateUI();
 
     // reset z_displacement to zero when not being actively updated
     if (!['z_displacement'].includes(scenes[state].effect) && dispBuffer != undefined){
-        brains.initializeBuffer(buffer='userOtherBuffers')
+        brains.initializeBuffer(buffer='focusBuffer')
         brains.initializeBuffer(buffer='userVoltageBuffers')
-        updateBufferData(attribs,'z_displacement',brains.BufferToWebGL(buffer='userOtherBuffers'))
+        updateBufferData(attribs,'z_displacement',brains.BufferToWebGL(buffer='focusBuffer'))
     }
 
 
@@ -216,10 +181,10 @@ function updateChannels(newChannels) {
         if (shapes.includes('channels')) {
             if (scenes[state].signaltype != 'voltage'){
                 [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
-                brains.initializeBuffer(buffer='userOtherBuffers');
+                brains.initializeBuffer(buffer='focusBuffer');
             } else {
                 [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
-                brains.initializeBuffer(buffer='userOtherBuffers')
+                brains.initializeBuffer(buffer='focusBuffer')
                 brains.initializeBuffer(buffer='userVoltageBuffers')
             }
         }
@@ -329,6 +294,120 @@ function toggleUI(){
         } else {
             document.getElementById('ui-elements').style.display = 'none'
         }
+}
+
+
+function updateUI(){
+    let dynamicSignalArray = ['delta', 'theta', 'alpha', 'beta', 'gamma']
+    let opacity;
+    let pointer;
+
+    if (brains.network != undefined){
+        if (brains.public){
+            document.getElementById('brain').style.opacity = '100%'
+            document.getElementById('channels').style.opacity = '100%'
+            document.getElementById('brain').style.pointerEvents = 'auto'
+            document.getElementById('channels').style.pointerEvents = 'auto'
+            document.getElementById('userinfo').style.opacity = '100%'
+            document.getElementById('groupdynamics').style.opacity = '100%'
+            document.getElementById('userinfo').style.pointerEvents = 'auto'
+            if (brains.users.size >= 2){
+                document.getElementById('groupdynamics').style.opacity = '25%'
+                document.getElementById('groupdynamics').style.pointerEvents = 'none'
+            } else {
+                document.getElementById('groupdynamics').style.opacity = '100%'
+                document.getElementById('groupdynamics').style.pointerEvents = 'auto'
+            }
+
+            if (['projection','z_displacement'].includes(scenes[state].effect)){
+                opacity = '0%'
+                pointer = 'none'
+                
+                if (scenes[state].effect == 'projection'){
+
+                    dynamicSignalArray.push('voltage')
+                    document.getElementById('synchrony').style.opacity = '100%'
+                    document.getElementById('synchrony').style.pointerEvents = 'auto'
+
+                    let prevSig = document.getElementById('signal-type').innerHTML
+                    if (prevSig != 'synchrony'){
+                        scenes[state].signaltype = 'synchrony'; 
+                        document.getElementById('signal-type').innerHTML = 'synchrony'; 
+                        newSignalType = true;
+                    }
+                }
+                else if (scenes[state].effect == 'z_displacement'){
+                    document.getElementById('synchrony').style.opacity = '100%'
+                    document.getElementById('synchrony').style.pointerEvents = 'auto'
+                    document.getElementById('voltage').style.opacity = '100%'
+                    document.getElementById('voltage').style.pointerEvents = 'auto'
+                }
+
+            } else {
+                dynamicSignalArray.push(...['voltage','synchrony'])
+                opacity = '0%'
+                pointer = 'none'
+            }
+
+            dynamicSignalArray.forEach((id) => {
+                    document.getElementById(id).style.opacity = opacity
+                    document.getElementById(id).style.pointerEvents = pointer
+            })
+
+            dynamicSignalArray.forEach((id) => {
+                document.getElementById(id).style.opacity = '0%'
+                document.getElementById(id).style.pointerEvents = 'none'
+            })
+        } else {
+            document.getElementById('brain').style.opacity = '100%'
+            document.getElementById('channels').style.opacity = '100%'
+            document.getElementById('brain').style.pointerEvents = 'auto'
+            document.getElementById('channels').style.pointerEvents = 'auto'
+            document.getElementById('userinfo').style.opacity = '25%'
+            document.getElementById('groupdynamics').style.opacity = '25%'
+            document.getElementById('userinfo').style.pointerEvents = 'none'
+            document.getElementById('groupdynamics').style.pointerEvents = 'none'
+
+            if (['projection','z_displacement'].includes(scenes[state].effect)){
+                dynamicSignalArray.push(...['voltage'])
+                opacity = '100%'
+                pointer = 'auto'
+                document.getElementById('synchrony').style.opacity = '0%'
+                document.getElementById('synchrony').style.pointerEvents = 'none'
+            } else {
+                opacity = '0%'
+                pointer = 'none'
+            }
+
+            dynamicSignalArray.forEach((id) => {
+                    document.getElementById(id).style.opacity = opacity
+                    document.getElementById(id).style.pointerEvents = pointer
+            })
+        }
+    } else {
+            document.getElementById('brain').style.opacity = '100%'
+            document.getElementById('channels').style.opacity = '100%'
+            document.getElementById('userinfo').style.opacity = '100%'
+            document.getElementById('groupdynamics').style.opacity = '100%'
+            document.getElementById('brain').style.pointerEvents = 'auto'
+            document.getElementById('channels').style.pointerEvents = 'auto'
+            document.getElementById('userinfo').style.pointerEvents = 'auto'
+            document.getElementById('groupdynamics').style.pointerEvents = 'auto'
+
+            dynamicSignalArray.push(...['voltage','synchrony'])
+            if (['projection','z_displacement'].includes(scenes[state].effect)){
+                opacity = '100%'
+                pointer = 'auto'
+            } else {
+                opacity = '0%'
+                pointer = 'none'
+            }
+
+            dynamicSignalArray.forEach((id) => {
+                    document.getElementById(id).style.opacity = opacity
+                    document.getElementById(id).style.pointerEvents = pointer
+            })
+    }
 }
 
 // Resizing
@@ -493,9 +572,10 @@ function updateColorsByChannel(new_sync) {
                 relSignal = brains.getBandPower(scenes[state].signaltype, relative=true) // relative
             }
 
-        if (['projection'].includes(scenes[state].effect) && brains.me != undefined){
+        if (['projection'].includes(scenes[state].effect)){
             gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
-        } 
+        }
+        
         
         if (['z_displacement'].includes(scenes[state].effect)) {
                 if (scenes[state].signaltype == 'voltage'){
@@ -507,14 +587,13 @@ function updateColorsByChannel(new_sync) {
                             relSignalOfInterest.push(data)
                         }
                     })
-                    if (brains.me != undefined){
-                        brains.updateBuffer(source=relSignalOfInterest,buffer='userOtherBuffers')
-                    } else {
-                        brains.updateBuffer(source=new Array(relSignalOfInterest.length).fill(NaN),buffer='userOtherBuffers')
-                    }
-                    updateBufferData(attribs,'z_displacement',brains.BufferToWebGL(buffer='userOtherBuffers'))
+                    brains.updateBuffer(source=relSignalOfInterest,buffer='focusBuffer')
+                    updateBufferData(attribs,'z_displacement',brains.BufferToWebGL(buffer='focusBuffer'))
                 }
         }
+
+    } else {
+        gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
     }
 }
 
@@ -522,9 +601,12 @@ function updateColorsByChannel(new_sync) {
 // Update Signal Type
 
 function updateSignalType(el){
-    scenes[state].signaltype = el.innerHTML.toLowerCase(); 
-    document.getElementById('signal-type').innerHTML = el.innerHTML.toLowerCase(); 
-    newSignalType = true;
+    let prevSig = document.getElementById('signal-type').innerHTML
+    if (prevSig != el.innerHTML.toLowerCase()){
+        scenes[state].signaltype = el.innerHTML.toLowerCase(); 
+        document.getElementById('signal-type').innerHTML = el.innerHTML.toLowerCase(); 
+        newSignalType = true;
+    }
 }
 
 function brainDependencies(updateArray){
@@ -532,7 +614,10 @@ function brainDependencies(updateArray){
     updateArray.forEach((updateObj) => {
     if (updateObj.destination !== undefined && updateObj.destination.length != 0) {
     if (updateObj.destination == 'opened'){
-        state = 3;
+        brains.initializeBuffer('userVoltageBuffers')
+        brains.initializeBuffer('focusBuffer')
+        state = 1;
+        stateManager(true)
     } else if (updateObj.destination == 'error'){
         console.log('error')
         announcement('WebSocket error.\n Please refresh your browser and try again.');
@@ -564,6 +649,7 @@ function brainDependencies(updateArray){
         } else {
             document.getElementById('nInterfaces').innerHTML = `${brains.nInterfaces}`
         }
+
     } else if (updateObj.destination == 'brains'){
         update = updateObj.n;
 
@@ -605,6 +691,9 @@ function brainDependencies(updateArray){
             <p id="access-mode" class="small">Not Connected</p>
             `
             document.getElementById("connection-button").innerHTML = 'Connect'; 
+            state = 1;
+            brains.initializeBuffer('userVoltageBuffers')
+            brains.initializeBuffer('focusBuffer')
             stateManager(true)
     }
 }

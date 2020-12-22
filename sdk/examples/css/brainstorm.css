@@ -546,7 +546,7 @@ input:focus{
 
 
 #signaltypes{
-    display: none;
+    display: block;
 }
 
 #bottom-info{
@@ -769,7 +769,7 @@ input:focus{
         right:0;
         width: 200px;
         height: 100vh;
-        opacity: 0%;
+        opacity: 100%;
         padding: 25px;
         display: flex;
         flex-direction: column;

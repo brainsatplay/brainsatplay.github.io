@@ -4,7 +4,7 @@ class BrainsAtPlay {
         this.users = new Map();
         if (input == undefined){
             this.userVoltageBuffers = []
-            this.userOtherBuffers = []
+            this.focusBuffer = []
         } else{
             this.add(input)
         }
@@ -80,13 +80,13 @@ class BrainsAtPlay {
             brain = new Brain(id,channelNames)
         }
         this.users.set(id, brain)
-        this.initializeBuffer('userOtherBuffers')
+        this.initializeBuffer('focusBuffer')
         this.initializeBuffer('userVoltageBuffers')
     }
 
     remove(id){
         this.users.delete(id)
-        this.initializeBuffer('userOtherBuffers')
+        this.initializeBuffer('focusBuffer')
         this.initializeBuffer('userVoltageBuffers')
     }
 
@@ -127,6 +127,8 @@ class BrainsAtPlay {
     getPower(relative=false){
         let dataOfInterest = [];
         let power = new Array(this.eegChannelsOfInterest.length).fill(NaN);
+
+        if (this.me){
         this.eegChannelsOfInterest.forEach((channel,ind) => {
             if (this.userVoltageBuffers[this.me].length > ind){
                 // Calculate Average Power of Voltage Signal
@@ -139,6 +141,7 @@ class BrainsAtPlay {
         if (relative){
             power = this.stdDev(dataOfInterest)
         }
+    }
 
         return power
     }
@@ -269,7 +272,7 @@ class BrainsAtPlay {
         let b = [];
         let user;
         let users;
-        if (buffer == 'userOtherBuffers'){
+        if (buffer == 'focusBuffer'){
             users = 1;
         } else {
             users = this.users.size;
@@ -390,19 +393,30 @@ class BrainsAtPlay {
                 userInd++;
             })
         } else {
-                userInd = this.me 
+            userInd = this.me 
+            let userData;
+            if (userInd != undefined){      
+                userData = this[buffer][userInd]
+            } else {
+                userData = this[buffer][0];
+            } 
+
+            userData.forEach((channelData,channel) => {
+                if (channelData.length != 0){
+                    channelData = new Array(SIGNAL_SUSTAIN).fill(source[channel])
+                } else {
+                    channelData = new Array(SIGNAL_SUSTAIN).fill(0)
+                }
+
+
                 if (userInd != undefined){      
-                    let userData = this[buffer][userInd]
-                    userData.forEach((channelData,channel) => {
-                        if (channelData.length != 0){
-                            channelData = new Array(SIGNAL_SUSTAIN).fill(source[channel])
-                        } else {
-                            channelData = new Array(SIGNAL_SUSTAIN).fill(0)
-                        }
-                        this[buffer][userInd][channel].splice(0,SIGNAL_SUSTAIN)
-                        this[buffer][userInd][channel].push(...channelData)
-                    })
-            }
+                    this[buffer][userInd][channel].splice(0,SIGNAL_SUSTAIN)
+                    this[buffer][userInd][channel].push(...channelData)
+                } else {
+                    this[buffer][0][channel].splice(0,SIGNAL_SUSTAIN)
+                    this[buffer][0][channel].push(...channelData)
+                }
+            })
         }
     }
 
@@ -441,21 +455,32 @@ class BrainsAtPlay {
         this.eegChannelsOfInterest = []
         let myBrain;        
         Object.keys(this.eegChannelCoordinates).forEach((name,ind) => {
-            myBrain = brains.users.get(this.username)
+            myBrain = this.users.get(this.username)
             if (myBrain == undefined){
-                myBrain = brains.users.get('me')
+                myBrain = this.users.get('me')
             }
-    
+            
+            // Extract My EEG Channels Of Interest
             if (myBrain != undefined){
                 if (myBrain.channelNames.includes(name)){
                     this.eegChannelsOfInterest.push(ind)
                 }
+            } 
+
+            // Extract All Used EEG Channels
+            else {
+                this.users.forEach((user) => {
+                    if (user.channelNames.includes(name)){
+                        this.eegChannelsOfInterest.push(ind)
+                    }
+                })
+                this.eegChannelsOfInterest = this.eegChannelsOfInterest.filter((v, i, a) => a.indexOf(v) === i)
             }
         })
     }
 
     // Networking Suite
-    connect(url){
+    connect(url, game){
 
     if (this.network) {
         this.network.onerror = connection.onopen = connection.onclose = null;
@@ -463,9 +488,9 @@ class BrainsAtPlay {
     }
 
     if (url.protocol == 'http:'){
-        this.network = new WebSocket(`ws://` + url.hostname,[this.username, 'interfaces']);
+        this.network = new WebSocket(`ws://` + url.hostname,[this.username, 'interfaces', game]);
     } else if (url.protocol == 'https:'){
-        this.network = new WebSocket(`wss://` + url.hostname,[this.username, 'interfaces']);
+        this.network = new WebSocket(`wss://` + url.hostname,[this.username, 'interfaces', game]);
     } else{
         console.log('invalid protocol')
         return
