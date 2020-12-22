@@ -1,118 +1,108 @@
+---
+---
 <!DOCTYPE html>
 <html lang=en>
 <head>
-    <meta charset=utf-8>
-    <meta http-equiv=X-UA-Compatible content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <meta property="og:title" content="Brains@Play - Brain-Responsive Multiplayer Experiences for the Web" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://brainsatplay.com/assets/images/brainsatplay.png" />
-    <meta property="og:description" content="Brains@Play enables the responsible development of brain-responsive multiplayer experiences. Explore, create, and share BCI games on the web!" />
-    <meta property="og:url" content="https://brainsatplay.com" />
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@brainsatplay">
-    <meta name="twitter:creator" content="@brainsatplay">
-    <meta name="twitter:domain" content="brainsatplay.com">
-    <meta name="twitter:title" content="Brainstorm">
-    <meta name="twitter:url" content="https://brainsatplay.com">
-    <meta name="twitter:description" content="Brains@Play enables the responsible development of brain-responsive multiplayer experiences. Explore, create, and share BCI games on the web!">
-    <meta name="twitter:image:src" content="https://brainsatplay.com/assets/images/brainsatplay.png">
+    {% include meta.html %}
     <title>Brains@Play | Home</title>
 
-  <link rel=icon href=assets/favicon.ico>
-  <link rel="stylesheet" type="text/css" href="css/style.css"/>
-  <script src="js/site.js" type="text/javascript" defer></script>
-  <script src="components/nav.js" type="text/javascript" defer></script>
-  <script src="components/footer.js" type="text/javascript" defer></script>
-  <script src="components/availablegames.js" type="text/javascript" defer></script>
-  <script src="components/submittedgames.js" type="text/javascript" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <link rel=icon href=assets/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="js/site.js" type="text/javascript" defer></script>
+    <script src="components/nav.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+    <script src="components/availablegames.js" type="text/javascript" defer></script>
+    <script src="components/submittedgames.js" type="text/javascript" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 
 </head>
 <body>
 <noscript>
-  <strong>We're sorry but Brains@Play doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    <strong>We're sorry but Brains@Play doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
 </noscript>
 <div id=app>
 
-  <!--Navbar-->
-  <nav-bar id="nav">
-  </nav-bar>
-  <!--Content-->
-  <div>
+    <!--Navbar-->
+    <nav-bar id="nav">
+    </nav-bar>
+    <!--Content-->
     <div>
-      <div id= "hero1" class="hero">
-        <section class="hero-content" style="text-align: center;">
-          <h1>Brains@Play</h1>
-          <H3>Brain-Responsive Multiplayer Experiences</H3>
-          <p>Brains@Play enables the responsible development of brain-responsive multiplayer experiences. Explore, create, and share
-             BCI games on the web!
-          </p>
-          <div class="button-nav">
-<!--            <button onclick="window.location.href='futures/projects/livewire'" rel="noopener">Participate in Livewire</button>-->
-            <button onclick="window.location.href='/futures'" rel="noopener" style="width: 100%">Learn More</button>
-          </div>
-        </section>
-      </div>
+        <div>
+            <div id= "hero1" class="hero">
+                <section class="hero-content" style="text-align: center;">
+                    <h1>Brains@Play</h1>
+                    <H3>Brain-Responsive Multiplayer Experiences</H3>
+                    <p>Brains@Play enables the responsible development of brain-responsive multiplayer experiences. Explore, create, and share
+                        BCI games on the web!
+                    </p>
+                    <div class="button-nav">
+                        <!--            <button onclick="window.location.href='futures/projects/livewire'" rel="noopener">Participate in Livewire</button>-->
+                        <button onclick="window.location.href='/futures'" rel="noopener" style="width: 100%">Learn More</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <nav id="game-nav">
+            <div id="available-option" class="game-option selected" onclick="switchToAvailableGames()">
+                <p>Available Games</p>
+            </div>
+            <div id="submitted-option" class="game-option">
+                <p>Submitted Games</p>
+            </div>
+            <!--      <div class="game-option-unavailable">-->
+            <!--        <p>BCI Entertainment Database</p>-->
+            <!--      </div>-->
+        </nav>
+        <div id="game-display">
+            <available-games id="available"></available-games>
+            <submitted-games id="submitted"></submitted-games>
+        </div>
+        <div id="call-to-submit" class="button-nav">
+            <button onclick="window.location.href='/futures/brainsandgames/submit'" style="width: calc(100vw - 100px)">Submit Your Game Ideas Here</button>
+        </div>
     </div>
-    <nav id="game-nav">
-      <div id="available-option" class="game-option selected" onclick="switchToAvailableGames()">
-        <p>Available Games</p>
-      </div>
-      <div id="submitted-option" class="game-option">
-        <p>Submitted Games</p>
-      </div>
-<!--      <div class="game-option-unavailable">-->
-<!--        <p>BCI Entertainment Database</p>-->
-<!--      </div>-->
-    </nav>
-    <div id="game-display">
-      <available-games id="available"></available-games>
-      <submitted-games id="submitted"></submitted-games>
-    </div>
-    <div id="call-to-submit" class="button-nav">
-      <button onclick="window.location.href='/futures/brainsandgames/submit'" style="width: calc(100vw - 100px)">Submit Your Game Ideas Here</button>
-    </div>
-  </div>
 
-  <!--Footer-->
-  <footer-bar>
-  </footer-bar>
+
+    {% include footer.html %}
+
 
 </div>
 
 
+
+
+
+
 <script>
 
-  let switched = false;
-  let state = 'available'
-  let url = "http://localhost"
-  // let url = "https://brainsatplay.azurewebsites.net"
-  let jsonOBJ = {'request': 'all'}
-  let submittedGamesJSON;
+    let switched = false;
+    let state = 'available'
+    let url = "http://localhost"
+    // let url = "https://brainsatplay.azurewebsites.net"
+    let jsonOBJ = {'request': 'all'}
+    let submittedGamesJSON;
 
-  document.getElementById('submitted-option').style.display = 'none'
+    document.getElementById('submitted-option').style.display = 'none'
 
-  fetch(url + '/getsubmissions', {
-    method: 'POST',
-    mode: 'cors', // no-cors, cors, *same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'omit', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrer: 'no-referrer', // no-referrer, *client
-    body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
-  }).then(response => {
-    response.json().then(function (json) {
-      submittedGamesJSON = json;
-      document.getElementById('submitted-option').addEventListener('click', function() {switchToSubmittedGames()});
-      document.getElementById('submitted-option').style.display = 'block'
-      document.getElementById('submitted-option').className = 'game-option'
+    fetch(url + '/getsubmissions', {
+        method: 'POST',
+        mode: 'cors', // no-cors, cors, *same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'omit', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
+    }).then(response => {
+        response.json().then(function (json) {
+            submittedGamesJSON = json;
+            document.getElementById('submitted-option').addEventListener('click', function() {switchToSubmittedGames()});
+            document.getElementById('submitted-option').style.display = 'block'
+            document.getElementById('submitted-option').className = 'game-option'
+        })
     })
-  })
 </script>
 
 

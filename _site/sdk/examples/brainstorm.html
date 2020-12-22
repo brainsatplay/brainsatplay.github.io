@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta property="og:title" content="Brainstorm" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://brainsatplay.com/sdk/examples/brainstorm.png" />
+    <meta property="og:description" content="Brainstorm - A Multiplayer Neurotechnology Game for the Web" />
+    <meta property="og:url" content="https://brainsatplay.com/sdk/examples/brainstorm" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@brainsatplay">
+    <meta name="twitter:creator" content="@brainsatplay">
+    <meta name="twitter:domain" content="brainsatplay.com">
+    <meta name="twitter:title" content="Brainstorm">
+    <meta name="twitter:url" content="https://brainsatplay.com/sdk/examples/brainstorm">
+    <meta name="twitter:description" content="Brainstorm - A Multiplayer Neurotechnology Game for the Web">
+    <meta name="twitter:image:src" content="https://brainsatplay.com/sdk/examples/brainstorm.png">
+    <title>Brainstorm</title>
+    
+    <link rel=icon href=favicons/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/brainstorm.css"/>
+    <script type="text/javascript" src="js/visbrain.js"></script>
+    <script type="text/javascript" src="classes/Brain.js"></script>
+    <script type="text/javascript" src="classes/nBrains.js"></script>
+    <script type="text/javascript" src="js/interaction.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/point-functions.js"></script>
+    <script type="text/javascript" src="js/networking.js"></script>
+    <script type="text/javascript" src="js/gl-matrix-min.js"></script>
+    <script type="text/javascript" src="js/shaders.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bcijs@1.8.0/dist/bci.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+</head>
+
+<body onstyle="overflow: hidden">
+
+<div id=app>
+
+    <div id="developer-tools" class="menu">
+        <div class="icon" onclick="toggleUI()">
+            <p>Toggle UI</p>
+        </div>
+        <!-- <div class="icon menuicon" onclick="window.open(`/downloadapp`)">
+            <a><i class="fas fa-desktop fa-2x"></i></a><p>Download Desktop App</p>
+        </div> -->
+    </div>
+
+    <div id="brainstorm">
+        <div id="canvas-container">
+            <canvas id='webgl'></canvas>
+        </div>
+
+        <div>
+            <span id="canvas-message"></span>
+        </div>
+
+        <div id="login-container" class="form-container">
+            <div id="login" class="form-context">
+                <h3>Sign In</h3>
+                <p id="login-message" class="small"></p>
+                <div class='flex'>
+                    <form id="login-form" action="">
+                        <div class="login-element">
+                        <label for="username"></label>
+                        <input type="text" name="username" autocomplete="off" placeholder="Username"/>
+                    </div>
+                    <div class="login-element">
+                        <label for="password"></label>
+                        <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                    </div>
+                    </form>
+                    <div>
+                        <button id="login-button" onclick="login('profile')">Sign In</button>
+                        <button onclick="login('guest')">Guest Access</button>
+                    </div>
+                </div>
+                <div id="login-buttons">
+                    <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Sign Up</button>
+                    <button onclick="toggleLoginScreen()">Go Back</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="signup-container" class="form-container">
+            <div id="signup" class="form-context">
+                <h3>Sign Up</h3>
+                <p id="signup-message" class="small"></p>
+                <div class='flex'>
+                    <form id="signup-form" action="">
+                        <div class="login-element">
+                        <label for="username"></label>
+                        <input type="text" name="username" autocomplete="off" placeholder="Username"/>
+                    </div>
+                    <div class="login-element">
+                        <label for="password"></label>
+                        <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                    </div>
+                    <div class="login-element">
+                        <label for="confirm-password"></label>
+                        <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password"/>
+                    </div>
+                    </form>
+                    <div>
+                        <button id="signup-button" onclick="signup()">Sign Up</button>
+                    </div>
+                </div>
+                <div id="login-buttons">
+                    <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Go Back</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="ui-elements">
+
+        <div id='signaltypes'>
+            <h4>Signal Types</h4>
+            <p id="signal-type" class="small"></p>
+            <button onclick="updateSignalType(this)">Voltage</button>
+            <button onclick="updateSignalType(this)">Synchrony</button>
+            <button onclick="updateSignalType(this)">Delta</button>
+            <button onclick="updateSignalType(this)">Theta</button>
+            <button onclick="updateSignalType(this)">Alpha</button>
+            <button onclick="updateSignalType(this)">Beta</button>
+            <button onclick="updateSignalType(this)">Gamma</button>
+        </div>
+
+        <div id="bottom-info">
+            <div class="info-holder-outer">
+                <h4>States</h4>
+                <div class="under-header-info">
+                <p id="state" class="small">&nbsp;</p>
+                </div>
+        <div class="info-holder-inner">
+            <div class=icongrid>
+            <div id="brain" class="menuicon" onclick="state = 1">
+                <i class="fas fa-brain fa-1x"></i>
+            </div>
+            <div id="channels" class="menuicon" onclick="state = 2">
+                <i class="fas fa-wave-square fa-1x"></i>
+            </div>
+            <div id="userinfo" class="menuicon" onclick="state = 3">
+                <i class="fas fa-users fa-1x"></i>
+            </div>
+            <div id="groupdynamics" class="menuicon" onclick="state = 4;">
+                <i class="fas fa-users-cog fa-1x"></i>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="info-holder-outer">
+            <h4>Connection Info</h4>
+
+            <div id="access-mode-div" class="under-header-info">
+                <p id="access-mode" class="small">Not Connected</p>
+            </div>
+
+            <div class="info-holder-inner">
+                <div id="id-params" class="params" style="display:none">
+            <h5>ID</h5>
+            <p id="userId" class="small"></p>
+          </div>
+
+          <div id="nBrains-params" class="params" style="display:none">
+            <h5>nBrains</h5>
+            <p id="nBrains" class="small"></p>
+        </div>
+        <div id="nInterfaces-params" class="params" style="display:none">
+
+        <h5>nInterfaces</h5>
+            <p id="nInterfaces" class="small"></p>
+            </div>
+            <div id="connection-toggle" class="params">
+                <button id="connection-button" onclick="toggleConnection();">Connect</button>
+            </div>
+            </div>
+        </div>
+        <div class="info-holder-outer">
+            <h4>Effects</h4>
+            <div class="under-header-info">
+                <p id="effect-status" class="small">Off</p>
+            </div>
+        <div class="info-holder-inner">
+        <div class="params">
+            <button onclick="distortToggle()">Toggle Mouse Distort</button>
+        </div>
+    </div>
+</div>
+        <!-- <div class=icongrid>
+            <div class="menuicon" onclick="toggleChat()">
+                <i class="fas fa-comment"></i>
+            </div>
+            <div class="menuicon" onclick="toggleDevTools()">
+                <i class="fas fa-desktop fa-1x"></i>
+            </div>
+        </div> -->
+        </div>
+
+        <div id="info-card">
+            <h4>Brainstorm</h4>
+            <p class='small'>Created by <a href="https://brainsatplay.com">Brains@Play</a></p>
+            <p>A multiplayer neurotechnology game for coupling minds across geographic, social, and cultural boundaries.</p>
+            <h5>Instructions</h5>
+            <p>Use the <strong>States</strong> panel to view different scenes of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>
+            <ol>
+            <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Connect</strong> to enter a network of real users and their brains.</p></li>
+            <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and send your data using OpenBCI or Neurosity headsets.</p></li>
+        </ol>
+        </div>
+
+    <div id="chat">
+        <ul id="messages"></ul>
+        <form id="chat-form" action="">
+            <label for="message"></label>
+            <input type="text" id="message" autocomplete="off" placeholder="Say hello..."/>
+        </form>
+    </div>
+
+
+
+    </div>
+    </div>
+</div>
+</div>
+
+<script>
+
+    // Initialize Visualization Variables
+    let canvas = document.getElementById('webgl');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let gl = canvas.getContext('webgl')
+
+    // visualization controls
+    let GENERIC_ZOOM = Math.max(1e5/window.innerWidth,1e5/window.innerHeight)*2
+    let effects = [false, 'projection','synchrony','scan'] // Order used in Shaders.js code
+
+    let scenes = [
+        {
+        name: 'Scan Phase', 
+        shapes: ['sphereShells'],
+        render: gl.POINTS,
+        type: 'intro',
+        timer: 5.0, 
+        message: ``,
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: 'scan',
+        signaltype: undefined
+    },
+    {
+        name: '3D Brain', 
+        shapes: ['brain'],
+        type: 'main',
+        render: gl.POINTS,
+        timer: false, 
+        message: '',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: 'projection',
+        signaltype: 'voltage'
+    },{
+        name: 'Data Streams', 
+        shapes: ['channels'],
+        type: 'main',
+        render: gl.LINES,
+        timer: false,
+        message: '',
+        ease: 0.1,
+        zoom: 1.2*GENERIC_ZOOM,
+        effect: 'z_displacement',
+        signaltype: 'voltage'
+    },{
+        name: 'User Information', 
+        shapes: ['brains'],
+        type: 'main',
+        render: gl.POINTS,
+        timer: false,
+        message: '',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: false,
+        signaltype: undefined
+    },{
+        name: 'Group Dynamics', 
+        shapes: ['brain'],
+        type: 'main',
+        render: gl.POINTS,
+        timer: false,
+        message: '',
+        ease: 0.1,
+        zoom: GENERIC_ZOOM,
+        effect: 'synchrony',
+        signaltype: 'synchrony'
+    }
+]
+
+    // global visualization variables
+    let DESIRED_POINTS = 1e5/2; // 80000
+    let AUTO_ROTATION_X = 0.0;
+    let DAMPING = .1;
+    let epsilon = .001;
+    let state = 0;
+    let prevState = 0;
+    let renderState = state;
+    let renderLagStart;
+    let animStart = Date.now();
+    let brainVertices;
+    let brainMesh;
+    let vertexHome;
+    let vertexCurr;
+    let vertexVel;
+    let viewMatrix;
+    let projectionMatrix;
+
+    let originalAspectX;
+    let originalAspectY;
+
+    let positionBuffer;
+    let dispBuffer;
+    let colorBuffer;
+    let uniformLocations;
+    let pointCount;
+    let color;
+    let cameraHome = scenes[state].zoom;
+    let cameraCurr = scenes[state].zoom;
+    let startTime = Date.now()
+    let diff_x = 0;
+    let diff_y = 0;
+    let ease = true;
+    let rotation = true;
+    let zoom = true;
+    let messages = []
+    let welcomed = false;
+    let newSignalType = false;
+
+    // Set User Interactions
+    let holdStatus = false;
+    let mouseEv;
+    let moveStatus;
+    let x;
+    let y;
+    let prev_x;
+    let prev_y;
+    let scroll;
+    let diff;
+    let diff_total;
+    let forceSink;
+    let messageStartTime;
+
+    // Set User Interactions
+    let devTools = false;
+    let showUI = true;
+    let chat = false;
+    let mouseDistort = false;
+    let showLogin = false;
+    let showSignUp = false;
+
+    canvas.onmousedown = mouseDown;
+    canvas.onmouseup = mouseUp
+    canvas.onmousemove = mouseMove
+    canvas.onwheel = wheelMove
+    document.onkeydown = keyboardShortcuts
+    bindChatSubmissionEvent()
+
+    // Reduce Point Count
+    brainVertices = reducePointCount(brainpoints, DESIRED_POINTS);
+    pointCount = brainVertices.length / 3;
+
+    // Instantiate BrainsAtPlay Object
+    let channels = 16;
+    let SIGNAL_SUSTAIN_ORIGINAL = 100;
+    let SIGNAL_SUSTAIN = Math.round(SIGNAL_SUSTAIN_ORIGINAL/channels);
+    if (SIGNAL_SUSTAIN%2 == 0){
+            SIGNAL_SUSTAIN += 1;
+    }
+    let url;
+    let option = 'server';
+    if (option  === 'local'){
+        url = new URL('http://localhost');
+    } else if (option === 'server'){
+        url = new URL('https://brainsatplay.azurewebsites.net/');
+    }
+    let brains = new BrainsAtPlay()
+    brains.simulate(2);
+
+    // Begin Rendering the Visualization
+    if (!gl) {
+        throw new Error('WebGL not supported')
+    }
+
+    stateManager()
+    vertexCurr = vertexHome;
+    let program;
+    gl, program = programShaders(gl)
+
+// Initialize Vertex Attributes
+    let arrays = {
+        position: {numComponents: 3, data: vertexCurr},
+        z_displacement: {numComponents: 1, data: brains.BufferToWebGL()},
+    }
+    let attribs;
+    gl, program, attribs = initializeAttributes(gl, program, arrays)
+
+// Set Uniform Locations
+    uniformLocations = {
+        effect: gl.getUniformLocation(program,`effect`),
+        matrix: gl.getUniformLocation(program, `matrix`),
+        u_time: gl.getUniformLocation(program, `u_time`),
+        synchrony: gl.getUniformLocation(program, `synchrony`),
+        eeg_coords: gl.getUniformLocation(program,`eeg_coords`),
+        eeg_signal: gl.getUniformLocation(program,`eeg_signal`),
+        ambientNoiseToggle: gl.getUniformLocation(program,'u_ambientNoiseToggle'),
+        aspectChange: gl.getUniformLocation(program,'aspectChange'),
+        mousePos: gl.getUniformLocation(program,'mousePos'),
+        colorToggle: gl.getUniformLocation(program,'colorToggle'),
+    };
+
+    // initialize uniforms that don't change on every draw loop
+    let passedEEGCoords = [];
+    Object.keys(brains.eegChannelCoordinates).forEach((name) => {
+        passedEEGCoords.push(brains.eegChannelCoordinates[name])
+    })
+    gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
+    gl.uniform1i(uniformLocations.effect, effects.indexOf(scenes[state].effect));
+    gl.uniform1i(uniformLocations.ambientNoiseToggle, 1);
+    gl.uniform1i(uniformLocations.colorToggle, 1);
+
+// Create Model, View, and ProjectionMatrices
+    const modelMatrix = mat4.create();
+
+    viewMatrix = mat4.create();
+    mat4.rotateX(viewMatrix, viewMatrix, Math.PI / 2);
+    mat4.rotateY(viewMatrix, viewMatrix, Math.PI / 2);
+    mat4.translate(viewMatrix, viewMatrix, [0, 0, cameraCurr]);
+    mat4.invert(viewMatrix, viewMatrix);
+    originalAspectX = canvas.width
+    originalAspectY = canvas.height
+
+    projectionMatrix = mat4.create();
+    mat4.perspective(projectionMatrix,
+        75 * Math.PI / 180, // vertical field-of-view (angle, radians)
+        originalAspectX/originalAspectY, // aspect W/H
+        1e-4, // near cull distance
+        1e4, // far cull distance
+    );
+
+    const mvMatrix = mat4.create();
+    const mvpMatrix = mat4.create();
+
+
+    
+
+    function animate() {
+
+        requestAnimationFrame(animate)
+        resize(gl.canvas);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        mouseState()
+        stateManager();
+        brainDependencies(brains.updateArray);
+        brains.update()
+
+        // Update rotation speeds
+        moveStatus = false;
+        diff_x *= (1-scenes[state].ease);
+        diff_y *= (1-scenes[state].ease);
+
+        // Rotate scene
+        rotate(scenes[state], diff_x,diff_y)
+
+        // Create WebGL matrix
+        mat4.multiply(mvMatrix, viewMatrix, modelMatrix)
+        mat4.multiply(mvpMatrix, projectionMatrix, mvMatrix)
+
+        // Update Uniforms
+        gl.uniformMatrix4fv(uniformLocations.matrix, false, mvpMatrix)
+        gl.uniform1f(uniformLocations.u_time, (Date.now()-startTime)/1000);
+        gl.uniform1f(uniformLocations.synchrony, brains.synchrony);
+        gl.uniform2fv(uniformLocations.aspectChange, [(canvas.width)/(originalAspectX),(canvas.height)/(originalAspectY)]);
+
+        if (mouseDistort){
+        gl.uniform2fv(uniformLocations.mousePos, [(x - (canvas.width/2))/2,((canvas.height/2) - y)/2]);
+        } else {
+            gl.uniform2fv(uniformLocations.mousePos, [NaN,NaN]);
+        }
+
+        // Update color based on channel data
+        updateColorsByChannel(brains.synchronyChannels)
+        easeCamera()
+        easeVertices()
+
+        // Draw
+        gl.drawArrays(scenes[renderState].render, 0, vertexCurr.length / 3);
+
+        // Update states for next animation loop
+        prevState = state;
+
+        // Remove message if not for the state itself
+        if ((messageStartTime != undefined) && (scenes[state].message == '') && (Date.now() - messageStartTime >= 2000)){
+            messageStartTime = undefined;
+            document.getElementById('canvas-message').style.opacity = 0;
+        }
+    };
+    animate()
+
+</script>
+
+</body>
+</html>
