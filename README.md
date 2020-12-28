@@ -1,7 +1,7 @@
 # Brains at Play website
 This is the repo containing the [Brains@Play Website](https://brainsatplay.com).
 
-Under `api/examples` we include a visualizer that works with live streamed data from OpenBCI headsets
+Under `api/examples/brainstorm`, we include a visualizer that works with live streamed data from OpenBCI headsets
 
 
 
