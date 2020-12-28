@@ -623,6 +623,7 @@ input:focus{
 .info-holder-outer {
     padding: 10px;
     text-align: center;
+    pointer-events:all;
 }
 .info-holder-outer h4 {
     margin: 0px;
