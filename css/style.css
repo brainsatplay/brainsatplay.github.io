@@ -281,8 +281,8 @@ a.link .current{
     /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/contribute.jpg')*/
 }
 
-#api-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/api.jpg')
+#docs-header{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/docs.jpg')
 }
 
 #contribute .about-right{
