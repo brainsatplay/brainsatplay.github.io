@@ -182,7 +182,7 @@ function getSubmissions(name) {
                         }
 
                         Object.keys(doc).forEach(function(field) {
-                            if (!['_id','additional-images', 'game-image','contact-fn','contact-ln','contact-email','competition'].includes(field)) {
+                            if (!['_id','additional-images', 'game-image','approved','contact-fn','contact-ln','contact-email','competition'].includes(field)) {
                                 document.getElementById(field).innerHTML += doc[field];
                             }
                         })
