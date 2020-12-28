@@ -613,9 +613,9 @@ function updateColorsByChannel(new_sync) {
 
 function updateSignalType(el){
     let prevSig = document.getElementById('signal-type').innerHTML
-    if (prevSig != el.innerHTML.toLowerCase()){
-        scenes[state].signaltype = el.innerHTML.toLowerCase(); 
-        document.getElementById('signal-type').innerHTML = el.innerHTML.toLowerCase(); 
+    if (prevSig != el.firstElementChild.innerHTML.toLowerCase()){
+        scenes[state].signaltype = el.firstElementChild.innerHTML.toLowerCase();
+        document.getElementById('signal-type').innerHTML = el.firstElementChild.innerHTML.toLowerCase();
         newSignalType = true;
     }
 }
@@ -701,7 +701,10 @@ function brainDependencies(updateArray){
             document.getElementById('access-mode-div').innerHTML = ` 
             <p id="access-mode" class="small">Not Connected</p>
             `
-            document.getElementById("connection-button").innerHTML = 'Connect'; 
+            document.getElementById("connection-button").innerHTML = `
+                                Connect
+                                <span class="tooltiptext"><p>Connect to Network</p><hr/><p class="small">View live brain data from Brains@Play server</p></span>
+            `;
             state = 1;
             brains.initializeBuffer('userVoltageBuffers')
             brains.initializeBuffer('focusBuffer')

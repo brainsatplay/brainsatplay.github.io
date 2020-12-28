@@ -110,18 +110,57 @@
             </div>
         </div>
 
+        <div id="info-card">
+            <h4>Brainstorm</h4>
+            <p class='small'>Created by <a href="../../..">Brains@Play</a>. See all examples <a href="../..">here</a></p>
+            <p>A multiplayer neurotechnology game for coupling minds across geographic, social, and cultural boundaries.</p>
+            <h5>Source</h5>
+            <a href='https://github.com/brainsatplay/brainsatplay.github.io/tree/master/api/examples/brainstorm' label='Github'>
+                <svg viewBox="0 0 24 24">
+                    <path d = "M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+            </a>
+            <!--            <h5>Instructions</h5>-->
+            <!--            <p>Use the <strong>States</strong> panel to view different scenes of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>-->
+            <!--            <ol>-->
+            <!--            <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Connect</strong> to enter a network of real users and their brains.</p></li>-->
+            <!--            <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and send your data using OpenBCI or Neurosity headsets.</p></li>-->
+            </ol>
+        </div>
+
         <div id="ui-elements">
 
         <div id='signaltypes'>
             <h4>Signal Types</h4>
             <p id="signal-type" class="small"></p>
-            <button id='voltage' onclick="updateSignalType(this)">Voltage</button>
-            <button id='synchrony' onclick="updateSignalType(this)">Synchrony</button>
-            <button id='delta' onclick="updateSignalType(this)">Delta</button>
-            <button id='theta' onclick="updateSignalType(this)">Theta</button>
-            <button id='alpha' onclick="updateSignalType(this)">Alpha</button>
-            <button id='beta' onclick="updateSignalType(this)">Beta</button>
-            <button id='gamma' onclick="updateSignalType(this)">Gamma</button>
+            <button id='voltage' class="tooltip" onclick="updateSignalType(this)">
+                <span>Voltage</span>
+                <span class="tooltiptext"><p>Voltage</p><hr/><p class="small">Raw electrical activity from the brain</p></span>
+            </button>
+            <button id='synchrony' class="tooltip" onclick="updateSignalType(this)">
+                <span>Synchrony</span>
+                <span class="tooltiptext"><p>Synchrony</p><hr/><p class="small">Similarity of data from two or more brains</p></span>
+            </button>
+            <button id='delta' class="tooltip" onclick="updateSignalType(this)">
+                <span>Delta</span>
+                <span class="tooltiptext"><p>Delta Bandpower</p><hr/><p class="small">Deep Sleep (1-3 Hz)</p></span>
+            </button>
+            <button id='theta' class="tooltip" onclick="updateSignalType(this)">
+                <span>Theta</span>
+                <span class="tooltiptext"><p>Theta Bandpower</p><hr/><p class="small">Meditation and Creativity (4-7 Hz)</p></span>
+            </button>
+            <button id='alpha' class="tooltip" onclick="updateSignalType(this)">
+                <span>Alpha</span>
+                <span class="tooltiptext"><p>Alpha Bandpower</p><hr/><p class="small">Relaxation (8-12 Hz)</p></span>
+            </button>
+            <button id='beta' class="tooltip" onclick="updateSignalType(this)">
+                <span>Beta</span>
+                <span class="tooltiptext"><p>Beta Bandpower</p><hr/><p class="small">Thinking and Excitement (13-30 Hz)</p></span>
+            </button>
+            <button id='gamma' class="tooltip" onclick="updateSignalType(this)">
+                <span>Gamma</span>
+                <span class="tooltiptext"><p>Gamma Bandpower</p><hr/><p class="small">Heightened Cognition (31-80 Hz)</p></span>
+            </button>
         </div>
 
         <div id="bottom-info">
@@ -132,17 +171,21 @@
                 </div>
         <div class="info-holder-inner">
             <div class=icongrid>
-            <div id="brain" class="menuicon" onclick="state = 1">
+            <div id="brain" class="tooltip menuicon" onclick="state = 1">
                 <i class="fas fa-brain fa-1x"></i>
+                <span class="tooltiptext"><p>3D Brain</p><hr/><p class="small">View signals mapped to a 3D brain</p></span>
             </div>
-            <div id="channels" class="menuicon" onclick="state = 2">
+            <div id="channels" class="tooltip menuicon" onclick="state = 2">
                 <i class="fas fa-wave-square fa-1x"></i>
+                <span class="tooltiptext"><p>Data Streams</p><hr/><p class="small">Choose various signals to view</p></span>
             </div>
-            <div id="userinfo" class="menuicon" onclick="state = 3">
+            <div id="userinfo" class="tooltip menuicon" onclick="state = 3">
                 <i class="fas fa-users fa-1x"></i>
+                <span class="tooltiptext"><p>User Info</p><hr/><p class="small">View active brains</p></span>
             </div>
-            <div id="groupdynamics" class="menuicon" onclick="state = 4;">
+            <div id="groupdynamics" class="tooltip menuicon" onclick="state = 4;">
                 <i class="fas fa-users-cog fa-1x"></i>
+                <span class="tooltiptext"><p>Group Dynamics</p><hr/><p class="small">View synchrony of active brains</p></span>
             </div>
         </div>
         </div>
@@ -171,7 +214,10 @@
             <p id="nInterfaces" class="small"></p>
             </div>
             <div id="connection-toggle" class="params">
-                <button id="connection-button" onclick="toggleConnection();">Connect</button>
+                <button id="connection-button" class="tooltip" onclick="toggleConnection();">
+                    Connect
+                    <span class="tooltiptext"><p>Connect to Network</p><hr/><p class="small">View live brain data from Brains@Play server</p></span>
+                </button>
             </div>
             </div>
         </div>
@@ -181,8 +227,12 @@
                 <p id="effect-status" class="small">Off</p>
             </div>
         <div class="info-holder-inner">
-        <div class="params">
-            <button onclick="distortToggle()">Toggle Mouse Distort</button>
+            <div class=icongrid>
+                <div class="tooltip menuicon" onclick="distortToggle()">
+                    <i class="fas fa-expand-arrows-alt fa-2x"></i>
+                    <span class="tooltiptext"><p>Mouse Distort</p><hr/><p class="small">Distort particles by moving your mouse</p></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -194,24 +244,6 @@
                 <i class="fas fa-desktop fa-1x"></i>
             </div>
         </div> -->
-        </div>
-
-        <div id="info-card">
-            <h4>Brainstorm</h4>
-            <p class='small'>Created by <a href="../../..">Brains@Play</a>. See all examples <a href="../..">here</a></p>
-            <p>A multiplayer neurotechnology game for coupling minds across geographic, social, and cultural boundaries.</p>
-            <h5>Source</h5>
-            <a href='https://github.com/brainsatplay/brainsatplay.github.io/tree/master/api/examples/brainstorm' label='Github'>
-                <svg viewBox="0 0 24 24">
-                    <path d = "M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                </svg>
-            </a>
-            <h5>Instructions</h5>
-            <p>Use the <strong>States</strong> panel to view different scenes of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>
-            <ol>
-            <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Connect</strong> to enter a network of real users and their brains.</p></li>
-            <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and send your data using OpenBCI or Neurosity headsets.</p></li>
-        </ol>
         </div>
     </div>
     </div>

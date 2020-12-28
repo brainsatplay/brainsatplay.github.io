@@ -361,6 +361,7 @@ canvas {
 
 #ui-elements {
     opacity: 0;
+    pointer-events: none;
     transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     -ms-transition: 0.5s ease-in-out;
@@ -549,7 +550,7 @@ input:focus{
 
 /* Menus */
 #info-card{
-    display: none;
+    display: block;
 }
 
 
@@ -585,7 +586,7 @@ input:focus{
     width: 100%;
     height: 50px;
     min-height: auto;
-    font-size: 10px;
+    /*font-size: 10px;*/
 }
 
 #bottom-info .params {
@@ -635,11 +636,11 @@ input:focus{
     padding: 10px;
     border-top: 1px solid white;
     display:flex; 
-    margin-top: 10px;
-    margin: 10px;
+    margin: 10px 0px 0px 0px;
     height: 100px;
     align-items: center; 
     justify-content: center;
+    pointer-events:all;
 }
 
   /* Slider */
@@ -784,6 +785,7 @@ input:focus{
         align-items: center; 
         justify-content:flex-start;
         text-align: center;
+        z-index: 2;
         transition: 0.5s ease-in-out;
         -o-transition: 0.5s ease-in-out;
         -ms-transition: 0.5s ease-in-out;
@@ -797,7 +799,6 @@ input:focus{
         height: 30px;
         min-height: auto;
         margin-right: 0px;
-        font-size: 80%;
         padding: 0;
     }
     
@@ -809,6 +810,56 @@ input:focus{
     #signaltypes p {
         width: 100%;
         margin-bottom: 20px;
+    }
+
+    /* Tooltip container */
+    .tooltip {
+        position: relative;
+        display: block;
+    }
+
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 150px;
+        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+        color: white;
+        text-align: center;
+        padding: 10px 10px;
+        border-radius: 6px;
+        top: 50%;
+        right: 105%;
+        transform: translateY(-50%);
+
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        z-index: 1;
+    }
+
+    .tooltip .tooltiptext p{
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .tooltip .tooltiptext .small{
+        font-size: 80%;
+    }
+
+    .tooltip .tooltiptext::after {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        left: 100%; /* To the right of the tooltip */
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent transparent white;
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        pointer-events:none;
     }
 
   }
