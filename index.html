@@ -8,11 +8,6 @@
 
     <link rel=icon href=assets/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
-    <script src="js/site.js" type="text/javascript" defer></script>
-    <script src="components/nav.js" type="text/javascript" defer></script>
-    <script src="components/footer.js" type="text/javascript" defer></script>
-    <script src="components/availablegames.js" type="text/javascript" defer></script>
-    <script src="components/submittedgames.js" type="text/javascript" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 
 </head>
@@ -23,8 +18,8 @@
 <div id=app>
 
     <!--Navbar-->
-    <nav-bar id="nav">
-    </nav-bar>
+    {% include nav.html %}
+
     <!--Content-->
     <div>
         <div>
@@ -32,80 +27,25 @@
                 <section class="hero-content" style="text-align: center;">
                     <h1>Brains@Play</h1>
                     <H3>Brain-Responsive Multiplayer Experiences</H3>
-                    <p>Brains@Play enables the responsible development of brain-responsive multiplayer experiences. Explore, create, and share
-                        BCI games on the web!
+                    <p>Brains@Play enables the responsible development of brain-responsive multiplayer experiences. </p>
+                    <p>Explore, create, and share BCI games on the web!
                     </p>
-                    <div class="button-nav">
-                        <!--            <button onclick="window.location.href='futures/projects/livewire'" rel="noopener">Participate in Livewire</button>-->
-                        <button onclick="window.location.href='/futures'" rel="noopener" style="width: 100%">Learn More</button>
+                    <div class="button-nav flex-center">
+                        <button onclick="window.location.href='/games'" rel="noopener" style="width: 940px">View Games</button>
+                        <button onclick="window.location.href='/about'" rel="noopener">Read More</button>
+                        <button onclick="window.location.href='/api'" rel="noopener">Develop with Us</button>
+                        <button onclick="window.location.href='/competition'" rel="noopener">Submit a Game Idea</button>
                     </div>
                 </section>
             </div>
         </div>
-        <nav id="game-nav">
-            <div id="available-option" class="game-option selected" onclick="switchToAvailableGames()">
-                <p>Available Games</p>
-            </div>
-            <div id="submitted-option" class="game-option">
-                <p>Submitted Games</p>
-            </div>
-            <!--      <div class="game-option-unavailable">-->
-            <!--        <p>BCI Entertainment Database</p>-->
-            <!--      </div>-->
-        </nav>
-        <div id="game-display">
-            <available-games id="available"></available-games>
-            <submitted-games id="submitted"></submitted-games>
-        </div>
-        <div id="call-to-submit" class="button-nav">
-            <button onclick="window.location.href='/futures/brainsandgames/submit'" style="width: calc(100vw - 100px)">Submit Your Game Ideas Here</button>
-        </div>
-    </div>
 
 
     {% include footer.html %}
 
 
 </div>
-
-
-
-
-
-
-<script>
-
-    let switched = false;
-    let state = 'available'
-    let url = "http://localhost"
-    // let url = "https://brainsatplay.azurewebsites.net"
-    let jsonOBJ = {'request': 'all'}
-    let submittedGamesJSON;
-
-    document.getElementById('submitted-option').style.display = 'none'
-
-    fetch(url + '/getsubmissions', {
-        method: 'POST',
-        mode: 'cors', // no-cors, cors, *same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'omit', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
-    }).then(response => {
-        response.json().then(function (json) {
-            submittedGamesJSON = json;
-            document.getElementById('submitted-option').addEventListener('click', function() {switchToSubmittedGames()});
-            document.getElementById('submitted-option').style.display = 'block'
-            document.getElementById('submitted-option').className = 'game-option'
-        })
-    })
-</script>
-
-
 </body>
 </html>
+
 

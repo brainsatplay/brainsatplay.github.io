@@ -8,6 +8,9 @@ body{
     font-family: Lato, sans-serif;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: white;
 }
 
 body::-webkit-scrollbar {
@@ -84,13 +87,6 @@ section{
     margin: 75px;
 }
 
-#app {
-    font-family: Lato, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: white;
-}
-
 img {
     height: 200px;
 }
@@ -115,7 +111,7 @@ svg {
 }
 
 
-nav-bar {
+#nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -130,11 +126,11 @@ nav-bar {
     transition: 0.5s;
 }
 
-nav-bar img{
+#nav img{
     display: none;
 }
 
-nav-bar a img{
+#nav a img{
     display: block;
 }
 
@@ -154,7 +150,7 @@ a.text:visited {
     color: #999999;
 }
 
-nav-bar a.link {
+#nav a.link {
     margin-left: 20px;
     font-size: 14px;
 }
@@ -213,10 +209,10 @@ a.link .current{
 /* Hero */
 
 #hero1{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/brainsatplay.png')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/brainsatplay.png')
 }
 #hero2{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/livewire.png')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/livewire.png')
 }
 
 .hero{
@@ -253,48 +249,28 @@ a.link .current{
     background-size: cover;
 }
 
-#about-header{
-    /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/about.jpg')*/
-}
-
-#projects-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/projects.jpg')
-}
-
 #games-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/games.jpg')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/games.jpg')
 }
 
 #example-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/games.jpg')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/games.jpg')
 }
 
 #competition-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/competition.jpg')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/competition.jpg')
 }
 
 #tgftf-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/tgftf.jpg')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/tgftf.jpg')
 }
 
 #submit-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/submit.jpg')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/submit.jpg')
 }
 
 #futures-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/futures.jpg')
-}
-
-#livewire-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/livewire.png')
-}
-
-#narratives-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../futures/projects/narratives.jpg')
-}
-
-#sixthsense-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../futures/projects/sixthsense.jpg')
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/futures.jpg')
 }
 
 #contact-header{
@@ -305,8 +281,8 @@ a.link .current{
     /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/contribute.jpg')*/
 }
 
-#sdk-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/sdk.jpg')
+#api-header{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/api.jpg')
 }
 
 #contribute .about-right{
@@ -687,16 +663,45 @@ footer a {
     margin-top: 50px;
 }
 
-#person{
+.feature{
+    display:flex;
     margin-top: 25px;
+    min-height: 250px;
 }
 
-#person h3{
+.feature .left-feature {
+    display:flex;
+    justify-content: center;
+    /*align-items: center;*/
+    width: 33%;
+ }
+
+.feature .right-feature {
+    width: 66%;
+}
+
+.feature h3{
     margin: 0px 0px 5px 0px;
 }
 
+.feature-anchor{
+    position:relative;
+    top:-50px;
+}
+
 .flex-center{
-    justify-content:center
+    align-items:center;
+    justify-content:center;
+}
+
+.flex-left{
+    align-items:center;
+    justify-content:flex-start;
+}
+
+.flex-right{
+    align-items:center;
+    justify-content:flex-end;
 }
 
 /*Submission*/
@@ -824,8 +829,6 @@ select {
 /*Competition*/
 .button-nav {
     display: flex;
-    align-items: center;
-    justify-content: center;
     margin: 10px 0px;
     flex-wrap: wrap;
 }
@@ -880,18 +883,6 @@ select {
 
 .remove{
     display: none;
-}
-
-#button-nav {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 25px 0px;
-    flex-wrap: wrap;
-}
-
-#button-nav button{
-    width: 300px;
 }
 
 #Generate0{

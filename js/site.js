@@ -21,23 +21,23 @@ function backToTeam(){
     document.getElementById("person").innerHTML = ``
 }
 
-function switchToAvailableGames(){
-
-    if (state != 'available') {
-        goBack()
-        document.getElementById("available-option").className = 'game-option selected'
-        document.getElementById("submitted-option").className = 'game-option'
-        document.getElementById("available").style.display = 'block'
-        document.getElementById("submitted").style.display = 'none'
-        state = 'available';
-    }
-}
+// function switchToAvailableGames(){
+//
+//     if (state != 'available') {
+//         goBack()
+//         // document.getElementById("available-option").className = 'game-option selected'
+//         document.getElementById("submitted-option").className = 'game-option'
+//         // document.getElementById("available").style.display = 'block'
+//         document.getElementById("submitted").style.display = 'none'
+//         state = 'available';
+//     }
+// }
 
 function switchToSubmittedGames(){
     if (state != 'submitted') {
-        document.getElementById("available-option").className = 'game-option'
+        // document.getElementById("available-option").className = 'game-option'
         document.getElementById("submitted-option").className = 'game-option selected'
-        document.getElementById("available").style.display = 'none'
+        // document.getElementById("available").style.display = 'none'
         document.getElementById("submitted").style.display = 'block'
         document.getElementById('back').addEventListener('click', function() {goBack()});
         if (switched == false) {
@@ -75,19 +75,17 @@ function goBack() {
     document.getElementById('temp-message').innerHTML = '';
     document.getElementById('back').style.display = 'none';
     document.getElementById('submitted-game-gallery').style.display = 'flex';
-    document.getElementById('call-to-submit').style.display = 'flex';
     // moveViewport('game-display');
 }
 
 function getSubmissions(name) {
     document.getElementById('game').innerHTML = '';
     document.getElementById('submitted-game-gallery').style.display = 'none';
-    document.getElementById('call-to-submit').style.display = 'none';
 
     document.getElementById('temp-message').innerHTML = 'Grabbing files. Please wait...';
     document.getElementById('temp-message').style.display = 'block';
 
-    jsonOBJ = {'gamename': name}
+    let jsonOBJ = {'get': name}
 
     fetch(url + '/getsubmissions', {
         method: 'POST',
@@ -108,7 +106,6 @@ function getSubmissions(name) {
                 } else {
                     $('#game').prepend(
                         `
-
 <div>
 <div>
 <h1 id='game-name'></h1>

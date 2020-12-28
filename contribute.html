@@ -3,35 +3,22 @@
 <!DOCTYPE html>
 <html lang=en>
 <head>
-    <meta charset=utf-8>
-    <meta http-equiv=X-UA-Compatible content="IE=edge">
-    <meta name=viewport content="width=device-width,initial-scale=1">
-    <link rel=icon href=assets/favicon.ico>
+    {% include meta.html %}
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
-    <script src="components/nav.js" type="text/javascript" defer></script>
-    <script src="components/footer.js" type="text/javascript" defer></script>
+    <link rel=icon href=/assets/favicon.ico>
     <title>Brain@Play | Contribute</title>
 </head>
 <body>
-<noscript>
-    <strong>We're sorry but Brain@Play doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-</noscript>
 <div id=app>
     <!--Navbar-->
-    <nav-bar id="nav">
-    </nav-bar>
-
-<!--    &lt;!&ndash;Header&ndash;&gt;-->
-<!--    <div id="contribute-header" class="header">-->
-<!--        <h1>Contribute</h1>-->
-<!--    </div>-->
+    {% include nav.html %}
 
     <section class="fullscreen">
         <div class="full-center">
             <h2><strong>Contribute</strong></h2>
 
             <p>Brains@Play is looking for <strong>neuroethicists, neuroscientists, and neural engineers</strong>
-                (PhD candidates welcome!) to facilitate a 1-hour breakout discussion during <a href="futures/projects/livewire" class="link">Livewire: A Stimulating Night of Neurotechnology.</a></p>
+                (PhD candidates welcome!) to facilitate 1-hour breakout discussions during <a href="about/projects/livewire" class="link">Livewire: A Stimulating Night of Neurotechnology.</a></p>
 
             <button onclick="window.location.href='http://eepurl.com/ha1i79'">Sign Up as a Facilitator</button>
         </div>

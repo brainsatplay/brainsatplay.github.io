@@ -1,0 +1,82 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include meta.html %}
+    <link rel=icon href=/assets/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <title>Brains@Play | API</title>
+</head>
+<body>
+<div id=app>
+
+    <!--Navbar-->
+    {% include nav.html %}
+
+    <!--Header-->
+    <div id="api-header" class="header">
+        <h2>Brains@Play API</h2>
+        <h4>Enabling Brain-Responsive Multiplayer Experiences for the Web</h4>
+        <br/>
+        <div class="button-nav flex-center">
+            <button onclick="window.location.href='https://www.github.com/brainsatplay'" target="_blank">Github Repo</button>
+            <button onclick="window.location.href='https://www.npmjs.com/org/brainsatplay'" target="_blank">NPM Packages</button>
+            <button onclick="window.location.href='https://pypi.org/project/brainsatplay/'" target="_blank">PyPi Package</button>
+        </div>
+    </div>
+
+    <!--Content-->
+    <section>
+        <h2>Overview</h2>
+        <hr/>
+        <p>
+            The <strong>Brains@Play API</strong> streamlines the process of developing brain-responsive multiplayer experiences for the web.
+        </p>
+
+        <br/>
+        <h2>Examples</h2>
+        <hr/>
+        <div id="game-gallery" class="gallery">
+            <a id="template" class="game" onclick="window.location.href='/api/examples/template'" style="background-image: url('/assets/images/brainsatplay.png')">
+                <div class="game-text">
+                    <h3>Project Template</h3>
+                    <i class="small">Brains@Play</i>
+                    <p>Create your own brain-responsive web app.</p>
+                </div>
+                <div class="game-mask"></div>
+            </a>
+            <a id="brainstorm" class="game" onclick="window.location.href='/api/examples/brainstorm'" style="background-image: url('/api/examples/brainstorm/brainstorm.png')">
+                <div class="game-text">
+                    <h3>Brainstorm</h3>
+                    <i class="small">Brains@Play</i>
+                    <p>Couple minds across social, cultural, and political boundaries.</p>
+                </div>
+                <div class="game-mask"></div>
+            </a>
+        </div>
+
+        <br/>
+        <h2>Contributing</h2>
+        <hr/>
+        <p>Please <a href="mailto:contact@brainsatplay.com" class="text">contact us</a> for details on our code of conduct, and the process for submitting pull requests to us.</p>
+
+        <h3>License</h3>
+        <p>All code is licensed under the MIT license.</p>
+
+        <br/>
+        <h2>Authors</h2>
+        <hr/>
+        <p><strong>Garrett Flynn</strong> - Project Lead</p>
+            <p><strong>Samir Ghosh</strong> - API Developer</p>
+
+    </section>
+
+    <!--Footer-->
+    {% include footer.html %}
+
+
+</div>
+
+</body>
+</html>
