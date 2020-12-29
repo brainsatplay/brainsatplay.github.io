@@ -87,10 +87,6 @@ section{
     margin: 75px;
 }
 
-img {
-    height: 200px;
-}
-
 svg {
     flex: none;
     fill: lightgrey;
@@ -667,19 +663,34 @@ footer a {
 
 .feature{
     display:flex;
-    margin-top: 25px;
-    min-height: 250px;
+    flex-wrap: wrap;
+    margin: 50px 50px;
 }
 
 .feature .left-feature {
     display:flex;
-    justify-content: center;
-    /*align-items: center;*/
-    width: 33%;
- }
+    margin-right: 50px;
+    align-items: center;
+    flex-basis: 25vw;
+    flex-grow:1;
+    overflow: hidden;
+}
+
+.feature .left-feature img{
+    width: 20vw;
+    height: 20vw;
+    min-width: 200px;
+    min-height: 200px;
+
+}
+
 
 .feature .right-feature {
-    width: 66%;
+    margin-top: 25px;
+    display:flex;
+    align-items: center;
+    flex-basis:300px;
+    flex-grow:9999;
 }
 
 .feature h3{
@@ -829,6 +840,14 @@ select {
 }
 
 /*Competition*/
+.competition-categories {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0px;
+}
+.competition-category {
+    margin: 0px 20px;
+}
 .button-nav {
     display: flex;
     margin: 10px 0px;
@@ -836,8 +855,9 @@ select {
 }
 
 .button-nav button{
-    width: 300px;
+    flex-grow: 1;
     margin: 10px 10px;
+    min-width: 300px;
 }
 
 
