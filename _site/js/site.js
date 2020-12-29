@@ -51,6 +51,8 @@ function switchToSubmittedGames(){
 
 // Dispay Submissions
 function displaySubmissions(){
+            document.getElementById('temp-message').style.display = 'none';
+            document.getElementById('temp-message').innerHTML = '';
             let gameTag;
             Object.keys(submittedGamesJSON).forEach(function(key) {
                 gameTag = `
@@ -75,7 +77,14 @@ function goBack() {
     document.getElementById('temp-message').innerHTML = '';
     document.getElementById('back').style.display = 'none';
     document.getElementById('submitted-game-gallery').style.display = 'flex';
-    // moveViewport('game-display');
+
+    // Hide Grading Rubric
+    if (brains.username != 'me') {
+        document.getElementById('rubric-header').style.display = 'block';
+        document.getElementById('rubric-message').style.display = 'block';
+        document.getElementById('rubric-inputs').style.display = 'none';
+        document.getElementById('rubric-game').style.display = 'none';
+    }
 }
 
 function getSubmissions(name) {
@@ -85,25 +94,35 @@ function getSubmissions(name) {
     document.getElementById('temp-message').innerHTML = 'Grabbing files. Please wait...';
     document.getElementById('temp-message').style.display = 'block';
 
-    let jsonOBJ = {'get': name}
+    // Show Grading Rubric
+    if (brains.username != 'me') {
+        document.getElementById('rubric-game').innerHTML = name.id;
+        document.getElementById('rubric-game').style.display = 'block';
+        document.getElementById('rubric-header').style.display = 'none';
+        document.getElementById('rubric-message').style.display = 'none';
+        document.getElementById('rubric-inputs').style.display = 'block';
+    }
 
-    fetch(url + '/getsubmissions', {
-        method: 'POST',
-        mode: 'cors', // no-cors, cors, *same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'omit', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
-    }).then(response => {
-        response.json().then(function (json) {
-            document.getElementById('temp-message').style.display = 'none';
-                if (json.error){
-                    $('#game').prepend('<h1>' + json.error + '</h1>')
-                } else {
+    let jsonOBJ = {'get': name}
+    //
+    // fetch(url + '/getsubmissions', {
+    //     method: 'POST',
+    //     mode: 'cors', // no-cors, cors, *same-origin
+    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    //     credentials: 'omit', // include, *same-origin, omit
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     redirect: 'follow', // manual, *follow, error
+    //     referrer: 'no-referrer', // no-referrer, *client
+    //     body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
+    // }).then(response => {
+    //     response.json().then(function (json) {
+    //         document.getElementById('temp-message').style.display = 'none';
+    //             if (json.error){
+    //                 $('#game').prepend('<h1>' + json.error + '</h1>')
+    //             } else {
+    //                 currentGame = name;
                     $('#game').prepend(
                         `
 <div>
@@ -171,8 +190,8 @@ function getSubmissions(name) {
 </div>
 `)
 
-                    Object.keys(json).forEach(function(key) {
-                        var doc = json[key];
+                    // Object.keys(json).forEach(function(key) {
+                        var doc = submittedGamesJSON[name.id]
 
                         document.getElementById("contact").innerHTML+= `${doc['contact-fn']} ${doc['contact-ln']} at ${doc['contact-email']}.`;
                         document.getElementById("game-image").innerHTML += `<img class="game-feature" src="${doc["game-image"]}"/>`
@@ -186,12 +205,127 @@ function getSubmissions(name) {
                                 document.getElementById(field).innerHTML += doc[field];
                             }
                         })
-                    });
-                }
+                    // });
+                // }
 
             document.getElementById('game').style.display = 'flex';
-            document.getElementById('back').style.display = 'block';
+            if (brains.username =='me') {
+                document.getElementById('back').style.display = 'block';
             }
-        )
-    });
+        //     }
+        // )
+    // });
 };
+
+
+// Login
+function toggleLoginScreen(){
+    showLogin = !showLogin;
+
+    if (showLogin){
+        document.getElementById('login-container').style.zIndex = '100'
+        document.getElementById('login-container').style.opacity = '1'
+    } else {
+        document.getElementById('login-container').style.opacity = '0'
+        document.getElementById('login-container').style.zIndex = '-1'
+    }
+}
+
+function toggleSignUpScreen(){
+    showSignUp = !showSignUp;
+
+    if (showSignUp){
+        document.getElementById('signup-container').style.zIndex = '100'
+        document.getElementById('signup-container').style.opacity = '1'
+    } else {
+        document.getElementById('signup-container').style.opacity = '0'
+        document.getElementById('signup-container').style.zIndex = '0'
+    }
+}
+
+async function login(brains, url, type){
+    let form = document.getElementById('login-form')
+    let formDict = {}
+    if (type === 'guest'){
+        formDict.guestaccess = true
+    } else {
+        let formData = new FormData(form);
+        for (var pair of formData.entries()) {
+            formDict[pair[0]] = pair[1];
+        }
+        formDict.guestaccess = false
+    }
+
+    let resDict = await brains.login(formDict,url)
+    if (resDict.result == 'OK'){
+        document.getElementById('judge-username').innerHTML = brains.username;
+        form.reset()
+        toggleLoginScreen();
+        document.getElementById('rubric-container').style.zIndex = '100';
+        document.getElementById('rubric-container').style.opacity = '1';
+    } else {
+        document.getElementById('login-message').innerHTML = resDict.msg
+    }
+}
+
+async function signup(brains, url){
+    let form = document.getElementById('signup-form')
+    let formData = new FormData(form);
+    let formDict = {}
+    for (var pair of formData.entries()) {
+        formDict[pair[0]] = pair[1];
+    }
+
+    if (formDict['username'] === ''){
+        document.getElementById('signup-message').innerHTML = "username is empty. please try again."
+    } else if (formDict['password'] ===''){
+        document.getElementById('signup-message').innerHTML = "password is empty. please try again."
+    }  else if (formDict['password'] !== formDict['confirm-password']) {
+        document.getElementById('signup-message').innerHTML = "passwords don't match. please try again."
+    }
+    else {
+
+        let resDict = await brains.signup(formDict,url);
+        if (resDict.result == 'OK'){
+            form.reset()
+            toggleLoginScreen();
+            toggleSignUpScreen();
+        } else {
+            document.getElementById('signup-message').innerHTML = resDict.msg
+        }
+    }
+}
+
+// Submit Ratings
+async function submitRatings(){
+    let form = document.getElementById('rubric')
+    let formData = new FormData(form);
+    let formDict = {}
+    for (var pair of formData.entries()) {
+        formDict[pair[0]] = pair[1];
+    }
+    formDict['username'] = brains.username;
+    formDict['game'] = currentGame;
+
+    let json  = JSON.stringify(formDict)
+
+    // let resDict = await fetch(url + 'submitRubric',
+    //     { method: 'POST',
+    //         mode: 'cors',
+    //         headers: new Headers({
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         }),
+    //         body: json
+    //     }).then((res) => {return res.json().then((message) => message)})
+    //     .then((message) => {
+    //         console.log(`\n${message}`);
+    //         return message})
+    //     .catch(function (err) {
+    //         console.log(`\n${err.message}`);
+    //     });
+    //
+    // if (resDict.result == 'OK'){
+        console.log(submittedGamesJSON)
+    // }
+}

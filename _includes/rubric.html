@@ -1,0 +1,22 @@
+<div id="rubric-container">
+    <form id="rubric" action="">
+        <h4 id="rubric-header">Welcome <span id="judge-username"></span>!</h4>
+        <h4 id="rubric-game"></h4>
+        <i id="rubric-message">Select a game to start rating.</i>
+        <div id="rubric-inputs" style="display: none;">
+            <p class="small">Relevance to Prize Category</p>
+            <input name="relevance" value = '5' type="range" min="0" max="10" class="slider" id="relevance">
+            <p class="small">Creativity and Originality</p>
+            <input name="originality" value = '5' type="range" min="0" max="10" class="slider" id="originality">
+            <p class="small">Documentation and Presentation</p>
+            <input name="documentation" value = '5' type="range" min="0" max="10" class="slider" id="documentation">
+            <p class="small">Consideration of Ethical Issues</p>
+            <input name="ethics" value = '5' type="range" min="0" max="10" class="slider" id="ethics">
+            <p class="small">Engagement and Fun</p>
+            <input name="fun" value = '5' type="range" min="0" max="10" class="slider" id="fun">
+            <br/>
+            <button id="submit-rating" type="button" onclick="submitRatings(); goBack();">Submit your Rating</button>
+            <p class="small">Note: Doesn't submit anywhere yet...</p>
+    </div>
+    </form>
+</div>

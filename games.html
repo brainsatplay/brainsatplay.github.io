@@ -9,6 +9,8 @@
     <link rel=icon href=/assets/favicon.ico>
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <script src="/js/site.js" type="text/javascript" defer></script>
+    <script type="text/javascript" src="/docs/src/Brain.js"></script>
+    <script type="text/javascript" src="/docs/src/nBrains.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 
 </head>
@@ -20,11 +22,18 @@
     {% include nav.html %}
 
     <!--Content-->
+    {% include login.html %}
+
+    {% include rubric.html %}
+
+
     <div id="games-header" class="header">
         <h2>Brains and Games</h2>
         <h4>Competition Submissions</h4>
+
         <div class="button-nav flex-center">
             <button onclick="window.location.href='/competition'" rel="noopener">Submit Your Game Idea</button>
+            <button onclick="toggleLoginScreen();" rel="noopener">Rate Games</button>
         </div>
     </div>
     <div>
@@ -54,7 +63,7 @@
 <!--            </div>-->
             <div id="submitted">
                 <section id="game" style="display:none;"></section>
-                <section id="temp-message" style="display:none;" class="flex-center flex"></section>
+                <section id="temp-message" class="flex-center flex">Loading games...</section>
                 <button id="back" style="display:none;">
                     Back to Submitted Games
                 </button>
@@ -71,13 +80,20 @@
     let switched = false;
     let state = 'available'
     // let url = "http://localhost"
-    let url = "https://brainsatplay.azurewebsites.net"
+    let url = "https://brainsatplay.azurewebsites.net/"
     let filter = 'approved'
     let jsonOBJ = {get: 'all', 'filter':filter}
     let submittedGamesJSON;
+    let currentGame;
     document.getElementById('submitted-option').style.display = 'block'
     document.getElementById('submitted-option').className = 'game-option selected'
 
+    // Initialize Login Variables
+    let showLogin=false;
+    let showSignUp=false;
+    let brains = new BrainsAtPlay();
+
+    // Get Available Submissions
     fetch(url + '/getsubmissions', {
         method: 'POST',
         mode: 'cors', // no-cors, cors, *same-origin
