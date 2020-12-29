@@ -103,28 +103,11 @@ function getSubmissions(name) {
         document.getElementById('rubric-inputs').style.display = 'block';
     }
 
-    let jsonOBJ = {'get': name}
-    //
-    // fetch(url + '/getsubmissions', {
-    //     method: 'POST',
-    //     mode: 'cors', // no-cors, cors, *same-origin
-    //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    //     credentials: 'omit', // include, *same-origin, omit
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     redirect: 'follow', // manual, *follow, error
-    //     referrer: 'no-referrer', // no-referrer, *client
-    //     body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
-    // }).then(response => {
-    //     response.json().then(function (json) {
-    //         document.getElementById('temp-message').style.display = 'none';
-    //             if (json.error){
-    //                 $('#game').prepend('<h1>' + json.error + '</h1>')
-    //             } else {
-    //                 currentGame = name;
-                    $('#game').prepend(
-                        `
+    // Set current game
+    currentGame = name;
+
+    // Fill basic content
+                    $('#game').prepend(`
 <div>
 <div>
 <h1 id='game-name'></h1>
@@ -190,23 +173,48 @@ function getSubmissions(name) {
 </div>
 `)
 
-                    // Object.keys(json).forEach(function(key) {
-                        var doc = submittedGamesJSON[name.id]
+    var doc = submittedGamesJSON[name.id]
 
-                        document.getElementById("contact").innerHTML+= `${doc['contact-fn']} ${doc['contact-ln']} at ${doc['contact-email']}.`;
-                        document.getElementById("game-image").innerHTML += `<img class="game-feature" src="${doc["game-image"]}"/>`
+    document.getElementById("contact").innerHTML+= `${doc['contact-fn']} ${doc['contact-ln']} at ${doc['contact-email']}.`;
+    document.getElementById("game-image").innerHTML += `<img class="game-feature" src="${doc["game-image"]}"/>`
 
-                        for (let img in doc["additional-images"]){
-                            $('#additional-images').prepend('<img class="item" src=' + doc["additional-images"][img] + ' />')
-                        }
+    for (let img in doc["additional-images"]){
+        $('#additional-images').prepend('<img class="item" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
+    }
 
-                        Object.keys(doc).forEach(function(field) {
-                            if (!['_id','additional-images', 'game-image','approved','contact-fn','contact-ln','contact-email','competition'].includes(field)) {
-                                document.getElementById(field).innerHTML += doc[field];
-                            }
-                        })
-                    // });
-                // }
+    Object.keys(doc).forEach(function(field) {
+        if (!['_id','additional-images', 'game-image','approved','contact-fn','contact-ln','contact-email','competition'].includes(field)) {
+            document.getElementById(field).innerHTML += doc[field];
+        }
+    })
+
+    let jsonOBJ = {'get': name}
+
+    fetch(url + '/getsubmissions', {
+        method: 'POST',
+        mode: 'cors', // no-cors, cors, *same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'omit', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
+    }).then(response => {
+        response.json().then(function (json) {
+            document.getElementById('temp-message').style.display = 'none';
+            if (json.error) {
+                $('#game').prepend('<h1>' + json.error + '</h1>')
+            } else {
+                console.log(json)
+                let doc = json[Object.keys(json)[0]]
+                for (let img in doc["additional-images"]){
+                    document.getElementById('additional-images').innerHTML = '';
+                    $('#additional-images').prepend('<img class="item" src=' + doc["additional-images"][img] + ' />')
+                }
+            }
+        })})
 
             document.getElementById('game').style.display = 'flex';
             if (brains.username =='me') {
