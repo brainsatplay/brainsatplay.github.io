@@ -75,7 +75,7 @@ class BrainsAtPlay {
     }
 
     add(id,channelNames) {
-        let brain; 
+        let brain;
         if (channelNames == undefined){
             brain = new Brain(id)
         } else {
@@ -125,19 +125,19 @@ class BrainsAtPlay {
         let power = new Array(this.usedChannels.length).fill(0);
         let channelInd;
         if (this.me != undefined){
-        this.usedChannels.forEach((channelInfo) => {
-            channelInd = this.usedChannelNames.indexOf(channelInfo.name)
-            // Calculate Average Power of Voltage Signal
-            let data = this.userVoltageBuffers[this.me][channelInd]
-            power[channelInd] = data.reduce((acc,cur) => acc + ((cur*cur)/2), 0)/data.length
-            dataOfInterest.push(power[channelInd])
-        })
+            this.usedChannels.forEach((channelInfo) => {
+                channelInd = this.usedChannelNames.indexOf(channelInfo.name)
+                // Calculate Average Power of Voltage Signal
+                let data = this.userVoltageBuffers[this.me][channelInd]
+                power[channelInd] = data.reduce((acc,cur) => acc + ((cur*cur)/2), 0)/data.length
+                dataOfInterest.push(power[channelInd])
+            })
 
-        if (relative){
-            power = this.stdDev(dataOfInterest)
+            if (relative){
+                power = this.stdDev(dataOfInterest)
+            }
+
         }
-
-    }
         return power
     }
 
@@ -175,7 +175,7 @@ class BrainsAtPlay {
                     rest  = list.slice(1),
                     pairs = rest.map(function (x) { return [first, x]; });
                 return pairs.concat(pairwise(rest));
-              }
+            }
 
             let edgesArray = pairwise(keys)
             if (method == 'pcc') {
@@ -189,57 +189,57 @@ class BrainsAtPlay {
 
                     for (let channel = 0; channel < numChannels; channel++){
 
-                    let x = xC[channel]
-                    let y = yC[channel]
+                        let x = xC[channel]
+                        let y = yC[channel]
 
-                    var shortestArrayLength = 0;
+                        var shortestArrayLength = 0;
 
-                    if (x.length == y.length) {
-                        shortestArrayLength = x.length;
-                    } else if (x.length > y.length) {
-                        shortestArrayLength = y.length;
-                        // console.error('x has more items in it, the last ' + (x.length - shortestArrayLength) + ' item(s) will be ignored');
-                    } else {
-                        shortestArrayLength = x.length;
-                        // console.error('y has more items in it, the last ' + (y.length - shortestArrayLength) + ' item(s) will be ignored');
+                        if (x.length == y.length) {
+                            shortestArrayLength = x.length;
+                        } else if (x.length > y.length) {
+                            shortestArrayLength = y.length;
+                            // console.error('x has more items in it, the last ' + (x.length - shortestArrayLength) + ' item(s) will be ignored');
+                        } else {
+                            shortestArrayLength = x.length;
+                            // console.error('y has more items in it, the last ' + (y.length - shortestArrayLength) + ' item(s) will be ignored');
+                        }
+
+                        var xy = [];
+                        var x2 = [];
+                        var y2 = [];
+
+                        for (var i = 0; i < shortestArrayLength; i++) {
+                            xy.push(x[i] * y[i]);
+                            x2.push(x[i] * x[i]);
+                            y2.push(y[i] * y[i]);
+                        }
+
+                        var sum_x = 0;
+                        var sum_y = 0;
+                        var sum_xy = 0;
+                        var sum_x2 = 0;
+                        var sum_y2 = 0;
+
+                        for (var i = 0; i < shortestArrayLength; i++) {
+                            sum_x += x[i];
+                            sum_y += y[i];
+                            sum_xy += xy[i];
+                            sum_x2 += x2[i];
+                            sum_y2 += y2[i];
+                        }
+
+                        var step1 = (shortestArrayLength * sum_xy) - (sum_x * sum_y);
+                        var step2 = (shortestArrayLength * sum_x2) - (sum_x * sum_x);
+                        var step3 = (shortestArrayLength * sum_y2) - (sum_y * sum_y);
+                        var step4 = Math.sqrt(step2 * step3);
+                        var answer = step1 / step4;
+
+                        if (channel >= channelSynchrony.length){
+                            channelSynchrony.push([answer])
+                        } else {
+                            channelSynchrony[channel].push(answer)
+                        }
                     }
-
-                    var xy = [];
-                    var x2 = [];
-                    var y2 = [];
-
-                    for (var i = 0; i < shortestArrayLength; i++) {
-                        xy.push(x[i] * y[i]);
-                        x2.push(x[i] * x[i]);
-                        y2.push(y[i] * y[i]);
-                    }
-
-                    var sum_x = 0;
-                    var sum_y = 0;
-                    var sum_xy = 0;
-                    var sum_x2 = 0;
-                    var sum_y2 = 0;
-
-                    for (var i = 0; i < shortestArrayLength; i++) {
-                        sum_x += x[i];
-                        sum_y += y[i];
-                        sum_xy += xy[i];
-                        sum_x2 += x2[i];
-                        sum_y2 += y2[i];
-                    }
-
-                    var step1 = (shortestArrayLength * sum_xy) - (sum_x * sum_y);
-                    var step2 = (shortestArrayLength * sum_x2) - (sum_x * sum_x);
-                    var step3 = (shortestArrayLength * sum_y2) - (sum_y * sum_y);
-                    var step4 = Math.sqrt(step2 * step3);
-                    var answer = step1 / step4;
-
-                    if (channel >= channelSynchrony.length){
-                        channelSynchrony.push([answer])
-                    } else {
-                        channelSynchrony[channel].push(answer)
-                    }
-                }
                 })
 
                 this.synchronyChannels = channelSynchrony.map((channelData) => {return channelData.reduce((a, b) => a + b, 0) / channelData.length})
@@ -253,12 +253,12 @@ class BrainsAtPlay {
                 this.synchronyBuffer.push(avg)
             } else {
                 this.synchronyBuffer.push(0)
-            }        
+            }
         } else {
             this.synchronyChannels = new Array(this.usedChannels.length).fill(0);
             this.synchronyBuffer.push(0)
         }
-        
+
         // Average Across Channels
         this.synchrony = this.synchronyBuffer.reduce((a, b) => a + b, 0) / this.synchronyBuffer.length;
     }
@@ -291,7 +291,7 @@ class BrainsAtPlay {
         //                 b[user][chan].push(0.0)
         //             }
         //     }
-        
+
         if (buffer != undefined){
             this[buffer] = b;
         }
@@ -309,7 +309,7 @@ class BrainsAtPlay {
     //         this.userVoltageBuffers.forEach((userData, user) => {
     //             this.userVoltageBuffers[user].splice(0,this.userVoltageBuffers[user].length - perUser)
     //         })
-            
+
     //         this.userVoltageBuffers.push(new Array(perUser).fill(0))
 
     //     } else {
@@ -323,27 +323,27 @@ class BrainsAtPlay {
     generateVoltageStream(){
 
         this.users.forEach((user) => {
-                let signal = new Array(this.usedChannels.length);
-                for (let channel =0; channel < this.usedChannels.length; channel++) {
-                    signal[channel] = bci.generateSignal([Math.random()], [this.base_freq+Math.random()*40], this.samplerate, (1/this.base_freq));
-                }
-        
-                let startTime = Date.now()
-                let time = [];
-                let cardinality = (1/this.base_freq)*this.samplerate
-                let step = (1/this.base_freq) / (cardinality - 1);
-                for (let i = 0; i < cardinality; i++) {
-                    time.push(startTime + (step * i));
-                }
-        
-                let data = {
-                    signal: signal,
-                    time: time
-                }
-                user.streamIntoBuffer(data)
-            })
-        }
-    
+            let signal = new Array(this.usedChannels.length);
+            for (let channel =0; channel < this.usedChannels.length; channel++) {
+                signal[channel] = bci.generateSignal([Math.random()], [this.base_freq+Math.random()*40], this.samplerate, (1/this.base_freq));
+            }
+
+            let startTime = Date.now()
+            let time = [];
+            let cardinality = (1/this.base_freq)*this.samplerate
+            let step = (1/this.base_freq) / (cardinality - 1);
+            for (let i = 0; i < cardinality; i++) {
+                time.push(startTime + (step * i));
+            }
+
+            let data = {
+                signal: signal,
+                time: time
+            }
+            user.streamIntoBuffer(data)
+        })
+    }
+
 
     update() {
         // Generate signal if specified
@@ -353,34 +353,34 @@ class BrainsAtPlay {
                 this.generatedSamples = 0;
             } else {
                 this.generatedSamples += 1
-        }}
-        
+            }}
+
         this.getSynchrony('pcc')
         this.updateBuffer('brains','userVoltageBuffers')
         this.setUpdateMessage()
     }
 
     updateBuffer(source='brains',buffer='userVoltageBuffers'){
-            let channelInd;
-            let userInd = 0;
-            this.users.forEach((brain) => {
-                brain.buffer.forEach((channelData, channel) => {
-                    channelInd = this.usedChannelNames.indexOf(brain.channelNames[channel])
-                        if (source == 'brains'){
-                            if (channelData.length != 0){
-                                channelData = brain.buffer[channel].shift()
-                            } else {
-                                channelData = 0
-                            }
-                        } else {
-                            channelData = source[channel]
-                        }
-                    if (source == 'brains'){
-                        this[buffer][userInd][channelInd].splice(0,1)
-                        this[buffer][userInd][channelInd].push(channelData)
+        let channelInd;
+        let userInd = 0;
+        this.users.forEach((brain) => {
+            brain.buffer.forEach((channelData, channel) => {
+                channelInd = this.usedChannelNames.indexOf(brain.channelNames[channel])
+                if (source == 'brains'){
+                    if (channelData.length != 0){
+                        channelData = brain.buffer[channel].shift()
                     } else {
-                        if (userInd == 0) {
-                        if (this.me != undefined){      
+                        channelData = 0
+                    }
+                } else {
+                    channelData = source[channel]
+                }
+                if (source == 'brains'){
+                    this[buffer][userInd][channelInd].splice(0,1)
+                    this[buffer][userInd][channelInd].push(channelData)
+                } else {
+                    if (userInd == 0) {
+                        if (this.me != undefined){
                             this[buffer][this.me][channelInd].splice(0,1)
                             this[buffer][this.me][channelInd].push(channelData)
                         } else {
@@ -388,19 +388,19 @@ class BrainsAtPlay {
                             this[buffer][0][channelInd].push(channelData)
                         }
                     }
-                    }
-                })
-                userInd++
+                }
             })
-        }
+            userInd++
+        })
+    }
 
     flatten(buffer='userVoltageBuffers', normalize=false){
-            let _temp = this[buffer]; 
-            if (normalize){
-                _temp = this.normalizeUserBuffers(this[buffer]);
-            }
-            // Upsample Buffer
-            return new Float32Array([..._temp.flat(2)])
+        let _temp = this[buffer];
+        if (normalize){
+            _temp = this.normalizeUserBuffers(this[buffer]);
+        }
+        // Upsample Buffer
+        return new Float32Array([..._temp.flat(2)])
     }
 
     normalizeUserBuffers(buffer) {
@@ -417,7 +417,7 @@ class BrainsAtPlay {
                 } else{
                     return channelData.map((val) => {return val*scaling})
                 }
-                
+
             })
         })
         return _temp
@@ -442,74 +442,74 @@ class BrainsAtPlay {
     // Networking Suite
     connect(game){
 
-    if (this.network) {
-        this.network.onerror = this.network.onopen = this.network.onclose = null;
-        this.network.close();
-    }
+        if (this.network) {
+            this.network.onerror = this.network.onopen = this.network.onclose = null;
+            this.network.close();
+        }
 
-    if (this.url.protocol == 'http:'){
-        this.network = new WebSocket(`ws://` + this.url.hostname,[this.username, 'interfaces', game]);
-    } else if (this.url.protocol == 'https:'){
-        this.network = new WebSocket(`wss://` + this.url.hostname,[this.username, 'interfaces', game]);
-    } else{
-        console.log('invalid protocol')
-        return
-    }
+        if (this.url.protocol == 'http:'){
+            this.network = new WebSocket(`ws://` + this.url.hostname,[this.username, 'interfaces', game]);
+        } else if (this.url.protocol == 'https:'){
+            this.network = new WebSocket(`wss://` + this.url.hostname,[this.username, 'interfaces', game]);
+        } else{
+            console.log('invalid protocol')
+            return
+        }
 
-    this.network.onerror =  () => {
-        this.setUpdateMessage({destination:'error'})
-    };
+        this.network.onerror =  () => {
+            this.setUpdateMessage({destination:'error'})
+        };
 
-    this.network.onopen =  () => {
-        this.network.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
-        this.setUpdateMessage({destination:'opened'})
-    };
+        this.network.onopen =  () => {
+            this.network.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
+            this.setUpdateMessage({destination:'opened'})
+        };
 
-    this.network.onmessage =  (msg) => {
+        this.network.onmessage =  (msg) => {
 
-        let obj = JSON.parse(msg.data);
-        if (obj.destination == 'bci'){
-            if (this.users.get(obj.id) != undefined){
-                this.users.get(obj.id).streamIntoBuffer(obj.data)
-            } 
-        } else if (obj.destination == 'init'){
+            let obj = JSON.parse(msg.data);
+            if (obj.destination == 'bci'){
+                if (this.users.get(obj.id) != undefined){
+                    this.users.get(obj.id).streamIntoBuffer(obj.data)
+                }
+            } else if (obj.destination == 'init'){
 
-            this.users.clear()
+                this.users.clear()
 
-            if (obj.privateBrains && this.public === false){
-                this.add(obj.privateInfo.id, obj.privateInfo.channelNames)
-            } else {
-                for (let newUser = 0; newUser < obj.nBrains; newUser++){
-                    if (this.users.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
-                        if (this.public){
-                            this.add(obj.ids[newUser], obj.channelNames[newUser])
-                        } else {
-                            if (obj.ids[newUser] == this.username){
+                if (obj.privateBrains && this.public === false){
+                    this.add(obj.privateInfo.id, obj.privateInfo.channelNames)
+                } else {
+                    for (let newUser = 0; newUser < obj.nBrains; newUser++){
+                        if (this.users.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
+                            if (this.public){
                                 this.add(obj.ids[newUser], obj.channelNames[newUser])
+                            } else {
+                                if (obj.ids[newUser] == this.username){
+                                    this.add(obj.ids[newUser], obj.channelNames[newUser])
+                                }
                             }
                         }
                     }
                 }
+
+                if (this.users.size == 0){
+                    this.add('me');
+                }
+
+                this.generate = false;
+                this.updateUsedChannels()
+                this.initializeBuffer('userVoltageBuffers')
+                this.nInterfaces = obj.nInterfaces;
+                this.getMyIndex()
+                this.setUpdateMessage(obj)
             }
 
-            if (this.users.size == 0){
-                this.add('me');
-            }
+            else if (obj.destination == 'brains'){
+                let update = obj.n;
 
-            this.generate = false;
-            this.updateUsedChannels()
-            this.initializeBuffer('userVoltageBuffers')
-            this.nInterfaces = obj.nInterfaces;
-            this.getMyIndex()
-            this.setUpdateMessage(obj)
-        }
-
-        else if (obj.destination == 'brains'){
-            let update = obj.n;
-
-            // Only update if access matches
-            if ((this.public) || (!this.public && obj.access === 'private')){
-                if (update == 1){
+                // Only update if access matches
+                if ((this.public) || (!this.public && obj.access === 'private')){
+                    if (update == 1){
                         if (this.public){
                             this.add(obj.id, obj.channelNames)
                             this.remove('me')
@@ -517,42 +517,42 @@ class BrainsAtPlay {
                             this.add(obj.id, obj.channelNames)
                             this.remove('me')
                         }
-                } else if (update == -1){
-                    this.remove(obj.id)
-                    if (this.public){
-                        if (this.users.size == 0){
+                    } else if (update == -1){
+                        this.remove(obj.id)
+                        if (this.public){
+                            if (this.users.size == 0){
+                                this.add('me')
+                            }
+                        } else if (!this.public && obj.access === 'private'){
                             this.add('me')
                         }
-                    } else if (!this.public && obj.access === 'private'){
-                        this.add('me')
                     }
+                    this.initializeBuffer('userVoltageBuffers')
+                    this.updateUsedChannels()
                 }
-                this.initializeBuffer('userVoltageBuffers')
-                this.updateUsedChannels()
+
+                this.getMyIndex()
+                this.setUpdateMessage(obj)
+
             }
-
-            this.getMyIndex()
-            this.setUpdateMessage(obj)
-
-            } 
             else if (obj.destination == 'interfaces'){
                 this.nInterfaces += obj.n;
                 this.setUpdateMessage(obj)
-            } 
-            else {
-            console.log(obj)
             }
-    };
+            else {
+                console.log(obj)
+            }
+        };
 
-    this.network.onclose =  () => {
-        this.network = undefined;
-        this.nInterfaces = undefined;
-        this.simulate(2)
-        this.generate = true;
-        this.getMyIndex()
-        this.setUpdateMessage({destination: 'closed'})
-    };
-}
+        this.network.onclose =  () => {
+            this.network = undefined;
+            this.nInterfaces = undefined;
+            this.simulate(2)
+            this.generate = true;
+            this.getMyIndex()
+            this.setUpdateMessage({destination: 'closed'})
+        };
+    }
 
 
     // Requests
@@ -582,8 +582,8 @@ class BrainsAtPlay {
                 this.username = resDict.msg;
             }
             return resDict
-          }
-          return handleLoginRequest(dict)
+        }
+        return handleLoginRequest(dict)
     }
 
     signup(dict, url='https://brainsatplay.azurewebsites.net/') {
@@ -610,7 +610,7 @@ class BrainsAtPlay {
 
             return resDict
         }
-          return handleSignupRequest(dict)
+        return handleSignupRequest(dict)
     }
 
 
@@ -682,6 +682,64 @@ class BrainsAtPlay {
             O1: [-25.8, -93.3, 7.7],
             Oz: [0.3, -97.1, 8.7],
             O2: [25.0,-95.2,6.2],
+        }
+    }
+}
+
+
+class Brain {
+    constructor(userId, channelNames = 'Fz,C3,Cz,C4,Pz,PO7,Oz,PO8,F5,F7,F3,F1,F2,F4,F6,F8') {
+        this.id = userId;
+        this.channelNames = channelNames.split(',')
+        this.numChannels = this.channelNames.length;
+        this.buffer = [[]];
+        this.times = [];
+        this.bufferTime = 10000; // 10 seconds
+        this.bufferSize = 1000
+
+    }
+
+    streamIntoBuffer(data) {
+
+        let signal = data.signal
+        let time = data.time
+
+        signal.forEach((channelData,channel) =>{
+
+            if (channel >= this.buffer.length){
+                this.buffer.push([])
             }
+
+            if (Array.isArray(channelData) && channelData.length) {
+                if (channelData.length > 0) {
+                    this.buffer[channel].push(...channelData);
+                    this.times.push(...time);
+                }
+            }
+        })
+
+        this.trimBufferBySize()
+    }
+
+
+    trimBufferByTime(){
+        let indexes = this.times.map((elm, idx) => (Date.now()-elm) >= this.bufferTime ? idx : '').filter(String);
+        indexes.sort(function(a,b){ return b - a; });
+        this.buffer.forEach((_,channel) =>{
+            for (var i = indexes.length -1; i >= 0; i--){
+                this.buffer[channel].splice(indexes[i],1);
+                this.times.splice(indexes[i],1);
+            }
+        })
+    }
+
+    trimBufferBySize() {
+        this.buffer.forEach((_,channel) =>{
+            let length = this.buffer[channel].length
+            if (length-this.bufferSize > 0){
+                this.buffer[channel].splice(this.bufferSize,length);
+                this.times.splice(this.bufferSize,length);
+            }
+        })
     }
 }
