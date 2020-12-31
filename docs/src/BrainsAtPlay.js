@@ -440,6 +440,11 @@ class BrainsAtPlay {
     }
 
     // Networking Suite
+
+    disconnect(){
+        this.network.close();
+    }
+
     connect(game){
 
         if (this.network) {

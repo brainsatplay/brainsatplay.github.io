@@ -21,7 +21,7 @@ function toggleConnection(){
         brains.connect('brainstorm')
     }
     } else {
-        brains.network.close()
+        brains.disconnect()
     }
 }
 
