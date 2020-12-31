@@ -676,15 +676,16 @@ function brainDependencies(updateArray){
                         document.getElementById('nBrains').innerHTML = `1`
                     }
             } else if (update == -1){
+                let brainReadout = document.getElementById('nBrains')
                 if (brains.public){
-                    if (brains.users.size == 0){
+                    if ((brains.users.size == 0) || (brainReadout.innerHTML == '1')){
                         announcement('all users left the brainstorm')
-                        document.getElementById('nBrains').innerHTML = `0`
+                        brainReadout.innerHTML = `0`
                     } else {
-                        document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+                        brainReadout.innerHTML = `${brains.users.size}`
                     }
                 } else if (!brains.public && updateObj.access === 'private'){
-                    document.getElementById('nBrains').innerHTML = `0`
+                    brainReadout.innerHTML = `0`
                 }
             }
         }

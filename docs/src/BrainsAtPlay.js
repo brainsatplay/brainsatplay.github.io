@@ -8,6 +8,10 @@ class BrainsAtPlay {
         } else{
             this.add(input)
         }
+        this.initialize()
+    }
+
+    initialize() {
         this.bufferSize = 1000;
         this.synchrony = 0;
         this.eegChannelCoordinates = this.getEEGCoordinates()
@@ -29,6 +33,12 @@ class BrainsAtPlay {
 
         this.updateArray = [];
         this.setUpdateMessage()
+        this.initializeBuffer('focusBuffer')
+        this.initializeBuffer('userVoltageBuffers')
+    }
+
+    reset(){
+        this.initialize()
     }
 
     setUpdateMessage(obj){
@@ -466,6 +476,7 @@ class BrainsAtPlay {
         };
 
         this.network.onopen =  () => {
+            this.initialize()
             this.network.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
             this.setUpdateMessage({destination:'opened'})
         };
@@ -577,7 +588,6 @@ class BrainsAtPlay {
                     body: json
                 }).then((res) => {return res.json().then((message) => message)})
                 .then((message) => {
-                    console.log(`\n${message}`);
                     return message})
                 .catch(function (err) {
                     console.log(`\n${err.message}`);
