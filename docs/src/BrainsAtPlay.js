@@ -358,7 +358,7 @@ class BrainsAtPlay {
     }
 
 
-    update(metrics = []) {
+    update() {
         // Generate signal if specified
         if (this.simulation.generate) {
             if (this.simulation.generatedSamples == Math.round(this.simulation.sampleRate*(1/this.simulation.baseFrequency))-1){
