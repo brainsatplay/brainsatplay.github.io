@@ -1,8 +1,8 @@
 // Connection Management
 function toggleConnection(){
 
-    if (brains.network == undefined){
-        if (['me'].includes(brains.username)){
+    if (game.connection == undefined){
+        if (['me'].includes(game.me.username)){
             toggleLoginScreen();
         } else {
         document.getElementById("connection-button").innerHTML = 'Disconnect';
@@ -18,10 +18,10 @@ function toggleConnection(){
             <span class="slider round"></span>
           </label>
           `
-        brains.connect('brainstorm')
+        game.connect('brainstorm')
     }
     } else {
-        brains.disconnect()
+        game.disconnect()
     }
 }
 
@@ -38,9 +38,9 @@ async function login(type='guest'){
         formDict.guestaccess = false
     }
 
-        let resDict = await brains.login(formDict,url)
+        let resDict = await game.login(formDict,url)
         if (resDict.result == 'OK'){
-            document.getElementById('userId').innerHTML = brains.username
+            document.getElementById('userId').innerHTML = game.me.username
             form.reset()
             toggleLoginScreen();
             toggleConnection();
@@ -66,7 +66,7 @@ async function signup(){
     }
     else {
 
-        let resDict = await brains.signup(formDict,url);
+        let resDict = await game.signup(formDict,url);
         if (resDict.result == 'OK'){
             form.reset()
             toggleLoginScreen();

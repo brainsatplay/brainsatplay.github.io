@@ -62,9 +62,9 @@ function stateManager(forceUpdate=false){
 
     // reset displacement if leaving channels visualization
     if (scenes[prevState].shapes.includes('channels')) {
-        brains.initializeBuffer(buffer='focusBuffer')
-        brains.initializeBuffer(buffer='userVoltageBuffers')
-        updateBufferData(attribs,'z_displacement',convertToWebGL(brains.flatten(buffer='userVoltageBuffers', true), 0))
+        game.initializeBuffer('focusBuffer')
+        game.initializeBuffer('userVoltageBuffers')
+        updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('userVoltageBuffers', true), 0))
     }
 
     // set up variables for new state
@@ -79,11 +79,11 @@ function stateManager(forceUpdate=false){
         cameraHome = scenes[state].zoom;
         if (scenes[state].signaltype != 'voltage'){
             [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
-            brains.initializeBuffer(buffer='focusBuffer');
+            game.initializeBuffer('focusBuffer');
         } else {
-            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
-            brains.initializeBuffer(buffer='focusBuffer')
-            brains.initializeBuffer(buffer='userVoltageBuffers')
+            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.info.brains)
+            game.initializeBuffer('focusBuffer')
+            game.initializeBuffer('userVoltageBuffers')
         }
         if (uniformLocations != undefined){
             gl.uniform1i(uniformLocations.ambientNoiseToggle, 0);
@@ -142,9 +142,9 @@ function stateManager(forceUpdate=false){
 
     // reset z_displacement to zero when not being actively updated
     if (!['z_displacement'].includes(scenes[state].effect) && dispBuffer != undefined){
-        brains.initializeBuffer(buffer='focusBuffer')
-        brains.initializeBuffer(buffer='userVoltageBuffers')
-        updateBufferData(attribs,'z_displacement',convertToWebGL(brains.flatten(buffer='focusBuffer', false),0))
+        game.initializeBuffer('focusBuffer')
+        game.initializeBuffer('userVoltageBuffers')
+        updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('focusBuffer', false),0))
     }
 
 
@@ -172,7 +172,7 @@ function updateChannels(newChannels) {
         
         if (channels != newChannels) {
             channels = newChannels;
-        SIGNAL_SUSTAIN = Math.round(SIGNAL_SUSTAIN_ORIGINAL/brains.usedChannels.length)
+        SIGNAL_SUSTAIN = Math.round(SIGNAL_SUSTAIN_ORIGINAL/game.usedChannels.length)
 
         if (SIGNAL_SUSTAIN%2 == 0){
             SIGNAL_SUSTAIN += 1;
@@ -181,18 +181,18 @@ function updateChannels(newChannels) {
         if (shapes.includes('channels')) {
             if (scenes[state].signaltype != 'voltage'){
                 [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
-                brains.initializeBuffer(buffer='focusBuffer');
+                game.initializeBuffer('focusBuffer');
             } else {
-                [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),brains.users.size)
-                brains.initializeBuffer(buffer='focusBuffer')
-                brains.initializeBuffer(buffer='userVoltageBuffers')
+                [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.info.brains)
+                game.initializeBuffer('focusBuffer')
+                game.initializeBuffer('userVoltageBuffers')
             }
         }
 
         let passedEEGCoords = [];
-        Object.keys(brains.eegChannelCoordinates).forEach((name) => {
-            if (brains.usedChannelNames.indexOf(name) != -1){
-                passedEEGCoords.push(brains.eegChannelCoordinates[name])
+        Object.keys(game.eegChannelCoordinates).forEach((name) => {
+            if (game.usedChannelNames.indexOf(name) != -1){
+                passedEEGCoords.push(game.eegChannelCoordinates[name])
             } else {
                 passedEEGCoords.push([NaN,NaN,NaN])
 
@@ -202,7 +202,7 @@ function updateChannels(newChannels) {
         gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
 
 
-        // brains.initializeBuffer(separateUsers=true);
+        // game.initializeBuffer(separateUsers=true);
     } else {
         channels = newChannels;
     }
@@ -277,13 +277,13 @@ function toggleChat(){
 }
 
 function toggleAccess(){
-    brains.public = !brains.public;
-    if (brains.public){
+    game.info.public = !game.info.public;
+    if (game.info.public){
         document.getElementById('access-mode').innerHTML = 'Public Mode'
-        brains.network.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
+        game.connection.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
     } else {
         document.getElementById('access-mode').innerHTML = 'Isolation Mode'
-        brains.network.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
+        game.connection.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
     }
 }
 
@@ -304,8 +304,8 @@ function updateUI(){
     let opacity;
     let pointer;
 
-    if (brains.network != undefined){
-        if (brains.public){
+    if (game.connection != undefined){
+        if (game.info.public){
             document.getElementById('brain').style.opacity = '100%'
             document.getElementById('channels').style.opacity = '100%'
             document.getElementById('brain').style.pointerEvents = 'auto'
@@ -313,7 +313,7 @@ function updateUI(){
             document.getElementById('userinfo').style.opacity = '100%'
             document.getElementById('groupdynamics').style.opacity = '100%'
             document.getElementById('userinfo').style.pointerEvents = 'auto'
-            if (brains.users.size < 2){
+            if (game.info.brains < 2){
                 document.getElementById('groupdynamics').style.opacity = '25%'
                 document.getElementById('groupdynamics').style.pointerEvents = 'none'
                 document.getElementById('userinfo').style.opacity = '25%'
@@ -343,7 +343,7 @@ function updateUI(){
                     document.getElementById('voltage').style.pointerEvents = 'auto'
                 }
 
-                if (brains.users.size < 2){
+                if (game.info.brains < 2){
                     dynamicSignalArray.push('synchrony')
                 } else {
                     document.getElementById('synchrony').style.opacity = '100%'
@@ -573,16 +573,16 @@ function lagDrawMode() {
 }
 
 function updateColorsByChannel(new_sync) {
-        let relSignal = new Array(Object.keys(brains.eegChannelCoordinates).length).fill(NaN);
+        let relSignal = new Array(Object.keys(game.eegChannelCoordinates).length).fill(NaN);
         if (['projection','z_displacement'].includes(scenes[state].effect)){
             if (scenes[state].signaltype == 'synchrony') {
-                brains.usedChannels.forEach((channelInfo,ind) => {
+                game.usedChannels.forEach((channelInfo,ind) => {
                     relSignal[channelInfo.index] = new_sync[ind]; // absolute
                 })
             } else if (scenes[state].signaltype == 'voltage'){
-                relSignal = brains.getPower(relative=true) // relative
+                relSignal = game.getPower(relative=true) // relative
             } else if (['delta','theta','alpha','beta','gamma'].includes(scenes[state].signaltype)){
-                relSignal = brains.getBandPower(scenes[state].signaltype, relative=true) // relative
+                relSignal = game.getBandPower(scenes[state].signaltype, relative=true) // relative
             }
 
         if (['projection'].includes(scenes[state].effect)){
@@ -592,14 +592,14 @@ function updateColorsByChannel(new_sync) {
         
         if (['z_displacement'].includes(scenes[state].effect)) {
                 if (scenes[state].signaltype == 'voltage'){
-                    updateBufferData(attribs,'z_displacement',convertToWebGL(brains.flatten(buffer='userVoltageBuffers', true),0))
+                    updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('userVoltageBuffers', true),0))
                 } else {
                     let relSignalOfInterest = [];
-                    brains.usedChannels.forEach((channelInfo)=> {
+                    game.usedChannels.forEach((channelInfo)=> {
                         relSignalOfInterest.push(relSignal[channelInfo.index])
                     })
-                    brains.updateBuffer(source=relSignalOfInterest,buffer='focusBuffer')
-                    updateBufferData(attribs,'z_displacement',convertToWebGL(brains.flatten(buffer='focusBuffer', false),0))
+                    game.updateBuffer(source=relSignalOfInterest,'focusBuffer')
+                    updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('focusBuffer', false),0))
                 }
         }
 
@@ -625,8 +625,8 @@ function brainDependencies(updateArray){
     updateArray.forEach((updateObj) => {
     if (updateObj.destination !== undefined && updateObj.destination.length != 0) {
     if (updateObj.destination == 'opened'){
-        brains.initializeBuffer('userVoltageBuffers')
-        brains.initializeBuffer('focusBuffer')
+        game.initializeBuffer('userVoltageBuffers')
+        game.initializeBuffer('focusBuffer')
         state = 1;
         stateManager(true)
     } else if (updateObj.destination == 'error'){
@@ -636,18 +636,18 @@ function brainDependencies(updateArray){
         stateManager(true)
 
         // Announce number of brains currently online
-        if (brains.public === true && (updateObj.nBrains > 0) && brains.users.get('me') == undefined){
+        if (game.info.public === true && (updateObj.nBrains > 0) && game.users.get('me') == undefined){
             announcement(`<div>Welcome to the Brainstorm
-                            <p class="small">${brains.users.size} brains online</p></div>`)
-            document.getElementById('nBrains').innerHTML = `${brains.users.size}`
-        } else if (brains.public === false) {
+                            <p class="small">${game.info.brains} brains online</p></div>`)
+            document.getElementById('nBrains').innerHTML = `${game.info.brains}`
+        } else if (game.info.public === false) {
             if (updateObj.privateBrains){
                 document.getElementById('nBrains').innerHTML = `1`
             } else {
-                if (brains.users.has("me")){
+                if (game.users.has("me")){
                     document.getElementById('nBrains').innerHTML = `0`
                 } else {
-                    document.getElementById('nBrains').innerHTML = `${brains.users.size}`
+                    document.getElementById('nBrains').innerHTML = `${game.info.brains}`
                 }
             }
         } else {
@@ -655,10 +655,10 @@ function brainDependencies(updateArray){
                             <p class="small">No brains online</p></div>`)
             document.getElementById('nBrains').innerHTML = `0`
         }
-        if (brains.public === false) {
+        if (game.info.public === false) {
             document.getElementById('nInterfaces').innerHTML = `1`
         } else {
-            document.getElementById('nInterfaces').innerHTML = `${brains.nInterfaces}`
+            document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
         }
 
     } else if (updateObj.destination == 'brains'){
@@ -668,29 +668,29 @@ function brainDependencies(updateArray){
             stateManager(true)
         }
 
-        if ((brains.public) || (!brains.public && updateObj.access === 'private')){
+        if ((game.info.public) || (!game.info.public && updateObj.access === 'private')){
             if (update == 1){
-                    if (brains.public){
-                        document.getElementById('nBrains').innerHTML = `${brains.users.size}`
-                    } else if (!brains.public && updateObj.access === 'private') {
+                    if (game.info.public){
+                        document.getElementById('nBrains').innerHTML = `${game.info.brains}`
+                    } else if (!game.info.public && updateObj.access === 'private') {
                         document.getElementById('nBrains').innerHTML = `1`
                     }
             } else if (update == -1){
                 let brainReadout = document.getElementById('nBrains')
-                if (brains.public){
-                    if ((brains.users.size == 0) || (brainReadout.innerHTML == '1')){
+                if (game.info.public){
+                    if ((game.info.brains == 0) || (brainReadout.innerHTML == '1')){
                         announcement('all users left the brainstorm')
                         brainReadout.innerHTML = `0`
                     } else {
-                        brainReadout.innerHTML = `${brains.users.size}`
+                        brainReadout.innerHTML = `${game.info.brains}`
                     }
-                } else if (!brains.public && updateObj.access === 'private'){
+                } else if (!game.info.public && updateObj.access === 'private'){
                     brainReadout.innerHTML = `0`
                 }
             }
         }
     } else if (updateObj.destination == 'interface'){
-        document.getElementById('nInterfaces').innerHTML = `${brains.nInterfaces}`
+        document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
     } else if (updateObj.destination =='closed'){
         announcement(`<div>Exiting the Brainstorm
             <p class="small">Thank you for playing!</p></div>`)
@@ -707,8 +707,8 @@ function brainDependencies(updateArray){
                                 <span class="tooltiptext"><p>Connect to Network</p><hr/><p class="small">View live brain data from Brains@Play server</p></span>
             `;
             state = 1;
-            brains.initializeBuffer('userVoltageBuffers')
-            brains.initializeBuffer('focusBuffer')
+            game.initializeBuffer('userVoltageBuffers')
+            game.initializeBuffer('focusBuffer')
             stateManager(true)
     }
 }

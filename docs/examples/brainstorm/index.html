@@ -403,8 +403,8 @@
     } else if (option === 'server'){
         url = new URL('https://brainsatplay.azurewebsites.net/');
     }
-    let brains = new BrainsAtPlay()
-    brains.simulate(2);
+    let game = new BrainsAtPlay()
+    game.simulate(2);
 
     // Begin Rendering the Visualization
     if (!gl) {
@@ -419,7 +419,7 @@
 // Initialize Vertex Attributes
     let arrays = {
         position: {numComponents: 3, data: vertexCurr},
-        z_displacement: {numComponents: 1, data: convertToWebGL(brains.flatten(buffer='userVoltageBuffers'))},
+        z_displacement: {numComponents: 1, data: convertToWebGL(game.flatten('userVoltageBuffers'))},
     }
     let attribs;
     gl, program, attribs = initializeAttributes(gl, program, arrays)
@@ -440,8 +440,8 @@
 
     // initialize uniforms that don't change on every draw loop
     let passedEEGCoords = [];
-    Object.keys(brains.eegChannelCoordinates).forEach((name) => {
-        passedEEGCoords.push(brains.eegChannelCoordinates[name])
+    Object.keys(game.eegChannelCoordinates).forEach((name) => {
+        passedEEGCoords.push(game.eegChannelCoordinates[name])
     })
     gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
     gl.uniform1i(uniformLocations.effect, effects.indexOf(scenes[state].effect));
@@ -481,8 +481,8 @@
         mouseState()
         lagDrawMode()
         stateManager();
-        brainDependencies(brains.updateArray);
-        brains.update()
+        brainDependencies(game.updateArray);
+        game.update(['synchrony'])
 
         // Update rotation speeds
         moveStatus = false;
@@ -500,7 +500,7 @@
         aspectChange = [(canvas.width)/(originalAspectX),(canvas.height)/(originalAspectY)]
         gl.uniformMatrix4fv(uniformLocations.matrix, false, mvpMatrix)
         gl.uniform1f(uniformLocations.u_time, (Date.now()-startTime)/1000);
-        gl.uniform1f(uniformLocations.synchrony, brains.synchrony);
+        gl.uniform1f(uniformLocations.synchrony, game.synchrony.value);
         gl.uniform2fv(uniformLocations.aspectChange, aspectChange);
 
         if (mouseDistort){
@@ -510,7 +510,7 @@
         }
 
         // Update color based on channel data
-        updateColorsByChannel(brains.synchronyChannels)
+        updateColorsByChannel(game.synchrony.channels)
         easeCamera()
         easeVertices()
 
