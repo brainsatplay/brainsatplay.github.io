@@ -70,6 +70,7 @@ function createPointCloud(pointFunction, pointCount) {
             }
         }
         else if (pointFunction == 'channels') {
+            console.log(game.brains.size)
             pointCloud = getChannels(pointCloud,pointCount,game.brains.size)
         } else if (pointFunction == shapes.sphereShells) {
             let dim_size = Math.ceil(Math.sqrt(game.brains.size));
@@ -269,7 +270,7 @@ function getChannels(pointCloud, pointCount, numUsers) {
     let currDataPoints = game.bufferSize*game.usedChannels.length*numUsers
     let upsamplingFactor = Math.floor(pointCount/(currDataPoints)) // account for doubling (due to line drawing)
 
-    let drawArea = {w: (0.8*canvas.getBoundingClientRect().width), h: (0.8*canvas.getBoundingClientRect().height)}
+    let drawArea = {w: 0.8*(canvas.getBoundingClientRect().width), h: 0.8*(canvas.getBoundingClientRect().height)}
     let z_iter = ((drawArea.h)/(2*game.usedChannels.length))
     let y_iter = (drawArea.w/ (channel_trigger*upsamplingFactor))
     // let channel_trigger = Math.floor(pointCount/(2*game.brains.size*game.usedChannels.length));

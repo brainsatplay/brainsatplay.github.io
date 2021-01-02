@@ -24,191 +24,26 @@
     <script type="text/javascript" src="../../src/BrainsAtPlay.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bcijs@1.8.0/dist/bci.min.js"></script>
 </head>
-
-<body style="background: black">
-
-    <div id="ui">
-        <div>
-            <h2>Synchrony</h2>
-            <i id="source">Synthetic Data Stream</i>
-            <p id="synchrony"></p>
-            <br/>
-
-            <button id="connect" onclick="
-            brains.login({'guestaccess':true},url);
-            brains.connect('untitled');
-            document.getElementById('disconnect').style.display = 'block';
-            document.getElementById('source').innerHTML = 'Real Data Stream';
-            this.style.display = 'none';
-            ">Connect to Server</button>
-
-            <button id="disconnect" style="display:none" onclick="
-            brains.network.close();
-            document.getElementById('connect').style.display = 'block';
-            document.getElementById('source').innerHTML = 'Synthetic Data Stream';
-            this.style.display = 'none';
-            ">Disconnect from Server</button>
-
-        </div>
-    </div>
-
-    <div id="info-card">
-        <h4>Project Template</h4>
-        <p class='small'>Created by <a href="../../..">Brains@Play</a>. See all examples <a href="../..">here</a></p>
-        <p>Create your own brain-responsive web app.</p>
-        <h5>Source</h5>
-        <a href='https://github.com/brainsatplay/brainsatplay.github.io/tree/master/docs/examples/template' label='Github'>
-            <svg viewBox="0 0 24 24" style="
-            flex: none;
-            fill: lightgrey;
-            width: 20px;
-            margin: 10px;">
-                <path d = "M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-            </svg>
-        </a>
-    </div>
-
-<script>
-
-    let url;
-    let option = 'server';
-    if (option  === 'local'){
-        url = new URL('http://localhost');
-    } else if (option === 'server'){
-        url = new URL('https://brainsatplay.azurewebsites.net/');
-    }
-    let brains = new BrainsAtPlay()
-    brains.simulate(2); // simulated data remains local on Interfaces
-
-    function animate() {
-        requestAnimationFrame(animate)
-        brains.update()
-        if (brains.synchrony === 0) {
-            document.getElementById("synchrony").innerHTML = 'Initializing...'
-        } else if (brains.network && brains.me != undefined){
-            document.getElementById("synchrony").innerHTML = 'No brains on the network...'
-        }  else if (brains.network && brains.users.size < 2) {
-            document.getElementById("synchrony").innerHTML = 'One brain on the network...'
-        } else {
-            document.getElementById("synchrony").innerHTML = brains.synchrony.toFixed(5)
-        }
-    };
-    animate()
-
-</script>
-
+<body>
+<iframe src="https://editor.p5js.org/gflynn/embed/7XhHs2xnX"></iframe>
 <style>
-    html {
+    html, body {
+        width: 100%;
+        height: 100%;
         font-family: Lato, sans-serif;
         color : white;
         background: black;
+        margin: 0;
     }
 
-    h2{
-        font-size: 40px;
-        font-weight: normal;
-        margin: 0px 0px 5px 0px;
+    iframe {
+        background-color: black;
+        width: 100%;
+        height: 100%;
+        margin:0;
+        border: none;
+        display: block;
     }
-
-    i {
-        font-size: 80%;
-    }
-
-    h5{
-        margin:0px
-    }
-
-    button {
-        width: 200px;
-        min-height: 50px;
-        cursor: pointer;
-        color: whitesmoke;
-        font-family: inherit;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: transparent;
-        margin: 0px 20px 20px 0px;
-        border: 1px solid whitesmoke;
-        padding: 10px 20px;
-        border-radius: 5px;
-        transition: 0.5s;
-    }
-
-    button:hover{
-        color: #FF76E9;
-        border-color: #FF76E9;
-    }
-
-    #ui {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100vw;
-        height: 100vh;
-    }
-
-    #info-card {
-        display: none;
-    }
-    @media only screen and (min-width: 768px) {
-
-        #info-card {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 250px;
-            width: calc(100vw - 150px);
-            max-width: 33.3vw;
-            padding: 25px;
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
-
-            transition: 0.5s ease-in-out;
-            -o-transition: 0.5s ease-in-out;
-            -ms-transition: 0.5s ease-in-out;
-            -moz-transition: 0.5s ease-in-out;
-            -webkit-transition: 0.5s ease-in-out;
-        }
-
-        #info-card .small {
-            font-size: 10px;
-        }
-
-        #info-card p {
-            font-size: 80%
-        }
-
-        #info-card ol {
-            font-size: 80%
-        }
-
-        #info-card ol p {
-            font-size: 100%
-        }
-
-        #info-card h4 {
-            margin: 0px;
-        }
-
-        #info-card a {
-            color: #6a8eb0;
-            text-decoration: none;
-        }
-
-        #info-card a:visited {
-            color: gray;
-        }
-
-        /*svg {*/
-        /*    flex: none;*/
-        /*    fill: lightgrey;*/
-        /*    width: 20px;*/
-        /*    margin: 10px;*/
-        /*}*/
-    }
-
 </style>
-
 </body>
 </html>

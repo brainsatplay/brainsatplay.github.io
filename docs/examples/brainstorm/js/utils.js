@@ -1,24 +1,5 @@
 /* -------------------------- Utility Functions -------------------------- */
 
-// function filterSignal(data){
-//     let firCalculator = new fili.FirCoeffs();
-//     let coeffs = firCalculator.bandpass({order: filterOrder, Fs: samplerate, F1: this.minFilter, F2: this.maxFilter});
-//     let filter = new fili.FirFilter(coeffs);
-//     let features = bci.windowApply(data, trial => {
-//         // Bandpass filter the trial
-//         let channels = bci.transpose(trial);
-//         console.log(channels)
-//         channels = channels.map(sig => filter.simulate(sig).slice(filterOrder));
-//         console.log(channels)
-//         trial = bci.transpose(channels);
-//         console.log(trial)
-//         return trial
-//     }, data.length, data.length);
-//     console.log([].concat(...features))
-//     console.log('filtering')
-//     return data
-// }
-
 function switchToChannels(pointCount,users){
 
     // Reset View Matrix
@@ -33,8 +14,8 @@ function switchToChannels(pointCount,users){
     // Create signal dashboard
     vertexHome = getChannels([],pointCount,users);
     let ease = true;
-    let rotation = true;
-    let zoom = true;
+    let rotation = false;
+    let zoom = false;
 
     return [vertexHome, viewMatrix, ease, rotation, zoom]
 }
@@ -62,9 +43,7 @@ function stateManager(forceUpdate=false){
 
     // reset displacement if leaving channels visualization
     if (scenes[prevState].shapes.includes('channels')) {
-        game.initializeBuffer('focusBuffer')
-        game.initializeBuffer('userVoltageBuffers')
-        updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('userVoltageBuffers', true), 0))
+        updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('voltage', true), 0))
     }
 
     // set up variables for new state
@@ -77,14 +56,7 @@ function stateManager(forceUpdate=false){
 
     if (shapes.includes('channels')){
         cameraHome = scenes[state].zoom;
-        if (scenes[state].signaltype != 'voltage'){
-            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
-            game.initializeBuffer('focusBuffer');
-        } else {
-            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.info.brains)
-            game.initializeBuffer('focusBuffer')
-            game.initializeBuffer('userVoltageBuffers')
-        }
+        [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.brains.size)
         if (uniformLocations != undefined){
             gl.uniform1i(uniformLocations.ambientNoiseToggle, 0);
         }
@@ -109,7 +81,6 @@ function stateManager(forceUpdate=false){
             gl.uniform1i(uniformLocations.ambientNoiseToggle, 1);
             gl.uniform1i(uniformLocations.colorToggle, 1);
         }
-        
     }
 
     if (!shapes.includes('brain') && !shapes.includes('channels')){
@@ -142,9 +113,7 @@ function stateManager(forceUpdate=false){
 
     // reset z_displacement to zero when not being actively updated
     if (!['z_displacement'].includes(scenes[state].effect) && dispBuffer != undefined){
-        game.initializeBuffer('focusBuffer')
-        game.initializeBuffer('userVoltageBuffers')
-        updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('focusBuffer', false),0))
+        updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten(scenes[state].signaltype, false),0))
     }
 
 
@@ -179,14 +148,7 @@ function updateChannels(newChannels) {
         }
 
         if (shapes.includes('channels')) {
-            if (scenes[state].signaltype != 'voltage'){
-                [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),1)
-                game.initializeBuffer('focusBuffer');
-            } else {
-                [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.info.brains)
-                game.initializeBuffer('focusBuffer')
-                game.initializeBuffer('userVoltageBuffers')
-            }
+            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.brains.size)
         }
 
         let passedEEGCoords = [];
@@ -200,10 +162,7 @@ function updateChannels(newChannels) {
         })
 
         gl.uniform3fv(uniformLocations.eeg_coords, new Float32Array(passedEEGCoords.flat()));
-
-
-        // game.initializeBuffer(separateUsers=true);
-    } else {
+        } else {
         channels = newChannels;
     }
 }
@@ -334,9 +293,7 @@ function updateUI(){
                     dynamicSignalArray.push('voltage')
                     let prevSig = document.getElementById('signal-type').innerHTML
                     if (prevSig != 'synchrony'){
-                        scenes[state].signaltype = 'synchrony'; 
-                        document.getElementById('signal-type').innerHTML = 'synchrony'; 
-                        newSignalType = true;
+                        updateSignalType('signaltype', 'synchrony')
                     }
                 } else if (scenes[state].effect == 'z_displacement'){
                     document.getElementById('voltage').style.opacity = '100%'
@@ -572,50 +529,57 @@ function lagDrawMode() {
     }
 }
 
-function updateColorsByChannel(new_sync) {
-        let relSignal = new Array(Object.keys(game.eegChannelCoordinates).length).fill(NaN);
-        if (['projection','z_displacement'].includes(scenes[state].effect)){
-            if (scenes[state].signaltype == 'synchrony') {
-                game.usedChannels.forEach((channelInfo,ind) => {
-                    relSignal[channelInfo.index] = new_sync[ind]; // absolute
-                })
-            } else if (scenes[state].signaltype == 'voltage'){
-                relSignal = game.getPower(relative=true) // relative
-            } else if (['delta','theta','alpha','beta','gamma'].includes(scenes[state].signaltype)){
-                relSignal = game.getBandPower(scenes[state].signaltype, relative=true) // relative
-            }
+function updateColorsByChannel() {
 
-        if (['projection'].includes(scenes[state].effect)){
-            gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
-        }
-        
-        
-        if (['z_displacement'].includes(scenes[state].effect)) {
-                if (scenes[state].signaltype == 'voltage'){
-                    updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('userVoltageBuffers', true),0))
-                } else {
-                    let relSignalOfInterest = [];
-                    game.usedChannels.forEach((channelInfo)=> {
-                        relSignalOfInterest.push(relSignal[channelInfo.index])
-                    })
-                    game.updateBuffer(source=relSignalOfInterest,'focusBuffer')
-                    updateBufferData(attribs,'z_displacement',convertToWebGL(game.flatten('focusBuffer', false),0))
+        if (scenes[state].signaltype) {
+            if (['projection', 'z_displacement'].includes(scenes[state].effect)) {
+                if (['projection'].includes(scenes[state].effect)) {
+                    gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(game.getChannelReadout(scenes[state].signaltype)));
+                    updateBufferData(attribs, 'z_displacement', new Array(pointCount).fill(0))
                 }
+                if (['z_displacement'].includes(scenes[state].effect)) {
+                    if (scenes[state].signaltype == 'voltage') {
+                        updateBufferData(attribs, 'z_displacement', convertToWebGL(game.flatten('voltage', true), 0))
+                    } else {
+                        updateBufferData(attribs, 'z_displacement', convertToWebGL(game.flatten(scenes[state].signaltype, false), 0))
+                    }
+                }
+            } else {
+                updateBufferData(attribs, 'z_displacement', new Array(pointCount).fill(0))
+                gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(game.getChannelReadout(scenes[state].signaltype)));
+            }
+        } else {
+            gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(game.getChannelReadout(scenes[state].signaltype)));
+            updateBufferData(attribs, 'z_displacement', new Array(pointCount).fill(0))
         }
-
-    } else {
-        gl.uniform1fv(uniformLocations.eeg_signal, new Float32Array(relSignal));
-    }
 }
 
 
 // Update Signal Type
 
-function updateSignalType(el){
+function updateSignalType(method, val){
     let prevSig = document.getElementById('signal-type').innerHTML
-    if (prevSig != el.firstElementChild.innerHTML.toLowerCase()){
-        scenes[state].signaltype = el.firstElementChild.innerHTML.toLowerCase();
-        document.getElementById('signal-type').innerHTML = el.firstElementChild.innerHTML.toLowerCase();
+    let thisSig;
+    if (method == 'signaltype'){
+        if (prevSig != val){
+            thisSig = val
+        }
+    } else if (method == 'element') {
+        thisSig= val.firstElementChild.innerHTML.toLowerCase()
+    } else {
+        thisSig = 'undefined';
+    }
+    if (prevSig != thisSig){
+        scenes[state].signaltype = thisSig;
+        document.getElementById('signal-type').innerHTML = thisSig;
+        game.subscribe(thisSig,false)
+        let unsubscribeList = Object.keys(game.subscriptions)
+        if (unsubscribeList.includes(thisSig)){
+            unsubscribeList.splice(unsubscribeList.indexOf(thisSig),1)
+        }
+        unsubscribeList.forEach((metricName) =>{
+            game.unsubscribe(metricName);
+        })
         newSignalType = true;
     }
 }
@@ -625,8 +589,6 @@ function brainDependencies(updateArray){
     updateArray.forEach((updateObj) => {
     if (updateObj.destination !== undefined && updateObj.destination.length != 0) {
     if (updateObj.destination == 'opened'){
-        game.initializeBuffer('userVoltageBuffers')
-        game.initializeBuffer('focusBuffer')
         state = 1;
         stateManager(true)
     } else if (updateObj.destination == 'error'){
@@ -658,6 +620,8 @@ function brainDependencies(updateArray){
         if (game.info.public === false) {
             document.getElementById('nInterfaces').innerHTML = `1`
         } else {
+            console.log('updating interfaces')
+            console.log(game.info.interfaces)
             document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
         }
 
@@ -707,8 +671,6 @@ function brainDependencies(updateArray){
                                 <span class="tooltiptext"><p>Connect to Network</p><hr/><p class="small">View live brain data from Brains@Play server</p></span>
             `;
             state = 1;
-            game.initializeBuffer('userVoltageBuffers')
-            game.initializeBuffer('focusBuffer')
             stateManager(true)
     }
 }
