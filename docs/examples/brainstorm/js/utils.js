@@ -620,8 +620,6 @@ function brainDependencies(updateArray){
         if (game.info.public === false) {
             document.getElementById('nInterfaces').innerHTML = `1`
         } else {
-            console.log('updating interfaces')
-            console.log(game.info.interfaces)
             document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
         }
 
@@ -653,7 +651,7 @@ function brainDependencies(updateArray){
                 }
             }
         }
-    } else if (updateObj.destination == 'interface'){
+    } else if (updateObj.destination == 'interfaces'){
         document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
     } else if (updateObj.destination =='closed'){
         announcement(`<div>Exiting the Brainstorm
