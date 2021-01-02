@@ -1,13 +1,9 @@
 
 class BrainsAtPlay {
-    constructor(input) {
-        this.users = new Map();
-        if (input == undefined){
-            this.userVoltageBuffers = []
-            this.focusBuffer = []
-        } else{
-            this.add(input)
-        }
+    constructor() {
+        this.brains = new Map();
+        this.userVoltageBuffers = []
+        this.focusBuffer = []
         this.initialize()
     }
 
@@ -70,7 +66,7 @@ class BrainsAtPlay {
         let user = 0;
         let gotMe = false;
 
-        this.users.forEach((_,key) => {
+        this.brains.forEach((_,key) => {
             if (key == this.me.username || key == 'me'){
                 this.me.index = user;
                 gotMe = true;
@@ -84,7 +80,7 @@ class BrainsAtPlay {
     }
 
     simulate(count){
-        this.users.clear()
+        this.brains.clear()
         this.add('me')
         for (let i = 1; i < count; i++){
             this.add('other'+i);
@@ -105,7 +101,7 @@ class BrainsAtPlay {
         } else {
             brain = new Brain(id,channelNames)
         }
-        this.users.set(id, brain)
+        this.brains.set(id, brain)
         this.getMyIndex()
         this.updateUsedChannels()
         this.initializeBuffer('focusBuffer')
@@ -113,7 +109,7 @@ class BrainsAtPlay {
     }
 
     remove(id){
-        this.users.delete(id)
+        this.brains.delete(id)
         this.initializeBuffer('focusBuffer')
         this.initializeBuffer('userVoltageBuffers')
     }
@@ -191,22 +187,23 @@ class BrainsAtPlay {
         let channelSynchrony = [];
 
         this.synchrony.buffer.shift()
-        if (this.users.size > 1){
+        if (this.brains.size > 1){
             // Generate edge array
-            let keys = Array.from(this.users.keys())
-            let myKey = keys.splice(this.me.index,1)[0];
+            let edgesArray = [];
 
-            // Get your synchrony with each other user
-            let edgesArray = keys.map((key) => {
-                return [myKey, key]
-            })
+            for (let i = 0; i < this.brains.size; i++){
+                if (i != this.me.index){
+                    edgesArray.push([this.me.index,i])
+                }
+            }
+
             if (method == 'pcc') {
                 // Source: http://stevegardner.net/2012/06/11/javascript-code-to-calculate-the-pearson-correlation-coefficient/
 
                 edgesArray.forEach((edge) => {
 
-                    let xC = this.users.get(edge[0]).buffer
-                    let yC = this.users.get(edge[1]).buffer
+                    let xC = this.userVoltageBuffers[edge[0]]
+                    let yC = this.userVoltageBuffers[edge[1]]
                     let numChannels = Math.min(xC.length,yC.length)
 
                     for (let channel = 0; channel < numChannels; channel++){
@@ -293,7 +290,7 @@ class BrainsAtPlay {
         if (buffer == 'focusBuffer'){
             users = 1;
         } else {
-            users = this.users.size;
+            users = this.brains.size;
         }
 
         // let perUser = Math.floor(pointCount/(users*this.usedChannels.length));
@@ -321,7 +318,7 @@ class BrainsAtPlay {
 
     generateVoltageStream(){
 
-        this.users.forEach((user) => {
+        this.brains.forEach((user) => {
             let signal = new Array(this.usedChannels.length);
             for (let channel =0; channel < this.usedChannels.length; channel++) {
                 signal[channel] = bci.generateSignal([Math.random()], [this.simulation.baseFrequency+Math.random()*40], this.simulation.sampleRate, (1/this.simulation.baseFrequency));
@@ -365,7 +362,7 @@ class BrainsAtPlay {
     updateBuffer(source='brains',buffer='userVoltageBuffers'){
         let channelInd;
         let userInd = 0;
-        this.users.forEach((brain) => {
+        this.brains.forEach((brain) => {
             brain.buffer.forEach((channelData, channel) => {
                 channelInd = this.usedChannelNames.indexOf(brain.channelNames[channel])
                 if (source == 'brains'){
@@ -432,7 +429,7 @@ class BrainsAtPlay {
         // Define all used channel indices
         Object.keys(this.eegChannelCoordinates).forEach((name,ind) => {
             // Extract All Used EEG Channels
-            this.users.forEach((user) => {
+            this.brains.forEach((user) => {
                 if (user.channelNames.includes(name) && this.usedChannelNames.indexOf(name) == -1){
                     this.usedChannels.push({name:name, index:ind})
                     this.usedChannelNames.push(name)
@@ -477,18 +474,18 @@ class BrainsAtPlay {
 
             let obj = JSON.parse(msg.data);
             if (obj.destination == 'bci'){
-                if (this.users.get(obj.id) != undefined){
-                    this.users.get(obj.id).streamIntoBuffer(obj.data)
+                if (this.brains.get(obj.id) != undefined){
+                    this.brains.get(obj.id).streamIntoBuffer(obj.data)
                 }
             } else if (obj.destination == 'init'){
 
-                this.users.clear()
+                this.brains.clear()
 
                 if (obj.privateBrains && this.info.public === false){
                     this.add(obj.privateInfo.id, obj.privateInfo.channelNames)
                 } else {
                     for (let newUser = 0; newUser < obj.nBrains; newUser++){
-                        if (this.users.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
+                        if (this.brains.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
                             if (this.info.public){
                                 this.add(obj.ids[newUser], obj.channelNames[newUser])
                             } else {
@@ -500,8 +497,9 @@ class BrainsAtPlay {
                     }
                 }
 
-                if (this.users.size == 0){
+                if (this.brains.size == 0){
                     this.add('me');
+                    this.info.brains = 1;
                 }
 
                 this.simulation.generate = false;
@@ -514,6 +512,8 @@ class BrainsAtPlay {
 
             else if (obj.destination == 'brains'){
                 let update = obj.n;
+
+                this.info.brains += update;
 
                 // Only update if access matches
                 if ((this.info.public) || (!this.info.public && obj.access === 'private')){
@@ -528,7 +528,7 @@ class BrainsAtPlay {
                     } else if (update == -1){
                         this.remove(obj.id)
                         if (this.info.public){
-                            if (this.users.size == 0){
+                            if (this.brains.size == 0){
                                 this.add('me')
                             }
                         } else if (!this.info.public && obj.access === 'private'){
@@ -539,7 +539,6 @@ class BrainsAtPlay {
                     this.updateUsedChannels()
                 }
 
-                this.info.brains = this.users.size
                 this.getMyIndex()
                 this.setUpdateMessage(obj)
             }

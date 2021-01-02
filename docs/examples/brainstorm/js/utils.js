@@ -636,7 +636,7 @@ function brainDependencies(updateArray){
         stateManager(true)
 
         // Announce number of brains currently online
-        if (game.info.public === true && (updateObj.nBrains > 0) && game.users.get('me') == undefined){
+        if (game.info.public === true && (updateObj.nBrains > 0) && game.brains.get('me') == undefined){
             announcement(`<div>Welcome to the Brainstorm
                             <p class="small">${game.info.brains} brains online</p></div>`)
             document.getElementById('nBrains').innerHTML = `${game.info.brains}`
@@ -644,7 +644,7 @@ function brainDependencies(updateArray){
             if (updateObj.privateBrains){
                 document.getElementById('nBrains').innerHTML = `1`
             } else {
-                if (game.users.has("me")){
+                if (game.brains.has("me")){
                     document.getElementById('nBrains').innerHTML = `0`
                 } else {
                     document.getElementById('nBrains').innerHTML = `${game.info.brains}`

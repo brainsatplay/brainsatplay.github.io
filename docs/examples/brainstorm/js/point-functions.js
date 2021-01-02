@@ -33,9 +33,9 @@ function reducePointCount(pointCloud,desiredCount){
 function createPointCloud(pointFunction, pointCount) {
     let pointCloud = [];
     if (pointFunction == 'brains'){
-            let oneBrain = reducePointCount(brainVertices, Math.floor((brainVertices.length/3)/game.users.size))
-            let dim_size = Math.ceil(Math.sqrt(game.users.size));
-    
+            let oneBrain = reducePointCount(brainVertices, Math.floor((brainVertices.length/3)/game.brains.size))
+            let dim_size = Math.ceil(Math.sqrt(game.brains.size));
+
             if (dim_size == 1){delta = 0; z_window = 0} else{
                 z_window = scenes[state].zoom/4;
                 delta = (2*z_window)/(dim_size-1)
@@ -45,7 +45,7 @@ function createPointCloud(pointFunction, pointCount) {
     
             let tempBrain;
 
-            for (let i = 0; i < game.users.size; i++) {
+            for (let i = 0; i < game.brains.size; i++) {
                 tempBrain = [...oneBrain];
                 if (i % dim_size == 0) {
                     row = 0;
@@ -61,7 +61,7 @@ function createPointCloud(pointFunction, pointCount) {
             }
     
     
-            if (game.users.size == 1) {
+            if (game.brains.size == 1) {
                 pointCloud = tempBrain;
             } else {
                 pointCloud = pointCloud.concat(tempBrain);
@@ -70,21 +70,21 @@ function createPointCloud(pointFunction, pointCount) {
             }
         }
         else if (pointFunction == 'channels') {
-            pointCloud = getChannels(pointCloud,pointCount,game.users.size)
+            pointCloud = getChannels(pointCloud,pointCount,game.brains.size)
         } else if (pointFunction == shapes.sphereShells) {
-            let dim_size = Math.ceil(Math.sqrt(game.users.size));
+            let dim_size = Math.ceil(Math.sqrt(game.brains.size));
             if (dim_size == 1){delta = 0; z_window = 0} else{
                 z_window = INNER_Z;
                 delta = (2*INNER_Z)/(dim_size-1)
             }
             let row = 0;
             let col = -1;
-            for (let i = 0; i < game.users.size; i++) {
+            for (let i = 0; i < game.brains.size; i++) {
                 if (i % dim_size == 0) {
                     row = 0;
                     col++;
                 }
-                for (let j = 0; j < Math.floor(pointCount / game.users.size); j++) {
+                for (let j = 0; j < Math.floor(pointCount / game.brains.size); j++) {
                     const r = () => (Math.random() - 0.5);
                     let point = pointFunction(r(), r(), r());
     
@@ -272,8 +272,8 @@ function getChannels(pointCloud, pointCount, numUsers) {
     let drawArea = {w: (0.8*canvas.getBoundingClientRect().width), h: (0.8*canvas.getBoundingClientRect().height)}
     let z_iter = ((drawArea.h)/(2*game.usedChannels.length))
     let y_iter = (drawArea.w/ (channel_trigger*upsamplingFactor))
-    // let channel_trigger = Math.floor(pointCount/(2*game.users.size*game.usedChannels.length));
-    // let user_trigger = Math.floor(pointCount/(2*game.users.size));
+    // let channel_trigger = Math.floor(pointCount/(2*game.brains.size*game.usedChannels.length));
+    // let user_trigger = Math.floor(pointCount/(2*game.brains.size));
 
 
    // factor must be odd
