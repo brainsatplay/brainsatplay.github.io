@@ -18,7 +18,7 @@ function toggleConnection(){
             <span class="slider round"></span>
           </label>
           `
-        game.connect('brainstorm')
+        game.connect()
     }
     } else {
         game.disconnect()

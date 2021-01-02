@@ -399,11 +399,11 @@
     let url;
     let option = 'server';
     if (option  === 'local'){
-        url = new URL('http://localhost');
+        url = 'http://localhost';
     } else if (option === 'server'){
-        url = new URL('https://brainsatplay.azurewebsites.net/');
+        url = 'https://brainsatplay.azurewebsites.net/';
     }
-    let game = new BrainsAtPlay()
+    let game = new BrainsAtPlay('brainstorm')
     game.simulate(2);
     game.subscribe('synchrony',false)
 

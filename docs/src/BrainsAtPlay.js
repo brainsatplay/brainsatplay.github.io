@@ -1,7 +1,8 @@
 
 class BrainsAtPlay {
-    constructor() {
+    constructor(gameName='untitled') {
         this.initialize()
+        this.gameName = gameName;
     }
 
     initialize() {
@@ -493,7 +494,7 @@ class BrainsAtPlay {
         this.connection.close();
     }
 
-    connect(gameName){
+    connect(){
 
         if (this.connection) {
             this.connection.onerror = this.connection.onopen = this.connection.onclose = null;
@@ -501,9 +502,9 @@ class BrainsAtPlay {
         }
 
         if (this.url.protocol == 'http:'){
-            this.connection = new WebSocket(`ws://` + this.url.hostname,[this.me.username, 'interfaces', gameName]);
+            this.connection = new WebSocket(`ws://` + this.url.hostname,[this.me.username, 'interfaces', this.gameName]);
         } else if (this.url.protocol == 'https:'){
-            this.connection = new WebSocket(`wss://` + this.url.hostname,[this.me.username, 'interfaces', gameName]);
+            this.connection = new WebSocket(`wss://` + this.url.hostname,[this.me.username, 'interfaces', this.gameName]);
         } else{
             console.log('invalid protocol')
             return
