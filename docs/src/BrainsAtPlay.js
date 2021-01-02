@@ -399,8 +399,6 @@ class BrainsAtPlay {
                     this.metrics[metricName].value = 0;
                 }
 
-
-
                 // Derive Buffer
                 if (metricName == 'voltage'){
                     this.updateBuffer('brains', metricName)
@@ -430,11 +428,15 @@ class BrainsAtPlay {
                     channelData = source[channel]
                     if (userInd == 0) {
                         if (this.me.index != undefined){
-                            this.metrics[metricName].buffer[this.me.index][channelInd].splice(0,1)
-                            this.metrics[metricName].buffer[this.me.index][channelInd].push(channelData)
+                            if (this.metrics[metricName].buffer.length != 0) {
+                                this.metrics[metricName].buffer[this.me.index][channelInd].splice(0, 1)
+                                this.metrics[metricName].buffer[this.me.index][channelInd].push(channelData)
+                            }
                         } else {
-                            this.metrics[metricName].buffer[0][channelInd].splice(0,1)
-                            this.metrics[metricName].buffer[0][channelInd].push(channelData)
+                            if (this.metrics[metricName].buffer.length != 0) {
+                                this.metrics[metricName].buffer[0][channelInd].splice(0, 1)
+                                this.metrics[metricName].buffer[0][channelInd].push(channelData)
+                            }
                         }
                     }
                 }
