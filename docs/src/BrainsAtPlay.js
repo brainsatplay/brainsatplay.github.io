@@ -33,9 +33,17 @@ class BrainsAtPlay {
             generatedSamples: Math.round(125*(1/(1)))-1
         }
 
-        this.metrics = {}
-        this.subscriptions = {};
-        this.subscribe('voltage',true);
+        if (!this.metrics){
+            this.metrics = {}
+        }
+        if (!this.subscriptions) {
+            this.subscriptions = {};
+            this.subscribe('voltage',true);
+        } else {
+            Object.keys(this.subscriptions).forEach((metricName)=>{
+                this.unsubscribe(metricName)
+            })
+        }
 
         this.setUpdateMessage()
     }
