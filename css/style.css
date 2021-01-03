@@ -1064,7 +1064,8 @@ hr {
     height: 250px;
     flex: 1 1 0;
     width: 0;
-    /*min-width: 40vw;*/
+    max-width: 100%;
+    min-width: 40vw;
     background-attachment: scroll;
     background-position: center;
     background-repeat: no-repeat;
