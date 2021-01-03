@@ -118,7 +118,7 @@ svg {
     left: 0;
     right: 0;
     background: #0c0b0c;
-    z-index: 1000;
+    z-index: 999;
     transition: 0.5s;
 }
 
@@ -548,7 +548,7 @@ footer {
     flex-wrap: wrap;
     padding: 25px 50px;
     background: #0c0b0c;
-    z-index: 1000;
+    z-index: 999;
 }
 
 footer a {
@@ -1291,3 +1291,77 @@ input[type="range"] {
 ::-ms-tooltip {
     display: none;
 }
+
+
+/* Sidenav */
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Stay on top */
+    top: 0; /* Stay at the top */
+    right: 0;
+    background: #0c0b0c;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 16px 0px 16px 0px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 300%;
+    color: #818181;
+    display: block;
+    transition: 0.5s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.nav-icon {
+    position: fixed;
+    right: 50px;
+    top: 0px;
+    transform: translateY(-15%);
+    margin: 1em;
+    width: 40px;
+    z-index: 1000;
+}
+
+.nav-icon div {
+    background-color: #fff;
+    border-radius: 3px;
+    content: '';
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px 0;
+    transition: all .5s ease-in-out;
+}
+
+#overlay {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    background:black;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .5s ease-in-out;
+}
+
+@media screen and (min-width: 768px) {
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        font-size: 25px;
+        text-align: left;
+    }
+}
+

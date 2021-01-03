@@ -79,7 +79,7 @@ function goBack() {
     document.getElementById('submitted-game-gallery').style.display = 'flex';
 
     // Hide Grading Rubric
-    if (brains.username != 'me') {
+    if (brains.me.username != 'me') {
         document.getElementById('rubric-header').style.display = 'block';
         document.getElementById('rubric-message').style.display = 'block';
         document.getElementById('rubric-inputs').style.display = 'none';
@@ -95,7 +95,7 @@ function getSubmissions(name) {
     document.getElementById('temp-message').style.display = 'block';
 
     // Show Grading Rubric
-    if (brains.username != 'me') {
+    if (brains.me.username != 'me') {
         document.getElementById('rubric-game').innerHTML = name.id;
         document.getElementById('rubric-game').style.display = 'block';
         document.getElementById('rubric-header').style.display = 'none';
@@ -217,7 +217,7 @@ function getSubmissions(name) {
         })})
 
             document.getElementById('game').style.display = 'flex';
-            if (brains.username =='me') {
+            if (brains.me.username =='me') {
                 document.getElementById('back').style.display = 'block';
             }
         //     }
@@ -264,9 +264,9 @@ async function login(brains, url, type){
         formDict.guestaccess = false
     }
 
-    let resDict = await brains.login(formDict,url)
+    let resDict = await brains.login(formDict)
     if (resDict.result == 'OK'){
-        document.getElementById('judge-username').innerHTML = brains.username;
+        document.getElementById('judge-username').innerHTML = brains.me.username;
         form.reset()
         toggleLoginScreen();
         document.getElementById('rubric-container').style.zIndex = '100';
@@ -293,7 +293,7 @@ async function signup(brains, url){
     }
     else {
 
-        let resDict = await brains.signup(formDict,url);
+        let resDict = await brains.signup(formDict);
         if (resDict.result == 'OK'){
             form.reset()
             toggleLoginScreen();
@@ -312,7 +312,7 @@ async function submitRatings(){
     for (var pair of formData.entries()) {
         formDict[pair[0]] = pair[1];
     }
-    formDict['username'] = brains.username;
+    formDict['username'] = brains.me.username;
     formDict['game'] = currentGame;
 
     let json  = JSON.stringify(formDict)
