@@ -179,7 +179,7 @@ function getSubmissions(name) {
     document.getElementById("game-image").innerHTML += `<img class="game-feature" src="${doc["game-image"]}"/>`
 
     for (let img in doc["additional-images"]){
-        $('#additional-images').prepend('<img class="item" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
+        $('#additional-images').append('<img class="item" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
     }
 
     Object.keys(doc).forEach(function(field) {
@@ -209,9 +209,10 @@ function getSubmissions(name) {
             } else {
                 console.log(json)
                 let doc = json[Object.keys(json)[0]]
+                document.getElementById('additional-images').innerHTML = '';
+                console.log(doc)
                 for (let img in doc["additional-images"]){
-                    document.getElementById('additional-images').innerHTML = '';
-                    $('#additional-images').prepend('<img class="item" src=' + doc["additional-images"][img] + ' />')
+                    $('#additional-images').append(`<img class="item" src="${doc["additional-images"][img]}"/>`)
                 }
             }
         })})

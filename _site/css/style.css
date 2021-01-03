@@ -465,6 +465,7 @@ input:focus{
 .item {
     cursor: pointer;
     margin: 5px;
+    max-width: 100%;
 }
 
 .soon {
