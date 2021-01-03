@@ -857,7 +857,8 @@ select {
 .button-nav button{
     flex-grow: 1;
     margin: 10px 10px;
-    min-width: 300px;
+    /*min-width: 20px;*/
+    padding: 10px 10px;
 }
 
 
