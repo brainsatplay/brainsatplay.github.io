@@ -113,7 +113,7 @@ svg {
     align-items: center;
     height: 50px;
     padding: 0px 50px;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -664,16 +664,16 @@ footer a {
 .feature{
     display:flex;
     flex-wrap: wrap;
-    margin: 50px 50px;
+    margin: 50px 0px;
 }
 
 .feature .left-feature {
     display:flex;
-    margin-right: 50px;
+    margin: 0px;
     align-items: center;
     flex-basis: 25vw;
     flex-grow:1;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .feature .left-feature img{
@@ -681,7 +681,6 @@ footer a {
     height: 20vw;
     min-width: 200px;
     min-height: 200px;
-
 }
 
 
@@ -1064,7 +1063,7 @@ hr {
     height: 250px;
     flex: 1 1 0;
     width: 0;
-    min-width: 40vw;
+    /*min-width: 40vw;*/
     background-attachment: scroll;
     background-position: center;
     background-repeat: no-repeat;
@@ -1326,7 +1325,7 @@ input[type="range"] {
 
 .nav-icon {
     position: fixed;
-    right: 50px;
+    right: 25px;
     top: 0px;
     transform: translateY(-15%);
     margin: 1em;
@@ -1363,6 +1362,14 @@ input[type="range"] {
         padding: 8px 8px 8px 32px;
         font-size: 25px;
         text-align: left;
+    }
+
+    .feature{
+        margin: 50px 50px;
+    }
+
+    .feature .left-feature {
+        margin-right: 50px;
     }
 }
 
