@@ -871,6 +871,11 @@ select {
     height: 200px;
 }
 
+#examples img{
+    height: 200px;
+    /*flex-grow: 1;*/
+}
+
 /*#example-section{*/
 /*    color: white;*/
 /*    background: black;*/
