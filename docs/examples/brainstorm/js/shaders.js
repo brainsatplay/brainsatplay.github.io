@@ -135,8 +135,8 @@ void main() {
                 vColor.y -= 0.5*(synchrony)*2.0;
                 vColor.z -= 0.2*(synchrony)*2.0;
             } else if (synchrony < 0.0){
-                vColor.x += 0.5*synchrony*10.0;
-                vColor.y += 0.2*synchrony*10.0;
+                vColor.x += 0.5*synchrony*2.0;
+                vColor.y += 0.2*synchrony*2.0;
             }
         } 
         else if (effect == 3){
@@ -148,11 +148,11 @@ void main() {
         }
 
         if (z_displacement > 0.0){
-            vColor.y -= 0.5*(z_displacement);
-            vColor.z -= 0.2*(z_displacement);
+            vColor.y -= 0.5*(z_displacement)*2.0;
+            vColor.z -= 0.2*(z_displacement)*2.0;
         } else if (z_displacement < 0.0){
-            vColor.x += 0.5*(z_displacement);
-            vColor.y += 0.2*(z_displacement);
+            vColor.x += 0.5*(z_displacement)*2.0;
+            vColor.y += 0.2*(z_displacement)*2.0;
         }
 
     }

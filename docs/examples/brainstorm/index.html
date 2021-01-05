@@ -133,6 +133,7 @@
         <div id='signaltypes'>
             <h4>Signal Types</h4>
             <p id="signal-type" class="small"></p>
+            <p id="synchrony-readout"></p>
             <button id='voltage' class="tooltip" onclick="updateSignalType('element',this)">
                 <span>Voltage</span>
                 <span class="tooltiptext"><p>Voltage</p><hr/><p class="small">Raw electrical activity from the brain</p></span>
@@ -498,6 +499,7 @@
         gl.uniformMatrix4fv(uniformLocations.matrix, false, mvpMatrix)
         gl.uniform1f(uniformLocations.u_time, (Date.now()-startTime)/1000);
         gl.uniform1f(uniformLocations.synchrony, game.getMetric('synchrony'));
+        document.getElementById('synchrony-readout').innerHTML = game.getMetric('synchrony').toFixed(3);
         gl.uniform2fv(uniformLocations.aspectChange, aspectChange);
 
         if (mouseDistort){

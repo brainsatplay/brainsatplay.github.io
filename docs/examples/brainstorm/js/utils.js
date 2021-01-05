@@ -263,6 +263,12 @@ function updateUI(){
     let opacity;
     let pointer;
 
+    if (scenes[state].name == 'Group Dynamics'){
+        document.getElementById('synchrony-readout').style.display = 'block'
+    } else {
+        document.getElementById('synchrony-readout').style.display = 'none'
+    }
+
     if (game.connection != undefined){
         if (game.info.public){
             document.getElementById('brain').style.opacity = '100%'
