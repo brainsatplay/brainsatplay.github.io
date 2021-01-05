@@ -12,7 +12,7 @@ function setup() {
 
 
   // Brains@Play Setup
-  game = new BrainsAtPlay('untitled')
+  game = new BrainsAtPlay('template')
   game.simulate(2);
   game.subscribe('synchrony',true)
   
