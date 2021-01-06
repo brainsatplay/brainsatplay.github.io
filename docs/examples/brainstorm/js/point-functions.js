@@ -31,10 +31,15 @@ function reducePointCount(pointCloud,desiredCount){
 }
 
 function createPointCloud(pointFunction, pointCount) {
+
     let pointCloud = [];
+    let numUsers = game.brains[game.info.access].size
+    if (numUsers == 0){
+        numUsers = 1;
+    }
     if (pointFunction == 'brains'){
-            let oneBrain = reducePointCount(brainVertices, Math.floor((brainVertices.length/3)/game.brains.size))
-            let dim_size = Math.ceil(Math.sqrt(game.brains.size));
+            let oneBrain = reducePointCount(brainVertices, Math.floor((brainVertices.length/3)/numUsers))
+            let dim_size = Math.ceil(Math.sqrt(numUsers));
 
             if (dim_size == 1){delta = 0; z_window = 0} else{
                 z_window = scenes[state].zoom/4;
@@ -45,7 +50,7 @@ function createPointCloud(pointFunction, pointCount) {
     
             let tempBrain;
 
-            for (let i = 0; i < game.brains.size; i++) {
+            for (let i = 0; i < numUsers; i++) {
                 tempBrain = [...oneBrain];
                 if (i % dim_size == 0) {
                     row = 0;
@@ -61,7 +66,7 @@ function createPointCloud(pointFunction, pointCount) {
             }
     
     
-            if (game.brains.size == 1) {
+            if (numUsers == 1) {
                 pointCloud = tempBrain;
             } else {
                 pointCloud = pointCloud.concat(tempBrain);
@@ -70,22 +75,21 @@ function createPointCloud(pointFunction, pointCount) {
             }
         }
         else if (pointFunction == 'channels') {
-            console.log(game.brains.size)
-            pointCloud = getChannels(pointCloud,pointCount,game.brains.size)
+            pointCloud = getChannels(pointCloud,pointCount)
         } else if (pointFunction == shapes.sphereShells) {
-            let dim_size = Math.ceil(Math.sqrt(game.brains.size));
+            let dim_size = Math.ceil(Math.sqrt(numUsers));
             if (dim_size == 1){delta = 0; z_window = 0} else{
                 z_window = INNER_Z;
                 delta = (2*INNER_Z)/(dim_size-1)
             }
             let row = 0;
             let col = -1;
-            for (let i = 0; i < game.brains.size; i++) {
+            for (let i = 0; i < numUsers; i++) {
                 if (i % dim_size == 0) {
                     row = 0;
                     col++;
                 }
-                for (let j = 0; j < Math.floor(pointCount / game.brains.size); j++) {
+                for (let j = 0; j < Math.floor(pointCount / numUsers); j++) {
                     const r = () => (Math.random() - 0.5);
                     let point = pointFunction(r(), r(), r());
     
@@ -261,21 +265,26 @@ const shapes = {
     },
 };
 
-function getChannels(pointCloud, pointCount, numUsers) {
+function getChannels(pointCloud, pointCount) {
+    let numUsers = game.brains[game.info.access].size
+    if (numUsers == 0){
+        numUsers = 1;
+    }
+    let numChannels = game.usedChannels.length
+    if (numChannels == 0){
+        numChannels = 16;
+    }
     let user = -1;
     let y;
     let z;
     let channel_trigger = game.bufferSize
-    let user_trigger = game.bufferSize*game.usedChannels.length
-    let currDataPoints = game.bufferSize*game.usedChannels.length*numUsers
+    let user_trigger = game.bufferSize*numChannels
+    let currDataPoints = game.bufferSize*numChannels*numUsers
     let upsamplingFactor = Math.floor(pointCount/(currDataPoints)) // account for doubling (due to line drawing)
 
     let drawArea = {w: 0.8*(canvas.getBoundingClientRect().width), h: 0.8*(canvas.getBoundingClientRect().height)}
-    let z_iter = ((drawArea.h)/(2*game.usedChannels.length))
+    let z_iter = ((drawArea.h)/(2*numChannels))
     let y_iter = (drawArea.w/ (channel_trigger*upsamplingFactor))
-    // let channel_trigger = Math.floor(pointCount/(2*game.brains.size*game.usedChannels.length));
-    // let user_trigger = Math.floor(pointCount/(2*game.brains.size));
-
 
    // factor must be odd
     if (upsamplingFactor%2 === 0){
@@ -292,7 +301,7 @@ function getChannels(pointCloud, pointCount, numUsers) {
 
         // reset user
         if (i*2 % user_trigger == 0){
-            z = -(z_iter)*(game.usedChannels.length/2) + z_iter/2;
+            z = -(z_iter)*(numChannels/2) + z_iter/2;
             y = -drawArea.w/4;
             user++;
         }

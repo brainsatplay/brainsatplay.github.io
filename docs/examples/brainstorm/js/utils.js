@@ -1,6 +1,6 @@
 /* -------------------------- Utility Functions -------------------------- */
 
-function switchToChannels(pointCount,users){
+function switchToChannels(pointCount){
 
     // Reset View Matrix
     viewMatrix = mat4.create();
@@ -12,7 +12,7 @@ function switchToChannels(pointCount,users){
 
     let vertexHome;
     // Create signal dashboard
-    vertexHome = getChannels([],pointCount,users);
+    vertexHome = getChannels([],pointCount);
     let ease = true;
     let rotation = false;
     let zoom = false;
@@ -56,13 +56,13 @@ function stateManager(forceUpdate=false){
 
     if (shapes.includes('channels')){
         cameraHome = scenes[state].zoom;
-        [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.brains.size)
+        [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.brains[game.info.access].size)
         if (uniformLocations != undefined){
             gl.uniform1i(uniformLocations.ambientNoiseToggle, 0);
         }
 
         // toggle color
-        if (scenes[state].signaltype.includes('voltage')){
+        if (scenes[state].signaltype == 'voltage'){
             gl.uniform1i(uniformLocations.colorToggle, 0);
         } else {
             gl.uniform1i(uniformLocations.colorToggle, 1);
@@ -148,7 +148,7 @@ function updateChannels(newChannels) {
         }
 
         if (shapes.includes('channels')) {
-            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.brains.size)
+            [vertexHome, , ease, rotation, zoom] = switchToChannels(Math.round(pointCount/shapes.length),game.brains[game.info.access].size)
         }
 
         let passedEEGCoords = [];
@@ -236,14 +236,15 @@ function toggleChat(){
 }
 
 function toggleAccess(){
-    game.info.public = !game.info.public;
-    if (game.info.public){
+    if (game.info.access == 'private'){
+        game.access('public')
         document.getElementById('access-mode').innerHTML = 'Public Mode'
-        game.connection.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
     } else {
-        document.getElementById('access-mode').innerHTML = 'Isolation Mode'
-        game.connection.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
+        document.getElementById('access-mode').innerHTML = 'Private Mode'
+        game.access('private')
+        updateSignalType('signaltype', 'voltage')
     }
+    updateUI()
 }
 
 
@@ -269,8 +270,8 @@ function updateUI(){
         document.getElementById('synchrony-readout').style.display = 'none'
     }
 
-    if (game.connection != undefined){
-        if (game.info.public){
+    if (game.connection != undefined && game.connection.readyState){
+        if (game.info.access == 'public'){
             document.getElementById('brain').style.opacity = '100%'
             document.getElementById('channels').style.opacity = '100%'
             document.getElementById('brain').style.pointerEvents = 'auto'
@@ -604,80 +605,40 @@ function brainDependencies(updateArray){
         stateManager(true)
 
         // Announce number of brains currently online
-        if (game.info.public === true && (updateObj.nBrains > 0) && game.brains.get('me') == undefined){
-            announcement(`<div>Welcome to the Brainstorm
+        if ((game.info.access === 'public') && game.info.simulated == false) {
+            if (updateObj.nBrains > 0) {
+                announcement(`<div>Welcome to the Brainstorm
                             <p class="small">${game.info.brains} brains online</p></div>`)
-            document.getElementById('nBrains').innerHTML = `${game.info.brains}`
-        } else if (game.info.public === false) {
-            if (updateObj.privateBrains){
-                document.getElementById('nBrains').innerHTML = `1`
             } else {
-                if (game.brains.has("me")){
-                    document.getElementById('nBrains').innerHTML = `0`
-                } else {
-                    document.getElementById('nBrains').innerHTML = `${game.info.brains}`
-                }
+                announcement(`<div>Welcome to the Brainstorm
+                                <p class="small">No brains online</p></div>`)
             }
-        } else {
-            announcement(`<div>Welcome to the Brainstorm
-                            <p class="small">No brains online</p></div>`)
-            document.getElementById('nBrains').innerHTML = `0`
         }
-        if (game.info.public === false) {
-            document.getElementById('nInterfaces').innerHTML = `1`
-        } else {
-            document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
-        }
+        document.getElementById('nBrains').innerHTML = `${game.info.brains}`
+        document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
 
-    } else if (updateObj.destination == 'brains'){
-        update = updateObj.n;
+    } else if (updateObj.destination == 'update'){
 
         if (state != 0){
             stateManager(true)
         }
 
-        if ((game.info.public) || (!game.info.public && updateObj.access === 'private')){
-            if (update == 1){
-                    if (game.info.public){
-                        document.getElementById('nBrains').innerHTML = `${game.info.brains}`
-                    } else if (!game.info.public && updateObj.access === 'private') {
-                        document.getElementById('nBrains').innerHTML = `1`
-                    }
-            } else if (update == -1){
-                let brainReadout = document.getElementById('nBrains')
-                if (game.info.public){
-                    if ((game.info.brains == 0) || (brainReadout.innerHTML == '1')){
-                        announcement('all users left the brainstorm')
-                        brainReadout.innerHTML = `0`
-                    } else {
-                        brainReadout.innerHTML = `${game.info.brains}`
-                    }
-                } else if (!game.info.public && updateObj.access === 'private'){
-                    brainReadout.innerHTML = `0`
-                }
-            }
+        document.getElementById('nBrains').innerHTML = `${game.info.brains}`
+
+        if (game.info.brains == 0 && (game.info.access == 'public')){
+            announcement('all users left the brainstorm')
         }
-    } else if (updateObj.destination == 'interfaces'){
-        document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
-    } else if (updateObj.destination =='closed'){
-        announcement(`<div>Exiting the Brainstorm
-            <p class="small">Thank you for playing!</p></div>`)
-            if (window.innerWidth >= 768) {
-                document.getElementById('id-params').style.display = `none`;
-                document.getElementById('nBrains-params').style.display = `none`;
-                document.getElementById('nInterfaces-params').style.display = `none`;
-            }
-            document.getElementById('access-mode-div').innerHTML = ` 
-            <p id="access-mode" class="small">Not Connected</p>
-            `
-            document.getElementById("connection-button").innerHTML = `
-                                Connect
-                                <span class="tooltiptext"><p>Connect to Network</p><hr/><p class="small">View live brain data from Brains@Play server</p></span>
-            `;
-            state = 1;
-            stateManager(true)
+        document.getElementById('nBrains').innerHTML = `${game.info.brains}`
+        }
+
+        if (game.info.access == 'private'){
+            document.getElementById('nInterfaces').innerHTML = `1`
+        } else {
+            document.getElementById('nInterfaces').innerHTML = `${game.info.interfaces}`
+        }
+    } else if (updateObj.destination == 'closed'){
+        updateUI();
     }
-}
 })
 }
 

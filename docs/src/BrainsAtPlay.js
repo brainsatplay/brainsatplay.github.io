@@ -6,7 +6,10 @@ class BrainsAtPlay {
     }
 
     initialize() {
-        this.brains = new Map();
+        this.brains = {
+            public: new Map(),
+            private: new Map()
+        }
         this.bufferSize = 1000;
         this.eegChannelCoordinates = this.getEEGCoordinates()
         this.usedChannels = []
@@ -24,7 +27,8 @@ class BrainsAtPlay {
         this.info = {
             interfaces: 0,
             brains: 0,
-            public: true,
+            access: 'public',
+            simulated: false
         }
 
         this.simulation = {
@@ -51,16 +55,23 @@ class BrainsAtPlay {
 
 
     subscribe(metricName,lock=false){
+        let alreadyExists = Object.keys(this.subscriptions).includes(metricName)
+        if (alreadyExists) {
+            lock = this.subscriptions[metricName].lock
+        }
         this.subscriptions[metricName] = {
             active: true,
             lock: lock
         }
-        this.addMetric(metricName)
-        this.initializeBuffer(metricName)
+
+        if (!this.subscriptions[metricName].lock || !alreadyExists) {
+            this.addMetric(metricName)
+            this.initializeBuffer(metricName)
+        }
     }
 
     unsubscribe(metricName){
-        if (Object.keys(this.subscriptions).includes(metricName) && this.subscriptions[metricName].lock != true) {
+        if (Object.keys(this.subscriptions).includes(metricName) && this.subscriptions[metricName].lock !== true) {
             this.subscriptions[metricName].active = false;
         }
         this.initializeBuffer(metricName)
@@ -75,24 +86,34 @@ class BrainsAtPlay {
     }
 
     getMetric(metricName) {
-        if (this.subscriptions[metricName].active){
-            return this.metrics[metricName].value
+        if (metricName !== undefined) {
+            if (this.subscriptions[metricName].active) {
+                return this.metrics[metricName].value
+            } else {
+                return 0
+            }
         } else {
             return 0
         }
     }
 
     getChannelReadout(metricName) {
-        if (this.subscriptions[metricName] && this.subscriptions[metricName].active){
+        if (metricName !== undefined) {
+            if (Object.keys(this.subscriptions).includes(metricName) && this.subscriptions[metricName].active){
             return this.metrics[metricName].channels
+        } else {
+            return Array.from({length: Object.keys(this.eegChannelCoordinates).length}, e => Array().fill(0));
+        }
         } else {
             return Array.from({length: Object.keys(this.eegChannelCoordinates).length}, e => Array().fill(0));
         }
     }
 
     getBuffer(metricName) {
-        if (this.subscriptions[metricName].active){
-            return this.metrics[metricName].buffer
+        if (metricName !== undefined) {
+            if (this.subscriptions[metricName].active) {
+                return this.metrics[metricName].buffer
+            }
         }
     }
 
@@ -118,7 +139,7 @@ class BrainsAtPlay {
         let user = 0;
         let gotMe = false;
 
-        this.brains.forEach((_,key) => {
+        this.brains[this.info.access].forEach((_,key) => {
             if (key == this.me.username || key == 'me'){
                 this.me.index = user;
                 gotMe = true;
@@ -132,7 +153,8 @@ class BrainsAtPlay {
     }
 
     simulate(count){
-        this.brains.clear()
+        this.brains.private.clear()
+        this.brains.public.clear()
         this.add('me')
         for (let i = 1; i < count; i++){
             this.add('other'+i);
@@ -142,23 +164,37 @@ class BrainsAtPlay {
         this.updateUsedChannels()
         this.me.username = "me"
         this.simulation.generate = true;
+        this.info.simulated = true;
     }
 
-    add(id,channelNames) {
+
+    add(id,channelNames,access='public') {
         let brain;
         if (channelNames == undefined){
             brain = new Brain(id)
         } else {
             brain = new Brain(id,channelNames)
         }
-        this.brains.set(id, brain)
-        this.getMyIndex()
-        this.updateUsedChannels()
-        this.initializeBuffer('voltage')
+
+        this.brains[access].set(id, brain)
+        if (id == "me" && this.info.simulated == false) {
+            this.info.brains = this.brains[access].size - 1
+        } else {
+            this.info.brains = this.brains[access].size
+        }
+
+        if (access == this.info.access) {
+            this.getMyIndex()
+            this.updateUsedChannels()
+            this.initializeBuffer('voltage')
+        }
     }
 
-    remove(id){
-        this.brains.delete(id)
+    remove(id,access='public'){
+        this.brains[access].delete(id)
+        this.info.brains = this.brains[access].size
+        this.getMyIndex()
+        this.updateUsedChannels()
         this.initializeBuffer('voltage')
     }
 
@@ -198,62 +234,82 @@ class BrainsAtPlay {
         return data
     }
 
-    getPower(relative=false){
-        let dataOfInterest = [];
-        let power = new Array(Object.keys(this.eegChannelCoordinates).length);
-        let channelInd;
-        if (this.me.index != undefined){
-            this.usedChannels.forEach((channelInfo) => {
-                channelInd = this.usedChannelNames.indexOf(channelInfo.name)
-                // Calculate Average Power of Voltage Signal
-                let data = this.metrics.voltage.buffer[this.me.index][channelInd]
-                power[channelInfo.index] = data.reduce((acc,cur) => acc + ((cur*cur)/2), 0)/data.length
-            })
+    getPower(user=this.me.index,relative=false){
 
-            if (relative){
-                power = this.stdDev(power,true)
+        if (user !== undefined) {
+            let dataOfInterest = [];
+            let power = new Array(Object.keys(this.eegChannelCoordinates).length);
+            let channelInd;
+            if (this.me.index != undefined) {
+                this.usedChannels.forEach((channelInfo) => {
+                    channelInd = this.usedChannelNames.indexOf(channelInfo.name)
+                    // Calculate Average Power of Voltage Signal
+                    let data = this.metrics.voltage.buffer[this.me.index][channelInd]
+                    power[channelInfo.index] = data.reduce((acc, cur) => acc + ((cur * cur) / 2), 0) / data.length
+                })
+
+                if (relative) {
+                    power = this.stdDev(power, true)
+                }
+
             }
-
+            return power
+        } else {
+            return this.getChannelReadout(user)
         }
-        return power
     }
 
-    getBandPower(band, relative=false){
-        let dataOfInterest = [];
+    getBandPower(band, user=this.me.index, relative=false) {
+        if (user !== undefined){
+            let dataOfInterest = [];
         let bandpower = new Array(Object.keys(this.eegChannelCoordinates).length);
         let channelInd;
-
+        // this.metrics.voltage.buffer.forEach((userData) => {
         this.usedChannels.forEach((channelInfo) => {
             channelInd = this.usedChannelNames.indexOf(channelInfo.name)
             // NOTE: Not actually the correct samplerate
             bandpower[channelInfo.index] = bci.bandpower(this.metrics.voltage.buffer[this.me.index][channelInd], this.simulation.sampleRate, band, {relative: true});
         })
 
-        if (relative){
+
+        if (relative) {
             bandpower = this.stdDev(bandpower)
         }
-
         return bandpower
+
+    } else {
+        return this.getChannelReadout(user)
+    }
     }
 
 
     getSynchrony(method="pcc") {
         let channelSynchrony = Array.from({length: Object.keys(this.eegChannelCoordinates).length}, e => Array());
-        if (this.brains.size > 1){
+        if (this.brains[this.info.access].size > 1){
             // Generate edge array
             let edgesArray = [];
 
-            for (let i = 0; i < this.brains.size; i++){
-                if (i != this.me.index){
-                    edgesArray.push([this.me.index,i])
+            if (this.me.index) {
+                for (let i = 0; i < this.brains[this.info.access].size; i++) {
+                    if (i != this.me.index) {
+                        edgesArray.push([this.me.index, i])
+                    }
                 }
+            } else {
+                let pairwise = (list) => {
+                    if (list.length < 2) { return []; }
+                    var first = list[0],
+                        rest  = list.slice(1),
+                        pairs = rest.map(function (x) { return [first, x]; });
+                    return pairs.concat(pairwise(rest));
+                }
+                edgesArray = pairwise([...Array(this.info.brains).keys()])
             }
 
             if (method == 'pcc') {
                 // Source: http://stevegardner.net/2012/06/11/javascript-code-to-calculate-the-pearson-correlation-coefficient/
 
                 edgesArray.forEach((edge) => {
-
                     let xC = this.metrics.voltage.buffer[edge[0]]
                     let yC = this.metrics.voltage.buffer[edge[1]]
                     let numChannels = Math.min(xC.length,yC.length)
@@ -324,7 +380,7 @@ class BrainsAtPlay {
 
         let b = [];
         let user;
-        for (user = 0; user < this.brains.size; user++) {
+        for (user = 0; user < this.brains[this.info.access].size; user++) {
             b.push([])
             for (let chan = 0; chan < this.usedChannels.length; chan++) {
                 b[user].push(new Array(this.bufferSize).fill(0));
@@ -335,7 +391,7 @@ class BrainsAtPlay {
 
     generateVoltageStream(){
 
-        this.brains.forEach((user) => {
+        this.brains[this.info.access].forEach((user) => {
             let signal = new Array(this.usedChannels.length);
             for (let channel =0; channel < this.usedChannels.length; channel++) {
                 signal[channel] = bci.generateSignal([Math.random()], [this.simulation.baseFrequency+Math.random()*40], this.simulation.sampleRate, (1/this.simulation.baseFrequency));
@@ -372,15 +428,15 @@ class BrainsAtPlay {
         this.updateSubscriptions()
     }
 
-    updateSubscriptions(){
+    async updateSubscriptions(){
         Object.keys(this.subscriptions).forEach((metricName) => {
             if (this.subscriptions[metricName].active) {
 
                 // Derive Channel Readouts
                 if (metricName == 'voltage') {
-                    this.metrics[metricName].channels = this.getPower(true)
+                    this.metrics[metricName].channels = this.getPower(this.me.index,true)
                 } else if (['delta', 'theta', 'alpha', 'beta', 'gamma'].includes(metricName)) {
-                    this.metrics[metricName].channels = this.getBandPower(metricName, false)
+                    this.metrics[metricName].channels = this.getBandPower(metricName, this.me.index,false)
                 } else if (metricName == 'synchrony') {
                     this.metrics[metricName].channels = this.getSynchrony('pcc')
                 }
@@ -410,10 +466,9 @@ class BrainsAtPlay {
     }
 
     updateBuffer(source='brains',metricName='voltage'){
-
         let channelInd;
         let userInd = 0;
-        this.brains.forEach((brain) => {
+        this.brains[this.info.access].forEach((brain) => {
             brain.buffer.forEach((channelData, channel) => {
                 channelInd = this.usedChannelNames.indexOf(brain.channelNames[channel])
                 if (source == 'brains'){
@@ -427,18 +482,18 @@ class BrainsAtPlay {
                 } else {
                     channelData = source[channel]
                     if (userInd == 0) {
-                        if (this.me.index != undefined){
-                            if (this.metrics[metricName].buffer.length != 0) {
-                                this.metrics[metricName].buffer[this.me.index][channelInd].splice(0, 1)
-                                this.metrics[metricName].buffer[this.me.index][channelInd].push(channelData)
-                            }
-                        } else {
-                            if (this.metrics[metricName].buffer.length != 0) {
-                                this.metrics[metricName].buffer[0][channelInd].splice(0, 1)
-                                this.metrics[metricName].buffer[0][channelInd].push(channelData)
+                            if (this.me.index != undefined) {
+                                    if (this.metrics[metricName].buffer.length != 0 && this.metrics[metricName].buffer[this.me.index].length == brain.channelNames.length) {
+                                        this.metrics[metricName].buffer[this.me.index][channelInd].splice(0, 1)
+                                        this.metrics[metricName].buffer[this.me.index][channelInd].push(channelData)
+                                }
+                            } else {
+                                if (this.metrics[metricName].buffer.length != 0) {
+                                    this.metrics[metricName].buffer[0][channelInd].splice(0, 1)
+                                    this.metrics[metricName].buffer[0][channelInd].push(channelData)
+                                }
                             }
                         }
-                    }
                 }
             })
             userInd++
@@ -481,7 +536,7 @@ class BrainsAtPlay {
         // Define all used channel indices
         Object.keys(this.eegChannelCoordinates).forEach((name,ind) => {
             // Extract All Used EEG Channels
-            this.brains.forEach((user) => {
+            this.brains[this.info.access].forEach((user) => {
                 if (user.channelNames.includes(name) && this.usedChannelNames.indexOf(name) == -1){
                     this.usedChannels.push({name:name, index:ind})
                     this.usedChannelNames.push(name)
@@ -490,10 +545,25 @@ class BrainsAtPlay {
         })
     }
 
-    // Networking Suite
+    // Access
+    access(type) {
+        if (type == undefined){
+            type = this.info.access
+        } else {
+            this.info.access = type;
+        }
+        this.info.brains = this.brains[this.info.access].size
+        this.getMyIndex()
+        this.updateUsedChannels()
+        this.initializeBuffer('voltage')
+        this.setUpdateMessage({destination: 'update'})
+        return type
+    }
 
+    // Networking Suite
     disconnect(){
         this.connection.close();
+        this.setUpdateMessage({destination:'closed'})
     }
 
     connect(){
@@ -518,40 +588,34 @@ class BrainsAtPlay {
 
         this.connection.onopen =  () => {
             this.initialize()
-            this.connection.send(JSON.stringify({'destination':'initializeBrains','public': BrainsAtPlay.public}));
-            this.setUpdateMessage({destination:'opened'})
+            this.send('initializeBrains')
         };
 
         this.connection.onmessage =  (msg) => {
 
             let obj = JSON.parse(msg.data);
             if (obj.destination == 'bci'){
-                if (this.brains.get(obj.id) != undefined){
-                    this.brains.get(obj.id).streamIntoBuffer(obj.data)
+                if (this.brains[this.info.access].get(obj.id) != undefined){
+                    this.brains[this.info.access].get(obj.id).streamIntoBuffer(obj.data)
                 }
             } else if (obj.destination == 'init'){
 
-                this.brains.clear()
+                this.brains.public.clear()
+                this.brains.private.clear()
 
-                if (obj.privateBrains && this.info.public === false){
-                    this.add(obj.privateInfo.id, obj.privateInfo.channelNames)
+                if (obj.privateBrains){
+                    this.add(obj.privateInfo.id, obj.privateInfo.channelNames,'private')
                 } else {
                     for (let newUser = 0; newUser < obj.nBrains; newUser++){
-                        if (this.brains.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
-                            if (this.info.public){
+                        if (this.brains.public.get(obj.ids[newUser]) == undefined && obj.ids[newUser] != undefined){
                                 this.add(obj.ids[newUser], obj.channelNames[newUser])
-                            } else {
-                                if (obj.ids[newUser] == this.me.username){
-                                    this.add(obj.ids[newUser], obj.channelNames[newUser])
-                                }
-                            }
                         }
                     }
                 }
 
-                if (this.brains.size == 0){
-                    this.add('me');
-                }
+                // if (this.brains.size == 0){
+                //     this.add('me');
+                // }
 
                 this.simulation.generate = false;
                 this.updateUsedChannels()
@@ -563,36 +627,20 @@ class BrainsAtPlay {
             else if (obj.destination == 'brains'){
                 let update = obj.n;
 
-                this.info.brains += update;
-
                 // Only update if access matches
-                if ((this.info.public) || (!this.info.public && obj.access === 'private')){
-                    if (update == 1){
-                        if (this.info.public){
-                            this.add(obj.id, obj.channelNames)
-                            this.remove('me')
-                        } else if (!this.info.public && obj.access === 'private') {
-                            this.add(obj.id, obj.channelNames)
-                            this.remove('me')
-                        }
-                    } else if (update == -1){
-                        this.remove(obj.id)
-                        if (this.info.public){
-                            if (this.brains.size == 0){
-                                this.add('me')
-                            }
-                        } else if (!this.info.public && obj.access === 'private'){
-                            this.add('me')
-                        }
-                    }
-                    this.updateUsedChannels()
+                if (update == 1){
+                    this.add(obj.id, obj.channelNames,obj.access)
+                } else if (update == -1){
+                    this.remove(obj.id,obj.access)
                 }
-
+                this.updateUsedChannels()
                 this.getMyIndex()
+                obj.destination = 'update'
                 this.setUpdateMessage(obj)
             }
             else if (obj.destination == 'interfaces'){
                 this.info.interfaces += obj.n;
+                obj.destination = 'update'
                 this.setUpdateMessage(obj)
             }
             else {
@@ -604,68 +652,75 @@ class BrainsAtPlay {
             this.connection = undefined;
             this.info.interfaces = undefined;
             this.simulate(2)
-            this.simulation.generate = true;
             this.getMyIndex()
-            this.setUpdateMessage({destination: 'closed'})
         };
     }
 
 
     // Requests
-    login(dict, url='https://brainsatplay.azurewebsites.net/') {
-        this.url = new URL(url);
 
-        const handleLoginRequest = async (dict) => {
-            let json  = JSON.stringify(dict)
-
-            let resDict = await fetch(url + 'login',
-                { method: 'POST',
-                    mode: 'cors',
-                    headers: new Headers({
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }),
-                    body: json
-                }).then((res) => {return res.json().then((message) => message)})
-                .then((message) => {
-                    return message})
-                .catch(function (err) {
-                    console.log(`\n${err.message}`);
-                });
-
-            if (resDict.result == 'OK'){
-                this.me.username = resDict.msg;
-            }
-            return resDict
+    send(command) {
+        if (command === 'initializeBrains') {
+            this.connection.send(JSON.stringify({'destination': 'initializeBrains', 'public': false}));
+            this.setUpdateMessage({destination:'opened'})
         }
-        return handleLoginRequest(dict)
     }
 
-    signup(dict, url='https://brainsatplay.azurewebsites.net/') {
+    checkURL(url) {
+        if (url.slice(-1) != '/'){
+            url += '/'
+        }
+        return url
+    }
+
+    async login(dict, url='https://brainsatplay.azurewebsites.net/') {
+        url = this.checkURL(url)
         this.url = new URL(url);
 
-        const handleSignupRequest = async (dict) => {
-            let json  = JSON.stringify(dict)
+        let json  = JSON.stringify(dict)
 
-            let resDict = await fetch(url + 'signup',
-                { method: 'POST',
-                    mode: 'cors',
-                    headers: new Headers({
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }),
-                    body: json
-                }).then((res) => {return res.json().then((message) => message)})
-                .then((message) => {
-                    console.log(`\n${message}`);
-                    return message})
-                .catch(function (err) {
-                    console.log(`\n${err.message}`);
-                });
+        let resDict = await fetch(url + 'login',
+            { method: 'POST',
+                mode: 'cors',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }),
+                body: json
+            }).then((res) => {return res.json().then((message) => message)})
+            .then((message) => {
+                return message})
+            .catch(function (err) {
+                console.log(`\n${err.message}`);
+            });
 
-            return resDict
+        if (resDict.result == 'OK'){
+            this.me.username = resDict.msg;
         }
-        return handleSignupRequest(dict)
+        return resDict
+    }
+
+    async signup(dict, url='https://brainsatplay.azurewebsites.net/') {
+        url = this.checkURL(url)
+        this.url = new URL(url);
+        let json  = JSON.stringify(dict)
+        let resDict = await fetch(url + 'signup',
+            { method: 'POST',
+                mode: 'cors',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }),
+                body: json
+            }).then((res) => {return res.json().then((message) => message)})
+            .then((message) => {
+                console.log(`\n${message}`);
+                return message})
+            .catch(function (err) {
+                console.log(`\n${err.message}`);
+            });
+
+        return resDict
     }
 
 

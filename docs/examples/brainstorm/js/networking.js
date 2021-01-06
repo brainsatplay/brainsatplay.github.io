@@ -22,6 +22,24 @@ function toggleConnection(){
     }
     } else {
         game.disconnect()
+
+        announcement(`<div>Exiting the Brainstorm
+        <p class="small">Thank you for playing!</p></div>`)
+        if (window.innerWidth >= 768) {
+            document.getElementById('id-params').style.display = `none`;
+            document.getElementById('nBrains-params').style.display = `none`;
+            document.getElementById('nInterfaces-params').style.display = `none`;
+        }
+        document.getElementById('access-mode-div').innerHTML = ` 
+        <p id="access-mode" class="small">Not Connected</p>
+        `
+        document.getElementById("connection-button").innerHTML = `
+                            Connect
+                            <span class="tooltiptext"><p>Connect to Network</p><hr/><p class="small">View live brain data from Brains@Play server</p></span>
+        `;
+        state = 1;
+        stateManager(true)
+        updateSignalType('signaltype','voltage')
     }
 }
 
