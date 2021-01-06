@@ -35,7 +35,8 @@ function distortToggle(){
 function stateManager(forceUpdate=false){
     // Do We Have Vertices Defined OR Did State Change OR Is This Animation Over?
     if (forceUpdate || vertexHome == undefined || state != prevState || newSignalType || (scenes[state].timer && ((Date.now() - animStart)/1000 > scenes[state].timer))){
-    if (scenes[state].timer && ((Date.now() - animStart)/1000 > scenes[state].timer)){
+
+        if (scenes[state].timer && ((Date.now() - animStart)/1000 > scenes[state].timer)){
         state++;
     }
 
@@ -270,7 +271,7 @@ function updateUI(){
         document.getElementById('synchrony-readout').style.display = 'none'
     }
 
-    if (game.connection != undefined && game.connection.readyState){
+    if (game.connection != undefined && game.connection.readyState === 1){
         if (game.info.access == 'public'){
             document.getElementById('brain').style.opacity = '100%'
             document.getElementById('channels').style.opacity = '100%'

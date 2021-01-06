@@ -22,7 +22,6 @@ function toggleConnection(){
     }
     } else {
         game.disconnect()
-
         announcement(`<div>Exiting the Brainstorm
         <p class="small">Thank you for playing!</p></div>`)
         if (window.innerWidth >= 768) {
@@ -38,8 +37,9 @@ function toggleConnection(){
                             <span class="tooltiptext"><p>Connect to Network</p><hr/><p class="small">View live brain data from Brains@Play server</p></span>
         `;
         state = 1;
-        stateManager(true)
         updateSignalType('signaltype','voltage')
+        stateManager(true)
+        updateUI()
     }
 }
 
