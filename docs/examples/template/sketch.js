@@ -14,19 +14,16 @@ function setup() {
   // Brains@Play Setup
   game = new BrainsAtPlay('template')
   game.simulate(2);
-  game.subscribe('synchrony',true)
+  game.subscribe('synchrony',true);
   
   connectToggle.mousePressed(() => {
-    game.login({
-          'guestaccess': true
-        }),
       game.connect(),
       disconnectToggle.show(),
       connectToggle.hide()
   });
 
   disconnectToggle.mousePressed(() => {
-    game.disconnect(),
+      game.disconnect(),
       disconnectToggle.hide(),
       connectToggle.show()
   });
@@ -37,7 +34,7 @@ function draw() {
   background(0);
 
   // Update Voltage Buffers and Derived Variables
-  game.update()
+  game.update();
 
   // Draw Raw Voltage 
   let c;
@@ -52,7 +49,7 @@ function draw() {
     strokeWeight(1)
     stroke(c)
 
-    let brainData = game.metrics.voltage.buffer[ind]
+    let brainData = game.getBuffer('voltage')[ind]
     // Grab only the first channel of data
     let data = brainData[0]
     let dx = windowWidth / data.length;
@@ -67,13 +64,13 @@ function draw() {
   
   // Draw Synchrony 
   noFill()
-  if (game.metrics.synchrony.value < 0) {
+  if (game.getMetric('synchrony') < 0) {
     stroke('blue')
   } else {
     stroke('red')
   }
   strokeWeight(2)
-  ellipse((windowWidth / 2), windowHeight/2, 10 * game.metrics.synchrony.value * Math.min(windowHeight / 2, windowWidth / 2));
+  ellipse((windowWidth / 2), windowHeight/2, 10 * game.getMetric('synchrony') * Math.min(windowHeight / 2, windowWidth / 2));
 
   noStroke()
   // Include Text for Raw Synchrony Value
@@ -84,19 +81,19 @@ function draw() {
   textStyle(ITALIC)
   textSize(10)
 
-  if (game.connection) {
+  if (!game.info.simulated) {
     text('Live Data Stream', windowWidth / 2, windowHeight-80)
   } else {
     text('Synthetic Data Stream', windowWidth / 2, windowHeight-80)
   }
   
   textStyle(NORMAL)
-  if (game.info.brains == 0 && game.me.index != undefined) {
+  if (game.info.brains == 0) {
     text('No brains on the network...', windowWidth / 2, windowHeight/2)
   } else if (game.info.brains < 2) {
     text('One brain on the network...', windowWidth / 2, windowHeight/2)
   } else {
-    text(game.metrics.synchrony.value.toFixed(4), windowWidth / 2, windowHeight/2)
+    text(game.getMetric('synchrony').toFixed(4), windowWidth / 2, windowHeight/2)
   }
 
 }

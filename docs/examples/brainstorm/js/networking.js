@@ -1,8 +1,7 @@
 // Connection Management
 function toggleConnection(){
-
-    if (game.connection == undefined){
-        if (['me'].includes(game.me.username)){
+    if (game.info.simulated == true){
+        if (undefined === game.me.username){
             toggleLoginScreen();
         } else {
         document.getElementById("connection-button").innerHTML = 'Disconnect';
@@ -17,9 +16,7 @@ function toggleConnection(){
             <input type="checkbox" onchange="toggleAccess()" checked>
             <span class="slider round"></span>
           </label>
-          `
-        game.connect()
-    }
+          `}
     } else {
         game.disconnect()
         announcement(`<div>Exiting the Brainstorm
@@ -56,7 +53,7 @@ async function login(type='guest'){
         formDict.guestaccess = false
     }
 
-        let resDict = await game.login(formDict,url)
+    await game.connect(formDict,url).then((resDict) =>{
         if (resDict.result == 'OK'){
             document.getElementById('userId').innerHTML = game.me.username
             form.reset()
@@ -65,6 +62,7 @@ async function login(type='guest'){
         } else {
             document.getElementById('login-message').innerHTML = resDict.msg
         }
+    })
 }
 
 async function signup(){
