@@ -65,10 +65,10 @@ class Game {
             lock: lock
         }
 
-        if (!this.subscriptions[metricName].lock || !alreadyExists) {
+        // if (!this.subscriptions[metricName].lock || !alreadyExists) {
             this.addMetric(metricName)
-            this.initializeBuffer(metricName)
-        }
+        // }
+        this.initializeBuffer(metricName)
     }
 
     unsubscribe(metricName) {
@@ -417,10 +417,6 @@ class Game {
             console.error('Amplitude array, frequency array, and phaseshift array must be of the same length.')
         }
 
-        if (samplerate % duration == 0){
-            console.error('duration/samplerate must leave no remainder.')
-        }
-
         let signal = new Array(Math.round(samplerate * duration)).fill(0)
 
         frequencies.forEach((frequency, index) => {
@@ -514,6 +510,7 @@ class Game {
     updateBuffer(source = 'brains', metricName = 'voltage') {
         let channelInd;
         let userInd = 0;
+
         this.brains[this.info.access].forEach((brain) => {
             brain.buffer.forEach((channelData, channel) => {
                 channelInd = this.usedChannelNames.indexOf(brain.channelNames[channel])
@@ -535,8 +532,8 @@ class Game {
                             }
                         } else {
                             if (this.metrics[metricName].buffer.length != 0) {
-                                this.metrics[metricName].buffer[0][channelInd].splice(0, 1)
-                                this.metrics[metricName].buffer[0][channelInd].push(channelData)
+                                this.metrics[metricName].buffer[userInd][channelInd].splice(0, 1)
+                                this.metrics[metricName].buffer[userInd][channelInd].push(channelData)
                             }
                         }
                     }

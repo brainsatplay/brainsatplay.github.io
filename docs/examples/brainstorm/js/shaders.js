@@ -12,6 +12,7 @@ vec3 color;
 varying vec3 vColor;
 
 uniform int effect;
+uniform int signaltype;
 uniform mat4 matrix;
 uniform float synchrony;
 uniform float u_time;
@@ -24,11 +25,15 @@ uniform int colorToggle;
 
 vec3 ambient_noise;
 float dist;
-float ss = synchrony*10.0;
 
 vec3 positionTransforms;
 vec4 positionProjected;
 vec2 currentScreen;
+
+ // Set Up Synchrony Scaling
+ float ss;
+ float eeg_ss[65];
+ float zdelta;
 
 
 //Classic Perlin 3D Noise 
@@ -113,7 +118,39 @@ void main() {
      // Initialize color at zero
      vColor = vec3(1.0,1.0,1.0);
      
-     // Cap Synchrony at [-1,1]
+    // Scale Values and Cap at [-1,1]
+    
+    
+    // displacement
+    if (signaltype != 1){
+        zdelta = z_displacement*10.0;
+        if (zdelta >= 5.0){
+            zdelta = 5.0;
+        } else if (zdelta <= -5.0){
+            zdelta = -5.0;
+        }
+    } 
+    else {
+        zdelta = z_displacement;
+    }
+
+    // projection
+    for (int i = 0; i < 65; i++){
+        if (signaltype == 2){
+            eeg_ss[i] = eeg_signal[i]*10.0;
+        } else {
+           eeg_ss[i] = eeg_signal[i];
+        }
+        
+        if (eeg_ss[i] >= 1.0){
+            eeg_ss[i] = 1.0;
+        } else if (eeg_ss[i] <= -1.0){
+            eeg_ss[i] = -1.0;
+        }
+    } 
+    
+    // one-dimensional values
+    ss = synchrony*10.0;
     if (ss >= 1.0){
         ss = 1.0;
     } else if (ss <= -1.0){
@@ -125,11 +162,11 @@ void main() {
         if (effect == 1){
             for (int i = 0; i < 65; i++){
                 if (abs(distance(eeg_coords[i],position)) <= 60.0){
-                    float factor = (eeg_signal[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
-                    if (eeg_signal[i] > 0.0){
+                    float factor = (eeg_ss[i])*(1.0-pow(abs(distance(eeg_coords[i],position)/75.0),2.0));
+                    if (eeg_ss[i] > 0.0){
                         vColor.y -= 0.5*factor;
                         vColor.z -= 0.2*factor;
-                    } else if (eeg_signal[i] < 0.0){
+                    } else if (eeg_ss[i] < 0.0){
                         vColor.x += 0.5*factor;
                         vColor.y += 0.2*factor;
                     }
@@ -154,12 +191,12 @@ void main() {
             }
         }
 
-        if (z_displacement > 0.0){
-            vColor.y -= 0.5*(z_displacement)*2.0;
-            vColor.z -= 0.2*(z_displacement)*2.0;
-        } else if (z_displacement < 0.0){
-            vColor.x += 0.5*(z_displacement)*2.0;
-            vColor.y += 0.2*(z_displacement)*2.0;
+        if (zdelta > 0.0){
+            vColor.y -= 0.5*(zdelta);
+            vColor.z -= 0.2*(zdelta);
+        } else if (zdelta < 0.0){
+            vColor.x += 0.5*(zdelta);
+            vColor.y += 0.2*(zdelta);
         }
 
     }
@@ -173,7 +210,7 @@ void main() {
         }
     } 
 
-     positionTransforms.z += z_displacement;
+     positionTransforms.z += zdelta;
      
      if (effect == 2){
         positionTransforms *= (1.0+(ss/2.0));

@@ -118,9 +118,10 @@ function stateManager(forceUpdate=false){
     }
 
 
-    // Update Effect
+    // Update Effect and Signal Type
     if (uniformLocations != undefined){
         gl.uniform1i(uniformLocations.effect, effects.indexOf(scenes[state].effect));
+        gl.uniform1i(uniformLocations.signaltype, signaltypes.indexOf(scenes[state].signaltype));
     }
 
     // Start Animation Timer
@@ -589,6 +590,7 @@ function updateSignalType(method, val){
             game.unsubscribe(metricName);
         })
         newSignalType = true;
+        gl.uniform1i(uniformLocations.signaltype, signaltypes.indexOf(scenes[state].signaltype));
     }
 }
 

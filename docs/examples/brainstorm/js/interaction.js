@@ -55,9 +55,10 @@ function wheelMove(ev) {
 function keyboardShortcuts(ev){
     let key_events = [37, 38, 39, 40];
     if (key_events.includes(ev.keyCode)){
-        // if (ev.keyCode == '38') {
-        // } else if (ev.keyCode == '40') {
-        // } 
+        if (ev.keyCode == '38') {
+            toggleUI()
+        } else if (ev.keyCode == '40') {
+        }
 
         if (ev.keyCode == '39' || ev.keyCode == '37') {
 
