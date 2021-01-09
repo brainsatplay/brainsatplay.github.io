@@ -23,7 +23,7 @@
     <link rel=icon href=favicons/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/brainstorm.css"/>
     <script type="text/javascript" src="js/visbrain.js"></script>
-    <script type="text/javascript" src="../../src/BrainsAtPlay.js"></script>
+    <script type="text/javascript" src="../../src/Game.js"></script>
     <script type="text/javascript" src="js/interaction.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/point-functions.js"></script>
@@ -403,7 +403,7 @@
     } else if (option === 'server'){
         url = 'https://brainsatplay.azurewebsites.net';
     }
-    let game = new BrainsAtPlay('brainstorm')
+    let game = new Game('brainstorm')
     game.simulate(2);
     game.subscribe('synchrony',false)
 

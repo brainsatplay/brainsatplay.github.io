@@ -1,4 +1,4 @@
-class BrainsAtPlay {
+class Game {
     constructor(gameName = 'untitled') {
         this.initialize()
         this.gameName = gameName;
