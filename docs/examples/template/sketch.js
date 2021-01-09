@@ -55,9 +55,9 @@ function draw() {
     let dx = windowWidth / data.length;
     for (var point = 0; point < data.length - 1; point++) {
       line(point * dx,
-        ((data[point] * windowHeight / 2) + windowHeight / 2),
+        ((data[point] * windowHeight / 16) + windowHeight / 2),
         (point + 1) * dx,
-        ((data[point + 1] * windowHeight / 2) + windowHeight / 2)
+        ((data[point + 1] * windowHeight / 16) + windowHeight / 2)
       )
     }
   }

@@ -22,14 +22,14 @@ uniform vec2 aspectChange;
 uniform vec2 mousePos;
 uniform int colorToggle;
 
-float sync_scaled = ((0.5*synchrony)); 
-
 vec3 ambient_noise;
 float dist;
+float ss = synchrony*10.0;
 
 vec3 positionTransforms;
 vec4 positionProjected;
 vec2 currentScreen;
+
 
 //Classic Perlin 3D Noise 
 //by Stefan Gustavson
@@ -112,6 +112,13 @@ void main() {
      
      // Initialize color at zero
      vColor = vec3(1.0,1.0,1.0);
+     
+     // Cap Synchrony at [-1,1]
+    if (ss >= 1.0){
+        ss = 1.0;
+    } else if (ss <= -1.0){
+        ss = -1.0;
+    }
 
      // Add color effects
      if (colorToggle == 1){
@@ -131,12 +138,12 @@ void main() {
         } 
         else if (effect == 2){
 
-            if (synchrony > 0.0){
-                vColor.y -= 0.5*(synchrony)*2.0;
-                vColor.z -= 0.2*(synchrony)*2.0;
-            } else if (synchrony < 0.0){
-                vColor.x += 0.5*synchrony*2.0;
-                vColor.y += 0.2*synchrony*2.0;
+            if (ss > 0.0){
+                vColor.y -= 0.5*(ss);
+                vColor.z -= 0.2*(ss);
+            } else if (ss < 0.0){
+                vColor.x += 0.5*ss;
+                vColor.y += 0.2*ss;
             }
         } 
         else if (effect == 3){
@@ -159,8 +166,8 @@ void main() {
 
     positionTransforms = position;
     if (u_ambientNoiseToggle == 1){
-        if (effect == 2 && sync_scaled < 0.0){
-            positionTransforms = position * (1.0+(cnoise(pos_timeoffset)*sync_scaled*2.0));
+        if (effect == 2 && ss < 0.0){
+            positionTransforms = position * (1.0+(cnoise(pos_timeoffset)*ss));
         } else{
             positionTransforms = position * (1.0+cnoise(pos_timeoffset)/75.0);
         }
@@ -169,7 +176,7 @@ void main() {
      positionTransforms.z += z_displacement;
      
      if (effect == 2){
-        positionTransforms *= (1.0+(synchrony/2.0));
+        positionTransforms *= (1.0+(ss/2.0));
      }
      
      positionProjected = matrix * vec4(positionTransforms,1.0);
