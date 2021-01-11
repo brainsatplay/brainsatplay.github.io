@@ -1334,7 +1334,6 @@ input[type="range"] {
     position: fixed;
     right: 25px;
     top: 0px;
-    transform: translateY(-15%);
     margin: 1em;
     width: 40px;
     z-index: 1000;

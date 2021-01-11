@@ -1,5 +1,19 @@
 /* -------------------------- Utility Functions -------------------------- */
 
+function closeNav() {
+    document.getElementById("info-card").style.transform = "translateX(0px)";
+    document.getElementById("navToggle").onclick = function() {openNav()};
+    document.getElementById("nav-arrow").style.transform = 'rotate(135deg)'
+    document.getElementById("navToggle").style.transform = 'translate(-100%)'
+}
+
+function openNav() {
+    document.getElementById("info-card").style.transform = "translateX(-400px)";
+    document.getElementById("navToggle").onclick =function() {closeNav()};
+    document.getElementById("nav-arrow").style.transform = 'rotate(-45deg)'
+    document.getElementById("navToggle").style.transform = 'translate(25px)'
+}
+
 function switchToChannels(pointCount){
 
     // Reset View Matrix
@@ -255,9 +269,9 @@ function toggleUI(){
 
     if (showUI){
         document.getElementById('ui-elements').style.display = 'block'
-        } else {
+    } else {
             document.getElementById('ui-elements').style.display = 'none'
-        }
+    }
 }
 
 
@@ -297,14 +311,11 @@ function updateUI(){
                 opacity = '0%'
                 pointer = 'none'
                 
-                if (scenes[state].effect == 'projection'){
-
-                    dynamicSignalArray.push('voltage')
-                    let prevSig = document.getElementById('signal-type').innerHTML
-                    if (prevSig != 'synchrony'){
-                        updateSignalType('signaltype', 'synchrony')
-                    }
-                } else if (scenes[state].effect == 'z_displacement'){
+                let prevSig = document.getElementById('signal-type').innerHTML
+                if (prevSig != 'synchrony'){
+                    updateSignalType('signaltype', 'synchrony')
+                }
+                if (scenes[state].effect == 'z_displacement'){
                     document.getElementById('voltage').style.opacity = '100%'
                     document.getElementById('voltage').style.pointerEvents = 'auto'
                 }
@@ -522,6 +533,15 @@ function easeVertices() {
         }
     }
 }
+
+function easeSynchrony() {
+
+    let homeSync = game.getMetric('synchrony')
+    if (!isNaN(homeSync)) {
+        easedSynchrony += scenes[state].ease * (homeSync - easedSynchrony);
+    }
+}
+
 
 function lagDrawMode() {
     if (scenes[state].render != gl.POINTS){

@@ -108,7 +108,28 @@
             </div>
         </div>
 
-<!--   datas-->
+        <div id="info-card">
+            <div id="navToggle" onclick="openNav()" class="info-icon">
+                <i id="nav-arrow" class="arrow left"></i>
+            </div>
+            <h4>Brainstorm</h4>
+            <p class="small">Created by <a href="https://brainsatplay.com">Brains@Play</a>. See all examples <a href="https://brainsatplay.com/docs">here</a></p>
+            <p>A collaborative BCI game for coupling minds across geographic, social, and cultural boundaries.</p>
+            <p>Join our <a href="https://discord.gg/F89jtMuNND">Discord server</a> to reflect on your experience with other users.</p>
+            <p>Contribute live data using our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> (OpenBCI/Neurosity headsets only). Connect with the same username to enable Private Mode (and view only your data).</p>
+            <h5>Source</h5>
+            <a href='https://github.com/brainsatplay/brainsatplay.github.io/tree/master/docs/examples/brainstorm' label='Github'>
+                <svg viewBox="0 0 24 24">
+                    <path d = "M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+            </a>
+            <!--            <h5>Instructions</h5>-->
+            <!--            <p>Use the <strong>States</strong> panel to view different scenes of brain activity—both individual and collective. Toggle between Signal Types on the right side of the screen.</p>-->
+            <!--            <ol>-->
+            <!--            <li><p>You start the experience by viewing a synthetic stream of two brains. Under <strong>Connection Info</strong>, press <strong>Connect</strong> to enter a network of real users and their brains.</p></li>-->
+            <!--            <li><p>Copy your <strong>ID</strong> to our <a href="https://github.com/brains-at-play/brains-at-play">Python streamer</a> and send your data using OpenBCI or Neurosity headsets.</p></li>-->
+            </ol>
+        </div>
 
         <div id="ui-elements">
 
@@ -389,6 +410,7 @@
     let game = new Game('brainstorm')
     game.simulate(2);
     game.subscribe('synchrony',false)
+    let easedSynchrony = 0;
 
     // Begin Rendering the Visualization
     if (!gl) {
@@ -482,8 +504,9 @@
         aspectChange = [(canvas.width)/(originalAspectX),(canvas.height)/(originalAspectY)]
         gl.uniformMatrix4fv(uniformLocations.matrix, false, mvpMatrix)
         gl.uniform1f(uniformLocations.u_time, (Date.now()-startTime)/1000);
-        gl.uniform1f(uniformLocations.synchrony, game.getMetric('synchrony'));
-        document.getElementById('synchrony-readout').innerHTML = game.getMetric('synchrony').toFixed(3);
+        easeSynchrony()
+        gl.uniform1f(uniformLocations.synchrony, easedSynchrony);
+        document.getElementById('synchrony-readout').innerHTML = easedSynchrony.toFixed(3);
         gl.uniform2fv(uniformLocations.aspectChange, aspectChange);
         if (mouseDistort){
         gl.uniform2fv(uniformLocations.mousePos, [(x - (canvas.width/2))/2,((canvas.height/2) - y)/2]);

@@ -729,8 +729,8 @@ input:focus{
         top: 0;
         left: 0;
         height: 250px;
-        width: calc(100vw - 150px);
-        max-width: 33.3vw;
+        width: 400px;
+        max-width: 100vw;
         padding: 25px;
         background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
     
@@ -768,6 +768,50 @@ input:focus{
     
     #info-card a:visited{
         color: gray;
+    }
+
+    .info-icon {
+        position: fixed;
+        left: 400px;
+        top: 25px;
+        transform: translateX(-100%);
+        /*margin: 1em;*/
+        padding: 1em;
+        width: 40px;
+        z-index: 1000;
+        transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        -ms-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -webkit-transition: 0.5s ease-in-out;
+    }
+
+    /*.info-icon div {*/
+    /*    background-color: #fff;*/
+    /*    border-radius: 5px;*/
+    /*    content: '';*/
+    /*    display: block;*/
+    /*    width: 25px;*/
+    /*    height: 3px;*/
+    /*    margin: 5px 0;*/
+    /*    transition: all .5s ease-in-out;*/
+    /*}*/
+
+    .arrow {
+        border: solid white;
+        border-width: 0 5px 5px 0;
+        display: inline-block;
+        padding: 5px;
+        transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        -ms-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -webkit-transition: 0.5s ease-in-out;
+    }
+
+    .left {
+        transform: rotate(135deg);
+        -webkit-transform: rotate(135deg);
     }
     
     

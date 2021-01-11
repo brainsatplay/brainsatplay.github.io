@@ -53,11 +53,30 @@ function wheelMove(ev) {
 
 // Keyboard Shortcuts
 function keyboardShortcuts(ev){
-    let key_events = [37, 38, 39, 40];
+    let key_events = [
+        37, // Left arrow
+        38, // Up arrow
+        39, // Right arrow
+        40, // Down arrow
+        49, // 1
+        50, // 2
+        51, // 3
+        52, // 4
+        73, // i
+    ];
     if (key_events.includes(ev.keyCode)){
-        if (ev.keyCode == '38') {
+        if (ev.keyCode == '73') {
             toggleUI()
-        } else if (ev.keyCode == '40') {
+        }
+
+        if (ev.keyCode == '49'){
+            state = 1
+        } else if (ev.keyCode == '50'){
+            state = 2
+        } else if (ev.keyCode == '51'){
+            state = 3
+        } else if (ev.keyCode == '52'){
+            state = 4
         }
 
         if (ev.keyCode == '39' || ev.keyCode == '37') {
