@@ -649,6 +649,9 @@ footer a {
 
 /*Games List*/
 
+.additional-img {
+    max-width: 40%;
+}
 #back {
     position:fixed;
     bottom: 10px;
@@ -1333,8 +1336,9 @@ input[type="range"] {
 .nav-icon {
     position: fixed;
     right: 25px;
-    top: 0px;
+    top: 25px;
     margin: 1em;
+    transform: translateY(-100%);
     width: 40px;
     z-index: 1000;
 }

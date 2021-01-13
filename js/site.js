@@ -79,7 +79,7 @@ function goBack() {
     document.getElementById('submitted-game-gallery').style.display = 'flex';
 
     // Hide Grading Rubric
-    if (brains.me.username != 'me') {
+    if (database.me.username != 'me') {
         document.getElementById('rubric-header').style.display = 'block';
         document.getElementById('rubric-message').style.display = 'block';
         document.getElementById('rubric-inputs').style.display = 'none';
@@ -95,7 +95,7 @@ function getSubmissions(name) {
     document.getElementById('temp-message').style.display = 'block';
 
     // Show Grading Rubric
-    if (brains.me.username != 'me') {
+    if (database.me.username != 'me') {
         document.getElementById('rubric-game').innerHTML = name.id;
         document.getElementById('rubric-game').style.display = 'block';
         document.getElementById('rubric-header').style.display = 'none';
@@ -179,7 +179,7 @@ function getSubmissions(name) {
     document.getElementById("game-image").innerHTML += `<img class="game-feature" src="${doc["game-image"]}"/>`
 
     for (let img in doc["additional-images"]){
-        $('#additional-images').append('<img class="item" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
+        $('#additional-images').append('<img class="additional-img" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
     }
 
     Object.keys(doc).forEach(function(field) {
@@ -212,13 +212,13 @@ function getSubmissions(name) {
                 document.getElementById('additional-images').innerHTML = '';
                 console.log(doc)
                 for (let img in doc["additional-images"]){
-                    $('#additional-images').append(`<img class="item" src="${doc["additional-images"][img]}"/>`)
+                    $('#additional-images').append(`<img class="additional-img" src="${doc["additional-images"][img]}"/>`)
                 }
             }
         })})
 
             document.getElementById('game').style.display = 'flex';
-            if (brains.me.username =='me') {
+            if (database.me.username =='me') {
                 document.getElementById('back').style.display = 'block';
             }
         //     }
@@ -252,7 +252,7 @@ function toggleSignUpScreen(){
     }
 }
 
-async function login(brains, url, type){
+async function login(database, url, type){
     let form = document.getElementById('login-form')
     let formDict = {}
     if (type === 'guest'){
@@ -265,9 +265,9 @@ async function login(brains, url, type){
         formDict.guestaccess = false
     }
 
-    let resDict = await brains.login(formDict)
+    let resDict = await database.login(formDict)
     if (resDict.result == 'OK'){
-        document.getElementById('judge-username').innerHTML = brains.me.username;
+        document.getElementById('judge-username').innerHTML = database.me.username;
         form.reset()
         toggleLoginScreen();
         document.getElementById('rubric-container').style.zIndex = '100';
@@ -277,7 +277,7 @@ async function login(brains, url, type){
     }
 }
 
-async function signup(brains, url){
+async function signup(database, url){
     let form = document.getElementById('signup-form')
     let formData = new FormData(form);
     let formDict = {}
@@ -294,7 +294,7 @@ async function signup(brains, url){
     }
     else {
 
-        let resDict = await brains.signup(formDict);
+        let resDict = await database.signup(formDict);
         if (resDict.result == 'OK'){
             form.reset()
             toggleLoginScreen();
@@ -313,7 +313,7 @@ async function submitRatings(){
     for (var pair of formData.entries()) {
         formDict[pair[0]] = pair[1];
     }
-    formDict['username'] = brains.me.username;
+    formDict['username'] = database.me.username;
     formDict['game'] = currentGame;
 
     let json  = JSON.stringify(formDict)
