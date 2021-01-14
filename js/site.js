@@ -79,7 +79,7 @@ function goBack() {
     document.getElementById('submitted-game-gallery').style.display = 'flex';
 
     // Hide Grading Rubric
-    if (database.me.username != 'me') {
+    if (game.me.username != 'me') {
         document.getElementById('rubric-header').style.display = 'block';
         document.getElementById('rubric-message').style.display = 'block';
         document.getElementById('rubric-inputs').style.display = 'none';
@@ -95,7 +95,7 @@ function getSubmissions(name) {
     document.getElementById('temp-message').style.display = 'block';
 
     // Show Grading Rubric
-    if (database.me.username != 'me') {
+    if (game.me.username != 'me') {
         document.getElementById('rubric-game').innerHTML = name.id;
         document.getElementById('rubric-game').style.display = 'block';
         document.getElementById('rubric-header').style.display = 'none';
@@ -218,7 +218,7 @@ function getSubmissions(name) {
         })})
 
             document.getElementById('game').style.display = 'flex';
-            if (database.me.username =='me') {
+            if (game.me.username =='me') {
                 document.getElementById('back').style.display = 'block';
             }
         //     }
@@ -252,7 +252,7 @@ function toggleSignUpScreen(){
     }
 }
 
-async function login(database, url, type){
+async function login(game, url, type){
     let form = document.getElementById('login-form')
     let formDict = {}
     if (type === 'guest'){
@@ -265,9 +265,9 @@ async function login(database, url, type){
         formDict.guestaccess = false
     }
 
-    let resDict = await database.login(formDict)
+    let resDict = await game.login(formDict)
     if (resDict.result == 'OK'){
-        document.getElementById('judge-username').innerHTML = database.me.username;
+        document.getElementById('judge-username').innerHTML = game.me.username;
         form.reset()
         toggleLoginScreen();
         document.getElementById('rubric-container').style.zIndex = '100';
@@ -277,7 +277,7 @@ async function login(database, url, type){
     }
 }
 
-async function signup(database, url){
+async function signup(game, url){
     let form = document.getElementById('signup-form')
     let formData = new FormData(form);
     let formDict = {}
@@ -294,7 +294,7 @@ async function signup(database, url){
     }
     else {
 
-        let resDict = await database.signup(formDict);
+        let resDict = await game.signup(formDict);
         if (resDict.result == 'OK'){
             form.reset()
             toggleLoginScreen();
@@ -313,7 +313,7 @@ async function submitRatings(){
     for (var pair of formData.entries()) {
         formDict[pair[0]] = pair[1];
     }
-    formDict['username'] = database.me.username;
+    formDict['username'] = game.me.username;
     formDict['game'] = currentGame;
 
     let json  = JSON.stringify(formDict)
