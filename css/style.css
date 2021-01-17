@@ -74,7 +74,7 @@ h4{
 
 button {
     width: 200px; min-height: 50px; cursor: pointer; color: whitesmoke;
-    font-family : inherit;
+    font-size: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -942,9 +942,7 @@ select {
 .card-text{
     color: white;
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    height: 200px;
+    /*height: 200px;*/
 }
 
 .card-holder{
@@ -954,8 +952,9 @@ select {
     justify-content: center;
 }
 
+
 .card{
-    margin: 25px;
+    margin: 10px;
     height: 300px;
     width: 200px;
     padding: 0px 0px;
@@ -969,9 +968,11 @@ select {
 }
 
 .card p{
-    flex-grow: 1;
-    font-size: 20px;
     font-family: Lato, sans-serif;
+}
+
+.card h3{
+    font-size:25px;
 }
 
 .card:focus{
@@ -985,8 +986,15 @@ select {
 
 .blank{
     background: white;
-    flex-grow: 1;
     color: black;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#Time {
+    font-size: 80%;
 }
 
 #examples{
