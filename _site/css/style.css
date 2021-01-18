@@ -287,6 +287,17 @@ a.link .current{
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/docs.jpg')
 }
 
+#curriculum-header{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/games.jpg')
+}
+
+#additional-resources h4{
+margin: 0;
+}
+#additional-resources p{
+    font-size:80%;
+}
+
 #contribute .about-right{
     justify-content: center;
     align-items: center;
