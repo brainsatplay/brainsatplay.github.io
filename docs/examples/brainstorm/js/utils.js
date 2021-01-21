@@ -288,6 +288,11 @@ function updateUI(){
 
     if (game.connection != undefined && game.connection.readyState === 1){
         if (game.info.access == 'public'){
+            let prevSig = document.getElementById('signal-type').innerHTML
+            if (prevSig != 'synchrony'){
+                updateSignalType('signaltype', 'synchrony')
+            }
+
             document.getElementById('brain').style.opacity = '100%'
             document.getElementById('channels').style.opacity = '100%'
             document.getElementById('brain').style.pointerEvents = 'auto'
@@ -307,35 +312,13 @@ function updateUI(){
                 document.getElementById('userinfo').style.pointerEvents = 'auto'
             }
 
-            if (['projection','z_displacement'].includes(scenes[state].effect)){
-                opacity = '0%'
-                pointer = 'none'
-                
-                let prevSig = document.getElementById('signal-type').innerHTML
-                if (prevSig != 'synchrony'){
-                    updateSignalType('signaltype', 'synchrony')
-                }
-                if (scenes[state].effect == 'z_displacement'){
-                    document.getElementById('voltage').style.opacity = '100%'
-                    document.getElementById('voltage').style.pointerEvents = 'auto'
-                }
 
-                if (game.info.brains < 2){
-                    dynamicSignalArray.push('synchrony')
-                } else {
-                    document.getElementById('synchrony').style.opacity = '100%'
-                    document.getElementById('synchrony').style.pointerEvents = 'auto'
-                }
-
-            } else {
-                dynamicSignalArray.push(...['voltage','synchrony'])
-                opacity = '0%'
-                pointer = 'none'
-            }
+            dynamicSignalArray.push('synchrony')
+            dynamicSignalArray.push('voltage')
 
             dynamicSignalArray.forEach((id) => {
-                    document.getElementById(id).style.opacity = opacity
-                    document.getElementById(id).style.pointerEvents = pointer
+                    document.getElementById(id).style.opacity = '0%'
+                    document.getElementById(id).style.pointerEvents = 'none'
             })
         } else {
             document.getElementById('brain').style.opacity = '100%'
