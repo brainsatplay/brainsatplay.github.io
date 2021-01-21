@@ -886,10 +886,9 @@ select {
 }
 .button-nav {
     display: flex;
-    margin: 10px 0px;
+    margin: auto;
     flex-wrap: wrap;
     max-width: 800px;
-
 }
 
 .button-nav button{
