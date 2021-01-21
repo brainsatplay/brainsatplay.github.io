@@ -243,10 +243,18 @@ a.link .current{
 .header{
     padding: 200px 50px 150px 50px;
     text-align: center;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+.header h1,h2,h3{
+    width: 100%;
 }
 
 .header img {
@@ -880,12 +888,13 @@ select {
     display: flex;
     margin: 10px 0px;
     flex-wrap: wrap;
+    max-width: 800px;
+
 }
 
 .button-nav button{
     flex-grow: 1;
     margin: 10px 10px;
-    /*min-width: 20px;*/
     padding: 10px 10px;
 }
 
