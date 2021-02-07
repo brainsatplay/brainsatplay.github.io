@@ -66,7 +66,7 @@ class Game {
         }
 
         // if (!this.subscriptions[metricName].lock || !alreadyExists) {
-            this.addMetric(metricName)
+        this.addMetric(metricName)
         // }
         this.initializeBuffer(metricName)
     }
@@ -725,10 +725,10 @@ class Game {
             {
                 method: 'POST',
                 mode: 'cors',
-                headers: new Headers({
+                headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                }),
+                },
                 body: json
             }).then((res) => {
             return res.json().then((message) => message)
@@ -864,6 +864,9 @@ class Brain {
         let signal = data.signal
         let time = data.time
 
+        let arbitraryFields = Object.keys(data)
+        arbitraryFields = arbitraryFields.filter(e => !['signal','time'].includes(e)); // will return ['A', 'C']
+
         signal.forEach((channelData, channel) => {
 
             if (channel >= this.buffer.length) {
@@ -876,6 +879,10 @@ class Brain {
                     this.times.push(...time);
                 }
             }
+        })
+
+        arbitraryFields.forEach((field) =>{
+            this[field] = data[field]
         })
 
         this.trimBufferBySize()
@@ -905,3 +912,6 @@ class Brain {
         })
     }
 }
+
+
+module.exports = Game
