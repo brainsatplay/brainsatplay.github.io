@@ -842,6 +842,10 @@ class Game {
             O1: [-25.8, -93.3, 7.7],
             Oz: [0.3, -97.1, 8.7],
             O2: [25.0, -95.2, 6.2],
+
+            // From https://sccn.ucsd.edu/pipermail/eeglablist/2003/000008.html
+            Tp9: [-0.2852*100,	    0.8777*100,	   -0.3826*100],
+            Tp10: [-0.2853*100,	   -0.8777*100,	   -0.3826*100]
         }
     }
 }
@@ -859,27 +863,34 @@ class Brain {
 
     }
 
-    streamIntoBuffer(data) {
+    streamIntoBuffer(data,index=undefined) {
+        // Added for Muse
+        if (index !==undefined){
+            this.buffer[index].push(...data);
+        }
 
-        let signal = data.signal
-        let time = data.time
+        // For OpenBCI
+        else {
+            let signal = data.signal
+            let time = data.time
+
+            signal.forEach((channelData, channel) => {
+
+                if (channel >= this.buffer.length) {
+                    this.buffer.push([])
+                }
+
+                if (Array.isArray(channelData) && channelData.length) {
+                    if (channelData.length > 0) {
+                        this.buffer[channel].push(...channelData);
+                        this.times.push(...time);
+                    }
+                }
+            })
+        }
 
         let arbitraryFields = Object.keys(data)
-        arbitraryFields = arbitraryFields.filter(e => !['signal','time'].includes(e)); // will return ['A', 'C']
-
-        signal.forEach((channelData, channel) => {
-
-            if (channel >= this.buffer.length) {
-                this.buffer.push([])
-            }
-
-            if (Array.isArray(channelData) && channelData.length) {
-                if (channelData.length > 0) {
-                    this.buffer[channel].push(...channelData);
-                    this.times.push(...time);
-                }
-            }
-        })
+        arbitraryFields = arbitraryFields.filter(e => !['signal','time'].includes(e));
 
         arbitraryFields.forEach((field) =>{
             this[field] = data[field]
