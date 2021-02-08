@@ -1,3 +1,6 @@
+let synchrony = 0;
+
+
 function setup() {
 
   // P5 Setup
@@ -14,18 +17,20 @@ function setup() {
   // Brains@Play Setup
   game = new Game('template')
   game.simulate(2);
+
+  // ensure that there is always a value available between server calls
   game.subscribe('synchrony',true);
-  
+
   connectToggle.mousePressed(() => {
-      game.connect(),
-      disconnectToggle.show(),
-      connectToggle.hide()
+    game.connect(dict = {'guestaccess': true}, url = 'http://localhost'),//url = 'https://brainsatplay.azurewebsites.net/'),
+        disconnectToggle.show(),
+        connectToggle.hide()
   });
 
   disconnectToggle.mousePressed(() => {
-      game.disconnect(),
-      disconnectToggle.hide(),
-      connectToggle.show()
+    game.disconnect(),
+        disconnectToggle.hide(),
+        connectToggle.show()
   });
 
 }
@@ -36,14 +41,19 @@ function draw() {
   // Update Voltage Buffers and Derived Variables
   game.update();
 
-  // Draw Raw Voltage 
+  // Update Synchrony
+  game.getMetric('synchrony').then((val) => {
+    synchrony = val;
+  })
+
+  // Draw Raw Voltage
   let c;
 
   for (let ind = 0; ind < game.info.brains; ind++) {
     if (ind == 1) {
-       c = color('#1cc5cd')
+      c = color('#1cc5cd')
     } else {
-       c = color('gray')
+      c = color('gray')
     }
     c.setAlpha(100)
     strokeWeight(1)
@@ -55,22 +65,21 @@ function draw() {
     let dx = windowWidth / data.length;
     for (var point = 0; point < data.length - 1; point++) {
       line(point * dx,
-        ((data[point] * windowHeight / 16) + windowHeight / 2),
-        (point + 1) * dx,
-        ((data[point + 1] * windowHeight / 16) + windowHeight / 2)
+          ((data[point] * windowHeight / 16) + windowHeight / 2),
+          (point + 1) * dx,
+          ((data[point + 1] * windowHeight / 16) + windowHeight / 2)
       )
     }
   }
-  
-  // Draw Synchrony 
+
   noFill()
-  if (game.getMetric('synchrony') < 0) {
+  if (synchrony < 0) {
     stroke('blue')
   } else {
     stroke('red')
   }
   strokeWeight(2)
-  ellipse((windowWidth / 2), windowHeight/2, 10 * game.getMetric('synchrony') * Math.min(windowHeight / 2, windowWidth / 2));
+  ellipse((windowWidth / 2), windowHeight/2, 10 * synchrony * Math.min(windowHeight / 2, windowWidth / 2));
 
   noStroke()
   // Include Text for Raw Synchrony Value
@@ -86,16 +95,19 @@ function draw() {
   } else {
     text('Synthetic Data Stream', windowWidth / 2, windowHeight-80)
   }
-  
+
   textStyle(NORMAL)
   if (game.info.brains == 0) {
     text('No brains on the network...', windowWidth / 2, windowHeight/2)
   } else if (game.info.brains < 2) {
     text('One brain on the network...', windowWidth / 2, windowHeight/2)
-  } else {
-    text(game.getMetric('synchrony').toFixed(4), windowWidth / 2, windowHeight/2)
+  }else {
+    if (synchrony != undefined){
+      text(synchrony.toFixed(4), windowWidth / 2, windowHeight/2)
+    } else {
+      text(synchrony, windowWidth / 2, windowHeight/2)
+    }
   }
-
 }
 
 function windowResized() {

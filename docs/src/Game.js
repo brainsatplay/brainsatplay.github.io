@@ -99,16 +99,31 @@ class Game {
         }
     }
 
-    getMetric(metricName) {
-        if (metricName !== undefined) {
-            if (this.subscriptions[metricName].active) {
-                return this.metrics[metricName].value
+    async getMetric(metricName, location='local') {
+        let val;
+        if ((this.connection === undefined) || (location === 'local' || metricName != 'synchrony')){
+            if (metricName !== undefined) {
+                // autosubscribe
+                if (!Object.keys(this.subscriptions).includes(metricName)){
+                    this.subscribe(metricName)
+                }
+                if (this.subscriptions[metricName].active) {
+                    val = this.metrics[metricName].value
+                } else {
+                    val = 0
+                }
             } else {
-                return 0
+                val = 0
             }
         } else {
-            return 0
+            if (this.connection == undefined){
+                val = 0
+            } else {
+                val = await this.request({game:this.gameName},'POST',metricName)
+            }
         }
+
+        return val
     }
 
     getChannelReadout(metricName) {
@@ -714,6 +729,45 @@ class Game {
         }
         return url
     }
+
+    checkPathname(pathname) {
+        if (pathname.slice(0) == '/') {
+            pathname.splice(0,1)
+        }
+        return pathname
+    }
+
+    async request(body,method='POST',pathname='',baseURL=this.url.href){
+        if (pathname !== ''){
+            baseURL = this.checkURL(baseURL)
+            pathname = this.checkPathname(pathname)
+            let dict = {
+                method: method,
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            };
+
+            if (method === 'POST'){
+                dict.body = JSON.stringify(body);
+            }
+
+            return await fetch(baseURL + pathname, dict).then((res) => {
+                return res.json().then((dict) => {
+                    return dict.message
+                })
+            })
+                .catch(function (err) {
+                    console.log(`\n${err.message}`);
+                });
+        } else {
+            console.log(`You must provide a valid pathname to request resources from ${baseURL}`)
+            return
+        }
+    }
+
 
     async login(dict, url = 'https://brainsatplay.azurewebsites.net/') {
         url = this.checkURL(url)
