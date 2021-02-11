@@ -1,0 +1,63 @@
+<div>
+    <nav id="game-nav">
+        <div id="available-option" class="game-option selected" onclick="switchToAvailableGames()">
+            <p class="small">Available Games</p>
+        </div>
+        <div id="submitted-option" class="game-option unavailable">
+            <p class="small">Submitted Games</p>
+        </div>
+    </nav>
+    <div id="game-display">
+        <div id="available">
+            <div id="game-gallery" class="gallery">
+                <a id="template" class="game" onclick="window.location.href='https://brainsatplay.com/brainsatplay-react-starter'" style="background-image: url('/assets/images/games/react-starter-template.png')">
+                    <div class="game-text">
+                        <h3>React Starter Template</h3>
+                        <i class="small">Brains@Play</i>
+                        <!--                            <p>Create your own brain-responsive browser application with React and p5.js.</p>-->
+                    </div>
+                    <div class="game-mask"></div>
+                </a>
+                <a id="brainstorm" class="game" onclick="window.location.href='https://brainsatplay.com/brainstorm'" style="background-image: url('https://brainsatplay.com/brainstorm/header.png')">
+                    <div class="game-text">
+                        <h3>Brainstorm</h3>
+                        <i class="small">Brains@Play</i>
+                        <!--                            <p>Couple minds across social, cultural, and political boundaries.</p>-->
+                    </div>
+                    <div class="game-mask"></div>
+                </a>
+            </div>
+        </div>
+        <div id="submitted">
+            <div id="submitted-content-container">
+                <section id="game" style="display:none;"></section>
+                <section id="temp-message" class="flex-center flex"></section>
+                <button id="back" style="display:none;">
+                    Back to Submitted Games
+                </button>
+                <div id="submitted-game-gallery" class="gallery"></div>
+            </div>
+            <div id="games-actions">
+                <div id="games-buttons">
+                    <button onclick="window.location.href='/competition'" rel="noopener">Submit Your Game Idea</button>
+                    <button onclick="toggleLoginScreen();" rel="noopener">Rate Submissions</button>
+                </div>
+                {% include rubric.html %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let state = 'available'
+    let currentGame;
+    document.getElementById('submitted').style.display = 'none'
+    // displaySubmissions()
+
+    // Initialize Login Variables
+    let showLogin=false;
+    let showSignUp=false;
+    let game = new Game();
+
+</script>

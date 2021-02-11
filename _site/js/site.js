@@ -21,51 +21,60 @@ function backToTeam(){
     document.getElementById("person").innerHTML = ``
 }
 
-// function switchToAvailableGames(){
-//
-//     if (state != 'available') {
-//         goBack()
-//         // document.getElementById("available-option").className = 'game-option selected'
-//         document.getElementById("submitted-option").className = 'game-option'
-//         // document.getElementById("available").style.display = 'block'
-//         document.getElementById("submitted").style.display = 'none'
-//         state = 'available';
-//     }
-// }
+function switchToAvailableGames(){
+
+    if (state != 'available') {
+        goBack()
+        document.getElementById("available-option").className = 'game-option selected'
+        document.getElementById("submitted-option").className = 'game-option'
+        document.getElementById("available").style.display = 'block'
+        document.getElementById("submitted").style.display = 'none'
+        state = 'available';
+    }
+}
 
 function switchToSubmittedGames(){
     if (state != 'submitted') {
-        // document.getElementById("available-option").className = 'game-option'
+        document.getElementById("available-option").className = 'game-option'
         document.getElementById("submitted-option").className = 'game-option selected'
-        // document.getElementById("available").style.display = 'none'
-        document.getElementById("submitted").style.display = 'block'
+        document.getElementById("available").style.display = 'none'
+        document.getElementById("submitted").style.display = 'flex'
         document.getElementById('back').addEventListener('click', function() {goBack()});
-        if (switched == false) {
-            displaySubmissions()
-            switched = true;
-        }
         state = 'submitted';
     }
 
 }
 
-// Dispay Submissions
 function displaySubmissions(){
-            document.getElementById('temp-message').style.display = 'none';
-            document.getElementById('temp-message').innerHTML = '';
-            let gameTag;
-            Object.keys(submittedGamesJSON).forEach(function(key) {
-                gameTag = `
-<a id="${key}" class="game" onclick="getSubmissions(${key})" style="background-image: url(${submittedGamesJSON[key]["game-image"]})">
-        <div class="game-text">
-          <h3>${key}</h3>
-          <i class="small">${submittedGamesJSON[key]['team-name']}</i>
-          <p>${submittedGamesJSON[key]['game-pitch']}</p>
-        </div>
-        <div class="game-mask"></div>
-      </a>`
-                $('#submitted-game-gallery').append(gameTag);
-            })
+    d3.csv('/competition/submissions/submissions.csv').then(function (data) {
+
+        data.forEach((submission, row) => {
+            if (submission['Finished'] === 'True') {
+                if (submission['Q51'] !== '' && submission['Q57'] !== ''){
+                    document.getElementById('temp-message').style.display = 'none';
+                    document.getElementById('temp-message').innerHTML = '';
+                    let gameTag;
+                    let name;
+                    if (submission['Q20'] === 'Brain Games'){
+                        name = submission['Q24'];
+                    } else if (submission['Q20'] === 'VR + Neurotech + Health'){
+                        name = submission['Q24'];
+                    } else if (submission['Q20'] === 'Computational Art'){
+                        name = submission['Q56'];
+                    }
+                    gameTag = `
+                    <a id="${name}" class="game" onclick="getSubmissions(row)" style="background-image: url('/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}')">
+                            <div class="game-text">
+                              <h3>${name}</h3>
+                              <i class="small">${submission['Q1']}</i>
+                            </div>
+                            <div class="game-mask"></div>
+                          </a>`
+                    document.getElementById('submitted-game-gallery').innerHTML += gameTag
+                }
+            }
+        })
+    })
 }
 
 
@@ -252,7 +261,7 @@ function toggleSignUpScreen(){
     }
 }
 
-async function login(game, url, type){
+async function login(game, type){
     let form = document.getElementById('login-form')
     let formDict = {}
     if (type === 'guest'){
@@ -270,6 +279,8 @@ async function login(game, url, type){
         document.getElementById('judge-username').innerHTML = game.me.username;
         form.reset()
         toggleLoginScreen();
+        document.getElementById('games-buttons').style.display = 'none';
+        document.getElementById('rubric-container').style.display = 'inline-block';
         document.getElementById('rubric-container').style.zIndex = '100';
         document.getElementById('rubric-container').style.opacity = '1';
     } else {
@@ -277,7 +288,7 @@ async function login(game, url, type){
     }
 }
 
-async function signup(game, url){
+async function signup(game){
     let form = document.getElementById('signup-form')
     let formData = new FormData(form);
     let formDict = {}

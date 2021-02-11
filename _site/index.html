@@ -31,7 +31,10 @@
 
     <link rel=icon href=assets/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="/js/site.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://brainsatplay.com/brainsatplay/libraries/js/Game.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 
 </head>
 <body>
@@ -60,7 +63,6 @@
         <a href="/about" class="link">About</a>
         <a href="/competition" class="link">Competition</a>
         <a href="/curriculum" class="link">Curriculum</a>
-        <a href="/docs" class="link">Software</a>
 
     <!--    </div>-->
 </div>
@@ -101,11 +103,61 @@
 
 
     <!--Content-->
+    <div id="login-container" class="form-container">
+    <div id="login" class="form-context">
+        <h3>Sign In</h3>
+        <p id="login-message" class="small"></p>
+        <div class='flex'>
+            <form id="login-form" action="">
+                <div class="login-element">
+                    <input type="text" name="username" autocomplete="off" placeholder="Username"/>
+                </div>
+                <div class="login-element">
+                    <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                </div>
+            </form>
+        </div>
+        <div class="login-buttons">
+            <button id="login-button" onclick="login(game,'profile')">Sign In</button>
+            <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Sign Up</button>
+<!--            <button onclick="login(brains, url,'guest')">Guest Access</button>-->
+            <button onclick="toggleLoginScreen();">Go Back</button>
+        </div>
+    </div>
+</div>
+
+<div id="signup-container" class="form-container">
+    <div id="signup" class="form-context">
+        <h3>Sign Up</h3>
+        <p id="signup-message" class="small"></p>
+        <div class='flex'>
+            <form id="signup-form" action="">
+                <div class="login-element">
+                    <input type="text" name="username" autocomplete="off" placeholder="Username"/>
+                </div>
+                <div class="login-element">
+                    <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                </div>
+                <div class="login-element">
+                    <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password"/>
+                </div>
+            </form>
+        </div>
+        <div class="login-buttons">
+            <button id="signup-button" onclick="signup(game)">Sign Up</button>
+            <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Go Back</button>
+        </div>
+    </div>
+</div>
+
+
+
+    <!--Content-->
     <div>
         <div>
             <div id= "hero1" class="hero header">
                 <img src="/assets/brand/logo_and_sub.png">
-                    <div class="button-nav flex-center">
+                    <div class="button-nav flex-center" style="width: 90%;">
                         <button onclick="window.location.href='/competition'" target="_blank" type="button" style="width: 100%;">
                             <div>
                                 <span>International Design Fiction Competition</span>
@@ -113,17 +165,99 @@
                                 <span class="small">Submit your idea for a brain-controlled game</span>
                             </div>
                         </button>
-                        <button onclick="window.location.href='/docs'" target="_blank" type="button" style="width: 100%;">
-                            <div>
-                                <span>Brains@Play Software Library</span>
-                                <br/>
-                                <span class="small">Develop a game with us</span>
-                            </div>
-                        </button>
-<!--                        <button onclick="window.location.href='/games'" style="min-width: 40%" rel="noopener">Explore Submitted Games</button>-->
                     </div>
             </div>
+
+<!--            Games              -->
+            <div>
+    <nav id="game-nav">
+        <div id="available-option" class="game-option selected" onclick="switchToAvailableGames()">
+            <p class="small">Available Games</p>
         </div>
+        <div id="submitted-option" class="game-option unavailable">
+            <p class="small">Submitted Games</p>
+        </div>
+    </nav>
+    <div id="game-display">
+        <div id="available">
+            <div id="game-gallery" class="gallery">
+                <a id="template" class="game" onclick="window.location.href='https://brainsatplay.com/brainsatplay-react-starter'" style="background-image: url('/assets/images/games/react-starter-template.png')">
+                    <div class="game-text">
+                        <h3>React Starter Template</h3>
+                        <i class="small">Brains@Play</i>
+                        <!--                            <p>Create your own brain-responsive browser application with React and p5.js.</p>-->
+                    </div>
+                    <div class="game-mask"></div>
+                </a>
+                <a id="brainstorm" class="game" onclick="window.location.href='https://brainsatplay.com/brainstorm'" style="background-image: url('https://brainsatplay.com/brainstorm/header.png')">
+                    <div class="game-text">
+                        <h3>Brainstorm</h3>
+                        <i class="small">Brains@Play</i>
+                        <!--                            <p>Couple minds across social, cultural, and political boundaries.</p>-->
+                    </div>
+                    <div class="game-mask"></div>
+                </a>
+            </div>
+        </div>
+        <div id="submitted">
+            <div id="submitted-content-container">
+                <section id="game" style="display:none;"></section>
+                <section id="temp-message" class="flex-center flex"></section>
+                <button id="back" style="display:none;">
+                    Back to Submitted Games
+                </button>
+                <div id="submitted-game-gallery" class="gallery"></div>
+            </div>
+            <div id="games-actions">
+                <div id="games-buttons">
+                    <button onclick="window.location.href='/competition'" rel="noopener">Submit Your Game Idea</button>
+                    <button onclick="toggleLoginScreen();" rel="noopener">Rate Submissions</button>
+                </div>
+                <div id="rubric-container">
+    <form id="rubric" action="">
+        <h4 id="rubric-header">Welcome <span id="judge-username"></span>!</h4>
+        <h4 id="rubric-game"></h4>
+        <i id="rubric-message">Select a game to start rating.</i>
+        <div id="rubric-inputs" style="display: none;">
+            <p class="small">Relevance to Prize Category</p>
+            <input name="relevance" value = '5' type="range" min="0" max="10" class="slider" id="relevance">
+            <p class="small">Creativity and Originality</p>
+            <input name="originality" value = '5' type="range" min="0" max="10" class="slider" id="originality">
+            <p class="small">Documentation and Presentation</p>
+            <input name="documentation" value = '5' type="range" min="0" max="10" class="slider" id="documentation">
+            <p class="small">Consideration of Ethical Issues</p>
+            <input name="ethics" value = '5' type="range" min="0" max="10" class="slider" id="ethics">
+            <p class="small">Engagement and Fun</p>
+            <input name="fun" value = '5' type="range" min="0" max="10" class="slider" id="fun">
+            <br/>
+            <button id="submit-rating" type="button" onclick="submitRatings(); goBack();">Submit your Rating</button>
+            <p class="small">Note: Doesn't submit anywhere yet...</p>
+    </div>
+    </form>
+</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let state = 'available'
+    let currentGame;
+    document.getElementById('submitted').style.display = 'none'
+    // displaySubmissions()
+
+    // Initialize Login Variables
+    let showLogin=false;
+    let showSignUp=false;
+    let game = new Game();
+
+</script>
+
+
+        </div>
+    </div>
 
 
     <footer id="footer">
@@ -192,7 +326,9 @@
 
 
 </div>
+
 </body>
+
 </html>
 
 

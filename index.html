@@ -8,7 +8,10 @@
 
     <link rel=icon href=assets/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="/js/site.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://brainsatplay.com/brainsatplay/libraries/js/Game.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 
 </head>
 <body>
@@ -21,11 +24,15 @@
     {% include nav.html %}
 
     <!--Content-->
+    {% include login.html %}
+
+
+    <!--Content-->
     <div>
         <div>
             <div id= "hero1" class="hero header">
                 <img src="/assets/brand/logo_and_sub.png">
-                    <div class="button-nav flex-center">
+                    <div class="button-nav flex-center" style="width: 90%;">
                         <button onclick="window.location.href='/competition'" target="_blank" type="button" style="width: 100%;">
                             <div>
                                 <span>International Design Fiction Competition</span>
@@ -33,24 +40,23 @@
                                 <span class="small">Submit your idea for a brain-controlled game</span>
                             </div>
                         </button>
-                        <button onclick="window.location.href='/docs'" target="_blank" type="button" style="width: 100%;">
-                            <div>
-                                <span>Brains@Play Software Library</span>
-                                <br/>
-                                <span class="small">Develop a game with us</span>
-                            </div>
-                        </button>
-<!--                        <button onclick="window.location.href='/games'" style="min-width: 40%" rel="noopener">Explore Submitted Games</button>-->
                     </div>
             </div>
+
+<!--            Games              -->
+            {% include games.html %}
+
         </div>
+    </div>
 
 
     {% include footer.html %}
 
 
 </div>
+
 </body>
+
 </html>
 
 

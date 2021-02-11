@@ -18,6 +18,10 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 strong {
     font-family: LatoHeavy
 }
@@ -510,10 +514,7 @@ input:focus{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    /*width: 100%;*/
     padding: 5px;
-    /*background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/livewire.png')*/
-
 }
 
 #projects a{
@@ -653,11 +654,6 @@ footer a {
 /*    width: 100%;*/
 /*}*/
 
-.unavailable{
-    color: #544d54;
-    cursor: default;
-}
-
 /* Contact */
 .contact{
     display: flex;
@@ -681,6 +677,130 @@ footer a {
 
 /*Games List*/
 
+#game-nav {
+    display: flex;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 65px;
+    z-index: 100;
+
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background: #201e20;
+    transition: 0.5s;
+}
+
+.game-option {
+    flex-grow: 1;
+    text-align: center;
+    color: gray;
+    cursor: pointer;
+    transition: .5s;
+    padding: 0px 25px;
+    border-bottom: 1px solid transparent;
+}
+
+.game-option:hover {
+    color: white;
+    /*border-bottom-color: #6a8eb0;*/
+}
+
+
+.unavailable{
+    color: gray;
+    cursor: default;
+}
+
+.unavailable:hover {
+    color: gray;
+}
+
+.selected {
+    color: white;
+    border-bottom-color: #6a8eb0;
+    font-weight: normal;
+}
+
+.game {
+    position: relative;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+    flex: 1 1 0;
+    width: 0px;
+    min-width: 250px;
+    max-width: 100%;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+}
+
+.game-mask{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 50%;
+    transition: .5s;
+    z-index: 0;
+}
+
+.game:hover .game-mask {
+    opacity: 30%;
+}
+
+.game-text {
+    margin: 25px;
+    z-index: 1;
+    flex-grow: 1;
+}
+
+
+.game-text h3{
+    margin: 0px;
+}
+
+
+.game-feature {
+    width: 100%;
+    max-width: 750px;
+    height: auto;
+    margin: 10px 0px;
+}
+
+
+#games-actions {
+    /*padding: 50px;*/
+    width: 40vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#submitted-game-gallery{
+    max-height: calc(100vh - 115px);
+    overflow: scroll;
+}
+
+#submitted-content-container{
+    width: 60vw;
+}
+
+#submitted {
+   display: flex;
+    flex-wrap: wrap;
+}
+
+#temp-message {
+    display: none;
+}
 .additional-img {
     max-width: 40%;
 }
@@ -1068,95 +1188,6 @@ hr {
 }
 
 
-/* App List */
-
-#game-nav {
-    display: flex;
-    position: sticky;
-    position: -webkit-sticky;
-    top: 50px;
-    z-index: 2;
-
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    background: #201e20;
-    font-size: 20;
-    transition: 0.5s;
-}
-
-.game-option {
-    flex-grow: 1;
-    text-align: center;
-    color: gray;
-    cursor: pointer;
-    transition: .5s;
-    padding: 0px 25px;
-    border-bottom: 1px solid transparent;
-}
-
-.game-option:hover {
-    color: white;
-    /*border-bottom-color: #6a8eb0;*/
-}
-
-.selected {
-    color: white;
-    border-bottom-color: #6a8eb0;
-    font-weight: normal;
-}
-
-.game {
-    position: relative;
-    display: flex;
-    height: 250px;
-    flex: 1 1 0;
-    width: 0;
-    max-width: 100%;
-    min-width: 40vw;
-    background-attachment: scroll;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    cursor: pointer;
-}
-
-.game-mask{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: 50%;
-    transition: .5s;
-    z-index: 0;
-}
-
-.game:hover .game-mask {
-    opacity: 30%;
-}
-
-.game-text {
-    margin: 50px;
-    z-index: 1;
-
-}
-
-.game-text h3{
-    margin-bottom: 0px;
-}
-
-
-.game-feature {
-    width: 100%;
-    max-width: 750px;
-    height: auto;
-    margin: 10px 0px;
-}
-
-
-
 /*Arrows*/
 .arrow {
     border: solid black;
@@ -1253,21 +1284,16 @@ input:focus{
 
 /*Judging*/
 #rubric-container{
-    position: fixed;
+    display:none;
+    box-sizing:border-box;
     z-index: -1;
     opacity: 0;
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
     bottom: 50%;
-    transform: translateY(50%);
-    right: 0px;
     width: 400px;
-    height: 100vh;
+    max-height: calc(100vh - 75px);
     padding: 75px 25px;
 }
-
-/*#rubric-container h4 {*/
-/*    margin: 0;*/
-/*}*/
 
 /* Slider */
 /* The switch - the box around the slider */
