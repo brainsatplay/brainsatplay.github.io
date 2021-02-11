@@ -789,6 +789,13 @@ footer a {
     overflow: scroll;
 }
 
+#game {
+    padding: 50px;
+    max-height: calc(100vh - 115px);
+    overflow: scroll;
+}
+
+
 #submitted-content-container{
     width: 60vw;
 }
@@ -803,13 +810,6 @@ footer a {
 }
 .additional-img {
     max-width: 40%;
-}
-#back {
-    position:fixed;
-    bottom: 10px;
-    right: 50px;
-    background-color: black;
-    z-index: 101;
 }
 
 /*Futures Initiative*/
@@ -1179,6 +1179,12 @@ hr {
     flex-grow: 1;
 }
 
+blockquote {
+    margin: 25px;
+    padding: 25px;
+    border-left: 1px solid lightgray;
+}
+
 .small{
     font-size: 80%;
 }
@@ -1291,7 +1297,7 @@ input:focus{
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
     bottom: 50%;
     width: 400px;
-    max-height: calc(100vh - 75px);
+    max-height: calc(100vh - 115px);
     padding: 75px 25px;
 }
 

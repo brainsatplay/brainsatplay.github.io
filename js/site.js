@@ -42,7 +42,6 @@ function switchToSubmittedGames(){
         document.getElementById('back').addEventListener('click', function() {goBack()});
         state = 'submitted';
     }
-
 }
 
 function displaySubmissions(){
@@ -51,8 +50,6 @@ function displaySubmissions(){
         data.forEach((submission, row) => {
             if (submission['Finished'] === 'True') {
                 if (submission['Q51'] !== '' && submission['Q57'] !== ''){
-                    document.getElementById('temp-message').style.display = 'none';
-                    document.getElementById('temp-message').innerHTML = '';
                     let gameTag;
                     let name;
                     if (submission['Q20'] === 'Brain Games'){
@@ -62,15 +59,17 @@ function displaySubmissions(){
                     } else if (submission['Q20'] === 'Computational Art'){
                         name = submission['Q56'];
                     }
+
                     gameTag = `
-                    <a id="${name}" class="game" onclick="getSubmissions(row)" style="background-image: url('/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}')">
+                    <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url('/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}')">
                             <div class="game-text">
                               <h3>${name}</h3>
                               <i class="small">${submission['Q1']}</i>
                             </div>
                             <div class="game-mask"></div>
                           </a>`
-                    document.getElementById('submitted-game-gallery').innerHTML += gameTag
+
+                    document.getElementById('submitted-game-gallery').innerHTML += gameTag;
                 }
             }
         })
@@ -82,12 +81,14 @@ function displaySubmissions(){
 function goBack() {
     document.getElementById('game').style.display = 'none';
     document.getElementById('game').innerHTML = '';
-    document.getElementById('temp-message').style.display = 'none';
-    document.getElementById('temp-message').innerHTML = '';
     document.getElementById('back').style.display = 'none';
     document.getElementById('submitted-game-gallery').style.display = 'flex';
 
-    // Hide Grading Rubric
+    // Hide Rubric
+    hideRubric()
+}
+
+function hideRubric(){
     if (game.me.username != 'me') {
         document.getElementById('rubric-header').style.display = 'block';
         document.getElementById('rubric-message').style.display = 'block';
@@ -95,144 +96,181 @@ function goBack() {
         document.getElementById('rubric-game').style.display = 'none';
     }
 }
-
-function getSubmissions(name) {
-    document.getElementById('game').innerHTML = '';
-    document.getElementById('submitted-game-gallery').style.display = 'none';
-
-    document.getElementById('temp-message').innerHTML = 'Grabbing files. Please wait...';
-    document.getElementById('temp-message').style.display = 'block';
-
-    // Show Grading Rubric
+function showRubric() {
     if (game.me.username != 'me') {
-        document.getElementById('rubric-game').innerHTML = name.id;
-        document.getElementById('rubric-game').style.display = 'block';
         document.getElementById('rubric-header').style.display = 'none';
         document.getElementById('rubric-message').style.display = 'none';
         document.getElementById('rubric-inputs').style.display = 'block';
     }
+}
+function showSubmission(row) {
+    document.getElementById('game').innerHTML = '';
+    document.getElementById('submitted-game-gallery').style.display = 'none';
 
-    // Set current game
-    currentGame = name;
+    // Show Grading Rubric
+    showRubric()
 
-    // Fill basic content
-                    $('#game').prepend(`
-<div>
-<div>
-<h1 id='game-name'></h1>
-<i id='game-pitch'></i>
-<br/>
-<div id='game-image' class="flex flex-center"></div>
-<div class="center">
-    <i id='game-prompt' class="small"></i>
-</div>
-<p id='game-description'></p>
-<h2>Additional Information</h2>
-<p id='additional-info'></p>
+    let submissionArr;
+    let questions;
+    var rows;
+    var headers;
 
-<h3>The Team</h3>
-<h4 id='team-name'></h4>
-<p id='team-members'>Members: </p>
-<p id='team-ages'>Ages: </p>
-<p id='team-country'>Country: </p>
-<p class="small" id='contact'>For inquiries, please contact </p>
+    d3.text('/competition/submissions/submissions.csv').then(function (text) {
+        rows = d3.csvParseRows(text)
+        headers = rows[0]
+        questions = rows[1]
+        submissionArr = rows[row+1]
+    }).then(() => {
 
-<h3>Video</h3>
-<div id="video-link"></div>
-<h3>Additional Images</h3>
-<div id='additional-images' class='gallery'>
-</div>
-<br/>
-<h2>Game Details</h2>
-<br/>
-<h3>How far in the future does your game take place?</h3>
-<p id='game-futuretime'></p>
-<h3>In what type of future does your game take place?</h3>
-<p id='game-futuretype'></p>
-<br/>
-<h3>How many players?</h3>
-<p id="players-number"></p>
-<h3>Who are the players?</h3>
-<p id="players-characteristics"></p>
-<h3>Except human brains, are there other types of brains involved?</h3>
-<p id="players-nonhuman"></p>
-<h3>Where are players located while playing the game?</h3>
-<p id="players-location"></p>
-<h3>Why are they playing?</h3>
-<p id="players-motivation"></p>
-<h3>Which is the main theme of the game?</h3>
-<p id="players-theme"></p>
-<h3>Where does it take place?</h3>
-<p id="players-world"></p>
-<br/>
-<h3>What kind of conflict does the game support?</h3>
-<p id="rules-conflict"></p>
-<h3>What players can (or cannot) do?</h3>
-<p id="rules-what"></p>
-<h3>How they can (or cannot) do it?</h3>
-<p id="rules-how"></p>
-<h3>What are the win/lose conditions—-if any?</h3>
-<p id="rules-conditions"></p>
-<br/>
-<h3>What are the major ethical issues that might be raised by the game?</h3>
-<p id="ethical-issues"></p>
-<h3>Do you have any specific safeguards to protect players against them?</h3>
-<p id="ethical-safeguards"></p>
-</div>
-</div>
-`)
+        let submissionCategory = submissionArr[headers.findIndex(val => val === 'Q20')];
+        let name;
+        let submissionEmoji;
+        let toIgnore;
 
-    var doc = submittedGamesJSON[name.id]
+        if (submissionCategory === 'Computational Art') {
+            name = submissionArr[headers.findIndex(val => val === 'Q56')]
+            submissionEmoji = '✨';
+            toIgnore = ['StartDate', 'EndDate', 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'Finished', 'RecordedDate', 'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference', 'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Q27 - Sentiment', 'Q27 - Sentiment Score', 'Q27 - Sentiment Polarity', 'Q27 - Topic Sentiment Label', 'Q27 - Topic Sentiment Score', 'Q27 - Topics', 'Q27 - Parent Topics', 'Q22 - Sentiment', 'Q22 - Sentiment Score', 'Q22 - Sentiment Polarity', 'Q22 - Topic Sentiment Label', 'Q22 - Topic Sentiment Score', 'Q22 - Topics', 'Q22 - Parent Topics',
+                'Q56','Q31','Q35','Q46','Q47',
+                'Q22','Q24','Q25_Id','Q25_Name','Q25_Size','Q25_Type','Q26_Id','Q26_Name','Q26_Size','Q26_Type','Q27','Q28_Id','Q28_Name','Q28_Size','Q28_Type','Q29','Q30','Q31_Id','Q31_Name','Q31_Size','Q31_Type','Q32','Q33','Q34','Q27','Q28','Q29','Q31','Q32','Q33','Q34','Q35','Q36','Q44_Id','Q44_Name','Q44_Size','Q44_Type','Q37','Q43_Id','Q43_Name','Q43_Size','Q43_Type','Q38','Q42_Id','Q42_Name','Q42_Size','Q42_Type','Q39','Q40','Q41_Id','Q41_Name','Q41_Size','Q41_Type','Q45','Q46','Q47','Q48','Q49_Id','Q49_Name','Q49_Size','Q49_Type'
+            ]
+        } else {
+            name = submissionArr[headers.findIndex(val => val === 'Q24')]
+            if (submissionCategory === 'Brain Games') {
+                submissionEmoji = '🎮';
+            } else {
+                submissionEmoji = '🧠';
+            }
 
-    document.getElementById("contact").innerHTML+= `${doc['contact-fn']} ${doc['contact-ln']} at ${doc['contact-email']}.`;
-    document.getElementById("game-image").innerHTML += `<img class="game-feature" src="${doc["game-image"]}"/>`
+            toIgnore = ['StartDate', 'EndDate', 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'Finished', 'RecordedDate', 'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference', 'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Q27 - Sentiment', 'Q27 - Sentiment Score', 'Q27 - Sentiment Polarity', 'Q27 - Topic Sentiment Label', 'Q27 - Topic Sentiment Score', 'Q27 - Topics', 'Q27 - Parent Topics', 'Q22 - Sentiment', 'Q22 - Sentiment Score', 'Q22 - Sentiment Polarity', 'Q22 - Topic Sentiment Label', 'Q22 - Topic Sentiment Score', 'Q22 - Topics', 'Q22 - Parent Topics',
+                'Q24','Q56', 'Q52', 'Q53', 'Q54', 'Q55','Q47'
+            ]
+        }
+        toIgnore.push('Q20')
 
-    for (let img in doc["additional-images"]){
-        $('#additional-images').append('<img class="additional-img" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
-    }
+        let names = []
+        let ages = []
+        let numMembers = submissionArr[headers.findIndex(val => val === 'Q3')]
+        toIgnore.push('Q3')
+        let cccMentorship = (submissionArr[headers.findIndex(val => val === 'Q51')] === 'Yes')
+        toIgnore.push('Q51')
+        let canPublish = (submissionArr[headers.findIndex(val => val === 'Q57')] === 'Yes')
+        toIgnore.push('Q57')
+        toIgnore.push('Q64')
+        toIgnore.push('Q68') // Agree to rules
+        toIgnore.push('Q62') // Team member text
+        toIgnore.push('Q7','Q7_2_TEXT') // Country of residence
 
-    Object.keys(doc).forEach(function(field) {
-        if (!['_id','additional-images', 'game-image','approved','contact-fn','contact-ln','contact-email','competition'].includes(field)) {
-            document.getElementById(field).innerHTML += doc[field];
+
+        for (let i = 1; i <= 4; i++) {
+            let age = parseInt(submissionArr[headers.findIndex(val => val === i + '_Q4')])
+            let name = submissionArr[headers.findIndex(val => val === i + '_Q2')] + ` (${age})`
+            if (age && name) {
+                ages.push(age)
+                names.push(name)
+            }
+            console.log(i + '_Q4')
+            toIgnore.push(i + '_Q4')
+            toIgnore.push(i+'_Q2')
+        }
+        if (names.length != 1){
+            names[names.length - 1] = `and ${names[names.length - 1]}`;
+            if (names.length === 2){
+                names = names.join(' ')
+            } else if (names.length > 2) {
+                names = names.join(', ')
+            }
+        }
+        toIgnore.push('Q65') // Confirm over 18yo
+
+        if (document.getElementById('rubric-game')) {
+            document.getElementById('rubric-game').style.display = 'block';
+            document.getElementById('rubric-game').innerHTML = name
+        }
+
+        document.getElementById('game').innerHTML += `<h1 id="game-name">${name}</h1>
+    <p class="small">Submitted by ${names} from <strong>${submissionArr[headers.findIndex(val => val === 'Q1')]}</strong> for the <strong>${submissionCategory}</strong> submission category.
+    Please send all inquiries to ${submissionArr[headers.findIndex(val => val === 'Q9')]} ${submissionArr[headers.findIndex(val => val === 'Q10')]} at <a class="text" href="mailto:${submissionArr[headers.findIndex(val => val === 'Q11')]}" class="text" target="_blank">${submissionArr[headers.findIndex(val => val === 'Q11')]}</a>.</p>
+    `
+      if (submissionCategory !== 'Computational Art')   {
+          document.getElementById('game').innerHTML += `<blockquote>${submissionArr[headers.findIndex(val => val === 'Q29')]}</blockquote>`
+      }
+        document.getElementById('game').innerHTML += `<img class="game-feature" src='/competition/submissions/files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'"/>`
+
+        toIgnore.push('Q29','Q1','Q9','Q10','Q11','Q25_Name')
+        // document.getElementById('game').innerHTML += `<video id="game-video" width="320" height="240" controls>
+        //   <source src='/competition/submissions/files/Q26/${submissionDict['ResponseId']}_${submissionDict['Q26_Name']}' type="video/mp4">
+        // Your browser does not support the video tag.
+        // </video>`
+        //
+        // document.getElementById('game-video').style.width = '100%';
+        // document.getElementById('game-video').style.height = 'auto';
+
+
+
+    // for (let img in doc["additional-images"]){
+    //     $('#additional-images').append('<img class="additional-img" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
+    // }
+    //
+
+        headers.forEach(function(qID,ind) {
+        if (!toIgnore.includes(qID)) {
+            if ('Q22'===qID){
+                document.getElementById('game').innerHTML += `<br/><br/><h2>Game Overview</h2><hr/>`
+                document.getElementById('game').innerHTML += `<h3>Prompt</h3><p>${submissionArr[ind]}</p>` // Prompt
+            } else if ('Q27'===qID){
+                if (!questions[ind].includes('video')){
+                    document.getElementById('game').innerHTML += `<br/><br/><h2>The Players</h2><hr/>`
+                    document.getElementById('game').innerHTML += `<h3>How many players can play at the same time?</h3><p>${submissionArr[ind]}</p>`
+                }
+            }
+            else if ('Q36'===qID){
+                    document.getElementById('game').innerHTML += `<br/><br/><h2>Rules/Gameplay</h2><hr/>`
+                    document.getElementById('game').innerHTML += `<h3>What can players do?</h3><p>${submissionArr[ind]}</p>`
+            } else if ('Q45'===qID){
+                    document.getElementById('game').innerHTML += `<br/><br/><h2>Ethical Issues</h2><hr/>`
+                    document.getElementById('game').innerHTML += `<h3>What are the major ethical issues that might be raised by your game?</h3><p>${submissionArr[ind]}</p>`
+            }else if ('Q48'===qID){
+                    document.getElementById('game').innerHTML += `<br/><br/><h2>Additional Materials</h2><hr/>`
+                    document.getElementById('game').innerHTML += `<h3>Is there anything else you would like to say about your game?</h3><p>${submissionArr[ind]}</p>`
+                    if (submissionCategory === 'VR + Neurotech + Health') {
+                        document.getElementById('game').innerHTML += `<h3>How is your team prepared to develop a function prototype of your VR + Neurotech + Health game?</h3><p>${submissionArr[headers.findIndex(val => val === 'Q64')]}</p>`
+                    }
+            }
+            else if(questions[headers.findIndex(val => val === qID)].includes('Consent Form')){
+                // Filter out consent forms
+            }
+            else if(questions[headers.findIndex(val => val === qID)].includes('image')){
+                // Filter out images
+            } else if(questions[headers.findIndex(val => val === qID)].includes('video')){
+                // Filter out videos
+            }
+            else {
+                if ('Q31'===qID){
+                    document.getElementById('game').innerHTML += `<h3>Who are the players?</h3><p>${submissionArr[ind]}</p>`
+                } else if ('Q35'===qID){
+                    document.getElementById('game').innerHTML += `<h3>Why are players motivated to play?</h3><p>${submissionArr[ind]}</p>`
+                } else if ('Q46'===qID){
+                    if (submissionArr[ind]==='Yes'){
+                        document.getElementById('game').innerHTML += `<h3>What ethical safeguards are in place to protect against these issues?</h3><p>${submissionArr[headers.findIndex(val => val === 'Q47')]}</p>`
+                    }
+                } else if ('Q52'===qID){
+                    document.getElementById('game').innerHTML += `<br/><br/><a class="text" href="${submissionArr[ind]}">${submissionArr[ind]}</a>`
+                }else if ('Q53'===qID){
+                    document.getElementById('game').innerHTML += `<br/><br/><h2>Description</h2><hr/><p>${submissionArr[ind]}</p>`
+                }else if ('Q55'===qID){
+                    document.getElementById('game').innerHTML += `<br/><br/><h2>Bio</h2><hr/><p>${submissionArr[ind]}</p>`
+                }else {
+                    document.getElementById('game').innerHTML += `<h3>${questions[headers.findIndex(val => val === qID)]}</h3>`
+                    document.getElementById('game').innerHTML += `<p>${submissionArr[headers.findIndex(val => val === qID)]}</p>`
+                }
+            }
         }
     })
 
-    let jsonOBJ = {'get': name}
-
-    fetch(url + '/getsubmissions', {
-        method: 'POST',
-        mode: 'cors', // no-cors, cors, *same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'omit', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify(jsonOBJ), // body data type must match "Content-Type" header
-    }).then(response => {
-        response.json().then(function (json) {
-            document.getElementById('temp-message').style.display = 'none';
-            if (json.error) {
-                $('#game').prepend('<h1>' + json.error + '</h1>')
-            } else {
-                console.log(json)
-                let doc = json[Object.keys(json)[0]]
-                document.getElementById('additional-images').innerHTML = '';
-                console.log(doc)
-                for (let img in doc["additional-images"]){
-                    $('#additional-images').append(`<img class="additional-img" src="${doc["additional-images"][img]}"/>`)
-                }
-            }
-        })})
-
-            document.getElementById('game').style.display = 'flex';
-            if (game.me.username =='me') {
-                document.getElementById('back').style.display = 'block';
-            }
-        //     }
-        // )
-    // });
+            document.getElementById('game').style.display = 'block';
+            document.getElementById('back').style.display = 'block';
+    })
 };
 
 
@@ -281,8 +319,12 @@ async function login(game, type){
         toggleLoginScreen();
         document.getElementById('games-buttons').style.display = 'none';
         document.getElementById('rubric-container').style.display = 'inline-block';
-        document.getElementById('rubric-container').style.zIndex = '100';
+        document.getElementById('rubric-container').style.zIndex = '10';
         document.getElementById('rubric-container').style.opacity = '1';
+        if (document.getElementById('game-name')){
+            document.getElementById('rubric-game').innerHTML = document.getElementById('game-name').innerHTML
+            showRubric()
+        }
     } else {
         document.getElementById('login-message').innerHTML = resDict.msg
     }

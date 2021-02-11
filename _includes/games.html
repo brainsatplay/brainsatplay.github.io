@@ -4,13 +4,14 @@
             <p class="small">Available Games</p>
         </div>
         <div id="submitted-option" class="game-option unavailable">
+<!--        <div id="submitted-option" class="game-option" onclick="switchToSubmittedGames()">-->
             <p class="small">Submitted Games</p>
         </div>
     </nav>
     <div id="game-display">
         <div id="available">
             <div id="game-gallery" class="gallery">
-                <a id="template" class="game" onclick="window.location.href='https://brainsatplay.com/brainsatplay-react-starter'" style="background-image: url('/assets/images/games/react-starter-template.png')">
+                <a id="template" class="game" onclick="window.location.href='https://brainsatplay.com/brainsatplay-react-starter'" style="background-image: url('https://brainsatplay.com/brainsatplay-react-starter/header.png')">
                     <div class="game-text">
                         <h3>React Starter Template</h3>
                         <i class="small">Brains@Play</i>
@@ -30,17 +31,16 @@
         </div>
         <div id="submitted">
             <div id="submitted-content-container">
-                <section id="game" style="display:none;"></section>
-                <section id="temp-message" class="flex-center flex"></section>
-                <button id="back" style="display:none;">
-                    Back to Submitted Games
-                </button>
+                <div id="game" style="display:none;"></div>
                 <div id="submitted-game-gallery" class="gallery"></div>
             </div>
             <div id="games-actions">
                 <div id="games-buttons">
                     <button onclick="window.location.href='/competition'" rel="noopener">Submit Your Game Idea</button>
                     <button onclick="toggleLoginScreen();" rel="noopener">Rate Submissions</button>
+                    <button id="back" style="display:none;">
+                        Back to Submitted Games
+                    </button>
                 </div>
                 {% include rubric.html %}
             </div>
