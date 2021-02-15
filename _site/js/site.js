@@ -54,6 +54,8 @@ function displaySubmissions(){
                     let name;
                     let headerImg;
                     let submissionEmoji;
+                    console.log(submission['Q20'])
+
                     if (submission['Q20'] === 'Brain Games'){
                         name = submission['Q24'];
                         submissionEmoji = '🎮'
@@ -217,6 +219,7 @@ function showSubmission(row) {
     Please send all inquiries to ${submissionArr[headers.findIndex(val => val === 'Q9')]} ${submissionArr[headers.findIndex(val => val === 'Q10')]} at <a class="text" href="mailto:${submissionArr[headers.findIndex(val => val === 'Q11')]}" class="text" target="_blank">${submissionArr[headers.findIndex(val => val === 'Q11')]}</a>.</p>
     `
         let headerImg;
+        console.log(submissionCategory)
       if (submissionCategory !== 'Computational Art')   {
           document.getElementById('game').innerHTML += `<blockquote>${submissionArr[headers.findIndex(val => val === 'Q29')]}</blockquote>`
             headerImg = `'/competition/submissions/files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'`
