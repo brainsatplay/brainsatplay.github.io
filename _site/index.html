@@ -174,9 +174,9 @@
         <div id="available-option" class="game-option selected" onclick="switchToAvailableGames()">
             <p class="small">Available Games</p>
         </div>
-        <div id="submitted-option" class="game-option unavailable">
-<!--        <div id="submitted-option" class="game-option" onclick="switchToSubmittedGames()">-->
-            <p class="small">Submitted Games</p>
+<!--        <div id="submitted-option" class="game-option unavailable">-->
+        <div id="submitted-option" class="game-option" onclick="switchToSubmittedGames()">
+            <p class="small">Competition Submissions</p>
         </div>
     </nav>
     <div id="game-display">
@@ -207,11 +207,15 @@
             </div>
             <div id="games-actions">
                 <div id="games-buttons">
-                    <button onclick="window.location.href='/competition'" rel="noopener">Submit Your Game Idea</button>
-                    <button onclick="toggleLoginScreen();" rel="noopener">Rate Submissions</button>
                     <button id="back" style="display:none;">
-                        Back to Submitted Games
+                        Back to Submissions
                     </button>
+                    <br/>
+                    <h4>Submit your Game Idea</h4>
+                    <button onclick="window.location.href='/competition'" rel="noopener">Submit Here</button>
+                    <br/>
+                    <h4>Judging Portal</h4>
+                    <button onclick="toggleLoginScreen();" rel="noopener">Login Here</button>
                 </div>
                 <div id="rubric-container">
     <form id="rubric" action="">
@@ -246,7 +250,7 @@
     let state = 'available'
     let currentGame;
     document.getElementById('submitted').style.display = 'none'
-    // displaySubmissions()
+    displaySubmissions()
 
     // Initialize Login Variables
     let showLogin=false;

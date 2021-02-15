@@ -52,16 +52,25 @@ function displaySubmissions(){
                 if (submission['Q51'] !== '' && submission['Q57'] !== ''){
                     let gameTag;
                     let name;
+                    let headerImg;
+                    let submissionEmoji;
                     if (submission['Q20'] === 'Brain Games'){
                         name = submission['Q24'];
+                        submissionEmoji = '🎮'
+                        headerImg = `'/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
                     } else if (submission['Q20'] === 'VR + Neurotech + Health'){
                         name = submission['Q24'];
+                        submissionEmoji = '🧠';
+                        headerImg = `'/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
                     } else if (submission['Q20'] === 'Computational Art'){
                         name = submission['Q56'];
+                        submissionEmoji = '✨';
+                        headerImg = `'/competition/submissions/files/Q69/${submission['ResponseId']}_${submission['Q69_Name']}'`
                     }
 
                     gameTag = `
-                    <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url('/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}')">
+                    <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url(${headerImg})">
+                            <div class="submission-emoji">${submissionEmoji}</div>
                             <div class="game-text">
                               <h3>${name}</h3>
                               <i class="small">${submission['Q1']}</i>
@@ -126,14 +135,22 @@ function showSubmission(row) {
         let name;
         let submissionEmoji;
         let toIgnore;
-
+        let nameQuestion;
+        let ageQuestion;
+        let nameQuestion_Ignore;
+        let ageQuestion_Ignore
+        let duplicateManager = {}
         if (submissionCategory === 'Computational Art') {
             name = submissionArr[headers.findIndex(val => val === 'Q56')]
             submissionEmoji = '✨';
             toIgnore = ['StartDate', 'EndDate', 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'Finished', 'RecordedDate', 'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference', 'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Q27 - Sentiment', 'Q27 - Sentiment Score', 'Q27 - Sentiment Polarity', 'Q27 - Topic Sentiment Label', 'Q27 - Topic Sentiment Score', 'Q27 - Topics', 'Q27 - Parent Topics', 'Q22 - Sentiment', 'Q22 - Sentiment Score', 'Q22 - Sentiment Polarity', 'Q22 - Topic Sentiment Label', 'Q22 - Topic Sentiment Score', 'Q22 - Topics', 'Q22 - Parent Topics',
-                'Q56','Q31','Q35','Q46','Q47',
-                'Q22','Q24','Q25_Id','Q25_Name','Q25_Size','Q25_Type','Q26_Id','Q26_Name','Q26_Size','Q26_Type','Q27','Q28_Id','Q28_Name','Q28_Size','Q28_Type','Q29','Q30','Q31_Id','Q31_Name','Q31_Size','Q31_Type','Q32','Q33','Q34','Q27','Q28','Q29','Q31','Q32','Q33','Q34','Q35','Q36','Q44_Id','Q44_Name','Q44_Size','Q44_Type','Q37','Q43_Id','Q43_Name','Q43_Size','Q43_Type','Q38','Q42_Id','Q42_Name','Q42_Size','Q42_Type','Q39','Q40','Q41_Id','Q41_Name','Q41_Size','Q41_Type','Q45','Q46','Q47','Q48','Q49_Id','Q49_Name','Q49_Size','Q49_Type'
+                'Q56','Q31','Q35','Q46','Q47','Q69_Name',
+                'Q22','Q24','Q25_Id','Q25_Name','Q25_Size','Q25_Type','Q26_Id','Q26_Name','Q26_Size','Q26_Type','Q27','Q28_Id','Q28_Name','Q28_Size','Q28_Type','Q29','Q30','Q31_Id','Q31_Name','Q31_Size','Q31_Type','Q33','Q34','Q27','Q28','Q29','Q31','Q32','Q33','Q34','Q35','Q36','Q44_Id','Q44_Name','Q44_Size','Q44_Type','Q37','Q43_Id','Q43_Name','Q43_Size','Q43_Type','Q38','Q42_Id','Q42_Name','Q42_Size','Q42_Type','Q39','Q40','Q41_Id','Q41_Name','Q41_Size','Q41_Type','Q45','Q46','Q47','Q48','Q49_Id','Q49_Name','Q49_Size','Q49_Type'
             ]
+            nameQuestion = 'Q79'
+            ageQuestion = 'Q80'
+            nameQuestion_Ignore = 'Q2'
+            ageQuestion_Ignore = 'Q4'
         } else {
             name = submissionArr[headers.findIndex(val => val === 'Q24')]
             if (submissionCategory === 'Brain Games') {
@@ -143,8 +160,12 @@ function showSubmission(row) {
             }
 
             toIgnore = ['StartDate', 'EndDate', 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'Finished', 'RecordedDate', 'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference', 'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Q27 - Sentiment', 'Q27 - Sentiment Score', 'Q27 - Sentiment Polarity', 'Q27 - Topic Sentiment Label', 'Q27 - Topic Sentiment Score', 'Q27 - Topics', 'Q27 - Parent Topics', 'Q22 - Sentiment', 'Q22 - Sentiment Score', 'Q22 - Sentiment Polarity', 'Q22 - Topic Sentiment Label', 'Q22 - Topic Sentiment Score', 'Q22 - Topics', 'Q22 - Parent Topics',
-                'Q24','Q56', 'Q52', 'Q53', 'Q54', 'Q55','Q47'
+                'Q24','Q56', 'Q52', 'Q53', 'Q54', 'Q55','Q47','Q70', 'Q69_Name'
             ]
+            nameQuestion = 'Q2'
+            ageQuestion = 'Q4'
+            nameQuestion_Ignore = 'Q79'
+            ageQuestion_Ignore = 'Q80'
         }
         toIgnore.push('Q20')
 
@@ -156,22 +177,22 @@ function showSubmission(row) {
         toIgnore.push('Q51')
         let canPublish = (submissionArr[headers.findIndex(val => val === 'Q57')] === 'Yes')
         toIgnore.push('Q57')
-        toIgnore.push('Q64')
         toIgnore.push('Q68') // Agree to rules
         toIgnore.push('Q62') // Team member text
         toIgnore.push('Q7','Q7_2_TEXT') // Country of residence
 
-
         for (let i = 1; i <= 4; i++) {
-            let age = parseInt(submissionArr[headers.findIndex(val => val === i + '_Q4')])
-            let name = submissionArr[headers.findIndex(val => val === i + '_Q2')] + ` (${age})`
+            let age = parseInt(submissionArr[headers.findIndex(val => val === i + '_' + ageQuestion)])
+            let name = submissionArr[headers.findIndex(val => val === i + '_' + nameQuestion)] + ` (${age})`
             if (age && name) {
                 ages.push(age)
                 names.push(name)
             }
-            console.log(i + '_Q4')
-            toIgnore.push(i + '_Q4')
-            toIgnore.push(i+'_Q2')
+            toIgnore.push(i + '_' + nameQuestion)
+            toIgnore.push(i + '_' + nameQuestion_Ignore)
+            toIgnore.push(i+'_' + ageQuestion)
+            toIgnore.push(i + '_' + ageQuestion_Ignore)
+
         }
         if (names.length != 1){
             names[names.length - 1] = `and ${names[names.length - 1]}`;
@@ -181,6 +202,7 @@ function showSubmission(row) {
                 names = names.join(', ')
             }
         }
+
         toIgnore.push('Q65') // Confirm over 18yo
 
         if (document.getElementById('rubric-game')) {
@@ -188,14 +210,20 @@ function showSubmission(row) {
             document.getElementById('rubric-game').innerHTML = name
         }
 
-        document.getElementById('game').innerHTML += `<h1 id="game-name">${name}</h1>
+        document.getElementById('game').innerHTML += `
+    <div class="submission-emoji">${submissionEmoji}</div>
+    <h1 id="game-name">${name}</h1>
     <p class="small">Submitted by ${names} from <strong>${submissionArr[headers.findIndex(val => val === 'Q1')]}</strong> for the <strong>${submissionCategory}</strong> submission category.
     Please send all inquiries to ${submissionArr[headers.findIndex(val => val === 'Q9')]} ${submissionArr[headers.findIndex(val => val === 'Q10')]} at <a class="text" href="mailto:${submissionArr[headers.findIndex(val => val === 'Q11')]}" class="text" target="_blank">${submissionArr[headers.findIndex(val => val === 'Q11')]}</a>.</p>
     `
+        let headerImg;
       if (submissionCategory !== 'Computational Art')   {
           document.getElementById('game').innerHTML += `<blockquote>${submissionArr[headers.findIndex(val => val === 'Q29')]}</blockquote>`
+            headerImg = `'/competition/submissions/files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'`
+      } else {
+          headerImg = `'/competition/submissions/files/Q69/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q69_Name')]}'`
       }
-        document.getElementById('game').innerHTML += `<img class="game-feature" src='/competition/submissions/files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'"/>`
+        document.getElementById('game').innerHTML += `<img class="game-feature" src=${headerImg}/>`
 
         toIgnore.push('Q29','Q1','Q9','Q10','Q11','Q25_Name')
         // document.getElementById('game').innerHTML += `<video id="game-video" width="320" height="240" controls>
@@ -233,15 +261,21 @@ function showSubmission(row) {
             }else if ('Q48'===qID){
                     document.getElementById('game').innerHTML += `<br/><br/><h2>Additional Materials</h2><hr/>`
                     document.getElementById('game').innerHTML += `<h3>Is there anything else you would like to say about your game?</h3><p>${submissionArr[ind]}</p>`
-                    if (submissionCategory === 'VR + Neurotech + Health') {
-                        document.getElementById('game').innerHTML += `<h3>How is your team prepared to develop a function prototype of your VR + Neurotech + Health game?</h3><p>${submissionArr[headers.findIndex(val => val === 'Q64')]}</p>`
-                    }
+            } else if ('Q64'===qID){
+                if (submissionCategory === 'VR + Neurotech + Health') {
+                    document.getElementById('game').innerHTML += `<h3>How is your team prepared to develop a function prototype of your VR + Neurotech + Health game?</h3><p>${submissionArr[headers.findIndex(val => val === 'Q64')]}</p>`
+                }
             }
             else if(questions[headers.findIndex(val => val === qID)].includes('Consent Form')){
                 // Filter out consent forms
             }
             else if(questions[headers.findIndex(val => val === qID)].includes('image')){
-                // Filter out images
+                if (qID.includes('Name')) {
+                    let name = submissionArr[headers.indexOf(qID.split('_')[0] + '_Name')]
+                    if (name != '') {
+                        document.getElementById('game').innerHTML += `<img class="game-feature" src='/competition/submissions/files/${qID.split('_')[0]}/${submissionArr[headers.indexOf('ResponseId')]}_${name}'/>`
+                    }
+                }
             } else if(questions[headers.findIndex(val => val === qID)].includes('video')){
                 // Filter out videos
             }
@@ -255,14 +289,27 @@ function showSubmission(row) {
                         document.getElementById('game').innerHTML += `<h3>What ethical safeguards are in place to protect against these issues?</h3><p>${submissionArr[headers.findIndex(val => val === 'Q47')]}</p>`
                     }
                 } else if ('Q52'===qID){
-                    document.getElementById('game').innerHTML += `<br/><br/><a class="text" href="${submissionArr[ind]}">${submissionArr[ind]}</a>`
-                }else if ('Q53'===qID){
+                    document.getElementById('game').innerHTML += `<br/><br/><p>Active Project (<a  class="text" href="${submissionArr[ind]}">link</a>)</p>`
+                } else if ('Q70'===qID){
+                    if (submissionArr[ind] != "") {
+                        document.getElementById('game').innerHTML += `<p>Source Code (<a class="text" href="${submissionArr[ind]}">link</a>)</p>`
+                    }
+                }
+                else if ('Q53'===qID){
                     document.getElementById('game').innerHTML += `<br/><br/><h2>Description</h2><hr/><p>${submissionArr[ind]}</p>`
                 }else if ('Q55'===qID){
                     document.getElementById('game').innerHTML += `<br/><br/><h2>Bio</h2><hr/><p>${submissionArr[ind]}</p>`
                 }else {
-                    document.getElementById('game').innerHTML += `<h3>${questions[headers.findIndex(val => val === qID)]}</h3>`
-                    document.getElementById('game').innerHTML += `<p>${submissionArr[headers.findIndex(val => val === qID)]}</p>`
+                    let startInd = 0
+                    if (duplicateManager[qID]){
+                        startInd = duplicateManager[qID]
+                    }
+                    let ind = headers.indexOf(qID,startInd)
+                    if (submissionArr[ind] != '') {
+                        document.getElementById('game').innerHTML += `<h3>${questions[ind]}</h3>`
+                        document.getElementById('game').innerHTML += `<p>${submissionArr[ind]}</p>`
+                    }
+                    duplicateManager[qID] = ind+1
                 }
             }
         }

@@ -756,6 +756,13 @@ footer a {
     opacity: 30%;
 }
 
+.submission-emoji {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    z-index: 10;
+}
+
 .game-text {
     margin: 25px;
     z-index: 1;
@@ -790,6 +797,7 @@ footer a {
 }
 
 #game {
+    position: relative;
     padding: 50px;
     max-height: calc(100vh - 115px);
     overflow: scroll;
