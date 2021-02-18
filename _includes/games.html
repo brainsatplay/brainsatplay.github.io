@@ -30,25 +30,12 @@
             </div>
         </div>
         <div id="submitted">
-            <div id="submitted-content-container">
-                <div id="game" style="display:none;"></div>
-                <div id="submitted-game-gallery" class="gallery"></div>
-            </div>
-            <div id="games-actions">
-                <div id="games-buttons">
-                    <button id="back" style="display:none;">
-                        Back to Submissions
-                    </button>
-                    <br/>
-                    <h4>Submit your Game Idea</h4>
-                    <button onclick="window.location.href='/competition'" rel="noopener">Submit Here</button>
-                    <br/>
-                    <h4>Judging Portal</h4>
-                    <button onclick="toggleLoginScreen();" rel="noopener">Login Here</button>
-                </div>
-                {% include rubric.html %}
-            </div>
+            <div id="game" style="display:none;"></div>
+            <div id="submitted-game-gallery" class="gallery"></div>
         </div>
+        <button id="back" style="display:none;">
+            Back to Submissions
+        </button>
     </div>
 </div>
 
@@ -62,6 +49,4 @@
     // Initialize Login Variables
     let showLogin=false;
     let showSignUp=false;
-    let game = new Game();
-
 </script>

@@ -44,17 +44,24 @@ function switchToSubmittedGames(){
     }
 }
 
-function displaySubmissions(){
+function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health', 'Computational Art']){
+
+    if (!Array.isArray(categories)){
+        categories = [categories]
+    }
+    document.getElementById('submitted-game-gallery').innerHTML = '';
+    allGames = []
+
     d3.csv('/competition/submissions/submissions.csv').then(function (data) {
 
         data.forEach((submission, row) => {
             if (submission['Finished'] === 'True') {
+                if (categories.includes(submission['Q20']))
                 if (submission['Q51'] !== '' && submission['Q57'] !== ''){
                     let gameTag;
                     let name;
                     let headerImg;
                     let submissionEmoji;
-                    console.log(submission['Q20'])
 
                     if (submission['Q20'] === 'Brain Games'){
                         name = submission['Q24'];
@@ -69,6 +76,7 @@ function displaySubmissions(){
                         submissionEmoji = '✨';
                         headerImg = `'/competition/submissions/files/Q69/${submission['ResponseId']}_${submission['Q69_Name']}'`
                     }
+                    allGames.push(name)
 
                     gameTag = `
                     <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url(${headerImg})">
@@ -84,6 +92,9 @@ function displaySubmissions(){
                 }
             }
         })
+        if (document.getElementById('rubric-container') !== null) {
+            populateJudgingRequirements(completedSubmissions)
+        }
     })
 }
 
@@ -134,6 +145,7 @@ function showSubmission(row) {
     }).then(() => {
 
         let submissionCategory = submissionArr[headers.findIndex(val => val === 'Q20')];
+        currentCategory = submissionCategory
         let name;
         let submissionEmoji;
         let toIgnore;
@@ -162,7 +174,7 @@ function showSubmission(row) {
             }
 
             toIgnore = ['StartDate', 'EndDate', 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'Finished', 'RecordedDate', 'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference', 'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Q27 - Sentiment', 'Q27 - Sentiment Score', 'Q27 - Sentiment Polarity', 'Q27 - Topic Sentiment Label', 'Q27 - Topic Sentiment Score', 'Q27 - Topics', 'Q27 - Parent Topics', 'Q22 - Sentiment', 'Q22 - Sentiment Score', 'Q22 - Sentiment Polarity', 'Q22 - Topic Sentiment Label', 'Q22 - Topic Sentiment Score', 'Q22 - Topics', 'Q22 - Parent Topics',
-                'Q24','Q56', 'Q52', 'Q53', 'Q54', 'Q55','Q47','Q70', 'Q69_Name'
+                'Q24','Q56', 'Q52', 'Q53', 'Q54', 'Q55','Q47','Q70', 'Q69_Name',
             ]
             nameQuestion = 'Q2'
             ageQuestion = 'Q4'
@@ -212,37 +224,40 @@ function showSubmission(row) {
             document.getElementById('rubric-game').innerHTML = name
         }
 
+        currentGame = name
+
         document.getElementById('game').innerHTML += `
-    <div class="submission-emoji">${submissionEmoji}</div>
+<!--    <div class="submission-emoji">${submissionEmoji}</div>-->
     <h1 id="game-name">${name}</h1>
     <p class="small">Submitted by ${names} from <strong>${submissionArr[headers.findIndex(val => val === 'Q1')]}</strong> for the <strong>${submissionCategory}</strong> submission category.
     Please send all inquiries to ${submissionArr[headers.findIndex(val => val === 'Q9')]} ${submissionArr[headers.findIndex(val => val === 'Q10')]} at <a class="text" href="mailto:${submissionArr[headers.findIndex(val => val === 'Q11')]}" class="text" target="_blank">${submissionArr[headers.findIndex(val => val === 'Q11')]}</a>.</p>
     `
         let headerImg;
-        console.log(submissionCategory)
       if (submissionCategory !== 'Computational Art')   {
           document.getElementById('game').innerHTML += `<blockquote>${submissionArr[headers.findIndex(val => val === 'Q29')]}</blockquote>`
             headerImg = `'/competition/submissions/files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'`
       } else {
           headerImg = `'/competition/submissions/files/Q69/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q69_Name')]}'`
       }
-        document.getElementById('game').innerHTML += `<img class="game-feature" src=${headerImg}/>`
+        document.getElementById('game').innerHTML += `<div class="game-media-container"><img class="game-media" src=${headerImg}/></div>`
 
         toIgnore.push('Q29','Q1','Q9','Q10','Q11','Q25_Name')
-        // document.getElementById('game').innerHTML += `<video id="game-video" width="320" height="240" controls>
-        //   <source src='/competition/submissions/files/Q26/${submissionDict['ResponseId']}_${submissionDict['Q26_Name']}' type="video/mp4">
-        // Your browser does not support the video tag.
-        // </video>`
-        //
-        // document.getElementById('game-video').style.width = '100%';
-        // document.getElementById('game-video').style.height = 'auto';
 
+        if (submissionCategory !== 'Computational Art') {
+            console.log(`'/competition/submissions/files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}'`)
+            document.getElementById('game').innerHTML += `<div class="game-media-container"><p style="margin-right: 50px;">Please download video to view:</p> <video id="game-video" width="320" height="240" controls>
+          <source src='/competition/submissions/files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}' type="video/mp4">
+        Your browser does not support the video tag.
+        </video></div>`
+
+            document.getElementById('game-video').maxWidth = '100%'
+        }
 
 
     // for (let img in doc["additional-images"]){
     //     $('#additional-images').append('<img class="additional-img" alt="fetching from server..." src=' + doc["additional-images"][img] + ' />')
     // }
-    //
+
 
         headers.forEach(function(qID,ind) {
         if (!toIgnore.includes(qID)) {
@@ -276,7 +291,7 @@ function showSubmission(row) {
                 if (qID.includes('Name')) {
                     let name = submissionArr[headers.indexOf(qID.split('_')[0] + '_Name')]
                     if (name != '') {
-                        document.getElementById('game').innerHTML += `<img class="game-feature" src='/competition/submissions/files/${qID.split('_')[0]}/${submissionArr[headers.indexOf('ResponseId')]}_${name}'/>`
+                        document.getElementById('game').innerHTML += `<div class="game-media-container"><img class="game-media" src='/competition/submissions/files/${qID.split('_')[0]}/${submissionArr[headers.indexOf('ResponseId')]}_${name}'/></div>`
                     }
                 }
             } else if(questions[headers.findIndex(val => val === qID)].includes('video')){
@@ -292,10 +307,10 @@ function showSubmission(row) {
                         document.getElementById('game').innerHTML += `<h3>What ethical safeguards are in place to protect against these issues?</h3><p>${submissionArr[headers.findIndex(val => val === 'Q47')]}</p>`
                     }
                 } else if ('Q52'===qID){
-                    document.getElementById('game').innerHTML += `<br/><br/><p>Active Project (<a  class="text" href="${submissionArr[ind]}">link</a>)</p>`
+                    document.getElementById('game').innerHTML += `<br/><br/><p>Active Project (<a  class="text" href="${submissionArr[ind]}" target="_blank">link</a>)</p>`
                 } else if ('Q70'===qID){
                     if (submissionArr[ind] != "") {
-                        document.getElementById('game').innerHTML += `<p>Source Code (<a class="text" href="${submissionArr[ind]}">link</a>)</p>`
+                        document.getElementById('game').innerHTML += `<p>Source Code (<a class="text" href="${submissionArr[ind]}" target="_blank">link</a>)</p>`
                     }
                 }
                 else if ('Q53'===qID){
@@ -325,7 +340,7 @@ function showSubmission(row) {
 
 
 // Login
-function toggleLoginScreen(){
+async function toggleLoginScreen(){
     showLogin = !showLogin;
 
     if (showLogin){
@@ -345,7 +360,7 @@ function toggleSignUpScreen(){
         document.getElementById('signup-container').style.opacity = '1'
     } else {
         document.getElementById('signup-container').style.opacity = '0'
-        document.getElementById('signup-container').style.zIndex = '0'
+        document.getElementById('signup-container').style.zIndex = '-1'
     }
 }
 
@@ -362,18 +377,22 @@ async function login(game, type){
         formDict.guestaccess = false
     }
 
-    let resDict = await game.login(formDict)
+    let resDict = await game.login(formDict);
     if (resDict.result == 'OK'){
-        document.getElementById('judge-username').innerHTML = game.me.username;
         form.reset()
         toggleLoginScreen();
-        document.getElementById('games-buttons').style.display = 'none';
-        document.getElementById('rubric-container').style.display = 'inline-block';
-        document.getElementById('rubric-container').style.zIndex = '10';
-        document.getElementById('rubric-container').style.opacity = '1';
-        if (document.getElementById('game-name')){
-            document.getElementById('rubric-game').innerHTML = document.getElementById('game-name').innerHTML
-            showRubric()
+        if (resDict.profile.role === 'judge') {
+            document.getElementById('judge-username').innerHTML = resDict.msg;
+            document.getElementById('judge-category').innerHTML = resDict.profile.judgingCategory
+            document.getElementById('rubric-container').style.display = 'block';
+            document.getElementById('rubric-container').style.zIndex = '10';
+            document.getElementById('rubric-container').style.opacity = '1';
+            if (document.getElementById('game-name')) {
+                document.getElementById('rubric-game').innerHTML = document.getElementById('game-name').innerHTML
+                showRubric()
+            }
+            completedSubmissions = resDict.profile.completedSubmissions
+            displaySubmissions(resDict.profile.judgingCategory)
         }
     } else {
         document.getElementById('login-message').innerHTML = resDict.msg
@@ -409,6 +428,28 @@ async function signup(game){
 }
 
 // Submit Ratings
+
+function populateJudgingRequirements(completedList){
+    let completed = document.getElementById('rubric-completed')
+    let todo = document.getElementById('rubric-todo')
+
+    completed.innerHTML = ''
+    todo.innerHTML = ''
+
+    let todoList = allGames;
+    completedList.forEach((name) => {
+        completed.innerHTML += `<li class="small">${name}</li>`
+        todoList = todoList.filter(e => e !== name);
+    })
+
+    if (todoList.length === 0){
+        document.getElementById('rubric-message').innerHTML = `<p class="small">No more submissions to judge. Browse all on the <a href="/" class="text">homepage</a>.</p>`
+    }
+
+    todoList.forEach((name) => {
+        todo.innerHTML += `<li class="small">${name}</li>`
+    })
+}
 async function submitRatings(){
     let form = document.getElementById('rubric')
     let formData = new FormData(form);
@@ -418,26 +459,24 @@ async function submitRatings(){
     }
     formDict['username'] = game.me.username;
     formDict['game'] = currentGame;
+    formDict['category'] = currentCategory;
 
     let json  = JSON.stringify(formDict)
 
-    // let resDict = await fetch(url + 'submitRubric',
-    //     { method: 'POST',
-    //         mode: 'cors',
-    //         headers: new Headers({
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         }),
-    //         body: json
-    //     }).then((res) => {return res.json().then((message) => message)})
-    //     .then((message) => {
-    //         console.log(`\n${message}`);
-    //         return message})
-    //     .catch(function (err) {
-    //         console.log(`\n${err.message}`);
-    //     });
-    //
-    // if (resDict.result == 'OK'){
-        console.log(submittedGamesJSON)
-    // }
+    let resDict = await fetch('https://brainsatplay.azurewebsites.net/' + 'judging',
+        { method: 'POST',
+            mode: 'cors',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }),
+            body: json
+        }).then((res) => {return res.json()})
+
+
+    if (resDict.result == 'OK'){
+        form.reset()
+        completedSubmissions = resDict.profile.completedSubmissions
+        populateJudgingRequirements(resDict.profile.completedSubmissions)
+    }
 }

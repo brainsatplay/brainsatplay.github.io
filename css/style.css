@@ -148,7 +148,8 @@ svg {
     align-items: center;
     height: 65px;
     padding: 0px 50px;
-    position: fixed;
+    position: sticky;
+    position: -webkit-sticky;
     top: 0;
     left: 0;
     right: 0;
@@ -244,7 +245,7 @@ a.link .current{
 
 /* Page Header */
 .header{
-    padding: 200px 50px 150px 50px;
+    padding: 100px 50px 100px 50px;
     text-align: center;
     display:flex;
     flex-wrap:wrap;
@@ -515,6 +516,7 @@ input:focus{
     justify-content: center;
     align-items: center;
     padding: 5px;
+    flex-basis: 100%;
 }
 
 #projects a{
@@ -758,9 +760,9 @@ footer a {
 
 .submission-emoji {
     position: absolute;
-    top: 5%;
-    right: 5%;
-    z-index: 10;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1;
 }
 
 .game-text {
@@ -774,12 +776,17 @@ footer a {
     margin: 0px;
 }
 
+.game-media-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0px;
+}
 
-.game-feature {
-    width: 100%;
-    max-width: 750px;
-    height: auto;
-    margin: 10px 0px;
+.game-media {
+    width: auto;
+    max-width: 100%;
+    height: 70vh;
 }
 
 
@@ -791,15 +798,15 @@ footer a {
     align-items: center;
 }
 
-#submitted-game-gallery{
-    max-height: calc(100vh - 115px);
-    overflow: scroll;
+#back {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
 }
 
 #game {
     position: relative;
     padding: 50px;
-    max-height: calc(100vh - 115px);
     overflow: scroll;
 }
 
@@ -1264,6 +1271,14 @@ input:focus{
     width: 100%;
 }
 
+#login-container {
+    transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    -ms-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
+}
+
 #login{
     /* linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)); */
     width: 75%;
@@ -1298,15 +1313,19 @@ input:focus{
 
 /*Judging*/
 #rubric-container{
+    position: sticky;
+    bottom: 0;
     display:none;
-    box-sizing:border-box;
     z-index: -1;
     opacity: 0;
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
-    bottom: 50%;
     width: 400px;
-    max-height: calc(100vh - 115px);
-    padding: 75px 25px;
+    /*height: calc(100vh - 65px);*/
+    padding: 65px 50px;
+}
+
+#rubric-inputs{
+    text-align: center;
 }
 
 /* Slider */

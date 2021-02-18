@@ -1,8 +1,19 @@
 <div id="rubric-container">
     <form id="rubric" action="">
         <h4 id="rubric-header">Welcome <span id="judge-username"></span>!</h4>
+
         <h3 id="rubric-game"></h3>
-        <i id="rubric-message">Select a game to start rating.</i>
+        <div id="judge-category" style="display:none"></div>
+        <hr/>
+        <div id="rubric-message">
+            <h5>To Do</h5>
+            <ul id="rubric-todo">
+            </ul>
+            <h5>Completed</h5>
+            <ul id="rubric-completed">
+            </ul>
+        </div>
+
         <div id="rubric-inputs" style="display: none;">
             <p class="small">Relevance to Prize Category</p>
             <input name="relevance" value = '5' type="range" min="0" max="10" class="slider" id="relevance">
@@ -16,7 +27,6 @@
             <input name="fun" value = '5' type="range" min="0" max="10" class="slider" id="fun">
             <br/>
             <button id="submit-rating" type="button" onclick="submitRatings(); goBack();">Submit your Rating</button>
-            <p class="small">Note: Doesn't submit anywhere yet...</p>
     </div>
     </form>
 </div>
