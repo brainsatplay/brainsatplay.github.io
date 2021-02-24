@@ -685,7 +685,6 @@ footer a {
     position: -webkit-sticky;
     top: 65px;
     z-index: 100;
-
     justify-content: space-between;
     align-items: center;
     height: 50px;
@@ -805,14 +804,15 @@ footer a {
 }
 
 #game {
+    box-sizing: border-box;
     position: relative;
     padding: 50px;
-    overflow: scroll;
+    width: calc(100vw - 400px)
 }
 
 
 #submitted-content-container{
-    width: 60vw;
+    width: calc(100vw - 400px)
 }
 
 #submitted {
@@ -1312,26 +1312,84 @@ input:focus{
 }
 
 /*Judging*/
+
+textarea {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    height: 200px;
+    font-family: Lato, sans-serif
+}
+#rubric-header {
+    margin-bottom: 25px;
+}
 #rubric-container{
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    right: 0px;
     display:none;
     z-index: -1;
     opacity: 0;
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
     width: 400px;
-    /*height: calc(100vh - 65px);*/
-    padding: 65px 50px;
+    padding: 25px 50px 65px 50px;
+    height: calc(100vh - 65px);
+    border-left: 1px solid white;
+}
+
+#rubric-container p{
+    margin-top: 0px;
+}
+
+#rubric-container h4{
+    margin-bottom: 10px;
+}
+
+.scrolly {
+    overflow-y: scroll;
+}
+
+/* width */
+.scrolly::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.scrolly::-webkit-scrollbar-track {
+    background: rgb(25, 25, 25);
+}
+
+/* Handle */
+.scrolly::-webkit-scrollbar-thumb {
+    background: rgb(150, 150, 150);
+    border-radius: 5px;
 }
 
 #rubric-inputs{
-    text-align: center;
+    text-align: left;
+}
+
+#submit-rating{
+    margin-top: 25px;
 }
 
 /* Slider */
 /* The switch - the box around the slider */
+
+label {
+    width: auto;
+}
+
+.slider-container {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 input[type="range"] {
-    margin: auto;
+    margin-right: 25px;
     -webkit-appearance: none;
     position: relative;
     overflow: hidden;
@@ -1343,7 +1401,7 @@ input[type="range"] {
 }
 
 ::-webkit-slider-runnable-track {
-    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
+    background: linear-gradient(rgb(25, 25, 25), rgb(25, 25, 25));
 }
 
 /*

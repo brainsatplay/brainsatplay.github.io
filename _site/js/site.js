@@ -1,13 +1,3 @@
-// Scrolling Behavior
-function moveViewport(id) {
-    let viewportOffset = document.getElementById(id).getBoundingClientRect();
-    let top = viewportOffset.top;
-    console.log(window.pageYOffset + top)
-    window.scrollTo(0, window.pageYOffset - top - 100);
-}
-
-
-
 // Switching Views
 
 function getPerson(fullName){
@@ -116,10 +106,13 @@ function hideRubric(){
         document.getElementById('rubric-message').style.display = 'block';
         document.getElementById('rubric-inputs').style.display = 'none';
         document.getElementById('rubric-game').style.display = 'none';
+        document.getElementById('judge-category').style.display = 'block'
     }
 }
 function showRubric() {
     if (game.me.username != 'me') {
+        document.getElementById('rubric-submission-category').innerHTML = document.getElementById('judge-category').innerHTML
+        document.getElementById('judge-category').style.display = 'none'
         document.getElementById('rubric-header').style.display = 'none';
         document.getElementById('rubric-message').style.display = 'none';
         document.getElementById('rubric-inputs').style.display = 'block';
@@ -244,7 +237,6 @@ function showSubmission(row) {
         toIgnore.push('Q29','Q1','Q9','Q10','Q11','Q25_Name')
 
         if (submissionCategory !== 'Computational Art') {
-            console.log(`'/competition/submissions/files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}'`)
             document.getElementById('game').innerHTML += `<div class="game-media-container"><p style="margin-right: 50px;">Please download video to view:</p> <video id="game-video" width="320" height="240" controls>
           <source src='/competition/submissions/files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}' type="video/mp4">
         Your browser does not support the video tag.
@@ -387,6 +379,8 @@ async function login(game, type){
             document.getElementById('rubric-container').style.display = 'block';
             document.getElementById('rubric-container').style.zIndex = '10';
             document.getElementById('rubric-container').style.opacity = '1';
+            document.getElementById('back').style.opacity = '0';
+            document.getElementById('back').style.pointerEvents = 'none';
             if (document.getElementById('game-name')) {
                 document.getElementById('rubric-game').innerHTML = document.getElementById('game-name').innerHTML
                 showRubric()
@@ -443,7 +437,7 @@ function populateJudgingRequirements(completedList){
     })
 
     if (todoList.length === 0){
-        document.getElementById('rubric-message').innerHTML = `<p class="small">No more submissions to judge. Browse all on the <a href="/" class="text">homepage</a>.</p>`
+        document.getElementById('rubric-message').innerHTML = `<p class="small">No more submissions to judge. Browse all submissions on the Brains@Play <a href="/" class="text">homepage</a>.</p>`
     }
 
     todoList.forEach((name) => {
@@ -479,4 +473,21 @@ async function submitRatings(){
         completedSubmissions = resDict.profile.completedSubmissions
         populateJudgingRequirements(resDict.profile.completedSubmissions)
     }
+}
+
+function updateLabel(val, labelID){
+    document.getElementById(labelID).innerHTML = val
+}
+
+async function getRatings(url = 'https://brainsatplay.azurewebsites.net/'){
+    let resDict = await fetch(url + 'judging',
+        { method: 'GET',
+            mode: 'cors',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }),
+        }).then((res) => {return res.json()})
+
+    return resDict
 }

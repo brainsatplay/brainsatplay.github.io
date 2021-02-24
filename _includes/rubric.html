@@ -1,9 +1,9 @@
-<div id="rubric-container">
+<div id="rubric-container" class="scrolly" >
     <form id="rubric" action="">
         <h4 id="rubric-header">Welcome <span id="judge-username"></span>!</h4>
 
         <h3 id="rubric-game"></h3>
-        <div id="judge-category" style="display:none"></div>
+        <div id="judge-category"></div>
         <hr/>
         <div id="rubric-message">
             <h5>To Do</h5>
@@ -15,16 +15,43 @@
         </div>
 
         <div id="rubric-inputs" style="display: none;">
-            <p class="small">Relevance to Prize Category</p>
-            <input name="relevance" value = '5' type="range" min="0" max="10" class="slider" id="relevance">
-            <p class="small">Creativity and Originality</p>
-            <input name="originality" value = '5' type="range" min="0" max="10" class="slider" id="originality">
-            <p class="small">Documentation and Presentation</p>
-            <input name="documentation" value = '5' type="range" min="0" max="10" class="slider" id="documentation">
-            <p class="small">Consideration of Ethical Issues</p>
-            <input name="ethics" value = '5' type="range" min="0" max="10" class="slider" id="ethics">
-            <p class="small">Engagement and Fun</p>
-            <input name="fun" value = '5' type="range" min="0" max="10" class="slider" id="fun">
+            <h4>Relevance to Prize Category</h4>
+            <p class="small">Does this game align with the <span id="rubric-submission-category"></span></span> category?</p>
+            <div class="slider-container">
+                <input name="relevance" value = '5' type="range" min="0" max="10" class="slider" oninput="updateLabel(this.value, this.name)">
+                <label id="relevance" for="relevance">5</label>
+
+            </div>
+            <h4>Creativity and Originality</h4>
+            <p class="small">How creative is this game idea?</p>
+            <div class="slider-container">
+                <input name="originality" value = '5' type="range" min="0" max="10" class="slider" oninput="updateLabel(this.value, this.name)">
+                <label id="originality" for="originality">5</label>
+            </div>
+            <h4>Documentation & Presentation</h4>
+            <p class="small">How well did this team present their game idea?</p>
+            <div class="slider-container">
+                <input name="documentation" value = '5' type="range" min="0" max="10" class="slider" oninput="updateLabel(this.value, this.name)">
+                <label id="documentation" for="documentation">5</label>
+            </div>
+            <h4>Consideration of Ethical Issues</h4>
+            <p class="small">Did this team address the ethical issues of their game?</p>
+            <div class="slider-container">
+                <input name="ethics" value = '5' type="range" min="0" max="10" class="slider" oninput="updateLabel(this.value, this.name)">
+                <label id="ethics" for="ethics">5</label>
+            </div>
+
+            <h4>Engagement and Fun</h4>
+            <p class="small">Does this game seem like it would be fun to play?</p>
+
+            <div class="slider-container">
+                <input name="fun" value = '5' type="range" min="0" max="10" class="slider" oninput="updateLabel(this.value, this.name)">
+                <label id="fun" for="fun">5</label>
+            </div>
+
+            <h4>Additional Comments</h4>
+            <p class="small">What else would you like to tell this team?</p>
+            <textarea name="comments"></textarea>
             <br/>
             <button id="submit-rating" type="button" onclick="submitRatings(); goBack();">Submit your Rating</button>
     </div>

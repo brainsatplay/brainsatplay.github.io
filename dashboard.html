@@ -17,37 +17,16 @@
 {% include nav.html %}
 
 <!--Content-->
-{% include login.html %}
-<div id="submitted" style="min-height: calc(100vh - 75px)">
-    <div id="submitted-content-container">
-        <div id="game" style="display:none;" class="scrolly"></div>
-        <div id="submitted-game-gallery" class="gallery"></div>
-    </div>
-    <div id="games-actions">
-        {% include rubric.html %}
-        <button id="back" style="display:none;">
-            Back to Submissions
-        </button>
-    </div>
+<div id="submitted">
 </div>
 </body>
 
 <script>
-    // Initialize Login Variables
-    let showLogin=false;
-    let showSignUp=false;
-    let currentGame;
-    let currentCategory;
-    let allGames = [];
-    let completedSubmissions = [];
-    let state = 'submitted'
-    document.getElementById('goBack').style.display = 'none';
-    toggleLoginScreen()
-
+    let ratings = getRatings()
+    console.log(ratings)
 </script>
 
 <script>
-    let game = new brainsatplay.Game();
 </script>
 
 </html>
