@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     {% include meta.html %}
-    <title>Judging | Brains@Play</title>
+    <title>Dashboard | Brains@Play</title>
     <link rel=icon href=assets/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <script src="/js/site.js" type="text/javascript"></script>
@@ -17,13 +17,163 @@
 {% include nav.html %}
 
 <!--Content-->
-<div id="submitted">
-</div>
+<section>
+    <div id="Brain Games">
+        <h1>Brain Games</h1>
+        <hr/>
+        <br/>
+    </div>
+    <br/>
+    <div id="VR + Neurotech + Health">
+        <h1>VR + Neurotech + Health</h1>
+        <hr/>
+        <br/>
+    </div>
+    <br/>
+    <div id="Computational Art">
+        <h1>Computational Art</h1>
+        <hr/>
+        <br/>
+    </div>
+</section>
 </body>
 
 <script>
-    let ratings = getRatings()
-    console.log(ratings)
+
+
+    getRatings('http://localhost/').then(resDict => {
+
+        let gameRatings = []
+        let winnersChosen = {
+            'Brain Games': {
+                '18+': 0,
+                '13-17': 0,
+                '<12': 0,
+            },
+            'VR + Neurotech + Health': {
+                '18+': 0,
+                '13-17': 0,
+                '<12': 0,
+            },
+            'Computational Art': {
+                '18+': 0,
+                '13-17': 0,
+                '<12': 0,
+            }
+        }
+
+        d3.csv('/competition/submissions/submissions.csv').then(function (data) {
+            let ageDict = {}
+            data.forEach((game,ind) => {
+                // Ignore headers
+                if (ind > 1) {
+                    // Get age data
+                    let name = game['Q24']
+                    if (name === ''){
+                        name = game['Q56'] // Catch CA
+                    }
+                    let ageArray = []
+                    for (let i = 1; i <= 4; i++) {
+                        let age = parseInt(game[i + '_' + 'Q4'])
+                        if (isNaN(age)) {
+                            age = parseInt(game[i + '_' + 'Q80']) // Catch CA
+                        }
+                        if (!isNaN(age)) {
+                            ageArray.push(age)
+                        }
+                    }
+                    ageDict[name] = Math.max(...ageArray)
+                }
+            })
+
+            Object.keys(resDict.docs).forEach((game,ind) => {
+            let judgeRatings = resDict.docs[game]
+            let scoreArray = []
+            let category = judgeRatings[0].category
+            judgeRatings.forEach((rating) => {
+                scoreArray.push(
+                    parseInt(rating.documentation) +
+                    parseInt(rating.fun) +
+                    parseInt(rating.relevance) +
+                    parseInt(rating.originality) +
+                    parseInt(rating.ethics)
+                )
+            })
+
+                console.log(judgeRatings)
+            gameRatings.push({
+                name: game,
+                average: scoreArray.reduce((a,b) => a+b)/scoreArray.length,
+                category: category,
+                maxAge: ageDict[game] || judgeRatings[0].maxAge || 15
+            })
+        })
+
+            // Sort by category (descending) THEN age (ascending)
+            gameRatings.sort((a,b) => {
+                if (a.average > b.average) {
+                    return -1;
+                } else if (a.average < b.average) {
+                    return 1;
+                }
+                if (a.maxAge < b.maxAge) {
+                    return -1;
+                } else if (a.maxAge > b.maxAge) {
+                    return 1
+                } else {
+                    return 0;
+                }
+            })
+
+        gameRatings.forEach((game) => {
+            let category = game.category
+
+            if (game.maxAge >= 18) {
+                game.ageGroup = '18+'
+            } else if (game.maxAge <= 12) {
+                game.ageGroup = '<12'
+            } else {
+                game.ageGroup = '13-17'
+            }
+
+            // If Child Age Group Has Reached Quota
+            if (game.ageGroup === '<12' && winnersChosen[category][game.ageGroup] < 1) {
+                placeGame(game,'rgb(25,25,25)')
+                winnersChosen[category][game.ageGroup]++;
+            } else if (game.ageGroup === '13-17' && winnersChosen[category][game.ageGroup] < 1) {
+                placeGame(game,'rgb(25,25,25)')
+                winnersChosen[category][game.ageGroup]++;
+            } else if (game.ageGroup === '18+' && winnersChosen[category][game.ageGroup] < 2) {
+                placeGame(game,'rgb(25,25,25)')
+                winnersChosen[category][game.ageGroup]++;
+            } else {
+                if (game.ageGroup === '<12' && winnersChosen[category][game.ageGroup] === 1) {
+                    placeGame(game,'rgb(25,25,25)')
+                    winnersChosen[category]['<12']++;
+                } else if (game.ageGroup === '13-17' && winnersChosen[category][game.ageGroup] === 1) {
+                    placeGame(game,'rgb(25,25,25)')
+                    winnersChosen[category]['13-17']++;
+                } else {
+                    placeGame(game)
+                }
+            }
+        })
+    })
+    })
+
+    function placeGame(game,color='transparent'){
+        document.getElementById(game.category).innerHTML += `
+                <div class="game-card" style="background: ${color}">
+                <h3>${game.name}</h3>
+                <p>${game.ageGroup}</p>
+                <p>${game.average}/50</p>
+                </div>
+                `
+        // document.getElementById(category).innerHTML += `
+        //     <h3>${rating.username}</h3>
+        //     <p>${rating.comments}</p>
+        // `
+    }
 </script>
 
 <script>

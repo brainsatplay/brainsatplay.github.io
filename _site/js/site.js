@@ -199,7 +199,6 @@ function showSubmission(row) {
             toIgnore.push(i + '_' + nameQuestion_Ignore)
             toIgnore.push(i+'_' + ageQuestion)
             toIgnore.push(i + '_' + ageQuestion_Ignore)
-
         }
         if (names.length != 1){
             names[names.length - 1] = `and ${names[names.length - 1]}`;
@@ -480,6 +479,7 @@ function updateLabel(val, labelID){
 }
 
 async function getRatings(url = 'https://brainsatplay.azurewebsites.net/'){
+
     let resDict = await fetch(url + 'judging',
         { method: 'GET',
             mode: 'cors',

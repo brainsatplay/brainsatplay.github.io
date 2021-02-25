@@ -1311,6 +1311,25 @@ input:focus{
     margin: 10px;
 }
 
+/* Dashboard */
+.game-card {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    border: 1px solid rgb(100,100,100);
+    padding: 10px 25px;
+    pointer-events: none;
+}
+
+.game-card h3 {
+    margin: 0;
+}
+
+.game-card p {
+    margin: 0px 25px;
+    width: 50px;
+}
+
 /*Judging*/
 
 textarea {
