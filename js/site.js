@@ -405,7 +405,7 @@ async function login(game, type){
         formDict.guestaccess = false
     }
 
-    let resDict = await game.login(formDict);
+    let resDict = await game.login(formDict,'http://localhost');
     if (resDict.result == 'OK'){
         form.reset()
         toggleLoginScreen();
@@ -446,7 +446,7 @@ async function signup(game){
     }
     else {
 
-        let resDict = await game.signup(formDict);
+        let resDict = await game.signup(formDict,'http://localhost');
         if (resDict.result == 'OK'){
             form.reset()
             toggleLoginScreen();
