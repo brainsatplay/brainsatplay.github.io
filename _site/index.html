@@ -112,12 +112,14 @@
                 <div class="login-element">
                     <input type="text" name="username" autocomplete="off" placeholder="Username or email"/>
                 </div>
-                <div class="login-element">
+                <div class="login-element" style="text-align:right;">
                     <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                    <a class="small text" href="/forgot">Forgot password?</a>
                 </div>
             </form>
         </div>
         <div class="login-buttons">
+
             <button id="login-button" onclick="login(game,'profile')">Sign In</button>
             <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Sign Up</button>
             <button id="goBack" onclick="toggleLoginScreen();">Go Back</button>

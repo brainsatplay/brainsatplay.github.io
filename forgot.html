@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel=icon href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script src="/js/site.js" type="text/javascript"></script>
+    <title>Forgot Password</title>
+</head>
+<body>
+<div id="login-container" class="form-container">
+    <div id="login" class="form-context">
+        <h3>Forgot Password</h3>
+        <p id="reset-message" class="small"></p>
+        <div class='flex'>
+            <form id="reset-form" action="">
+                <div class="login-element">
+                    <input type="email" name="email" autocomplete="off" placeholder="Email"/>
+                </div>
+            </form>
+        </div>
+        <div class="login-buttons">
+            <button id="login-button" onclick="reset('http://localhost/')">Reset Password</button>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    showLogin = false;
+    toggleLoginScreen();
+</script>
+</html>

@@ -357,6 +357,41 @@ function toggleSignUpScreen(){
     }
 }
 
+async function reset(url= 'https://brainsatplay.azurewebsites.net/'){
+    let form = document.getElementById('reset-form')
+    let formDict = {}
+    let formData = new FormData(form);
+    for (var pair of formData.entries()) {
+        formDict[pair[0]] = pair[1];
+    }
+    this.url = new URL(url);
+    let json = JSON.stringify(formDict)
+
+    let resDict = await fetch(url + 'reset',
+        {
+            method: 'POST',
+            mode: 'cors',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }),
+            body: json
+        }).then((res) => {
+        return res.json().then((message) => message)
+    })
+        .then((message) => {
+            return message
+        })
+        .catch(function (err) {
+            console.log(`\n${err.message}`);
+        });
+
+    if (resDict.result === 'OK') {
+        form.reset()
+        document.getElementById('reset-message').innerHTML = resDict.msg
+    }
+}
+
 async function login(game, type){
     let form = document.getElementById('login-form')
     let formDict = {}
