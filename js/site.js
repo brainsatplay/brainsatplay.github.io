@@ -190,7 +190,7 @@ function showSubmission(row) {
 
         for (let i = 1; i <= 4; i++) {
             let age = parseInt(submissionArr[headers.findIndex(val => val === i + '_' + ageQuestion)])
-            let name = submissionArr[headers.findIndex(val => val === i + '_' + nameQuestion)] + ` (${age})`
+            let name = submissionArr[headers.findIndex(val => val === i + '_' + nameQuestion)] //+ ` (${age})`
             if (age && name) {
                 ages.push(age)
                 names.push(name)
@@ -221,7 +221,7 @@ function showSubmission(row) {
         document.getElementById('game').innerHTML += `
 <!--    <div class="submission-emoji">${submissionEmoji}</div>-->
     <h1 id="game-name">${name}</h1>
-    <p class="small">Submitted by ${names} from <strong>${submissionArr[headers.findIndex(val => val === 'Q1')]}</strong> for the <strong>${submissionCategory}</strong> submission category.
+    <p class="small">Submitted by <strong>${submissionArr[headers.findIndex(val => val === 'Q1')]}</strong> (${names}) for the <strong>${submissionCategory}</strong> category.
     Please send all inquiries to ${submissionArr[headers.findIndex(val => val === 'Q9')]} ${submissionArr[headers.findIndex(val => val === 'Q10')]} at <a class="text" href="mailto:${submissionArr[headers.findIndex(val => val === 'Q11')]}" class="text" target="_blank">${submissionArr[headers.findIndex(val => val === 'Q11')]}</a>.</p>
     `
         let headerImg;
@@ -236,7 +236,9 @@ function showSubmission(row) {
         toIgnore.push('Q29','Q1','Q9','Q10','Q11','Q25_Name')
 
         if (submissionCategory !== 'Computational Art') {
-            document.getElementById('game').innerHTML += `<div class="game-media-container"><p style="margin-right: 50px;">Please download video to view:</p> <video id="game-video" width="320" height="240" controls>
+            document.getElementById('game').innerHTML += `<div class="game-media-container">
+<!--<p style="margin-right: 50px;">Please download video to view:</p> -->
+<video id="game-video" width="320" height="240" controls>
           <source src='/competition/submissions/files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}' type="video/mp4">
         Your browser does not support the video tag.
         </video></div>`
