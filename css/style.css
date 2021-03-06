@@ -783,9 +783,8 @@ footer a {
 }
 
 .game-media {
-    width: auto;
-    max-width: 100%;
-    height: 70vh;
+    height: auto;
+    width: 100%;
 }
 
 
