@@ -100,6 +100,7 @@
                 <div>
                     <p>All submissions must be submitted via our <a href="https://usc.qualtrics.com/jfe/form/SV_4MCmbwJVGnPheZL" class="text" target="_blank">web form</a> by 11:59pm PST on March 10th, 2021. You can also <a href="/competition/DesignDocument.pdf" class="text">download a preview of the content of the form</a>.</p>
                     <p>Winning teams will be selected by a <a href="/competition/judges.html" class="text" target="_blank">panel of experts</a> and notified by March 15th, 2021.</p>
+                    <button onclick="window.location.href='https://usc.qualtrics.com/jfe/form/SV_4MCmbwJVGnPheZL'" target="_blank" rel="noopener" style="width: 40%;">Submit your Game</button>
                 </div>
             </div>
         </div>
@@ -113,8 +114,32 @@
                 </div>
             </div>
             <div class="right-feature">
+                <div>
                 <p>Winning participants share their submissions during the Brains and Games public showcase for <a href="https://www.brainawareness.org/" class="text" target="_blank">Brain Awareness Week</a>.
                 </p>
+
+                <!-- Noscript content for added SEO -->
+                <noscript><a href="https://www.eventbrite.com/e/brains-and-games-public-showcase-tickets-144342738015" rel="noopener noreferrer" target="_blank"></noscript>
+                <!-- You can customize this button any way you like -->
+                <button id="eventbrite-widget-modal-trigger-144342738015" type="button" style="width: 40%;" target="_blank">RSVP Here</button>
+                <noscript></a>RSVP Here</noscript>
+
+                <script src="https://www.eventbrite.com/static/widgets/eb_widgets.js"></script>
+
+                <script type="text/javascript">
+                    var exampleCallback = function() {
+                        console.log('Order complete!');
+                    };
+
+                    window.EBWidgets.createWidget({
+                        widgetType: 'checkout',
+                        eventId: '144342738015',
+                        modal: true,
+                        modalTriggerElementId: 'eventbrite-widget-modal-trigger-144342738015',
+                        onOrderComplete: exampleCallback
+                    });
+                </script>
+                </div>
             </div>
         </div>
         <a id="prototyping" class="feature-anchor"></a>
