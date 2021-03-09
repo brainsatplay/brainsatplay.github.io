@@ -364,37 +364,50 @@ async function reset(command, url= 'https://brainsatplay.azurewebsites.net/'){
     for (var pair of formData.entries()) {
         formDict[pair[0]] = pair[1];
     }
+
     formDict.command = command;
-    let pageURL = window.location;
-    let token = new URLSearchParams(pageURL.search).get('token');
-    if (token !== null){
-        formDict.token = token
+    if (formDict.command === 'replacePassword' && formDict['password'] ===''){
+        document.getElementById('reset-message').innerHTML = "password is empty. please try again."
+    }  else if (formDict.command === 'replacePassword' && formDict['password'] !== formDict['confirm-password']) {
+        document.getElementById('reset-message').innerHTML = "passwords don't match. please try again."
     }
+    else {
 
-    let json = JSON.stringify(formDict)
+        formDict.command = command;
+        let pageURL = window.location;
+        let token = new URLSearchParams(pageURL.search).get('token');
+        if (token !== null) {
+            formDict.token = token
+        }
 
-    let resDict = await fetch(url + 'reset',
-        {
-            method: 'POST',
-            mode: 'cors',
-            headers: new Headers({
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }),
-            body: json
-        }).then((res) => {
-        return res.json().then((message) => message)
-    })
-        .then((message) => {
-            return message
+
+        let json = JSON.stringify(formDict)
+
+        let resDict = await fetch(url + 'reset',
+            {
+                method: 'POST',
+                mode: 'cors',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }),
+                body: json
+            }).then((res) => {
+            return res.json().then((message) => message)
         })
-        .catch(function (err) {
-            console.log(`\n${err.message}`);
-        });
+            .then((message) => {
+                return message
+            })
+            .catch(function (err) {
+                console.log(`\n${err.message}`);
+            });
 
-    if (resDict.result === 'OK') {
-        form.reset()
-        document.getElementById('reset-message').innerHTML = resDict.msg
+        console.log(resDict)
+
+        if (resDict.result === 'OK') {
+            form.reset()
+            document.getElementById('reset-message').innerHTML = resDict.msg
+        }
     }
 }
 
@@ -435,7 +448,7 @@ async function login(game, type){
     }
 }
 
-async function signup(game){
+async function signup(game,url='https://brainsatplay.azurewebsites.net/'){
     let form = document.getElementById('signup-form')
     let formData = new FormData(form);
     let formDict = {}
@@ -451,8 +464,8 @@ async function signup(game){
         document.getElementById('signup-message').innerHTML = "passwords don't match. please try again."
     }
     else {
-
-        let resDict = await game.signup(formDict);
+        let resDict = await game.signup(formDict,url);
+        console.log(resDict)
         if (resDict.result == 'OK'){
             form.reset()
             toggleLoginScreen();
