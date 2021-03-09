@@ -367,8 +367,7 @@ async function reset(command, url= 'https://brainsatplay.azurewebsites.net/'){
     formDict.command = command;
     let pageURL = window.location;
     let token = new URLSearchParams(pageURL.search).get('token');
-    console.log(token)
-    if (token){
+    if (token !== null){
         formDict.token = token
     }
 
