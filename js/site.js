@@ -357,14 +357,21 @@ function toggleSignUpScreen(){
     }
 }
 
-async function reset(url= 'https://brainsatplay.azurewebsites.net/'){
+async function reset(command, url= 'https://brainsatplay.azurewebsites.net/'){
     let form = document.getElementById('reset-form')
     let formDict = {}
     let formData = new FormData(form);
     for (var pair of formData.entries()) {
         formDict[pair[0]] = pair[1];
     }
-    this.url = new URL(url);
+    formDict.command = command;
+    let pageURL = window.location;
+    let token = new URLSearchParams(pageURL.search).get('token');
+    console.log(token)
+    if (token){
+        formDict.token = token
+    }
+
     let json = JSON.stringify(formDict)
 
     let resDict = await fetch(url + 'reset',
