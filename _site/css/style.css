@@ -1313,6 +1313,17 @@ input:focus{
 }
 
 /* Dashboard */
+
+#dashboard {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category-div {
+    width: 575px;
+    margin: 25px;
+    flex-grow: 1;
+}
 .game-card {
     display: flex;
     justify-content:center;
