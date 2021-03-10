@@ -730,10 +730,10 @@ footer a {
     justify-content: center;
     align-items: center;
     height: 250px;
-    flex: 1 1 0;
-    width: 0px;
-    min-width: 250px;
-    max-width: 100%;
+    /*flex: 1 1 0;*/
+    width: calc(250px * 1920/1080);
+    min-width: calc(250px * 1920/1080);
+    /*max-width: 100%;*/
     background-attachment: scroll;
     background-position: center;
     background-repeat: no-repeat;

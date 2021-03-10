@@ -1,7 +1,13 @@
 // Switching Views
+
 let exampleSubDir = '/competition/examplesubmissions/'
 let liveSubDir = '/competition/submissions/'
-let chosenSubDir = exampleSubDir
+let chosenSubDir;
+if (window.location.pathname === '/'){
+    chosenSubDir = liveSubDir
+} else {
+    chosenSubDir = exampleSubDir
+}
 
 function getPerson(fullName){
     document.getElementById("team").style.display = `none`
@@ -74,10 +80,8 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
                     <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url(${headerImg})">
                             <div class="submission-emoji">${submissionEmoji}</div>
                             <div class="game-text">
-                              <h3>${name}</h3>
-                              <i class="small">${submission['Q1']}</i>
                             </div>
-                            <div class="game-mask"></div>
+                            <div class="game-mask" style="opacity: 20%;"></div>
                           </a>`
 
                     allGames.push(name)
@@ -232,7 +236,7 @@ function showSubmission(row) {
           document.getElementById('game').innerHTML += `<blockquote>${submissionArr[headers.findIndex(val => val === 'Q29')]}</blockquote>`
             headerImg = `'${chosenSubDir}files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'`
       } else {
-          headerImg = `''${chosenSubDir}files/Q69/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q69_Name')]}'`
+          headerImg = `'${chosenSubDir}files/Q69/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q69_Name')]}'`
       }
         document.getElementById('game').innerHTML += `<div class="game-media-container"><img class="game-media" src=${headerImg}/></div>`
 
