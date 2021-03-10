@@ -243,12 +243,18 @@ function showSubmission(row) {
         toIgnore.push('Q29','Q1','Q9','Q10','Q11','Q25_Name')
 
         if (submissionCategory !== 'Computational Art') {
+            let vidLink = `${chosenSubDir}files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}`
             document.getElementById('game').innerHTML += `<div class="game-media-container">
+<div>
 <!--<p style="margin-right: 50px;">Please download video to view:</p> -->
 <video id="game-video" width="320" height="240" controls>
-          <source src='${chosenSubDir}files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}' type="video/mp4">
+          <source src='${vidLink}' type="video/mp4">
         Your browser does not support the video tag.
-        </video></div>`
+        </video>
+                <p class="small">If unavailable, please view <a href="https://brainsatplay.com${vidLink}" class="text" target="_blank">here</a></p>
+        </div>
+        </div>
+`
 
             document.getElementById('game-video').maxWidth = '100%'
         }

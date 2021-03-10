@@ -785,6 +785,7 @@ footer a {
 .game-media {
     height: auto;
     width: 100%;
+    max-width: 1080px
 }
 
 
@@ -800,6 +801,7 @@ footer a {
     position: fixed;
     bottom: 25px;
     right: 25px;
+    background: black;
 }
 
 #game {
