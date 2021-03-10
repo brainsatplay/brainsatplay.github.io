@@ -89,6 +89,7 @@
             Object.keys(resDict.docs).forEach((game,ind) => {
             let judgeRatings = resDict.docs[game]
             let scoreArray = []
+                let comments = {}
             let category = judgeRatings[0].category
             judgeRatings.forEach((rating) => {
                 scoreArray.push(
@@ -98,14 +99,16 @@
                     parseInt(rating.originality) +
                     parseInt(rating.ethics)
                 )
+                console.log(rating)
+                comments[rating.username] = rating.comments;
             })
 
-                console.log(judgeRatings)
             gameRatings.push({
                 name: game,
                 average: scoreArray.reduce((a,b) => a+b)/scoreArray.length,
                 category: category,
-                maxAge: ageDict[game] || judgeRatings[0].maxAge || 15
+                maxAge: ageDict[game] || judgeRatings[0].maxAge || 15,
+                comments: comments
             })
         })
 
@@ -125,6 +128,8 @@
                 }
             })
 
+            console.log(gameRatings)
+
         gameRatings.forEach((game) => {
             let category = game.category
 
@@ -136,22 +141,29 @@
                 game.ageGroup = '13-17'
             }
 
-            // If Child Age Group Has Reached Quota
-            if (game.ageGroup === '<12' && winnersChosen[category][game.ageGroup] < 1) {
-                placeGame(game,'rgb(25,25,25)')
-                winnersChosen[category][game.ageGroup]++;
-            } else if (game.ageGroup === '13-17' && winnersChosen[category][game.ageGroup] < 1) {
-                placeGame(game,'rgb(25,25,25)')
-                winnersChosen[category][game.ageGroup]++;
-            } else if (game.ageGroup === '18+' && winnersChosen[category][game.ageGroup] < 2) {
-                placeGame(game,'rgb(25,25,25)')
-                winnersChosen[category][game.ageGroup]++;
+            // If Adult Age Group Has Reached Quota, Pick Younger Submissions
+
+            let numWinners = 0;
+            Object.keys(winnersChosen[category]).forEach(function(key) {
+                numWinners += winnersChosen[category][key]
+            });
+
+
+
+            if (game.ageGroup === '18+') {
+                if (winnersChosen[category][game.ageGroup] < 2 && numWinners < 4) {
+                    placeGame(game, 'rgb(25,25,25)')
+                    winnersChosen[category][game.ageGroup]++;
+                } else {
+                    placeGame(game)
+                }
             } else {
-                if (game.ageGroup === '<12' && winnersChosen[category][game.ageGroup] === 1) {
+                if (game.ageGroup === '<12' && numWinners < 4) {
                     placeGame(game,'rgb(25,25,25)')
                     winnersChosen[category]['<12']++;
-                } else if (game.ageGroup === '13-17' && winnersChosen[category][game.ageGroup] === 1) {
+                } else if (game.ageGroup === '13-17' && numWinners < 4) {
                     placeGame(game,'rgb(25,25,25)')
+                    winnersChosen[category][game.ageGroup]++;
                     winnersChosen[category]['13-17']++;
                 } else {
                     placeGame(game)
@@ -161,18 +173,36 @@
     })
     })
 
-    function placeGame(game,color='transparent'){
+    function placeGame(game, color='transparent'){
+        let gameId = game.name.split(' ').join('').split('.').join('')
+        console.log(game.name.split(' ').join('').split('.').join(''))
         document.getElementById(game.category).innerHTML += `
-                <div class="game-card" style="background: ${color}">
+                <button id="${gameId}Button" class="game-card" onclick="openComments(event,${gameId})" style="background: ${color}">
                 <h3>${game.name}</h3>
                 <p>${game.ageGroup}</p>
                 <p>${game.average.toFixed(1)}/50</p>
+                </button>
+
+                <div id="${gameId}" class="tabcontent">
                 </div>
                 `
-        // document.getElementById(category).innerHTML += `
-        //     <h3>${rating.username}</h3>
-        //     <p>${rating.comments}</p>
-        // `
+        Object.keys(game.comments).forEach(key => {
+            console.log(game.comments[key])
+            document.getElementById(gameId).innerHTML += `
+                  <h3>${key}</h3>
+                  <p>${game.comments[key]}</p>
+        `
+        })
+    }
+
+    function openComments(evt,div){
+        div.style.display = "block";
+        document.getElementById(div.id + 'Button').onclick = () => closeComments(event,div);
+    }
+
+    function closeComments(evt,div){
+        div.style.display = "none";
+        document.getElementById(div.id + 'Button').onclick = () => openComments(event,div)
     }
 </script>
 
