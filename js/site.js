@@ -283,8 +283,10 @@ function showSubmission(row) {
                     document.getElementById('game').innerHTML += `<br/><br/><h2>Ethical Issues</h2><hr/>`
                     document.getElementById('game').innerHTML += `<h3>What are the major ethical issues that might be raised by your game?</h3><p>${submissionArr[ind]}</p>`
             }else if ('Q48'===qID){
+                if (submissionArr[ind] !== '') {
                     document.getElementById('game').innerHTML += `<br/><br/><h2>Additional Materials</h2><hr/>`
                     document.getElementById('game').innerHTML += `<h3>Is there anything else you would like to say about your game?</h3><p>${submissionArr[ind]}</p>`
+                }
             } else if ('Q64'===qID){
                 if (submissionCategory === 'VR + Neurotech + Health') {
                     document.getElementById('game').innerHTML += `<h3>How is your team prepared to develop a function prototype of your VR + Neurotech + Health game?</h3><p>${submissionArr[headers.findIndex(val => val === 'Q64')]}</p>`
