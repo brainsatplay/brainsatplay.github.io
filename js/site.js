@@ -1,4 +1,7 @@
 // Switching Views
+let exampleSubDir = '/competition/examplesubmissions/'
+let liveSubDir = '/competition/submissions/'
+let chosenSubDir = exampleSubDir
 
 function getPerson(fullName){
     document.getElementById("team").style.display = `none`
@@ -42,7 +45,7 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
     document.getElementById('submitted-game-gallery').innerHTML = '';
     allGames = []
 
-    d3.csv('/competition/submissions/submissions.csv').then(function (data) {
+    d3.csv(chosenSubDir + 'submissions.csv').then(function (data) {
 
         data.forEach((submission, row) => {
             if (submission['Finished'] === 'True') {
@@ -56,17 +59,16 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
                     if (submission['Q20'] === 'Brain Games'){
                         name = submission['Q24'];
                         submissionEmoji = '🎮'
-                        headerImg = `'/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
+                        headerImg = `'${chosenSubDir}files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
                     } else if (submission['Q20'] === 'VR + Neurotech + Health'){
                         name = submission['Q24'];
                         submissionEmoji = '🧠';
-                        headerImg = `'/competition/submissions/files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
+                        headerImg = `'${chosenSubDir}files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
                     } else if (submission['Q20'] === 'Computational Art'){
                         name = submission['Q56'];
                         submissionEmoji = '✨';
-                        headerImg = `'/competition/submissions/files/Q69/${submission['ResponseId']}_${submission['Q69_Name']}'`
+                        headerImg = `'${chosenSubDir}files/Q69/${submission['ResponseId']}_${submission['Q69_Name']}'`
                     }
-                    allGames.push(name)
 
                     gameTag = `
                     <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url(${headerImg})">
@@ -78,6 +80,7 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
                             <div class="game-mask"></div>
                           </a>`
 
+                    allGames.push(name)
                     document.getElementById('submitted-game-gallery').innerHTML += gameTag;
                 }
             }
@@ -130,7 +133,7 @@ function showSubmission(row) {
     var rows;
     var headers;
 
-    d3.text('/competition/submissions/submissions.csv').then(function (text) {
+    d3.text(chosenSubDir + 'submissions.csv').then(function (text) {
         rows = d3.csvParseRows(text)
         headers = rows[0]
         questions = rows[1]
@@ -227,9 +230,9 @@ function showSubmission(row) {
         let headerImg;
       if (submissionCategory !== 'Computational Art')   {
           document.getElementById('game').innerHTML += `<blockquote>${submissionArr[headers.findIndex(val => val === 'Q29')]}</blockquote>`
-            headerImg = `'/competition/submissions/files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'`
+            headerImg = `'${chosenSubDir}files/Q25/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q25_Name')]}'`
       } else {
-          headerImg = `'/competition/submissions/files/Q69/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q69_Name')]}'`
+          headerImg = `''${chosenSubDir}files/Q69/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q69_Name')]}'`
       }
         document.getElementById('game').innerHTML += `<div class="game-media-container"><img class="game-media" src=${headerImg}/></div>`
 
@@ -239,7 +242,7 @@ function showSubmission(row) {
             document.getElementById('game').innerHTML += `<div class="game-media-container">
 <!--<p style="margin-right: 50px;">Please download video to view:</p> -->
 <video id="game-video" width="320" height="240" controls>
-          <source src='/competition/submissions/files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}' type="video/mp4">
+          <source src='${chosenSubDir}files/Q26/${submissionArr[headers.findIndex(val => val === 'ResponseId')]}_${submissionArr[headers.findIndex(val => val === 'Q26_Name')]}' type="video/mp4">
         Your browser does not support the video tag.
         </video></div>`
 
@@ -284,7 +287,7 @@ function showSubmission(row) {
                 if (qID.includes('Name')) {
                     let name = submissionArr[headers.indexOf(qID.split('_')[0] + '_Name')]
                     if (name != '') {
-                        document.getElementById('game').innerHTML += `<div class="game-media-container"><img class="game-media" src='/competition/submissions/files/${qID.split('_')[0]}/${submissionArr[headers.indexOf('ResponseId')]}_${name}'/></div>`
+                        document.getElementById('game').innerHTML += `<div class="game-media-container"><img class="game-media" src='${chosenSubDir}files/${qID.split('_')[0]}/${submissionArr[headers.indexOf('ResponseId')]}_${name}'/></div>`
                     }
                 }
             } else if(questions[headers.findIndex(val => val === qID)].includes('video')){
@@ -523,7 +526,7 @@ async function submitRatings(){
     if (resDict.result == 'OK'){
         form.reset()
         completedSubmissions = resDict.profile.completedSubmissions
-        populateJudgingRequirements(resDict.profile.completedSubmissions)
+        populateJudgingRequirements(completedSubmissions)
     }
 }
 

@@ -1337,7 +1337,8 @@ input:focus{
 
 .game-card p {
     margin: 0px 25px;
-    width: 50px;
+    width: 150px;
+    text-align: right;
 }
 
 /* Style the tab content */

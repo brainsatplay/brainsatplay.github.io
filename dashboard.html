@@ -39,7 +39,9 @@
 </body>
 
 <script>
-
+    let dashSubDir = '/competition/examplesubmissions/'
+    // let dashSubDir = '/competition/submissions/'
+    ignoreGarrett = true;
 
     getRatings().then(resDict => {
 
@@ -91,25 +93,37 @@
             let scoreArray = []
                 let comments = {}
             let category = judgeRatings[0].category
-                let comments = {}
+                let numRatings = 0;
             judgeRatings.forEach((rating) => {
-                scoreArray.push(
-                    parseInt(rating.documentation) +
-                    parseInt(rating.fun) +
-                    parseInt(rating.relevance) +
-                    parseInt(rating.originality) +
-                    parseInt(rating.ethics)
-                )
-                comments[rating.username] = rating.comments;
+                if (!(ignoreGarrett && rating.username.indexOf('garrettmflynn') !== -1)) {
+                    scoreArray.push(
+                        parseInt(rating.documentation) +
+                        parseInt(rating.fun) +
+                        parseInt(rating.relevance) +
+                        parseInt(rating.originality) +
+                        parseInt(rating.ethics)
+                    )
+                    comments[rating.username] = rating.comments;
+                    numRatings++
+                }
             })
-
-            gameRatings.push({
-                name: game,
-                average: scoreArray.reduce((a,b) => a+b)/scoreArray.length,
-                category: category,
-                maxAge: ageDict[game] || judgeRatings[0].maxAge,
-                comments: comments
-            })
+                if (numRatings > 0) {
+                    gameRatings.push({
+                        name: game,
+                        average: scoreArray.reduce((a, b) => a + b) / scoreArray.length,
+                        category: category,
+                        maxAge: ageDict[game] || judgeRatings[0].maxAge,
+                        comments: comments
+                    })
+                } else {
+                    gameRatings.push({
+                        name: game,
+                        average: NaN,
+                        category: category,
+                        maxAge: ageDict[game] || judgeRatings[0].maxAge,
+                        comments: comments
+                    })
+                }
         })
 
             // Sort by category (descending) THEN age (ascending)
@@ -128,13 +142,13 @@
                 }
             })
 
-            console.log(gameRatings)
-
         gameRatings.forEach((game) => {
             let category = game.category
             if (game.maxAge === undefined) {
-                game.ageGroup = 'Test'
-            } else if (game.maxAge >= 18) {
+                game.ageGroup = 'Example'
+            } else if (isNaN(game.average)) {
+                game.ageGroup = 'No Score Yet'
+            }else if (game.maxAge >= 18) {
                 game.ageGroup = '18+'
             } else if (game.maxAge <= 12) {
                 game.ageGroup = '<12'
@@ -156,7 +170,10 @@
                 } else {
                     placeGame(game)
                 }
-            } else {
+            } else if (game.ageGroup === 'Example') {
+                placeGame(game, 'rgb(25,25,25)')
+            }
+            else {
                 if (game.ageGroup === '<12' && numWinners < 4) {
                     placeGame(game,'rgb(25,25,25)')
                     winnersChosen[category]['<12']++;
@@ -173,8 +190,10 @@
     })
 
     function placeGame(game, color='transparent'){
-        let gameId = game.name.split(' ').join('').split('.').join('')
-        document.getElementById(game.category).innerHTML += `
+        let gameId = game.name.split(' ').join('').replace(/^[^a-z]+|[^\w]+/gi, "")
+
+        if (game.ageGroup !== 'Example' || dashSubDir === '/competition/examplesubmissions/') {
+            document.getElementById(game.category).innerHTML += `
                 <button id="${gameId}Button" class="game-card" onclick="openComments(event,${gameId})" style="background: ${color}">
                 <h3>${game.name}</h3>
                 <p>${game.ageGroup}</p>
@@ -184,12 +203,15 @@
                 <div id="${gameId}" class="tabcontent">
                 </div>
                 `
-        Object.keys(game.comments).forEach(key => {
-            document.getElementById(gameId).innerHTML += `
+            Object.keys(game.comments).forEach(key => {
+                if (game.comments[key] !== '') {
+                    document.getElementById(gameId).innerHTML += `
                   <h3>${key}</h3>
                   <p>${game.comments[key]}</p>
         `
-        })
+                }
+            })
+        }
     }
 
     function openComments(evt,div){
