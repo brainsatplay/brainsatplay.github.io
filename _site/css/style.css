@@ -1316,8 +1316,19 @@ input:focus{
     justify-content:center;
     align-items: center;
     border: 1px solid rgb(100,100,100);
-    padding: 10px 25px;
-    pointer-events: none;
+    padding: 25px;
+    max-width: none;
+    width: 100%;
+    text-align: left;
+}
+
+.game-card:hover {
+    color: white;
+    border-color: white;
+}
+
+.game-card:focus {
+    outline: none;
 }
 
 .game-card h3 {
@@ -1327,6 +1338,13 @@ input:focus{
 .game-card p {
     margin: 0px 25px;
     width: 50px;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    color: white;
 }
 
 /*Judging*/
