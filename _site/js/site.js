@@ -3,7 +3,7 @@
 let exampleSubDir = '/competition/examplesubmissions/'
 let liveSubDir = '/competition/submissions/'
 let chosenSubDir;
-if (window.location.pathname === '/'){
+if (window.location.pathname === '/' || window.location.pathname === '/competition/submissions/'){
     chosenSubDir = liveSubDir
 } else {
     chosenSubDir = exampleSubDir
@@ -102,7 +102,7 @@ function goBack() {
     document.getElementById('game').innerHTML = '';
     document.getElementById('back').style.display = 'none';
     document.getElementById('submitted-game-gallery').style.display = 'flex';
-
+    window.scrollTo(0, 0);
     // Hide Rubric
     hideRubric()
 }
