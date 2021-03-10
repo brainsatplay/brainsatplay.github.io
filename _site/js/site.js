@@ -402,8 +402,6 @@ async function reset(command, url= 'https://brainsatplay.azurewebsites.net/'){
                 console.log(`\n${err.message}`);
             });
 
-        console.log(resDict)
-
         if (resDict.result === 'OK') {
             form.reset()
             document.getElementById('reset-message').innerHTML = resDict.msg
@@ -465,7 +463,6 @@ async function signup(game,url='https://brainsatplay.azurewebsites.net/'){
     }
     else {
         let resDict = await game.signup(formDict,url);
-        console.log(resDict)
         if (resDict.result == 'OK'){
             form.reset()
             toggleLoginScreen();
