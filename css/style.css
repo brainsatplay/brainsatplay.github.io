@@ -778,6 +778,7 @@ footer a {
     margin: 25px;
     z-index: 1;
     text-align: left;
+    width: 75%;
     /*flex-grow: 1;*/
 }
 

@@ -56,36 +56,56 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
         data.forEach((submission, row) => {
             if (submission['Finished'] === 'True') {
                 if (categories.includes(submission['Q20']))
-                if (submission['Q51'] !== '' && submission['Q57'] !== ''){
+                if (submission['Q51'] !== '' && submission['Q57'] !== '') {
                     let gameTag;
                     let name;
                     let headerImg;
                     let submissionEmoji;
 
-                    if (submission['Q20'] === 'Brain Games'){
+                    if (submission['Q20'] === 'Brain Games') {
                         name = submission['Q24'];
                         submissionEmoji = '🎮'
                         headerImg = `'${chosenSubDir}files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
-                    } else if (submission['Q20'] === 'VR + Neurotech + Health'){
+                    } else if (submission['Q20'] === 'VR + Neurotech + Health') {
                         name = submission['Q24'];
                         submissionEmoji = '🧠';
                         headerImg = `'${chosenSubDir}files/Q25/${submission['ResponseId']}_${submission['Q25_Name']}'`
-                    } else if (submission['Q20'] === 'Computational Art'){
+                    } else if (submission['Q20'] === 'Computational Art') {
                         name = submission['Q56'];
                         submissionEmoji = '✨';
                         headerImg = `'${chosenSubDir}files/Q69/${submission['ResponseId']}_${submission['Q69_Name']}'`
                     }
 
+                    console.log(name)
+                    badImages = ['Memory face Jenga', 'Emotia', 'It’s a Pirate’s Life for Me', 'SaṃsāRa - Remember this Story', 'Garden Invaders']
+
+                //     if (!badImages.includes(name)) {
+                //         gameTag = `
+                //     <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url(${headerImg})">
+                //             <div class="submission-emoji">${submissionEmoji}</div>
+                //             <div class="game-text">
+                //
+                //             </div>
+                //             <div class="game-mask" style="opacity: 20%;"></div>
+                //           </a>`
+                //
+                //         allGames.push(name)
+                //         document.getElementById('submitted-game-gallery').innerHTML += gameTag;
+                // } else {
                     gameTag = `
                     <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url(${headerImg})">
                             <div class="submission-emoji">${submissionEmoji}</div>
                             <div class="game-text">
+                                <p class="small2x" style="margin:0">2021</p>
+                                <h3>${name}</h3>
+                                <i class="small">${submission['Q20']}</i>
                             </div>
-                            <div class="game-mask" style="opacity: 20%;"></div>
+                            <div class="game-mask" style="opacity: 60%;"></div>
                           </a>`
 
                     allGames.push(name)
                     document.getElementById('submitted-game-gallery').innerHTML += gameTag;
+                // }
                 }
             }
         })
