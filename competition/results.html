@@ -163,7 +163,8 @@
 
             if (game.ageGroup === '18+' && !isNaN(game.average)) {
                 if (winnersChosen[category][game.ageGroup] < 2 && numWinners < 4) {
-                    placeGame(game, 'rgb(25,25,25)')
+                    // placeGame(game, 'rgb(25,25,25)')
+                    placeGame(game)
                     winnersChosen[category][game.ageGroup]++;
                 } else {
                     placeGame(game)
@@ -173,10 +174,12 @@
             }
             else {
                 if (game.ageGroup === '<12' && numWinners < 4 && !isNaN(game.average)) {
-                    placeGame(game,'rgb(25,25,25)')
+                    // placeGame(game, 'rgb(25,25,25)')
+                    placeGame(game)
                     winnersChosen[category]['<12']++;
                 } else if (game.ageGroup === '13-17' && numWinners < 4 && !isNaN(game.average)) {
-                    placeGame(game,'rgb(25,25,25)')
+                    // placeGame(game, 'rgb(25,25,25)')
+                    placeGame(game)
                     winnersChosen[category][game.ageGroup]++;
                     winnersChosen[category]['13-17']++;
                 } else {
