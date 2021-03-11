@@ -118,7 +118,7 @@
                 } else {
                     gameRatings.push({
                         name: game,
-                        average: NaN,
+                        average: 0,
                         category: category,
                         maxAge: ageDict[game] || judgeRatings[0].maxAge,
                         comments: comments
@@ -126,21 +126,23 @@
                 }
         })
 
-            // Sort by category (descending) THEN age (ascending)
-            gameRatings.sort((a,b) => {
-                if (a.average > b.average) {
-                    return -1;
-                } else if (a.average < b.average) {
-                    return 1;
-                }
-                if (a.maxAge < b.maxAge) {
-                    return -1;
-                } else if (a.maxAge > b.maxAge) {
-                    return 1
-                } else {
-                    return 0;
-                }
-            })
+            // // Sort by category (descending) THEN age (ascending)
+            // gameRatings.sort((a,b) => {
+            //     if (a.average > b.average) {
+            //         return -1;
+            //     } else if (a.average < b.average) {
+            //         return 1;
+            //     }
+            //     if (a.maxAge < b.maxAge) {
+            //         return -1;
+            //     } else if (a.maxAge > b.maxAge) {
+            //         return 1
+            //     } else {
+            //         return 0;
+            //     }
+            // })
+
+            gameRatings.sort((a,b) => b.average - a.average)
 
         gameRatings.forEach((game) => {
             let category = game.category
