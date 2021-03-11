@@ -3,11 +3,11 @@
 let exampleSubDir = '/competition/examplesubmissions/'
 let liveSubDir = '/competition/submissions/'
 let chosenSubDir;
-if (window.location.pathname === '/' || window.location.pathname === '/competition/submissions/'){
+// if (window.location.pathname === '/' || window.location.pathname === '/competition/submissions/'){
     chosenSubDir = liveSubDir
-} else {
-    chosenSubDir = exampleSubDir
-}
+// } else {
+//     chosenSubDir = exampleSubDir
+// }
 
 function getPerson(fullName){
     document.getElementById("team").style.display = `none`
@@ -51,7 +51,7 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
     document.getElementById('submitted-game-gallery').innerHTML = '';
     allGames = []
 
-    d3.csv(chosenSubDir + 'submissions.csv').then(function (data) {
+    d3.csv(chosenSubDir + 'submissions2.csv').then(function (data) {
 
         data.forEach((submission, row) => {
             if (submission['Finished'] === 'True') {
@@ -137,7 +137,7 @@ function showSubmission(row) {
     var rows;
     var headers;
 
-    d3.text(chosenSubDir + 'submissions.csv').then(function (text) {
+    d3.text(chosenSubDir + 'submissions2.csv').then(function (text) {
         rows = d3.csvParseRows(text)
         headers = rows[0]
         questions = rows[1]
