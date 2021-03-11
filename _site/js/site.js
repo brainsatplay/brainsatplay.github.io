@@ -113,13 +113,13 @@ function hideRubric(){
         document.getElementById('rubric-message').style.display = 'block';
         document.getElementById('rubric-inputs').style.display = 'none';
         document.getElementById('rubric-game').style.display = 'none';
-        document.getElementById('judge-category').style.display = 'block'
+        // document.getElementById('judge-category').style.display = 'block'
     }
 }
 function showRubric() {
     if (game.me.username != 'me') {
-        document.getElementById('rubric-submission-category').innerHTML = document.getElementById('judge-category').innerHTML
-        document.getElementById('judge-category').style.display = 'none'
+        // document.getElementById('rubric-submission-category').innerHTML = document.getElementById('judge-category').innerHTML
+        // document.getElementById('judge-category').style.display = 'none'
         document.getElementById('rubric-header').style.display = 'none';
         document.getElementById('rubric-message').style.display = 'none';
         document.getElementById('rubric-inputs').style.display = 'block';
@@ -444,7 +444,7 @@ async function login(game, type){
         toggleLoginScreen();
         if (resDict.profile.role === 'judge') {
             document.getElementById('judge-username').innerHTML = resDict.msg;
-            document.getElementById('judge-category').innerHTML = resDict.profile.judgingCategory
+            // document.getElementById('judge-category').innerHTML = resDict.profile.judgingCategory
             document.getElementById('rubric-container').style.display = 'block';
             document.getElementById('rubric-container').style.zIndex = '10';
             document.getElementById('rubric-container').style.opacity = '1';
@@ -507,7 +507,7 @@ function populateJudgingRequirements(completedList){
     })
 
     if (todoList.length === 0){
-        document.getElementById('rubric-message').innerHTML = `<p class="small">No more submissions to judge. Browse all submissions on the Brains@Play <a href="/" class="text">homepage</a>.</p>`
+        document.getElementById('rubric-message').innerHTML = `<p class="small">No more submissions to judge. Browse all submissions on the Brains and Games <a href="/" class="text">submission page</a>.</p>`
     } else {
         todo.innerHTML += `<p class="small">View <a class="text" href="https://docs.google.com/spreadsheets/d/14jPG4Ixlz6i8qiVA05JbbMmuHDSbGcGE8CMVar4iXSQ/edit#gid=0" target="_blank">on this Google Sheet.</a></p>`
     }
