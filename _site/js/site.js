@@ -306,7 +306,14 @@ function showSubmission(row) {
             }else if ('Q48'===qID){
                 if (submissionArr[ind] !== '') {
                     document.getElementById('game').innerHTML += `<br/><br/><h2>Additional Materials</h2><hr/>`
-                    document.getElementById('game').innerHTML += `<h3>Is there anything else you would like to say about your game?</h3><p>${submissionArr[ind]}</p>`
+                    let link
+                    if (submissionArr[ind].split('http')[1] !== 0){
+                        let split = submissionArr[ind].split('at the following link. http')
+                        submissionArr[ind] = split[0]
+                        link += 'http' + split[1]
+                        submissionArr[ind] += `<a href=${link} class="text">here.`
+                    }
+                    document.getElementById('game').innerHTML += `<h3>Is there anything else you would like to say about your game?</h3><p class="permalink-section">${submissionArr[ind]}</p>`
                 }
             } else if ('Q64'===qID){
                 if (submissionCategory === 'VR + Neurotech + Health') {

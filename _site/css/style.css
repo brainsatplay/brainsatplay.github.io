@@ -121,7 +121,7 @@ button:hover{
 
 section{
     color: white;
-    margin: 75px;
+    margin: 5vw 5vw;
 }
 
 #submission-categories h3{
@@ -737,9 +737,9 @@ footer a {
     text-align: center;
     justify-content: center;
     align-items: center;
-    height: 250px;
-    width: calc(250px * 1920/1080);
-    min-width: calc(250px * 1920/1080);
+    height: calc(75vw * 1080/1920);
+    width: 75vw;
+    min-width: 75vw;
     background-attachment: scroll;
     background-position: center;
     background-repeat: no-repeat;
@@ -785,6 +785,16 @@ footer a {
 
 .game-text h3{
     margin: 0px;
+    font-size: 25px;
+}
+
+.permalink-section
+{
+    white-space: pre-wrap; /* CSS3 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 .game-media-container {
@@ -1328,10 +1338,10 @@ input:focus{
 }
 
 .category-div {
-    width: 575px;
-    margin: 25px;
+    width: 100%;
     flex-grow: 1;
 }
+
 .game-card {
     display: flex;
     justify-content:center;
@@ -1546,10 +1556,9 @@ input[type="range"] {
 
 /* The navigation menu links */
 #sideNav a {
-    padding: 16px 0px 16px 0px;
     text-decoration: none;
-    text-align: left;
-    font-size: 300%;
+    text-align: center;
+    font-size: 200%;
     color: #818181;
     display: block;
     transition: 0.5s;
@@ -1558,6 +1567,11 @@ input[type="range"] {
 #sideNav a:hover {
     color: #f1f1f1;
 }
+
+#sideNav a.small {
+    font-size: 80%;
+}
+
 
 .nav-icon {
     position: fixed;
@@ -1595,9 +1609,9 @@ input[type="range"] {
 
 
 @media screen and (min-width: 768px) {
-
-    #sideNav a.small {
-        font-size: 80%;
+    section{
+        color: white;
+        margin: 75px;
     }
 
     #sideNav a {
@@ -1606,5 +1620,29 @@ input[type="range"] {
         text-align: left;
     }
 
+    .category-div {
+        width: 575px;
+        margin: 25px;
+        flex-grow: 1;
+    }
+
+    .game {
+        position: relative;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        height: 250px;
+        width: calc(250px * 1920/1080);
+        min-width: calc(250px * 1920/1080);
+        background-attachment: scroll;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+    .game-text h3{
+        margin: 0px;
+    }
 }
 
