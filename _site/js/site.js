@@ -51,7 +51,7 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
     document.getElementById('submitted-game-gallery').innerHTML = '';
     allGames = []
 
-    d3.csv(chosenSubDir + 'submissions2.csv').then(function (data) {
+    d3.csv(chosenSubDir + 'submissions3.csv').then(function (data) {
 
         data.forEach((submission, row) => {
             if (submission['Finished'] === 'True') {
@@ -137,7 +137,7 @@ function showSubmission(row) {
     var rows;
     var headers;
 
-    d3.text(chosenSubDir + 'submissions2.csv').then(function (text) {
+    d3.text(chosenSubDir + 'submissions3.csv').then(function (text) {
         rows = d3.csvParseRows(text)
         headers = rows[0]
         questions = rows[1]
@@ -455,7 +455,9 @@ async function login(game, type){
                 showRubric()
             }
             completedSubmissions = resDict.profile.completedSubmissions
-            displaySubmissions(resDict.profile.judgingCategory)
+            // displaySubmissions(resDict.profile.judgingCategory)
+            displaySubmissions()
+
         }
     } else {
         document.getElementById('login-message').innerHTML = resDict.msg
@@ -506,11 +508,9 @@ function populateJudgingRequirements(completedList){
 
     if (todoList.length === 0){
         document.getElementById('rubric-message').innerHTML = `<p class="small">No more submissions to judge. Browse all submissions on the Brains@Play <a href="/" class="text">homepage</a>.</p>`
+    } else {
+        todo.innerHTML += `<p class="small">View <a class="text" href="https://docs.google.com/spreadsheets/d/14jPG4Ixlz6i8qiVA05JbbMmuHDSbGcGE8CMVar4iXSQ/edit#gid=0" target="_blank">on this Google Sheet.</a></p>`
     }
-
-    todoList.forEach((name) => {
-        todo.innerHTML += `<li class="small">${name}</li>`
-    })
 }
 async function submitRatings(){
     let form = document.getElementById('rubric')
