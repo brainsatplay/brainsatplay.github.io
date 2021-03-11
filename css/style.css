@@ -1369,6 +1369,10 @@ input:focus{
     color: white;
 }
 
+.tabcontent h3 {
+    margin: 0;
+}
+
 /*Judging*/
 
 textarea {
