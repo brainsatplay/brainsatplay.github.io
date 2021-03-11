@@ -51,7 +51,7 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
     document.getElementById('submitted-game-gallery').innerHTML = '';
     allGames = []
 
-    d3.csv(chosenSubDir + 'submissions3.csv').then(function (data) {
+    d3.csv(chosenSubDir + 'submissions4.csv').then(function (data) {
 
         data.forEach((submission, row) => {
             if (submission['Finished'] === 'True') {
@@ -137,7 +137,7 @@ function showSubmission(row) {
     var rows;
     var headers;
 
-    d3.text(chosenSubDir + 'submissions3.csv').then(function (text) {
+    d3.text(chosenSubDir + 'submissions4.csv').then(function (text) {
         rows = d3.csvParseRows(text)
         headers = rows[0]
         questions = rows[1]
