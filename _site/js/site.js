@@ -247,16 +247,17 @@ function showSubmission(row) {
             document.getElementById('game').innerHTML += `<div class="game-media-container">
 <div>
 <!--<p style="margin-right: 50px;">Please download video to view:</p> -->
-<video id="game-video" width="320" height="240" controls>
-          <source src='${vidLink}' type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
-                <p class="small">If unavailable, please view <a href="https://brainsatplay.com${vidLink}" class="text" target="_blank">here</a></p>
+<!--<video id="game-video" width="320" height="240" controls>-->
+<!--          <source src='${vidLink}' type="video/mp4">-->
+<!--        Your browser does not support the video tag.-->
+<!--        </video>-->
+<!--                <p class="small">If unavailable, please view <a href="https://brainsatplay.com${vidLink}" class="text" target="_blank">here</a></p>-->
+                <p class="small">Please view the video for this submission on our <a href="https://youtube.com/playlist?list=PLdAKE-cHWv39kSpvhwB_4wM5btevE7CEy" class="text" target="_blank">Competition YouTube playlist</a></p>
         </div>
         </div>
 `
 
-            document.getElementById('game-video').maxWidth = '100%'
+            // document.getElementById('game-video').maxWidth = '100%'
         }
 
 

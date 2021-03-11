@@ -146,9 +146,7 @@
             let category = game.category
             if (game.maxAge === undefined) {
                 game.ageGroup = 'Example'
-            } else if (isNaN(game.average)) {
-                game.ageGroup = 'No Score'
-            }else if (game.maxAge >= 18) {
+            } else if (game.maxAge >= 18) {
                 game.ageGroup = '18+'
             } else if (game.maxAge <= 12) {
                 game.ageGroup = '<12'
@@ -163,7 +161,7 @@
                 numWinners += winnersChosen[category][key]
             });
 
-            if (game.ageGroup === '18+') {
+            if (game.ageGroup === '18+' && !isNaN(game.average)) {
                 if (winnersChosen[category][game.ageGroup] < 2 && numWinners < 4) {
                     placeGame(game, 'rgb(25,25,25)')
                     winnersChosen[category][game.ageGroup]++;
@@ -174,10 +172,10 @@
                 placeGame(game, 'rgb(25,25,25)')
             }
             else {
-                if (game.ageGroup === '<12' && numWinners < 4) {
+                if (game.ageGroup === '<12' && numWinners < 4 && !isNaN(game.average)) {
                     placeGame(game,'rgb(25,25,25)')
                     winnersChosen[category]['<12']++;
-                } else if (game.ageGroup === '13-17' && numWinners < 4) {
+                } else if (game.ageGroup === '13-17' && numWinners < 4 && !isNaN(game.average)) {
                     placeGame(game,'rgb(25,25,25)')
                     winnersChosen[category][game.ageGroup]++;
                     winnersChosen[category]['13-17']++;
