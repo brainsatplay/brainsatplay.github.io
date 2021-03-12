@@ -76,7 +76,6 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
                         headerImg = `'${chosenSubDir}files/Q69/${submission['ResponseId']}_${submission['Q69_Name']}'`
                     }
 
-                    console.log(name)
                     badImages = ['Memory face Jenga', 'Emotia', 'It’s a Pirate’s Life for Me', 'SaṃsāRa - Remember this Story', 'Garden Invaders']
 
                 //     if (!badImages.includes(name)) {
