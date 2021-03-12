@@ -285,8 +285,49 @@ function showSubmission(row) {
     // }
 
 
+
         headers.forEach(function(qID,ind) {
         if (!toIgnore.includes(qID)) {
+
+            let split = submissionArr[ind].split(/\n/)
+            if (split.length > 1) {
+                split.forEach((val, ind) => {
+                    if (val != '') {
+                        split[ind] = `<p>${val}</p>`
+                    }
+                })
+                submissionArr[ind] = split.join('')
+            }
+
+            split = submissionArr[ind].split(/[^=]http/)
+            if (split.length > 1) {
+                let split = submissionArr[ind].split(/[^=]http|''|<p/)
+                console.log(split)
+                let toSplice = []
+                split.forEach((val,ind) => {
+                    if (ind !== 0) {
+                        if ('http' + split[ind].charAt(0) === 'https') {
+                            console.log(split[ind])
+                            split[ind] = split[ind].replace('</p>','')
+                            console.log(split[ind])
+                            let str = ` <a href=${'http' + split[ind]} class="text">link</a>`
+                            split[ind-1] += str
+                            toSplice.push(ind)
+                        }
+
+                        if (split[ind].charAt(0) === '>'){
+                            split[ind] = '<p' + split[ind]
+                        }
+                    }
+                })
+                toSplice = toSplice.reverse()
+                toSplice.forEach((val,ind) => {
+                        split.splice(val, 1)
+                }
+                )
+                submissionArr[ind] = split.join('')
+            }
+
             if ('Q22'===qID){
                 document.getElementById('game').innerHTML += `<br/><br/><h2>Game Overview</h2><hr/>`
                 document.getElementById('game').innerHTML += `<h3>Prompt</h3><p>${submissionArr[ind]}</p>` // Prompt
@@ -305,13 +346,6 @@ function showSubmission(row) {
             }else if ('Q48'===qID){
                 if (submissionArr[ind] !== '') {
                     document.getElementById('game').innerHTML += `<br/><br/><h2>Additional Materials</h2><hr/>`
-                    let link
-                    if (submissionArr[ind].split('http')[1] !== 0){
-                        let split = submissionArr[ind].split('at the following link. http')
-                        submissionArr[ind] = split[0]
-                        link += 'http' + split[1]
-                        submissionArr[ind] += `<a href=${link} class="text">here.`
-                    }
                     document.getElementById('game').innerHTML += `<h3>Is there anything else you would like to say about your game?</h3><p class="permalink-section">${submissionArr[ind]}</p>`
                 }
             } else if ('Q64'===qID){
