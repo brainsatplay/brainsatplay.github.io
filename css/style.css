@@ -1353,15 +1353,6 @@ input:focus{
     text-align: left;
 }
 
-.game-card:hover {
-    color: white;
-    border-color: white;
-}
-
-.game-card:focus {
-    outline: none;
-}
-
 .game-card h3 {
     margin: 0;
 }

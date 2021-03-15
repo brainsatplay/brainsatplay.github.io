@@ -33,6 +33,7 @@
 </body>
 
 <script>
+
     // Initialize Login Variables
     let showLogin=false;
     let showSignUp=false;
@@ -43,11 +44,13 @@
     let state = 'submitted'
     document.getElementById('back').style.display = 'none';
     displaySubmissions()
-
-</script>
-
-<script>
     let game = new brainsatplay.Game();
+    let submission = window.location.href.split('#')[1]
+    console.log(submission)
+    if (submission){
+        showSubmission(submission)
+    }
+
 </script>
 
 </html>

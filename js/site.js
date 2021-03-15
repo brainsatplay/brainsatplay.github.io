@@ -91,8 +91,10 @@ function displaySubmissions(categories=['Brain Games','VR + Neurotech + Health',
                 //         allGames.push(name)
                 //         document.getElementById('submitted-game-gallery').innerHTML += gameTag;
                 // } else {
+                    let gameId = name.split(' ').join('').replace(/^[^a-z]+|[^\w]+/gi, "")
+                    console.log(gameId)
                     gameTag = `
-                    <a id="${name}" class="game" onclick="showSubmission(${row})" style="background-image: url(${headerImg})">
+                    <a id="${gameId}" class="game" onclick="showSubmission('${gameId}')" style="background-image: url(${headerImg})">
                             <div class="submission-emoji">${submissionEmoji}</div>
                             <div class="game-text">
                                 <p class="small2x" style="margin:0">2021</p>
@@ -136,6 +138,7 @@ function hideRubric(){
     }
 }
 function showRubric() {
+        console.log(game)
     if (game.me.username != 'me') {
         // document.getElementById('rubric-submission-category').innerHTML = document.getElementById('judge-category').innerHTML
         // document.getElementById('judge-category').style.display = 'none'
@@ -144,7 +147,7 @@ function showRubric() {
         document.getElementById('rubric-inputs').style.display = 'block';
     }
 }
-function showSubmission(row) {
+function showSubmission(name) {
     document.getElementById('game').innerHTML = '';
     document.getElementById('submitted-game-gallery').style.display = 'none';
 
@@ -155,12 +158,15 @@ function showSubmission(row) {
     let questions;
     var rows;
     var headers;
-
     d3.text(chosenSubDir + 'submissions4.csv').then(function (text) {
         rows = d3.csvParseRows(text)
         headers = rows[0]
         questions = rows[1]
-        submissionArr = rows[row+1]
+        rows.forEach(submission => {
+            if ((submission[headers.findIndex(val => val === 'Q24')].split(' ').join('').replace(/^[^a-z]+|[^\w]+/gi, "") === name) || (submission[headers.findIndex(val => val === 'Q56')].split(' ').join('').replace(/^[^a-z]+|[^\w]+/gi, "") === name)){
+                submissionArr = submission
+            }
+        })
     }).then(() => {
 
         let submissionCategory = submissionArr[headers.findIndex(val => val === 'Q20')];
@@ -302,14 +308,11 @@ function showSubmission(row) {
             split = submissionArr[ind].split(/[^=]http/)
             if (split.length > 1) {
                 let split = submissionArr[ind].split(/[^=]http|''|<p/)
-                console.log(split)
                 let toSplice = []
                 split.forEach((val,ind) => {
                     if (ind !== 0) {
                         if ('http' + split[ind].charAt(0) === 'https') {
-                            console.log(split[ind])
                             split[ind] = split[ind].replace('</p>','')
-                            console.log(split[ind])
                             let str = ` <a href=${'http' + split[ind]} class="text">link</a>`
                             split[ind-1] += str
                             toSplice.push(ind)

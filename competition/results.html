@@ -253,12 +253,15 @@
 
         if (game.ageGroup !== 'Example' || dashSubDir === '/competition/examplesubmissions/') {
             document.getElementById(game.category).innerHTML += `
-                <button id="${gameId}Button" class="game-card" onclick="openComments(event,${gameId})" style="background: ${color}">
+                <div class="game-card" style="background: ${color}">
                 <h3>${game.name}</h3>
-                <p>${game.judges.length} judges</p>
-                <p>${game.ageGroup}</p>
-                <p>${game.average.toFixed(1)}/50</p>
-                </button>
+                <p class="small">${game.ageGroup}</p>
+                <p class="small">${game.average.toFixed(1)}/50</p>
+                </div>
+                <div style="display:flex; margin: 25px;">
+                <a href="/competition/submissions#${gameId}" class="text" target="_blank"><button>View Submission</button></a>
+                <button id="${gameId}Button" onclick="openComments(event,${gameId})">View Score Details</button>
+                </div>
 
                 <div id="${gameId}" class="tabcontent">
                 <h3>Score Breakdown</h3>
