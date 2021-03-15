@@ -48,25 +48,31 @@
         let allJudges = []
         let gameRatings = []
         let winnersChosen = {
-            'Brain Games': {
-                '18+': 0,
-                '13-17': 0,
-                '<12': 0,
-            },
-            'VR + Neurotech + Health': {
-                '18+': 0,
-                '13-17': 0,
-                '<12': 0,
-            },
-            'Computational Art': {
-                '18+': 0,
-                '13-17': 0,
-                '<12': 0,
-            }
+            'Brain Games': 0
+            //     {
+            //     '18+': 0,
+            //     '13-17': 0,
+            //     '<12': 0,
+            // }
+            ,
+            'VR + Neurotech + Health': 0
+            //     {
+            //     '18+': 0,
+            //     '13-17': 0,
+            //     '<12': 0,
+            // }
+            ,
+            'Computational Art': 0
+            //     {
+            //     '18+': 0,
+            //     '13-17': 0,
+            //     '<12': 0,
+            // }
         }
 
         d3.csv('/competition/submissions/submissions4.csv').then(function (data) {
             let ageDict = {}
+            let sizeDict = {}
             data.forEach((game,ind) => {
                 // Ignore headers
                 if (ind > 1) {
@@ -85,6 +91,7 @@
                             ageArray.push(age)
                         }
                     }
+                    sizeDict[name] = ageArray.length
                     ageDict[name] = Math.max(...ageArray)
                 }
             })
@@ -131,12 +138,12 @@
                         maxAge: ageDict[game] || judgeRatings[0].maxAge,
                         comments: comments,
                         judges: judges,
+                        teamSize: sizeDict[game],
                         documentation: scoreArrays.documentation.reduce((a, b) => a + b) / scoreArrays.documentation.length,
                         ethics: scoreArrays.ethics.reduce((a, b) => a + b) / scoreArrays.ethics.length,
                         relevance: scoreArrays.relevance.reduce((a, b) => a + b) / scoreArrays.relevance.length,
                         fun: scoreArrays.fun.reduce((a, b) => a + b) / scoreArrays.fun.length,
                         originality: scoreArrays.originality.reduce((a, b) => a + b) / scoreArrays.originality.length,
-
                     })
                 } else {
                     gameRatings.push({
@@ -145,7 +152,14 @@
                         category: category,
                         maxAge: ageDict[game] || judgeRatings[0].maxAge,
                         comments: comments,
-                        judges: judges
+                        judges: judges,
+                        teamSize: sizeDict[game],
+                        documentation: 0,
+                        ethics: 0,
+                        relevance: 0,
+                        fun: 0,
+                        originality: 0,
+
                     })
                 }
         })
@@ -168,12 +182,10 @@
 
             gameRatings.sort((a,b) => b.average - a.average)
 
-            console.log(allJudges)
-            let unique = allJudges.filter((v, i, a) => a.indexOf(v) === i);
-            console.log(unique)
-            console.log(unique.length)
-
-        gameRatings.forEach((game) => {
+            let uniqueJudges = allJudges.filter((v, i, a) => a.indexOf(v) === i);
+            let numWinners = 0;
+            let numWinningPeople = 0;
+            gameRatings.forEach((game) => {
             let category = game.category
             if (game.maxAge === undefined) {
                 game.ageGroup = 'Example'
@@ -187,38 +199,53 @@
 
 
             // If Adult Age Group Has Reached Quota, Pick Younger Submissions
-            let numWinners = 0;
-            Object.keys(winnersChosen[category]).forEach(function(key) {
-                numWinners += winnersChosen[category][key]
-            });
+            // Object.keys(winnersChosen[category]).forEach(function(key) {
+            //     numWinners += winnersChosen[category][key]
+            // });
 
-            if (game.ageGroup === '18+' && !isNaN(game.average)) {
-                if (winnersChosen[category][game.ageGroup] < 2 && numWinners < 4) {
-                    // placeGame(game, 'rgb(25,25,25)')
-                    placeGame(game)
-                    winnersChosen[category][game.ageGroup]++;
+            if (numWinners < 12){
+                if (category === 'VR + Neurotech + Health' && winnersChosen[category] < 1){
+                    placeGame(game, 'rgb(106 , 142, 176)')
                 } else {
-                    placeGame(game)
+                    placeGame(game, 'rgb(25,25,25)')
                 }
-            } else if (game.ageGroup === 'Example') {
-                placeGame(game, 'rgb(25,25,25)')
+                winnersChosen[category]++
+                numWinners++
+                numWinningPeople += game.teamSize
+            } else {
+                placeGame(game)
             }
-            else {
-                if (game.ageGroup === '<12' && numWinners < 4 && !isNaN(game.average)) {
-                    // placeGame(game, 'rgb(25,25,25)')
-                    placeGame(game)
-                    winnersChosen[category]['<12']++;
-                } else if (game.ageGroup === '13-17' && numWinners < 4 && !isNaN(game.average)) {
-                    // placeGame(game, 'rgb(25,25,25)')
-                    placeGame(game)
-                    winnersChosen[category][game.ageGroup]++;
-                    winnersChosen[category]['13-17']++;
-                } else {
-                    placeGame(game)
-                }
-            }
+
+            // if (game.ageGroup === '18+' && !isNaN(game.average)) {
+            //     if (winnersChosen[category][game.ageGroup] < 2 && numWinners < 4) {
+            //         // placeGame(game, 'rgb(25,25,25)')
+            //         placeGame(game)
+            //         winnersChosen[category][game.ageGroup]++;
+            //     } else {
+            //         placeGame(game)
+            //     }
+            // } else if (game.ageGroup === 'Example') {
+            //     placeGame(game, 'rgb(25,25,25)')
+            // }
+            // else {
+            //     if (game.ageGroup === '<12' && numWinners < 4 && !isNaN(game.average)) {
+            //         // placeGame(game, 'rgb(25,25,25)')
+            //         placeGame(game)
+            //         winnersChosen[category]['<12']++;
+            //     } else if (game.ageGroup === '13-17' && numWinners < 4 && !isNaN(game.average)) {
+            //         // placeGame(game, 'rgb(25,25,25)')
+            //         placeGame(game)
+            //         winnersChosen[category][game.ageGroup]++;
+            //         winnersChosen[category]['13-17']++;
+            //     } else {
+            //         placeGame(game)
+            //     }
+            // }
         })
-    })
+            console.log('Winners: ' + numWinningPeople)
+            console.log('Judges: ' + uniqueJudges)
+            console.log('Judges: ' + uniqueJudges.length)
+        })
     })
 
     function placeGame(game, color='transparent'){
