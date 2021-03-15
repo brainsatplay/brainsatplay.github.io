@@ -45,6 +45,7 @@
 
     getRatings().then(resDict => {
 
+        let allJudges = []
         let gameRatings = []
         let winnersChosen = {
             'Brain Games': {
@@ -93,6 +94,7 @@
             let scoreArray = []
                 let comments = {}
             let category = judgeRatings[0].category
+                let judges = []
                 let numRatings = 0;
             judgeRatings.forEach((rating) => {
                 if (!(ignoreGarrett && rating.username.indexOf('garrettmflynn') !== -1)) {
@@ -104,8 +106,11 @@
                         parseInt(rating.ethics)
                     )
                     comments[rating.username] = rating.comments;
+                    judges.push(rating.username)
+                    allJudges.push(rating.username)
                     numRatings++
                 }
+
             })
                 if (numRatings > 0) {
                     gameRatings.push({
@@ -113,7 +118,8 @@
                         average: scoreArray.reduce((a, b) => a + b) / scoreArray.length,
                         category: category,
                         maxAge: ageDict[game] || judgeRatings[0].maxAge,
-                        comments: comments
+                        comments: comments,
+                        judges: judges
                     })
                 } else {
                     gameRatings.push({
@@ -121,7 +127,8 @@
                         average: 0,
                         category: category,
                         maxAge: ageDict[game] || judgeRatings[0].maxAge,
-                        comments: comments
+                        comments: comments,
+                        judges: judges
                     })
                 }
         })
@@ -143,6 +150,11 @@
             // })
 
             gameRatings.sort((a,b) => b.average - a.average)
+
+            console.log(allJudges)
+            let unique = allJudges.filter((v, i, a) => a.indexOf(v) === i);
+            console.log(unique)
+            console.log(unique.length)
 
         gameRatings.forEach((game) => {
             let category = game.category
@@ -199,6 +211,7 @@
             document.getElementById(game.category).innerHTML += `
                 <button id="${gameId}Button" class="game-card" onclick="openComments(event,${gameId})" style="background: ${color}">
                 <h3>${game.name}</h3>
+                <p>${game.judges.length} judges</p>
                 <p>${game.ageGroup}</p>
                 <p>${game.average.toFixed(1)}/50</p>
                 </button>
