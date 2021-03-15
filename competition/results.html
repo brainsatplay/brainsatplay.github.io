@@ -91,15 +91,26 @@
 
             Object.keys(resDict.docs).forEach((game,ind) => {
             let judgeRatings = resDict.docs[game]
-            let scoreArray = []
+            let scoreArrays = {
+                documentation: [],
+                relevance: [],
+                fun: [],
+                originality: [],
+                ethics: [],
+                sum:[]
+            }
                 let comments = {}
             let category = judgeRatings[0].category
                 let judges = []
                 let numRatings = 0;
             judgeRatings.forEach((rating) => {
                 if (!(ignoreGarrett && rating.username.indexOf('garrettmflynn') !== -1)) {
-                    scoreArray.push(
-                        parseInt(rating.documentation) +
+                    scoreArrays.documentation.push(parseInt(rating.documentation))
+                    scoreArrays.fun.push(parseInt(rating.fun))
+                    scoreArrays.relevance.push(parseInt(rating.relevance))
+                    scoreArrays.originality.push(parseInt(rating.originality))
+                    scoreArrays.ethics.push(parseInt(rating.ethics))
+                    scoreArrays.sum.push(parseInt(rating.documentation) +
                         parseInt(rating.fun) +
                         parseInt(rating.relevance) +
                         parseInt(rating.originality) +
@@ -115,11 +126,17 @@
                 if (numRatings > 0) {
                     gameRatings.push({
                         name: game,
-                        average: scoreArray.reduce((a, b) => a + b) / scoreArray.length,
+                        average: scoreArrays.sum.reduce((a, b) => a + b) / scoreArrays.sum.length,
                         category: category,
                         maxAge: ageDict[game] || judgeRatings[0].maxAge,
                         comments: comments,
-                        judges: judges
+                        judges: judges,
+                        documentation: scoreArrays.documentation.reduce((a, b) => a + b) / scoreArrays.documentation.length,
+                        ethics: scoreArrays.ethics.reduce((a, b) => a + b) / scoreArrays.ethics.length,
+                        relevance: scoreArrays.relevance.reduce((a, b) => a + b) / scoreArrays.relevance.length,
+                        fun: scoreArrays.fun.reduce((a, b) => a + b) / scoreArrays.fun.length,
+                        originality: scoreArrays.originality.reduce((a, b) => a + b) / scoreArrays.originality.length,
+
                     })
                 } else {
                     gameRatings.push({
@@ -217,12 +234,21 @@
                 </button>
 
                 <div id="${gameId}" class="tabcontent">
+                <h3>Score Breakdown</h3>
+                <hr>
+                <p>Relevance: ${game.relevance.toFixed(1)}</p>
+                <p>Originality: ${game.originality.toFixed(1)}</p>
+                <p>Documentation: ${game.documentation.toFixed(1)}</p>
+                <p>Ethics: ${game.ethics.toFixed(1)}</p>
+                <p>Fun: ${game.fun.toFixed(1)}</p>
+                <h3>Comments</h3>
+                <hr>
                 </div>
                 `
             Object.keys(game.comments).forEach(key => {
                 if (game.comments[key] !== '') {
                     document.getElementById(gameId).innerHTML += `
-                  <h3>${key}</h3>
+                  <h4>${key}</h4>
                   <p>${game.comments[key]}</p>
         `
                 }
