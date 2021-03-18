@@ -73,6 +73,7 @@
         d3.csv('/competition/submissions/submissions4.csv').then(function (data) {
             let ageDict = {}
             let sizeDict = {}
+            let teamNames = {}
             data.forEach((game,ind) => {
                 // Ignore headers
                 if (ind > 1) {
@@ -93,6 +94,7 @@
                     }
                     sizeDict[name] = ageArray.length
                     ageDict[name] = Math.max(...ageArray)
+                    teamNames[name] = game['Q1']
                 }
             })
 
@@ -104,7 +106,7 @@
                 fun: [],
                 originality: [],
                 ethics: [],
-                sum:[]
+                sum: []
             }
                 let comments = {}
             let category = judgeRatings[0].category
@@ -144,6 +146,7 @@
                         relevance: scoreArrays.relevance.reduce((a, b) => a + b) / scoreArrays.relevance.length,
                         fun: scoreArrays.fun.reduce((a, b) => a + b) / scoreArrays.fun.length,
                         originality: scoreArrays.originality.reduce((a, b) => a + b) / scoreArrays.originality.length,
+                        team: teamNames[game]
                     })
                 } else {
                     gameRatings.push({
@@ -159,7 +162,7 @@
                         relevance: 0,
                         fun: 0,
                         originality: 0,
-
+                        team: teamNames[game]
                     })
                 }
         })
@@ -254,9 +257,20 @@
         if (game.ageGroup !== 'Example' || dashSubDir === '/competition/examplesubmissions/') {
             document.getElementById(game.category).innerHTML += `
                 <div class="game-card" style="background: ${color}">
-                <h3>${game.name}</h3>
+                <div>
+                    <h3>${game.name}</h3>
+                    <i class="small">${game.team}</i>
+                </div>
+                <div style="display: flex;">
+                <div class="text-container">
+                <h5>Age Group</h5>
                 <p class="small">${game.ageGroup}</p>
+                </div>
+                <div class="text-container">
+                <h5>Score</h5>
                 <p class="small">${game.average.toFixed(1)}/50</p>
+                </div>
+                </div>
                 </div>
                 <div style="display:flex; margin: 25px;">
                 <a href="/competition/submissions#${gameId}" class="text" target="_blank"><button>View Submission</button></a>

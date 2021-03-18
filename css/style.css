@@ -1344,7 +1344,7 @@ input:focus{
 
 .game-card {
     display: flex;
-    justify-content:center;
+    justify-content:space-between;
     align-items: center;
     border: 1px solid rgb(100,100,100);
     padding: 25px;
@@ -1357,10 +1357,18 @@ input:focus{
     margin: 0;
 }
 
-.game-card p {
+.game-card h5 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.game-card .text-container {
     margin: 0px 25px;
-    width: 125px;
-    text-align: right;
+    min-width: 50px;
+    text-align: left;
+}
+.game-card p {
+    margin: 0;
 }
 
 /* Style the tab content */
