@@ -60,6 +60,7 @@ p {
 
 div {
     display: block;
+    box-sizing: border-box;
 }
 
 h1{
@@ -154,14 +155,14 @@ svg {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 65px;
+    height: 75px;
     padding: 0px 50px;
-    position: sticky;
+    position: fixed;
     position: -webkit-sticky;
     top: 0;
     left: 0;
     right: 0;
-    background: #0c0b0c;
+    /*background: #0c0b0c;*/
     z-index: 999;
     transition: 0.5s;
 }
