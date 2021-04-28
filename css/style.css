@@ -222,7 +222,7 @@ a.link .current{
 /* Hero */
 
 #hero1{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/brainsatplay.png');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/nasa.jpg');
 }
 #hero2{
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/livewire.png')
@@ -272,6 +272,7 @@ a.link .current{
 .header img {
     width: 75vw;
     max-width: 800px;
+    padding: 25px 50px;
 }
 
 #games-header{
@@ -1043,7 +1044,6 @@ select {
 }
 .button-nav {
     display: flex;
-    margin: auto;
     flex-wrap: wrap;
     max-width: 800px;
 }

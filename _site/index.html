@@ -61,14 +61,12 @@
         </div>
         <a href="/" class="link">Home</a>
         <a href="/about" class="link">About</a>
+        <a href="https://app.brainsatplay.com" class="link" target="_blank">Platform</a>
+        <a href="https://docs.brainsatplay.com" class="link" target="_blank">Documentation</a>
         <a href="/competition" class="link">Competition</a>
         <a href="/competition" class="link small">Main Page</a>
         <a href="/competition/submissions" class="link small">Submissions</a>
         <a href="/competition/results" class="link small">Results</a>
-        <a href="/competition/judges" class="link small">Judges</a>
-        <a href="/competition/rules" class="link small">Rules</a>
-        <a href="/curriculum" class="link">Curriculum</a>
-        <a href="/the-game-from-the-future" class="link">The Game from the Future</a>
 
     <!--    </div>-->
 </div>
@@ -170,89 +168,34 @@
     <!--Content-->
     <div>
         <div>
-            <div id= "hero1" class="hero header">
-                <img src="/assets/brand/logo_and_sub.png">
+            <div id= "hero1" class="hero header" style="height: calc(100vh - 65px);  align-items: center;">
+                <img src="/assets/brand/logo_and_sub(v4).png">
                     <div class="button-nav flex-center" style="width: 90%;">
-                        <button onclick="window.location.href='/competition'" target="_blank" type="button" style="width: 100%;">
+                        <button onclick="window.location.href='https://app.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
                             <div>
-                                <span>International Design Fiction Competition</span>
+                                <span>Platform</span>
                                 <br/>
-                                <span class="small">Participate in the future of brain-controlled games</span>
+                                <span class="small">Creating Content for Everyone</span>
+                            </div>
+                        </button>
+                        <button onclick="window.location.href='https://app.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
+                            <div>
+                                <span>Documentation</span>
+                                <br/>
+                                <span class="small">Open-Source Software Library</span>
+                            </div>
+                        </button>
+                        <button onclick="window.location.href='/competition'" target="_blank" type="button" style="width: 45%;">
+                            <div>
+                                <span>Competition</span>
+                                <br/>
+                                <span class="small">International Design Fiction Competition</span>
                             </div>
                         </button>
                     </div>
             </div>
 
 <!--            Games              -->
-            <div>
-    <nav id="game-nav">
-        <div id="available-option" class="game-option selected" onclick="switchToAvailableGames()">
-            <p class="small">Available Games</p>
-        </div>
-<!--        <div id="submitted-option" class="game-option unavailable">-->
-<!--        <div id="submitted-option" class="game-option" onclick="switchToSubmittedGames()">-->
-<!--            <p class="small">Competition Submissions</p>-->
-<!--        </div>-->
-    </nav>
-    <div id="game-display">
-        <div id="available">
-            <div id="game-gallery" class="gallery">
-                <a id="brainstorm" class="game" onclick="window.location.href='https://brainsatplay.com/brainstorm'" style="background-image: url('https://brainsatplay.com/brainstorm/header.png')">
-                    <div class="game-text">
-                        <p class="small2x" style="margin:0">2020</p>
-                        <h3>Brainstorm</h3>
-                        <i class="small">Brains@Play</i>
-                    </div>
-                    <div class="game-mask"></div>
-                </a>
-                <a id="brainrunner" class="game" onclick="window.location.href='https://brainsatplay.com/brainrunner'" style="background-image: url('https://brainsatplay.com/brainrunner/header.png')">
-                    <div class="game-text">
-                        <p class="small2x" style="margin:0">2021</p>
-                        <h3>BrainRunner</h3>
-                        <i class="small">HackSC Team</i>
-                    </div>
-                    <div class="game-mask"></div>
-                </a>
-                <a id="alphabattle" class="game" onclick="window.location.href='https://brainsatplay.com/alphabattle/'" style="background-image: url('https://brainsatplay.com/alphabattle/header.png')">
-                    <div class="game-text">
-                        <p class="small2x" style="margin:0">2021</p>
-                        <h3>AlphaBattle</h3>
-                        <i class="small">UW CNT Hackathon Team</i>
-                    </div>
-                    <div class="game-mask"></div>
-                </a>
-<!--                <a id="blink" class="game" onclick="window.location.href='https://brainsatplay.com/blink'" style="background-image: url('https://brainsatplay.com/blink/header.png')">-->
-<!--                    <div class="game-text">-->
-<!--                        <p class="small2x" style="margin:0">2021</p>-->
-<!--                        <h3>Blink</h3>-->
-<!--                        <i class="small">Brains@Play</i>-->
-<!--                    </div>-->
-<!--                    <div class="game-mask"></div>-->
-<!--                </a>-->
-            </div>
-        </div>
-        <div id="submitted">
-            <div id="game" style="display:none; width: 100vw;"></div>
-            <div id="submitted-game-gallery" class="gallery"></div>
-        </div>
-        <button id="back" style="display:none;">
-            Back to Submissions
-        </button>
-    </div>
-</div>
-
-<script>
-
-    let state = 'available'
-    let currentGame;
-    document.getElementById('submitted').style.display = 'none'
-    displaySubmissions()
-
-    // Initialize Login Variables
-    let showLogin=false;
-    let showSignUp=false;
-</script>
-
 
         </div>
     </div>
