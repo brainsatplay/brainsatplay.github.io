@@ -62,7 +62,7 @@
         <a href="/" class="link">Home</a>
         <a href="/about" class="link">About</a>
         <a href="https://app.brainsatplay.com" class="link" target="_blank">Platform</a>
-        <a href="https://docs.brainsatplay.com" class="link" target="_blank">Documentation</a>
+        <a href="https://docs.brainsatplay.com" class="link" target="_blank">Software</a>
         <a href="/competition" class="link">Competition</a>
         <a href="/competition" class="link small">Main Page</a>
         <a href="/competition/submissions" class="link small">Submissions</a>
@@ -105,6 +105,13 @@
                 closeNav()
             }
     };
+
+    // Scroll
+    let navbar = document.getElementById("nav")
+    window.onscroll = (e) => {
+        if (window.scrollY > 100) navbar.style.background = 'rgba(0,0,0,0.8)'
+        else navbar.style.background = 'transparent'
+    }
 </script>
 
 
@@ -176,14 +183,14 @@
                             <div>
                                 <span>Platform</span>
                                 <br/>
-                                <span class="small">Creating Content for Everyone</span>
+                                <span class="small">Content with Everyone</span>
                             </div>
                         </button>
-                        <button onclick="window.location.href='https://app.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
+                        <button onclick="window.location.href='https://docs.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
                             <div>
                                 <span>Documentation</span>
                                 <br/>
-                                <span class="small">Open-Source Software Library</span>
+                                <span class="small">Software with Everyone</span>
                             </div>
                         </button>
                         <button onclick="window.location.href='/competition'" target="_blank" type="button" style="width: 45%;">
