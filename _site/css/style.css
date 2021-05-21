@@ -271,8 +271,8 @@ a.link .current{
 }
 
 .header img {
-    width: 75vw;
-    max-width: 800px;
+    width: 100%;
+    /*max-width: 800px;*/
     padding: 25px 50px;
 }
 
