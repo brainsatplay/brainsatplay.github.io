@@ -33,8 +33,17 @@
             <div id= "hero1" class="hero header" style="height: 100vh;">
                 <div style="align-items: center; justify-content: center; max-width: 800px;">
                 <img src="/assets/brand/logo_and_sub.png">
-                    <p><strong>Brains@Play is developing an open-source framework for creating brain-responsive applications using modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</p>
+                    <div style="text-align: left; margin: 25px; margin-left: 75px; padding: 2px; padding-left: 25px; border-left: 3px solid white;">
+                        <p><strong>Brains@Play is developing an open-source framework for creating brain-responsive applications using modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</p>
+                    </div>
                     <div class="button-nav flex-center">
+                        <button onclick="window.location.href='/competition'" target="_blank" type="button" style="width: 100%;">
+                            <div>
+                                <span>Join our Discord Community</span>
+                                <br/>
+                                <span class="small">Let's brainstorm togetherr</span>
+                            </div>
+                        </button>
                         <button onclick="window.location.href='https://app.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
                             <div>
                                 <span>Platform</span>
@@ -49,16 +58,26 @@
                                 <span class="small">Software with Everyone</span>
                             </div>
                         </button>
-                        <button onclick="window.location.href='/competition'" target="_blank" type="button" style="width: 45%;">
-                            <div>
-                                <span>Competition</span>
-                                <br/>
-                                <span class="small">International Design Fiction Competition</span>
-                            </div>
-                        </button>
                     </div>
                 </div>
             </div>
+
+            <!-- Add a placeholder for the Twitch embed -->
+            <div id="twitch-embed"></div>
+
+            <!-- Load the Twitch embed JavaScript file -->
+            <script src="https://embed.twitch.tv/embed/v1.js"></script>
+
+            <!-- Create a Twitch.Embed object that will render within the "twitch-embed" element -->
+            <script type="text/javascript">
+            new Twitch.Embed("twitch-embed", {
+                width: 854,
+                height: 480,
+                channel: "brainsatplay",
+                // Only needed if this page is going to be embedded on other websites
+                parent: ["embed.example.com", "othersite.example.com"]
+            });
+            </script>
 
 <!--            Games              -->
 
