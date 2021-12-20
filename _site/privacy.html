@@ -41,56 +41,64 @@
 <!--        <strong><h4>Brains@Play</h4></strong>-->
         <img src="/assets/brand/logo_and_sub.png">
     </a>
-</div>
-<div id="sideNav" class="sidenav">
-<!--    <div id="links" class="stretch">-->
-        <div id="navToggle" class="nav-icon">
-            <div id="ham-1"></div>
-            <div id="ham-2"></div>
-            <div id="ham-3"></div>
+    <div id="navToggle" class="nav-icon">
+        <div id="ham-1"></div>
+        <div id="ham-2"></div>
+        <div id="ham-3"></div>
+    </div>
+    <div id="sideNav" class="sidenav">
+        <!--    <div id="links" class="stretch">-->
+                <a href="/" class="link">Home</a>
+                <a href="/about" class="link">About</a>
+                <a href="/fund" class="link">Fund</a>
+                <a href="mailto:contact@brainsatplay.com" class="link" target="_blank">Contact</a>
+
+            <!--    </div>-->
         </div>
-        <a href="/" class="link">Home</a>
-        <a href="/about" class="link">About</a>
-        <a href="https://app.brainsatplay.com" class="link" target="_blank">Platform</a>
-        <a href="https://docs.brainsatplay.com" class="link" target="_blank">Software</a>
-        <a href="/competition" class="link">Competition</a>
-        <a href="/competition" class="link small">Main Page</a>
-        <a href="/competition/submissions" class="link small">Submissions</a>
-        <a href="/competition/results" class="link small">Results</a>
-
-    <!--    </div>-->
+        <div id="overlay">
+        </div>        
 </div>
-
-<div id="overlay">
-</div>
-
 
 <script>
-    function openNav() {
-        if (window.innerWidth > 768){
-        document.getElementById("sideNav").style.width = "250px";
-        } else {
-            document.getElementById("sideNav").style.width = "100vw";
-            document.getElementById("sideNav").style.padding = "60px 25px";
+
+    let nav = document.getElementById('nav')
+    // check which a tag is selected
+    let checkSelected = () => {
+        let tags = nav.querySelectorAll('a')
+        for (let tag of tags){
+            if (tag.href === window.location.href){
+                tag.classList.add('selected')
+            }
         }
-        document.getElementById("ham-3").style.transform = 'translateY(-7px) translateX(25px) rotate(-135deg)'
-        document.getElementById("ham-1").style.transform = 'translateY(7px) translateX(25px) rotate(135deg)'
-        document.getElementById("ham-2").style.transform = 'scale(0)'
-        document.getElementById("overlay").style.opacity = '0.6'
+
+    }
+
+    window.onload = checkSelected
+
+
+    // set nav behavior
+    function openNav() {
+        nav.classList.add('open')
     }
 
     function closeNav() {
-        document.getElementById("sideNav").style.width = "0";
-        document.getElementById("sideNav").style.padding = "60px 0px";
-        document.getElementById("ham-3").style.transform = 'translateY(0) translateX(0) rotate(0)'
-        document.getElementById("ham-1").style.transform = 'translateY(0) translateX(0) rotate(0)'
-        document.getElementById("ham-2").style.transform = 'scale(1)'
-        document.getElementById("overlay").style.opacity = '0'
+        nav.classList.remove('open')
+        // document.getElementById("sideNav").style.transform = "translateX(100%)";
+        // document.getElementById("sideNav").style.padding = "60px 0px";
+        // document.getElementById("ham-3").style.transform = 'translateY(0) translateX(0) rotate(0)'
+        // document.getElementById("ham-1").style.transform = 'translateY(0) translateX(0) rotate(0)'
+        // document.getElementById("ham-2").style.transform = 'scale(1)'
+        // document.getElementById("overlay").style.opacity = '0'
     }
 
     document.onclick = function(e){
-            if (['navToggle','ham-1','ham-2','ham-3'].includes(e.target.id) && document.getElementById("overlay").style.opacity == '0'){
-                openNav()
+
+            if (['navToggle','ham-1','ham-2','ham-3'].includes(e.target.id)){
+                if (!nav.classList.contains('open')){
+                    openNav()
+                } else {
+                    closeNav()
+                }
             } else if (e.target.id != 'sideNav') {
                 closeNav()
             }
@@ -99,7 +107,7 @@
     // Scroll
     let navbar = document.getElementById("nav")
     window.onscroll = (e) => {
-        if (window.scrollY > 100) navbar.style.background = 'rgba(0,0,0,0.8)'
+        if (window.scrollY > 75) navbar.style.background = 'rgba(0,0,0,0.8)'
         else navbar.style.background = 'transparent'
     }
 </script>
@@ -138,7 +146,7 @@
         <p class="footer-text"><a class ='link' href="mailto:contact@brainsatplay.com" target="_blank">Contact</a></p>
     </div>
     <div id="footer-links2" class="right-footer">
-        <p class="footer-text"><a class ='link' href="https://www.patreon.com/brainsatplay" target="_blank">Donate</a></p>
+        <p class="footer-text"><a class ='link' href="./fund" target="_blank">Fund</a></p>
         <!--        <p class ='footer-text'><a class ='link' href="/rules">Rules</a></p>-->
         <p class ='footer-text link unavailable'>Rules</p>
     </div>

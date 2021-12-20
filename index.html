@@ -34,7 +34,7 @@
                 <div class="split">
                 <div>
                     <strong><span class="line">WE ARE</span> <h1><span class="line">BRAINS <span class="line">AT PLAY.</span></span></strong></h1>
-                    <p><span class="line"><strong>8B</strong> Brains</span> | <span class="line"><strong>5B</strong> Internet Users</span> | <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
+                    <p><span class="line"><strong>8B</strong> Brains |</span> <span class="line"><strong>5B</strong> Internet Users |</span> <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
                     <small><strong>Brains@Play is developing free and open-source biomedical infrastructure supported by modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</p>
                 </div>
 
@@ -94,69 +94,6 @@
 
 </div>
 </body>
-
-<!-- Create a Counter for World Population -->
-<script>
-
-/*
-* World Populution Counter - By JavaScript Kit (http://www.javascriptkit.com)
-* Based on code by Adam Brown
-* This notice MUST stay intact for use
-* Visit JavaScript Kit (http://www.javascriptkit.com) for this script and more
-*/
-
-function maind(){
-	startdate = new Date()
-	now(startdate.getYear(),startdate.getMonth(),startdate.getDate(),startdate.getHours(),startdate.getMinutes(),startdate.getSeconds())
-}
-
-
-function ChangeValue(number,pv){
-	numberstring =""
-	var j=0 
-	var i=0
-	while (number > 1)
-	 { 
-
-	    numberstring = (Math.round(number-0.5) % 10) + numberstring
-	    number= number / 10
-	    j++
-	    if (number > 1 && j==3) { 
-			numberstring = "," + numberstring 
-			j=0}
-	    i++
-	 }
-
-	 numberstring=numberstring
-
-if (pv==1) {document.getElementById("worldpop").innerHTML=numberstring }
-}
-
-
-function now(year,month,date,hours,minutes,seconds){       
-startdatum = new Date(year,month,date,hours,minutes,seconds)
-
-var now = 5600000000.0
-var now2 = 5690000000.0
-var groeipercentage = (now2 - now) / now *100
-var groeiperseconde = (now * (groeipercentage/100))/365.0/24.0/60.0/60.0 
-nu = new Date ()                
-schuldstartdatum = new Date (96,1,1)                            
-secondenoppagina = (nu.getTime() - startdatum.getTime())/1000
-totaleschuld= (nu.getTime() - schuldstartdatum.getTime())/1000*groeiperseconde + now
-ChangeValue(totaleschuld,1);
-
-
-timerID = setTimeout("now(startdatum.getYear(),startdatum.getMonth(),startdatum.getDate(),startdatum.getHours(),startdatum.getMinutes(),startdatum.getSeconds())",200)
-}
-
-window.onload=maind
-
-
-
-
-</script>
-
 </html>
 
 

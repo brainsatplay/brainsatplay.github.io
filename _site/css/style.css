@@ -198,11 +198,6 @@ a.text:visited {
     color: #999999;
 }
 
-#nav a.link {
-    margin-left: 20px;
-    font-size: 20px;
-}
-
 a.link {
     color: white;
     text-decoration: none;
@@ -612,6 +607,7 @@ input:focus{
     width: 100%;
     flex-grow: 1;
     flex-shrink: 0;
+    margin: 5px;
 }
 
 @media (max-width: 510px) {
@@ -623,14 +619,17 @@ input:focus{
     }
 }
 
-.person {
+.labeled {
     position: relative;
 }
 
-.person h4 {
+.labeled h4 {
+    font-size: 100%;
     margin: 0px;
 }
-.person div {
+
+
+.labeled div {
     position: absolute; 
     bottom: 0px;
     left: 0px;
@@ -1654,15 +1653,37 @@ input[type="range"] {
 /* The side navigation menu */
 #sideNav {
     height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
+    width: 100%; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 1000; /* Stay on top */
     top: 0; /* Stay at the top */
     right: 0;
+    transform: translateX(100%);
     background: #0c0b0c;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the nav */
+    transition: transform 0.5s; /* 0.5 second transition effect to slide in the nav */
+}
+
+#nav.open #sideNav{
+    width: 100%;
+    transform: translateX(0%);
+}
+
+#nav.open #ham-1{
+    transform: translateY(7px) translateX(25px) rotate(135deg)
+}
+
+#nav.open #ham-2{
+    transform: scale(0)
+}
+
+#nav.open #ham-3{
+    transform: translateY(-7px) translateX(25px) rotate(-135deg)
+}
+
+#nav.open #overlay{
+    transform: 0.6
 }
 
 /* The navigation menu links */
@@ -1679,8 +1700,47 @@ input[type="range"] {
     color: #f1f1f1;
 }
 
+#sideNav a.selected {
+    color: #f1f1f1;
+}
+
 #sideNav a.small {
     font-size: 80%;
+}
+
+
+#navToggle {
+    z-index: 1001; /* Stay on top */
+}
+
+
+@media (min-width: 600px) {
+
+    #sideNav {
+        height: 100%; /* 100% Full-height */
+        width: 100%; /* 0 width - change this with JavaScript */
+        position: relative; /* Stay in place */
+        display: flex;
+        align-items: center; 
+        justify-content: flex-start;
+        z-index: 1000; /* Stay on top */
+        transform: translateX(0);
+        background: transparent;
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 0px; /* Place content 60px from the top */
+        transition: translate 0.5s; /* 0.5 second transition effect to slide in the nav */
+    }
+
+    #navToggle {
+        display: none;
+    }
+
+    #nav a.link {
+        margin-left: 25px;
+        font-size: 17px;
+    }
+
+
 }
 
 
@@ -1724,12 +1784,6 @@ input[type="range"] {
         color: white;
         margin: 75px;
     } */
-
-    #sideNav a {
-        padding: 8px 8px 8px 32px;
-        font-size: 25px;
-        text-align: left;
-    }
 
     .category-div {
         width: 575px;

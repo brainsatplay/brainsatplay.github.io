@@ -51,56 +51,64 @@
 <!--        <strong><h4>Brains@Play</h4></strong>-->
         <img src="/assets/brand/logo_and_sub.png">
     </a>
-</div>
-<div id="sideNav" class="sidenav">
-<!--    <div id="links" class="stretch">-->
-        <div id="navToggle" class="nav-icon">
-            <div id="ham-1"></div>
-            <div id="ham-2"></div>
-            <div id="ham-3"></div>
+    <div id="navToggle" class="nav-icon">
+        <div id="ham-1"></div>
+        <div id="ham-2"></div>
+        <div id="ham-3"></div>
+    </div>
+    <div id="sideNav" class="sidenav">
+        <!--    <div id="links" class="stretch">-->
+                <a href="/" class="link">Home</a>
+                <a href="/about" class="link">About</a>
+                <a href="/fund" class="link">Fund</a>
+                <a href="mailto:contact@brainsatplay.com" class="link" target="_blank">Contact</a>
+
+            <!--    </div>-->
         </div>
-        <a href="/" class="link">Home</a>
-        <a href="/about" class="link">About</a>
-        <a href="https://app.brainsatplay.com" class="link" target="_blank">Platform</a>
-        <a href="https://docs.brainsatplay.com" class="link" target="_blank">Software</a>
-        <a href="/competition" class="link">Competition</a>
-        <a href="/competition" class="link small">Main Page</a>
-        <a href="/competition/submissions" class="link small">Submissions</a>
-        <a href="/competition/results" class="link small">Results</a>
-
-    <!--    </div>-->
+        <div id="overlay">
+        </div>        
 </div>
-
-<div id="overlay">
-</div>
-
 
 <script>
-    function openNav() {
-        if (window.innerWidth > 768){
-        document.getElementById("sideNav").style.width = "250px";
-        } else {
-            document.getElementById("sideNav").style.width = "100vw";
-            document.getElementById("sideNav").style.padding = "60px 25px";
+
+    let nav = document.getElementById('nav')
+    // check which a tag is selected
+    let checkSelected = () => {
+        let tags = nav.querySelectorAll('a')
+        for (let tag of tags){
+            if (tag.href === window.location.href){
+                tag.classList.add('selected')
+            }
         }
-        document.getElementById("ham-3").style.transform = 'translateY(-7px) translateX(25px) rotate(-135deg)'
-        document.getElementById("ham-1").style.transform = 'translateY(7px) translateX(25px) rotate(135deg)'
-        document.getElementById("ham-2").style.transform = 'scale(0)'
-        document.getElementById("overlay").style.opacity = '0.6'
+
+    }
+
+    window.onload = checkSelected
+
+
+    // set nav behavior
+    function openNav() {
+        nav.classList.add('open')
     }
 
     function closeNav() {
-        document.getElementById("sideNav").style.width = "0";
-        document.getElementById("sideNav").style.padding = "60px 0px";
-        document.getElementById("ham-3").style.transform = 'translateY(0) translateX(0) rotate(0)'
-        document.getElementById("ham-1").style.transform = 'translateY(0) translateX(0) rotate(0)'
-        document.getElementById("ham-2").style.transform = 'scale(1)'
-        document.getElementById("overlay").style.opacity = '0'
+        nav.classList.remove('open')
+        // document.getElementById("sideNav").style.transform = "translateX(100%)";
+        // document.getElementById("sideNav").style.padding = "60px 0px";
+        // document.getElementById("ham-3").style.transform = 'translateY(0) translateX(0) rotate(0)'
+        // document.getElementById("ham-1").style.transform = 'translateY(0) translateX(0) rotate(0)'
+        // document.getElementById("ham-2").style.transform = 'scale(1)'
+        // document.getElementById("overlay").style.opacity = '0'
     }
 
     document.onclick = function(e){
-            if (['navToggle','ham-1','ham-2','ham-3'].includes(e.target.id) && document.getElementById("overlay").style.opacity == '0'){
-                openNav()
+
+            if (['navToggle','ham-1','ham-2','ham-3'].includes(e.target.id)){
+                if (!nav.classList.contains('open')){
+                    openNav()
+                } else {
+                    closeNav()
+                }
             } else if (e.target.id != 'sideNav') {
                 closeNav()
             }
@@ -109,7 +117,7 @@
     // Scroll
     let navbar = document.getElementById("nav")
     window.onscroll = (e) => {
-        if (window.scrollY > 100) navbar.style.background = 'rgba(0,0,0,0.8)'
+        if (window.scrollY > 75) navbar.style.background = 'rgba(0,0,0,0.8)'
         else navbar.style.background = 'transparent'
     }
 </script>
@@ -179,7 +187,7 @@
                 <div class="split">
                 <div>
                     <strong><span class="line">WE ARE</span> <h1><span class="line">BRAINS <span class="line">AT PLAY.</span></span></strong></h1>
-                    <p><span class="line"><strong>8B</strong> Brains</span> | <span class="line"><strong>5B</strong> Internet Users</span> | <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
+                    <p><span class="line"><strong>8B</strong> Brains |</span> <span class="line"><strong>5B</strong> Internet Users |</span> <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
                     <small><strong>Brains@Play is developing free and open-source biomedical infrastructure supported by modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</p>
                 </div>
 
@@ -254,7 +262,7 @@
         <p class="footer-text"><a class ='link' href="mailto:contact@brainsatplay.com" target="_blank">Contact</a></p>
     </div>
     <div id="footer-links2" class="right-footer">
-        <p class="footer-text"><a class ='link' href="https://www.patreon.com/brainsatplay" target="_blank">Donate</a></p>
+        <p class="footer-text"><a class ='link' href="./fund" target="_blank">Fund</a></p>
         <!--        <p class ='footer-text'><a class ='link' href="/rules">Rules</a></p>-->
         <p class ='footer-text link unavailable'>Rules</p>
     </div>
@@ -301,69 +309,6 @@
 
 </div>
 </body>
-
-<!-- Create a Counter for World Population -->
-<script>
-
-/*
-* World Populution Counter - By JavaScript Kit (http://www.javascriptkit.com)
-* Based on code by Adam Brown
-* This notice MUST stay intact for use
-* Visit JavaScript Kit (http://www.javascriptkit.com) for this script and more
-*/
-
-function maind(){
-	startdate = new Date()
-	now(startdate.getYear(),startdate.getMonth(),startdate.getDate(),startdate.getHours(),startdate.getMinutes(),startdate.getSeconds())
-}
-
-
-function ChangeValue(number,pv){
-	numberstring =""
-	var j=0 
-	var i=0
-	while (number > 1)
-	 { 
-
-	    numberstring = (Math.round(number-0.5) % 10) + numberstring
-	    number= number / 10
-	    j++
-	    if (number > 1 && j==3) { 
-			numberstring = "," + numberstring 
-			j=0}
-	    i++
-	 }
-
-	 numberstring=numberstring
-
-if (pv==1) {document.getElementById("worldpop").innerHTML=numberstring }
-}
-
-
-function now(year,month,date,hours,minutes,seconds){       
-startdatum = new Date(year,month,date,hours,minutes,seconds)
-
-var now = 5600000000.0
-var now2 = 5690000000.0
-var groeipercentage = (now2 - now) / now *100
-var groeiperseconde = (now * (groeipercentage/100))/365.0/24.0/60.0/60.0 
-nu = new Date ()                
-schuldstartdatum = new Date (96,1,1)                            
-secondenoppagina = (nu.getTime() - startdatum.getTime())/1000
-totaleschuld= (nu.getTime() - schuldstartdatum.getTime())/1000*groeiperseconde + now
-ChangeValue(totaleschuld,1);
-
-
-timerID = setTimeout("now(startdatum.getYear(),startdatum.getMonth(),startdatum.getDate(),startdatum.getHours(),startdatum.getMinutes(),startdatum.getSeconds())",200)
-}
-
-window.onload=maind
-
-
-
-
-</script>
-
 </html>
 
 
