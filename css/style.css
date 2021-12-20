@@ -1641,6 +1641,12 @@ input[type="range"] {
     display: none;
 }
 
+.disabled {
+    cursor: default;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
 /* Judges */
 
 #judges i {

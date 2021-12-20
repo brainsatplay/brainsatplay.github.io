@@ -8,6 +8,7 @@
     <meta name=viewport content="width=device-width,initial-scale=1">
     <link rel=icon href=/assets/favicon.ico>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="./fund.css"/>
     <script src="../js/site.js" type="text/javascript" defer></script>
 
     <title>Fund | Brains@Play</title>
@@ -23,9 +24,48 @@
 
     <!--Content-->
 <section id="futures">
-    <div>
-        <h2>Coming soon...</h2>
+    <h2>Montly Fund Income</h2>
+    <hr>
+    <br>
+    <div id="fund-info">
+        <span id="fund-total"><span id="fund-total-current">$10</span> USD / month</span>
+        <p><span id="fund-latest-contributor"><span id="fund-latest-contributor-name">blueberryxpod</span> <span id="fund-latest-contributor-action">became a member on Buy Me a Coffee</span></span>!</p>
     </div>
+
+    <h2>Select a Contribution Amount</h2>
+    <hr>
+    <br>
+    <div id="fund-contribution-amounts">
+        <div data-amount="5">
+            <p>$5 USD</p>
+        </div>
+        <div data-amount="10">
+            <p>$10 USD</p>
+        </div>
+        <div data-amount="20">
+            <p>$20 USD</p>
+        </div>
+        <div>
+            <p>$_ USD</p>
+        </div>
+    </div>
+
+    <div id="fund-contribution-monthly">
+        <h3>Help Sustain Monthly?</h3>
+        <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider round"></span>
+          </label>
+
+        <h4>Rewards</h4>
+        <div id="fund-rewards">
+        </div>
+    </div>
+
+    <br>
+
+    <button class="disabled">Contribute</button>
+
 </section>
 
     <!--Footer-->
@@ -34,4 +74,40 @@
 </div>
 
 </body>
+
+<script>
+
+let currentAmount = 0
+let amounts = document.getElementById('fund-contribution-amounts')
+let divs = amounts.querySelectorAll('div')
+
+for (let div of divs) {
+    div.onclick = () => {
+        for (let d of divs) d.classList.remove('selected')
+        div.classList.add('selected')
+        currentAmount = div.getAttribute('data-amount')
+    }
+}
+
+// Show / Hide Fund Rewards
+
+let monthly = document.getElementById('fund-contribution-monthly') 
+let checkbox = monthly.querySelector('input')
+let rewards = document.getElementById('fund-rewards')
+
+let checkRewards = () => {
+
+    let checked = checkbox.checked
+    if (checked) {
+        rewards.innerHTML = 'Coming soon...'
+    } else {
+        rewards.innerHTML = 'None'
+    }
+
+}
+ 
+checkbox.onchange = checkRewards
+checkRewards()
+
+</script>
 </html>

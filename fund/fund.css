@@ -1,0 +1,113 @@
+#fund-contribution-amounts{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#fund-contribution-amounts div {
+    padding: 25px;
+    border: 1px solid grey;
+    color: grey;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+#fund-contribution-amounts div:hover {
+    cursor: pointer;
+}
+
+#fund-contribution-amounts .selected {
+    border: 1px solid #6a8eb0;
+    color: white;
+}
+
+#fund-info {
+    text-align: center;
+}
+
+#fund-total {
+    font-size: 40px;
+}
+
+#fund-latest-contributor-name {
+    color: #6a8eb0;
+}
+
+#fund-total-current {
+    color: #6a8eb0;
+}
+
+#fund-contribution-monthly {
+
+}
+
+#fund-rewards {
+
+}
+
+
+
+
+
+/* Cute slider from W3Schools (https://www.w3schools.com/howto/howto_css_switch.asp) */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #6a8eb0;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #6a8eb0;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(30px);
+    -ms-transform: translateX(30px);
+    transform: translateX(30px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 30px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
