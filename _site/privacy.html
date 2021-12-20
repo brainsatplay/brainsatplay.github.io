@@ -51,6 +51,7 @@
                 <a href="/" class="link">Home</a>
                 <a href="/about" class="link">About</a>
                 <a href="/fund" class="link">Fund</a>
+                <a href="/blog" class="link">Blog</a>
                 <a href="mailto:contact@brainsatplay.com" class="link" target="_blank">Contact</a>
 
             <!--    </div>-->
@@ -66,7 +67,6 @@
     let checkSelected = () => {
         let tags = nav.querySelectorAll('a')
         for (let tag of tags){
-            console.log(tag.href, window.location.href, tag.href === window.location.href)
             if (tag.href === window.location.href || tag.href + '/' === window.location.href){
                 tag.classList.add('selected')
             }

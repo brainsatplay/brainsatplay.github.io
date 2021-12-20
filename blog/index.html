@@ -1,0 +1,43 @@
+---
+---
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link rel=icon href=/assets/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <script src="../js/site.js" type="text/javascript" defer></script>
+
+    <title>Blog | Brains@Play</title>
+</head>
+<body>
+
+    <!--Navbar-->
+    {% include nav.html %}
+
+    <div id="blog-header" class="header new">
+        <h2>Blog</h2>
+    </div>
+    
+    <div style="padding: 25px;">
+        <div class="gallery grid">
+            {% for post in site.posts %}
+            <div class="labeled">
+                <a href="{{ post.url }}" target="_blank"><img src="{{ post.image or ../assets/images/posts/placeholder.jpg}}" alt="First Post"></a>
+                <div>
+                    <small><small><small>{{ post.date  | date: "%B %-d, %Y" }}</small></small></small>
+                    <h4>{{ post.title }}</h4>
+                    <small><i>{{ post.subtitle }}</i></small>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+    <!--Footer-->
+    {% include footer.html %}
+
+  </body>
+</html>

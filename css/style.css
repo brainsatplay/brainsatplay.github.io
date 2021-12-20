@@ -348,13 +348,23 @@ span.line {
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/submit.jpg')
 }
 
-#futures-header {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/futures.jpg');
-    padding-bottom: 5px;
-    min-height: 250px;
+#about-header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/projects.jpg');
 }
 
-#futures-header h2 {
+#blog-header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/about.jpg');
+}
+
+.header.new {
+    /* padding: 0px; */
+    padding-bottom: 25px;
+    min-height: 250px;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.header.new h2 {
     text-align: left;
     text-transform: uppercase;
     font-weight: bold;
@@ -369,8 +379,10 @@ span.line {
     /*background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/images/contribute.jpg')*/
 }
 
-#docs-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/docs.jpg')
+#fund-header{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/docs.jpg');
+    background-position: bottom;
+
 }
 
 #curriculum-header{
@@ -594,6 +606,10 @@ input:focus{
     /* flex: 1 1 10%; */
 }
 
+.gallery.grid > div {
+    margin: 5px;
+}
+
 
 
 
@@ -607,7 +623,6 @@ input:focus{
     width: 100%;
     flex-grow: 1;
     flex-shrink: 0;
-    margin: 5px;
 }
 
 @media (max-width: 510px) {
@@ -621,6 +636,8 @@ input:focus{
 
 .labeled {
     position: relative;
+    width: 200px;
+    height: 200px;
 }
 
 .labeled h4 {
@@ -1721,7 +1738,7 @@ input[type="range"] {
 }
 
 
-@media (min-width: 600px) {
+@media (min-width: 625px) {
 
     #sideNav {
         height: 100%; /* 100% Full-height */
