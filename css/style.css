@@ -122,7 +122,7 @@ button:hover{
 
 section{
     color: white;
-    margin: 5vw 5vw;
+    margin: 50px;
 }
 
 #submission-categories h3{
@@ -353,8 +353,17 @@ span.line {
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/submit.jpg')
 }
 
-#futures-header{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/futures.jpg')
+#futures-header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/futures.jpg');
+    padding-bottom: 5px;
+    min-height: 250px;
+}
+
+#futures-header h2 {
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 55px;
 }
 
 #contact-header{
@@ -575,10 +584,60 @@ input:focus{
 .gallery{
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     padding: 5px;
     flex-basis: 100%;
+}
+
+.gallery.grid {
+    /* display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(6,1fr);
+    column-gap: 10px;
+    row-gap: 10px; */
+    /* flex: 1 1 10%; */
+}
+
+
+
+
+/* .gallery.grid.col-4 {
+    grid-template-columns: repeat(4,1fr);
+} */
+
+.gallery.grid img {
+    aspect-ratio: 1/1;
+    max-width: 200px;
+    width: 100%;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+@media (max-width: 510px) {
+    .gallery.grid img {
+        max-width: none;
+    }
+    .gallery.grid{
+        justify-content: center;
+    }
+}
+
+.person {
+    position: relative;
+}
+
+.person h4 {
+    margin: 0px;
+}
+.person div {
+    position: absolute; 
+    bottom: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    font-size: 80%;
+    padding: 15px 25px;
 }
 
 #projects a{
@@ -944,10 +1003,10 @@ footer a {
     margin: 0px 0px 5px 0px;
 }
 
-.feature-anchor{
+/* .feature-anchor{
     position:relative;
     top:-50px;
-}
+} */
 
 .flex-center{
     align-items:center;
@@ -1661,10 +1720,10 @@ input[type="range"] {
 
 
 @media screen and (min-width: 768px) {
-    section{
+    /* section{
         color: white;
         margin: 75px;
-    }
+    } */
 
     #sideNav a {
         padding: 8px 8px 8px 32px;
