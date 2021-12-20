@@ -30,14 +30,15 @@
     let checkSelected = () => {
         let tags = nav.querySelectorAll('a')
         for (let tag of tags){
-            if (tag.href === window.location.href){
+            console.log(tag.href, window.location.href, tag.href === window.location.href)
+            if (tag.href === window.location.href || tag.href + '/' === window.location.href){
                 tag.classList.add('selected')
             }
         }
 
     }
 
-    window.onload = checkSelected
+    checkSelected()
 
 
     // set nav behavior
@@ -47,12 +48,6 @@
 
     function closeNav() {
         nav.classList.remove('open')
-        // document.getElementById("sideNav").style.transform = "translateX(100%)";
-        // document.getElementById("sideNav").style.padding = "60px 0px";
-        // document.getElementById("ham-3").style.transform = 'translateY(0) translateX(0) rotate(0)'
-        // document.getElementById("ham-1").style.transform = 'translateY(0) translateX(0) rotate(0)'
-        // document.getElementById("ham-2").style.transform = 'scale(1)'
-        // document.getElementById("overlay").style.opacity = '0'
     }
 
     document.onclick = function(e){
