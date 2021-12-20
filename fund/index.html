@@ -32,7 +32,16 @@
         <p><span id="fund-latest-contributor"><span id="fund-latest-contributor-name">blueberryxpod</span> <span id="fund-latest-contributor-action">became a member on Buy Me a Coffee</span></span>!</p>
     </div>
 
-    <h2>Select a Contribution Amount</h2>
+    <div id="contribution-header">
+        <h2>Select a Contribution</h2>
+        <div>
+            <span id="contribution-type">Monthly</span>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
     <hr>
     <br>
     <div id="fund-contribution-amounts">
@@ -45,17 +54,21 @@
         <div data-amount="20">
             <p>$20 USD</p>
         </div>
-        <div>
-            <p>$_ USD</p>
+        <div data-amount="50">
+            <p>$50 USD</p>
         </div>
-    </div>
-
-    <div id="fund-contribution-monthly">
-        <h3>Help Sustain Monthly?</h3>
-        <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider round"></span>
-          </label>
+        <div data-amount="250">
+            <p>$250 USD</p>
+        </div>
+        <div data-amount="1000">
+            <p>$1000 USD</p>
+        </div>
+        <div data-amount="5000">
+            <p>$5000 USD</p>
+        </div>
+        <div id="custom">
+            <p>$<input id="custom-contribution-amount" type="number"></input> USD</p>
+        </div>
     </div>
 
     <br>
@@ -76,11 +89,19 @@
 let currentAmount = 0
 let amounts = document.getElementById('fund-contribution-amounts')
 let divs = amounts.querySelectorAll('div')
+let custom = document.getElementById('custom')
+let customInput = document.getElementById('custom-contribution-amount')
+
+customInput.oninput = (e) => {
+    custom.setAttribute('data-amount', customInput.value)
+    currentAmount = customInput.value
+}
 
 for (let div of divs) {
     div.onclick = () => {
         for (let d of divs) d.classList.remove('selected')
         div.classList.add('selected')
+
         currentAmount = div.getAttribute('data-amount')
     }
 }
@@ -88,16 +109,19 @@ for (let div of divs) {
 // Show / Hide Fund Rewards
 
 let monthly = document.getElementById('fund-contribution-monthly') 
-let checkbox = monthly.querySelector('input')
+let checkbox = document.body.querySelector('input')
 let rewards = document.getElementById('fund-rewards')
+let type = document.getElementById('contribution-type')
 
 let checkRewards = () => {
 
     let checked = checkbox.checked
     if (checked) {
-        rewards.innerHTML = 'Coming soon...'
+        if (type) type.innerHTML = 'Monthly'
+        if (rewards) rewards.innerHTML = 'Coming soon...'
     } else {
-        rewards.innerHTML = 'None'
+        if (type) type.innerHTML = 'One Time'
+        if (rewards) rewards.innerHTML = 'None'
     }
 
 }

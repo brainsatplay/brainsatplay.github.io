@@ -3,12 +3,40 @@
     flex-wrap: wrap;
 }
 
+#contribution-header {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+#contribution-header h2 {
+    width: auto;
+}
+
+#contribution-header > * {
+    padding-right: 25px;
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+    padding-top: 10px;
+}
+
+#contribution-header > * > * {
+    padding-right: 10px;
+    font-size: 85%;
+}
+
 #fund-contribution-amounts div {
     padding: 25px;
     border: 1px solid grey;
     color: grey;
     border-radius: 10px;
     margin: 10px;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
 }
 
 #fund-contribution-amounts div:hover {
@@ -34,6 +62,21 @@
 
 #fund-total-current {
     color: #6a8eb0;
+}
+
+#custom-contribution-amount {
+    background: transparent;
+    color: white;
+    border: none;
+    border-bottom: 1px solid grey;
+    color: grey;
+    width: 50px;
+    font-size: 20px;
+}
+
+#fund-contribution-amounts .selected #custom-contribution-amount {
+    border-bottom: 1px solid white;
+    color: white;
 }
 
 #fund-contribution-monthly {
@@ -111,3 +154,15 @@
   .slider.round:before {
     border-radius: 50%;
   }
+
+  /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
