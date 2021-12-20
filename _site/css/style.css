@@ -220,11 +220,63 @@ a.link .current{
     color: #6a8eb0;
 }
 
+/* Split */
+
+.split {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex: 1 1 45%;
+}
+
+span.line {
+    display: inline-block;
+  }
+
 /* Hero */
 
 #hero1{
+    min-height: 500px;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/nasa.jpg');
 }
+
+#hero1 h1 {
+    margin-top: 0px;
+    font-size: 65px;
+}
+
+#hero1 .split > div {
+    padding: 10px;
+}
+
+#hero1 .split > div:first-of-type{
+    text-align: left;
+    width: 100%;
+    max-width: 600px;
+}
+
+#hero1 .split > div:last-of-type{
+    /* text-align: left; */
+}
+
+#hero1 .split img {
+    width: 500px;
+}
+
+@media (max-width: 640px) {
+    #hero1 .split > div:first-of-type{
+        text-align: center;
+    }
+
+    #hero1 h1 {
+        margin-top: 0px;
+        font-size: 45px;
+    }
+}
+
+
+
 #hero2{
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/assets/images/livewire.png')
 }
@@ -272,7 +324,7 @@ a.link .current{
 
 .header img {
     width: 100%;
-    /*max-width: 800px;*/
+    max-width: 800px;
     padding: 25px 50px;
 }
 
@@ -1539,7 +1591,7 @@ input[type="range"] {
 
 
 
-/* Sidenav */
+/* nav */
 /* The side navigation menu */
 #sideNav {
     height: 100%; /* 100% Full-height */
@@ -1551,7 +1603,7 @@ input[type="range"] {
     background: #0c0b0c;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the nav */
 }
 
 /* The navigation menu links */
