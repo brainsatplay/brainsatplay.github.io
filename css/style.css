@@ -48,6 +48,9 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 body::-webkit-scrollbar {
@@ -132,6 +135,8 @@ button:hover{
 section{
     color: white;
     margin: 50px;
+    max-width: 850px;
+    width: 100%;
 }
 
 #submission-categories h3{
@@ -310,6 +315,7 @@ span.line {
 
 /* Page Header */
 .header{
+    width: 100%;
     padding: 100px 50px 100px 50px;
     text-align: center;
     display:flex;

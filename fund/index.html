@@ -15,7 +15,7 @@
     <title>Fund | Brains@Play</title>
 </head>
 <body>
-<div id=app>
+<!-- <div id=app> -->
     <!--Navbar-->
     {% include nav.html %}
 
@@ -38,9 +38,13 @@
         infrastructure.
     </small></p>
 
+    {% include projects.html %}
+
     <p><small>
         As we scale our efforts, every <strong>$3000 USD</strong> of funding will support another full-time contributor to our projects.
     </small></p>
+
+    <!-- {% include feed.html %} -->
 
     <p><small>
         Let's do this, together.
@@ -98,23 +102,29 @@
 
     <br>
 
-    <div>
-        <label class="switch">
-            <input type="checkbox" checked>
-            <span class="slider round"></span>
-        </label>
-        <small id="contribution-type">Monthly</small>
-    </div>
-
     <div id="dropin-container"></div>
     <br>
 
     <div id="checkout-container">
-        <button id="submit-button">Checkout</button>
-        <div class="notification">
-            <h4 id="error-action"></h4>
-            <p><strong><span id="error-name"></span>:</strong> <span id="error-response"></span></p>
+        <button id="submit-button">
+            <div>
+                <span>Fund!</span>
+                <br/>
+                <span class="small">Secured by Braintree</span>
+            </div>
+        </button>
+        <div>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider round"></span>
+            </label>
+            <small id="contribution-type">Monthly</small>
         </div>
+    </div>
+    
+    <div class="notification">
+        <h4 id="error-action"></h4>
+        <p><strong><span id="error-name"></span>:</strong> <span id="error-response"></span></p>
     </div>
 
 </section>
@@ -122,7 +132,7 @@
     <!--Footer-->
     {% include footer.html %}
 
-</div>
+<!-- </div> -->
 
 </body>
 

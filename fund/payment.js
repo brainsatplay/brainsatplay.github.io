@@ -7,7 +7,7 @@ const SERVER_URI = (window.location.hostname != 'brainsatplay.com') ? 'http://lo
 // Decline Visa: 4000111111111115
 
 const checkout = document.getElementById('checkout-container')
-const notification = checkout.querySelector('.notification')
+const notification = document.body.querySelector('.notification')
 const button = document.querySelector('#submit-button');
 const action = document.querySelector('#error-action');
 const errorName = document.querySelector('#error-name');

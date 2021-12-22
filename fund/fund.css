@@ -57,7 +57,7 @@
 
 #fund-contribution-amounts div {
     padding: 25px;
-    border: 1px solid grey;
+    border: 2px solid grey;
     color: grey;
     border-radius: 10px;
     margin: 10px;
@@ -72,7 +72,7 @@
     cursor: pointer;
 }
 
-#fund-contribution-amounts .selected {
+#fund-contribution-amounts div:hover, #fund-contribution-amounts .selected {
     border: 1px solid #6a8eb0;
     color: white;
 }
