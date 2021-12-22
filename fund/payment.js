@@ -62,13 +62,27 @@ braintree.dropin.create({
         clientInstance.requestPaymentMethod().then(function (payload) {
             notification.style.display = 'none'
             button.classList.add('disabled') // avoid sending multiple payment requests
+
+
+            // Get Custom Fields for Form
+            let form = document.getElementById('contributor-info-form')
+            let formDict = {}
+            let formData = new FormData(form);
+            for (var pair of formData.entries()) {
+                formDict[pair[0]] = pair[1];
+            }
+
+            formDict.nonce = payload.nonce
+            formDict.amount = selectedContribution
+            formDict.recurring = recurring
+
             fetch(`${SERVER_URI}/transaction`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 mode: 'cors',
-                body: JSON.stringify({nonce: payload.nonce, amount: selectedContribution, recurring})
+                body: JSON.stringify(formDict)
             }).then(async res => {
                 const msg = await res.json()
                 if (msg.errors) {

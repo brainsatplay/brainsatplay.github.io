@@ -28,6 +28,10 @@
     flex-wrap: wrap;
 }
 
+#contribution-type {
+    margin-left: 15px;
+}
+
 #contribution-header {
     display: flex;
     align-items: flex-end;
@@ -75,6 +79,10 @@
 
 #fund-info {
     text-align: center;
+}
+
+#fund-info > *{
+    margin: 0;
 }
 
 #fund-total {

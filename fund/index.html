@@ -25,26 +25,50 @@
 
     <!--Content-->
 <section id="futures">
-    <h2>Monthly Fund Income</h2>
-    <hr>
-    <br>
     <div id="fund-info">
         <span id="fund-total"><span id="fund-total-current">$0</span> USD / month</span>
-        <p style="display: none;"><span id="fund-latest-contributor"><span id="fund-latest-contributor-name">blueberryxpod</span> <span id="fund-latest-contributor-action">became a member on Buy Me a Coffee</span></span>!</p>
+        <p id="fund-latest-contributor" style="opacity: 0; transition: 0.5s;"><small><span id="fund-latest-contributor-name"></span> <span id="fund-latest-contributor-action"></span>!</small></p>
     </div>
+
+    <h2>About the Fund</h2>
+    <hr>
+    <p><small>
+        All the funds raised here are helping to support Brains@Play software development 
+        and allow us to focus our efforts wholeheartedly towards releasing open-source biomedical 
+        infrastructure.
+    </small></p>
+
+    <p><small>
+        As we scale our efforts, every <strong>$3000 USD</strong> of funding will support another full-time contributor to our projects.
+    </small></p>
+
+    <p><small>
+        Let's do this, together.
+    </small></p>
+
+    <small style="opacity: 0.5;">
+        — Garrett, Josh, and Jacob
+    </small>
 
     <div id="contribution-header">
         <h2>Select a Contribution</h2>
-        <div>
-            <span id="contribution-type">Monthly</span>
-            <label class="switch">
-                <input type="checkbox" checked>
-                <span class="slider round"></span>
-            </label>
-        </div>
     </div>
     <hr>
-    <br>
+    <div class="form-container">
+        <div class="form-context">
+            <div class='flex'>
+                <form  id="contributor-info-form" class="form" action="">
+                    <div class="login-element">
+                        <input type="text" name="displayName" autocomplete="off" placeholder="Display Name"/>
+                    </div>
+                    <div class="login-element">
+                        <input type="text" name="contributionNote" autocomplete="off" placeholder="Contribution Note"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="fund-contribution-amounts">
         <div data-amount="5">
             <p>$5 USD</p>
@@ -72,6 +96,15 @@
         </div>
     </div>
 
+    <br>
+
+    <div>
+        <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider round"></span>
+        </label>
+        <small id="contribution-type">Monthly</small>
+    </div>
 
     <div id="dropin-container"></div>
     <br>
@@ -103,14 +136,44 @@ let divs = amounts.querySelectorAll('div')
 let custom = document.getElementById('custom')
 let customInput = document.getElementById('custom-contribution-amount')
 const fundTotal = document.getElementById('fund-total-current')
+const latestContributor = document.getElementById('fund-latest-contributor')
+const displayName = document.getElementById('fund-latest-contributor-name')
+const actionReadout = document.getElementById('fund-latest-contributor-action')
 
 // Show Fund Total
-fetch(`${SERVER_URI}/fund`,{
+let total = 0
+let decoder = new TextDecoder();
+
+fetch(`${SERVER_URI}/fund/contributions`,{
     method: 'GET',
     mode: 'cors',
 }).then(async res => {
-    let dict = await res.json()
-    fundTotal.innerHTML = `$${dict.income}`
+
+    // Recieve Contribution Information as a Readable Stream (organized by latest)
+    let chunkCount = 0
+    const reader = res.body.getReader();
+
+    while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        let chunk = decoder.decode(value)
+        chunk.split('}').forEach(json => {
+            try {
+                const dict = JSON.parse(`${json}}`)
+                total += dict.amount
+                fundTotal.innerHTML = `$${total}`
+
+                if (dict.order === 0){
+                    latestContributor.style.opacity = 1
+                    displayName.innerHTML = dict.displayname || 'anonymous'
+                    actionReadout.innerHTML = `contributed $${dict.amount} USD`
+                }
+            } catch {}
+            chunkCount++
+        })
+    }
+
 }).catch(e => {
     console.error(e)
 })
