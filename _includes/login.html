@@ -1,9 +1,9 @@
 <div id="login-container" class="form-container">
     <div id="login" class="form-context">
-        <h3>Sign In</h3>
+        <h3>Login</h3>
         <p id="login-message" class="small"></p>
         <div class='flex'>
-            <form id="login-form" action="">
+            <form id="login-form" class="form" action="">
                 <div class="login-element">
                     <input type="text" name="username" autocomplete="off" placeholder="Username or email"/>
                 </div>
@@ -15,9 +15,9 @@
         </div>
         <div class="login-buttons">
 
-            <button id="login-button" onclick="login(game,'profile')">Sign In</button>
-            <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Sign Up</button>
-            <button id="goBack" onclick="toggleLoginScreen();">Go Back</button>
+            <button id="login-button" onclick="login('profile')">Log In</button>
+            <button class="secondary" onclick="toggleLoginScreen(false); toggleSignUpScreen(true)">Sign Up</button>
+            <button id="goBack" class="secondary"  onclick="toggleLoginScreen(false);">Exit</button>
         </div>
     </div>
 </div>
@@ -27,7 +27,7 @@
         <h3>Sign Up</h3>
         <p id="signup-message" class="small"></p>
         <div class='flex'>
-            <form id="signup-form" action="">
+            <form id="signup-form"  class="form" action="">
                 <div class="login-element">
                     <input type="email" name="email" autocomplete="off" placeholder="Email"/>
                 </div>
@@ -40,14 +40,14 @@
                 <div class="login-element">
                     <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password"/>
                 </div>
-                <div class="login-element">
+                <!-- <div class="login-element">
                     <input type="text" name="code" autocomplete="off" placeholder="Code (optional)"/>
-                </div>
+                </div> -->
             </form>
         </div>
         <div class="login-buttons">
-            <button id="signup-button" onclick="signup(game)">Sign Up</button>
-            <button onclick="toggleLoginScreen(); toggleSignUpScreen()">Go Back</button>
+            <button id="signup-button" onclick="signup()">Sign Up</button>
+            <button class="secondary"  onclick="toggleLoginScreen(true); toggleSignUpScreen(false)">Login</button>
         </div>
     </div>
 </div>

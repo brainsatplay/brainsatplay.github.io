@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <link rel=icon href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
-    <script src="/js/site.js" type="text/javascript"></script>
+    <!-- <script src="/js/accounts.js" type="text/javascript"></script> -->
     <title>Forgot Password</title>
 </head>
 <body>
@@ -14,12 +14,12 @@
 {% include nav.html %}
 
 <!--Main Content-->
-<div id="login-container" class="form-container">
+<div class="form-container">
     <div id="login" class="form-context">
         <h3>Forgot Password</h3>
         <p id="reset-message" class="small"></p>
         <div class='flex'>
-            <form id="reset-form" action="">
+            <form id="reset-form"  class="form" action="">
                 <div class="login-element">
                     <input type="email" name="email" autocomplete="off" placeholder="Email"/>
                 </div>
@@ -31,8 +31,4 @@
     </div>
 </div>
 </body>
-<script>
-    showLogin = false;
-    toggleLoginScreen();
-</script>
 </html>

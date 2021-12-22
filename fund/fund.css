@@ -1,3 +1,28 @@
+.notification {
+    font-size: 60%;
+    padding: 20px;
+    border: 1px solid white;
+    border-radius: 25px;
+}
+
+.notification > * {
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.notification > *:last-child {
+    margin-bottom: 0px;
+}
+
+#checkout-container {
+    display: flex;
+    align-items: center;
+}
+
+#checkout-container > button {
+    margin-bottom: 0px;
+}
+
 #fund-contribution-amounts{
     display: flex;
     flex-wrap: wrap;
@@ -71,7 +96,10 @@
     border-bottom: 1px solid grey;
     color: grey;
     width: 50px;
-    font-size: 20px;
+    font-size: 15px;
+    /* height: 20px; */
+    padding: 5px;
+    transform: translateY(-2.5px)
 }
 
 #fund-contribution-amounts .selected #custom-contribution-amount {

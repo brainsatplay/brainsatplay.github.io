@@ -99,6 +99,15 @@ button {
     transition: 0.5s;
 }
 
+button.secondary {
+    width: 150px;
+    min-height: 30px;
+    font-size: 12px;
+    color: whitesmoke;
+    border: 1px solid rgb(189, 189, 189);
+}
+
+
 button:hover{
     color: #6a8eb0;
     border-color: #6a8eb0;
@@ -133,7 +142,7 @@ section{
     font-size:80%;
 }
 
-svg {
+.social-svg {
     flex: none;
     fill: lightgrey;
     transition: .5s;
@@ -1373,27 +1382,32 @@ blockquote {
 
 
 /* Login */
-form input {
+#login-container, #signup-container {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+form.form input {
     width: 100%; height: 100%; padding: 10px 0px; display: flex; align-items: center; justify-content:center; color: white; background:transparent; border: transparent; border-bottom: 1px solid white;
 }
+
 input:focus{
     outline: none;
 }
 
 .form-container{
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+    background:linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
     position: fixed;
     display: flex;
     justify-content:center;
     align-items: center;
     text-align: center;
     flex-wrap: wrap;
-    opacity: 0;
     top: 0;
     right: 0;
     height: 100vh;
     width: 100vw;
-    z-index: -1;
     transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     -ms-transition: 0.5s ease-in-out;
@@ -1417,14 +1431,6 @@ input:focus{
 
 .form-context form {
     width: 100%;
-}
-
-#login-container {
-    transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    -ms-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -webkit-transition: 0.5s ease-in-out;
 }
 
 #login{
@@ -1738,7 +1744,7 @@ input[type="range"] {
 }
 
 
-@media (min-width: 625px) {
+@media (min-width: 700px) {
 
     #sideNav {
         height: 100%; /* 100% Full-height */
@@ -1746,13 +1752,19 @@ input[type="range"] {
         position: relative; /* Stay in place */
         display: flex;
         align-items: center; 
-        justify-content: flex-start;
+        justify-content: space-between;
         z-index: 1000; /* Stay on top */
         transform: translateX(0);
         background: transparent;
         overflow-x: hidden; /* Disable horizontal scroll */
         padding-top: 0px; /* Place content 60px from the top */
         transition: translate 0.5s; /* 0.5 second transition effect to slide in the nav */
+    }
+
+    #sideNav > div {
+        display: flex;
+        align-items: center; 
+        justify-content: space-between;
     }
 
     #navToggle {

@@ -6,19 +6,19 @@
     <meta charset="UTF-8">
     <link rel=icon href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
-    <script src="/js/site.js" type="text/javascript"></script>
+    <!-- <script src="/js/accounts.js" type="text/javascript"></script> -->
     <title>Reset Password</title>
 </head>
 <body>
 <!--Navbar-->
 {% include nav.html %}
 
-<div id="login-container" class="form-container">
+<div class="form-container">
     <div id="login" class="form-context">
         <h3>Reset Password</h3>
         <p id="reset-message" class="small"></p>
         <div class='flex'>
-            <form id="reset-form" action="">
+            <form id="reset-form" class="form" action="">
                 <div class="login-element">
                     <input type="password" name="password" autocomplete="off" placeholder="Password"/>
                 </div>
@@ -34,7 +34,12 @@
 </div>
 </body>
 <script>
-    showLogin = false;
-    toggleLoginScreen();
+    toggleLoginScreen(true);
+    let token = new URLSearchParams(window.location.search).get('token');
+
+    if (!token) {
+        document.body.querySelector('.form-container').innerHTML = ``
+        window.location = '/'
+    }
 </script>
 </html>
