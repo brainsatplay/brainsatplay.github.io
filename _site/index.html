@@ -29,7 +29,7 @@
 
     <title>Home | Brains@Play</title>
 
-    <link rel=icon href=assets/favicon.ico>
+    <link rel=icon href=assets/favicons/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brainsatplay@0.0.1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
@@ -49,7 +49,7 @@
 <div id="nav">
     <a href="/" class="logo">
 <!--        <strong><h4>Brains@Play</h4></strong>-->
-        <img src="/assets/brand/logo_and_sub.png">
+        <img src="/assets/brand/logo_and_sub_colorized.png">
     </a>
     <div id="navToggle" class="nav-icon">
         <div id="ham-1"></div>
@@ -179,76 +179,18 @@
 
 
     <!--Content-->
-    <div id="login-container" class="form-container">
-    <div id="login" class="form-context">
-        <h3>Login</h3>
-        <p id="login-message" class="small"></p>
-        <div class='flex'>
-            <form id="login-form" class="form" action="">
-                <div class="login-element">
-                    <input type="text" name="username" autocomplete="off" placeholder="Username or email"/>
-                </div>
-                <div class="login-element" style="text-align:right;">
-                    <input type="password" name="password" autocomplete="off" placeholder="Password"/>
-                    <a class="small text" href="/forgot">Forgot password?</a>
-                </div>
-            </form>
-        </div>
-        <div class="login-buttons">
-
-            <button id="login-button" onclick="login('profile')">Log In</button>
-            <button class="secondary" onclick="toggleLoginScreen(false); toggleSignUpScreen(true)">Sign Up</button>
-            <button id="goBack" class="secondary"  onclick="toggleLoginScreen(false);">Exit</button>
-        </div>
-    </div>
-</div>
-
-<div id="signup-container" class="form-container">
-    <div id="signup" class="form-context">
-        <h3>Sign Up</h3>
-        <p id="signup-message" class="small"></p>
-        <div class='flex'>
-            <form id="signup-form"  class="form" action="">
-                <div class="login-element">
-                    <input type="email" name="email" autocomplete="off" placeholder="Email"/>
-                </div>
-                <div class="login-element">
-                    <input type="text" name="username" autocomplete="off" placeholder="Username"/>
-                </div>
-                <div class="login-element">
-                    <input type="password" name="password" autocomplete="off" placeholder="Password"/>
-                </div>
-                <div class="login-element">
-                    <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password"/>
-                </div>
-                <!-- <div class="login-element">
-                    <input type="text" name="code" autocomplete="off" placeholder="Code (optional)"/>
-                </div> -->
-            </form>
-        </div>
-        <div class="login-buttons">
-            <button id="signup-button" onclick="signup()">Sign Up</button>
-            <button class="secondary"  onclick="toggleLoginScreen(true); toggleSignUpScreen(false)">Login</button>
-        </div>
-    </div>
-</div>
-
-
-
-    <!--Content-->
-    <div>
-        <div>
             <div id= "hero1" class="hero header">
                 <div class="split">
-                <div>
-                    <strong><span class="line">WE ARE</span> <h1><span class="line">BRAINS <span class="line">AT PLAY.</span></span></strong></h1>
-                    <p><span class="line"><strong>8B</strong> Brains |</span> <span class="line"><strong>5B</strong> Internet Users |</span> <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
-                    <small><strong>Brains@Play is developing free and open-source biomedical infrastructure supported by modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</p>
-                </div>
+
+                    <img src="/assets/brand/logo_colorized.png" class="logo">
+
+                    <div>
+                        <strong><span class="line">WE ARE</span> <h1><span class="line">BRAINS <span class="line">AT PLAY.</span></span></strong></h1>
+                        <p><span class="line"><strong>8B</strong> Brains |</span> <span class="line"><strong>5B</strong> Internet Users |</span> <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
+                        <small><strong>Brains@Play is developing free and open-source biomedical infrastructure supported by modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</small>
+                    </div>
 
                 <div style="align-items: center; justify-content: center;">
-                    <br>
-                    <br>
                     <div class="button-nav flex-center">
                         <button onclick="window.location.href='./fund'" target="_blank" type="button" style="width: 100%;">
                             <div>
@@ -336,8 +278,6 @@
                 parent: ["embed.example.com", "othersite.example.com"]
             });
             </script>
-        </div>
-    </div>
 
 
     <footer id="footer">

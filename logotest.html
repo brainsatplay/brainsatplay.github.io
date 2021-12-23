@@ -1,0 +1,59 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include meta.html %}
+    <link rel=icon href=/assets/favicons/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/logo.css"/>
+    <title>Github Logo Test | Brains@Play</title>
+</head>
+<body>
+
+<!--Navbar-->
+{% include nav.html %}
+
+<section>
+<div class="logo-container">
+    <div>
+        <img class="logo-test" src="/assets/brand/logo_and_sub_nomaxent.png">
+        <!-- <img class="logo-test" src="/assets/brand/logo_and_sub.png"> -->
+        <div class="logo-highlight"></div>
+        <div class="logo-highlight"></div>
+    </div>
+</div>
+</section>
+<!--Footer-->
+{% include footer.html %}
+</body>
+
+<script>
+
+    let i = -1
+    let numMaxEnt = 6
+    let maxent = document.body.querySelectorAll('.logo-highlight')
+
+    let animate = () => {
+
+        // Remove
+        maxent[0].classList.remove(`v${i % 6}`)
+        maxent[1].classList.remove(`v${(i+1) % 6}`)
+        maxent[0].classList.remove(`on`)
+
+        i++ // iterate
+        if (i === numMaxEnt) i = 1 // set back to zero if the last image
+
+        // Add
+        maxent[0].classList.add(`v${i % 6}`)
+        maxent[1].classList.add(`v${(i+1) % 6}`)
+        maxent[0].classList.add(`on`)
+
+        setTimeout(animate, 1000)
+    }
+
+    animate()
+
+
+</script>
+</html>

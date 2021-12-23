@@ -1,0 +1,68 @@
+/* body::after{
+    position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
+    content: url('/assets/brand/maxent/1.PNG') url('/assets/brand/maxent/2.PNG') url('/assets/brand/maxent/3.PNG') url('/assets/brand/maxent/4.PNG') url('/assets/brand/maxent/5.PNG') url('/assets/brand/maxent/6.PNG')
+ } */
+
+.logo-highlight {
+    height: 50px;
+    width: 50px;
+    border: none;
+    position: absolute;
+    top: 6%;
+    left: 0.5%;
+    opacity: 0;
+
+    /* Flip */
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+
+    transition: 0.5s;
+}
+
+.logo-highlight.on {
+    opacity: 1;
+}
+
+.logo-highlight.v1 {
+    background: url('/assets/brand/maxent/1.PNG');
+    background-size:cover;
+    /* backdrop-filter: grayscale(1); */
+    /* invert(.7);  */
+}
+
+.logo-highlight.v2 {
+    background: url('/assets/brand/maxent/2.PNG');
+    background-size:cover;
+}
+.logo-highlight.v3 {
+    background: url('/assets/brand/maxent/3.PNG');
+    background-size:cover;
+}
+.logo-highlight.v4 {
+    background: url('/assets/brand/maxent/4.PNG');
+    background-size:cover;
+}
+.logo-highlight.v5 {
+    background: url('/assets/brand/maxent/5.PNG');
+    background-size:cover;
+}
+.logo-highlight.v6 {
+    background: url('/assets/brand/maxent/6.PNG');
+    background-size:cover;
+}
+
+.logo-container {
+    display: flex; align-items: center; justify-content: center; height: 500px;
+}
+
+.logo-container > div {
+    position: relative;
+}
+
+.logo-test {
+    height: 100px;
+}

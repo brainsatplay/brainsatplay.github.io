@@ -6,7 +6,7 @@
     {% include meta.html %}
     <title>Home | Brains@Play</title>
 
-    <link rel=icon href=assets/favicon.ico>
+    <link rel=icon href=assets/favicons/favicon.ico>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brainsatplay@0.0.1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
@@ -23,23 +23,18 @@
     {% include nav.html %}
 
     <!--Content-->
-    {% include login.html %}
-
-
-    <!--Content-->
-    <div>
-        <div>
             <div id= "hero1" class="hero header">
                 <div class="split">
-                <div>
-                    <strong><span class="line">WE ARE</span> <h1><span class="line">BRAINS <span class="line">AT PLAY.</span></span></strong></h1>
-                    <p><span class="line"><strong>8B</strong> Brains |</span> <span class="line"><strong>5B</strong> Internet Users |</span> <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
-                    <small><strong>Brains@Play is developing free and open-source biomedical infrastructure supported by modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</p>
-                </div>
+
+                    <img src="/assets/brand/logo_colorized.png" class="logo">
+
+                    <div>
+                        <strong><span class="line">WE ARE</span> <h1><span class="line">BRAINS <span class="line">AT PLAY.</span></span></strong></h1>
+                        <p><span class="line"><strong>8B</strong> Brains |</span> <span class="line"><strong>5B</strong> Internet Users |</span> <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
+                        <small><strong>Brains@Play is developing free and open-source biomedical infrastructure supported by modern web technologies.</strong> Everyone has a brain. Let's develop applications accessible to all of them.</small>
+                    </div>
 
                 <div style="align-items: center; justify-content: center;">
-                    <br>
-                    <br>
                     <div class="button-nav flex-center">
                         <button onclick="window.location.href='./fund'" target="_blank" type="button" style="width: 100%;">
                             <div>
@@ -84,8 +79,6 @@
                 parent: ["embed.example.com", "othersite.example.com"]
             });
             </script>
-        </div>
-    </div>
 
 
     {% include footer.html %}
