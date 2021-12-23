@@ -1,6 +1,6 @@
 /* body::after{
     position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
-    content: url('/assets/brand/maxent/1.PNG') url('/assets/brand/maxent/2.PNG') url('/assets/brand/maxent/3.PNG') url('/assets/brand/maxent/4.PNG') url('/assets/brand/maxent/5.PNG') url('/assets/brand/maxent/6.PNG')
+    content: url('/assets/brand/maxent/1-min.png') url('/assets/brand/maxent/2-min.png') url('/assets/brand/maxent/3-min.png') url('/assets/brand/maxent/4-min.png') url('/assets/brand/maxent/5-min.png') url('/assets/brand/maxent/6-min.png')
  } */
 
 .logo-highlight {
@@ -28,30 +28,30 @@
 }
 
 .logo-highlight.v1 {
-    background: url('/assets/brand/maxent/1.PNG');
+    background: url('/assets/brand/maxent/1-min.png');
     background-size:cover;
     /* backdrop-filter: grayscale(1); */
     /* invert(.7);  */
 }
 
 .logo-highlight.v2 {
-    background: url('/assets/brand/maxent/2.PNG');
+    background: url('/assets/brand/maxent/2-min.png');
     background-size:cover;
 }
 .logo-highlight.v3 {
-    background: url('/assets/brand/maxent/3.PNG');
+    background: url('/assets/brand/maxent/3-min.png');
     background-size:cover;
 }
 .logo-highlight.v4 {
-    background: url('/assets/brand/maxent/4.PNG');
+    background: url('/assets/brand/maxent/4-min.png');
     background-size:cover;
 }
 .logo-highlight.v5 {
-    background: url('/assets/brand/maxent/5.PNG');
+    background: url('/assets/brand/maxent/5-min.png');
     background-size:cover;
 }
 .logo-highlight.v6 {
-    background: url('/assets/brand/maxent/6.PNG');
+    background: url('/assets/brand/maxent/6-min.png');
     background-size:cover;
 }
 

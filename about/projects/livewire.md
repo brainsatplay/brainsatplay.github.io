@@ -3,7 +3,7 @@ layout: extended-summary
 date: March 5th, 2021
 title: Livewire
 subtitle: A Stimulating Night of Neurotechnology
-image: '/assets/images/livewire.png'
+image: '/assets/images/livewire-min.png'
 video: <iframe src="https://player.vimeo.com/video/467405213" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 goals:
     - thought leadership
