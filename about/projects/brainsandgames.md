@@ -3,7 +3,7 @@ layout: extended-summary
 date: Spring 2021
 title: Brains and Games
 subtitle: International Design Fiction Competition
-image: /assets/images/competition.jpg
+image: /assets/images/competition-min.jpg
 goals:
     - thought leadership
     - creative showcase

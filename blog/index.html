@@ -24,7 +24,7 @@
         <div class="gallery grid">
             {% for post in site.posts %}
             <div class="labeled">
-                <a href="{{ post.url }}" target="_blank"><img src="{{ post.image or ../assets/images/posts/placeholder.jpg}}" alt="First Post"></a>
+                <a href="{{ post.url }}" target="_blank"><img src="{{ post.image or ../assets/images/posts/placeholder-min.jpg}}" alt="First Post"></a>
                 <div>
                     <small><small><small>{{ post.date  | date: "%B %-d, %Y" }}</small></small></small>
                     <h4>{{ post.title }}</h4>

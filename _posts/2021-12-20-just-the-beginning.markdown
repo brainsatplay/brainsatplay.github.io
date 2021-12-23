@@ -5,7 +5,7 @@ layout: post
 author: Brains@Play
 date:   2021-12-20 10:14:33 -0600
 categories: brainsatplay update
-image: '/assets/images/about.jpg'
+image: '/assets/images/about-min.jpg'
 ---
 
 To be continued...
