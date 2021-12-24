@@ -78,10 +78,22 @@
 }
 
 #fund-info {
+  display:flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#fund-info > div:first-of-type{
     text-align: center;
 }
 
-#fund-info > *{
+#fund-info > div:last-of-type{
+  padding: 10px;
+  height: 200px;
+}
+
+#fund-info > div:first-of-type > * {
     margin: 0;
 }
 

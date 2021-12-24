@@ -26,8 +26,14 @@
     <!--Content-->
 <section id="futures">
     <div id="fund-info">
-        <span id="fund-total"><span id="fund-total-current">$0</span> USD / month</span>
-        <p id="fund-latest-contributor" style="opacity: 0; transition: 0.5s;"><small><span id="fund-latest-contributor-name"></span> <span id="fund-latest-contributor-action"></span>!</small></p>
+        <div>
+            <span id="fund-total"><span id="fund-total-current">$0</span> USD / month</span>
+            <p id="fund-latest-contributor" style="opacity: 0; transition: 0.5s;"><small><span id="fund-latest-contributor-name"></span> <span id="fund-latest-contributor-action"></span>!</small></p>
+        </div>
+
+        <div>
+            {% include feed.html %}
+        </div>
     </div>
 
     <h2>About the Fund</h2>
