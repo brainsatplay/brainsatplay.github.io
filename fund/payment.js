@@ -12,7 +12,6 @@ const button = document.querySelector('#submit-button');
 const action = document.querySelector('#error-action');
 const errorName = document.querySelector('#error-name');
 const error = document.querySelector('#error-response');
-notification.style.display = 'none'
 button.classList.add('disabled') // avoid sending multiple payment requests
 
 const showError = (e, actn) => {
@@ -60,7 +59,7 @@ braintree.dropin.create({
             }, 'No Contribution Specified')
         } else {
         clientInstance.requestPaymentMethod().then(function (payload) {
-            notification.style.display = 'none'
+            notification.style.display = ''
             button.classList.add('disabled') // avoid sending multiple payment requests
 
 
