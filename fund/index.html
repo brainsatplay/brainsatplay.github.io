@@ -3,10 +3,7 @@
 <!DOCTYPE html>
 <html lang=en>
 <head>
-    <meta charset=utf-8>
-    <meta http-equiv=X-UA-Compatible content="IE=edge">
-    <meta name=viewport content="width=device-width,initial-scale=1">
-    <link rel=icon href=/assets/favicons/favicon.ico>
+    {% include meta.html %}
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <link rel="stylesheet" type="text/css" href="./fund.css"/>
 
@@ -70,6 +67,9 @@
                     <div class="login-element">
                         <input type="text" name="contributionNote" autocomplete="off" placeholder="Contribution Note"/>
                     </div>
+                    <div class="login-element">
+                        <input type="text" name="discordId" autocomplete="off" placeholder="Discord ID (optional)"/>
+                    </div>
                 </form>
             </div>
         </div>
@@ -112,12 +112,12 @@
             <div>
                 <span>Fund!</span>
                 <br/>
-                <span class="small">Secured by Braintree</span>
+                <span class="small">Secured by Stripe</span>
             </div>
         </button>
         <div>
             <label class="switch">
-                <input type="checkbox" checked>
+                <input type="checkbox">
                 <span class="slider round"></span>
             </label>
             <small id="contribution-type">Monthly</small>
@@ -138,95 +138,37 @@
 
 </body>
 
-<script src="./payment.js" type="text/javascript"></script>
+<script src="./stripe.js" type="text/javascript"></script>
+
 <script>
 
+// Globals to Manage (and remove eventually...)
 let selectedContribution
 let recurring = true
-let amounts = document.getElementById('fund-contribution-amounts')
-let divs = amounts.querySelectorAll('div')
-let custom = document.getElementById('custom')
-let customInput = document.getElementById('custom-contribution-amount')
-const fundTotal = document.getElementById('fund-total-current')
-const latestContributor = document.getElementById('fund-latest-contributor')
-const displayName = document.getElementById('fund-latest-contributor-name')
-const actionReadout = document.getElementById('fund-latest-contributor-action')
 
-// Show Fund Total
-let total = 0
-let decoder = new TextDecoder();
+const button = document.querySelector('#submit-button');
+button.onclick = () => {
 
-fetch(`${SERVER_URI}/fund/contributions`,{
-    method: 'GET',
-    mode: 'cors',
-}).then(async res => {
-
-    // Recieve Contribution Information as a Readable Stream (organized by latest)
-    let chunkCount = 0
-    const reader = res.body.getReader();
-
-    while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        let chunk = decoder.decode(value)
-        chunk.split('}').forEach(json => {
-            try {
-                const dict = JSON.parse(`${json}}`)
-                total += dict.amount
-                fundTotal.innerHTML = `$${total}`
-
-                if (dict.order === 0){
-                    latestContributor.style.opacity = 1
-                    displayName.innerHTML = dict.displayname || 'anonymous'
-                    actionReadout.innerHTML = `contributed $${dict.amount} USD`
-                }
-            } catch {}
-            chunkCount++
-        })
+    // Get Custom Fields for Form
+    let form = document.getElementById('contributor-info-form')
+    let formDict = {metadata: {}, recurring}
+    let formData = new FormData(form);
+    for (var pair of formData.entries()) {
+        formDict.metadata[pair[0]] = pair[1];
     }
 
-}).catch(e => {
-    console.error(e)
-})
+    formDict.amount = selectedContribution
 
-// Handle Custom Amount Input
-customInput.oninput = (e) => {
-    custom.setAttribute('data-amount', customInput.value)
-    selectedContribution = Number.parseFloat(customInput.value)
-}
-
-for (let div of divs) {
-    div.onclick = () => {
-        for (let d of divs) d.classList.remove('selected')
-        div.classList.add('selected')
-
-        selectedContribution = Number.parseFloat(div.getAttribute('data-amount'))
-    }
-}
-
-// Show / Hide Fund Rewards
-
-let monthly = document.getElementById('fund-contribution-monthly') 
-let checkbox = document.body.querySelector('input[type="checkbox"]')
-let rewards = document.getElementById('fund-rewards')
-let type = document.getElementById('contribution-type')
-
-let checkRewards = () => {
-
-    recurring = checkbox.checked
-    if (recurring) {
-        if (type) type.innerHTML = 'Monthly'
-        if (rewards) rewards.innerHTML = 'Coming soon...'
-    } else {
-        if (type) type.innerHTML = 'One Time'
-        if (rewards) rewards.innerHTML = 'None'
-    }
+    // Trigger Stripe Action
+    contributeToFund(formDict)
 
 }
- 
-checkbox.onchange = checkRewards
-checkRewards()
 
 </script>
+
+<!-- <script src="./payment.js" type="text/javascript"></script> -->
+<script src="./total.js" type="text/javascript"></script>
+<script src="./monthly.js" type="text/javascript"></script>
+<script src="./custom.js" type="text/javascript"></script>
+
 </html>

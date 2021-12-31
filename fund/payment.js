@@ -1,7 +1,5 @@
-// Create a PayPal Checkout component
-// Create a client.
+
 const CLIENT_AUTHORIZATION = 'sandbox_9qgtbdsg_vsm2tjxr62wttvhk' // default sandbox client
-const SERVER_URI = (window.location.hostname != 'brainsatplay.com') ? 'http://localhost:443' : 'https://brainsatplay.azurewebsites.net'
 
 // Accept Visa: 4111111111111111
 // Decline Visa: 4000111111111115

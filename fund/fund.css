@@ -82,11 +82,12 @@
   display:flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 #fund-info > div:first-of-type{
     text-align: center;
+    margin: 50px;
 }
 
 #fund-info > div:last-of-type{

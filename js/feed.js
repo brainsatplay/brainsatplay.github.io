@@ -1,4 +1,3 @@
-const SERVER_URI = (window.location.hostname != 'brainsatplay.com') ? 'http://localhost:443' : 'https://brainsatplay.azurewebsites.net'
 
 const sources = [
     'garrettmflynn',
