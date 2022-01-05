@@ -121,7 +121,7 @@
                 <small id="contribution-type">Monthly</small><br>
             </div>
         </div>
-        <div id="contribution-account-warning">Note: Must <a class="text" onclick="toggleCurrentProfileOverlay()">sign into your account</a> to enable monthly subscription</div>
+        <div id="contribution-account-warning">Note: Must <a class="text">sign into your account</a> to enable monthly subscription</div>
 
     
     </div>
@@ -142,12 +142,16 @@
 
 <script type="module">
 
-    import {accounts} from '../js/accounts.mjs' 
+    import {accounts, toggleCurrentProfileOverlay} from '../js/accounts.mjs' 
     import {contributeToFund} from './stripe.mjs'
     import {toggleMonthly} from './monthly.mjs'
 
     let recurring = false
     let selectedContribution
+
+
+const warning = document.getElementById('contribution-account-warning')
+warning.onclick = toggleCurrentProfileOverlay
 
 
 const button = document.querySelector('#submit-button');
