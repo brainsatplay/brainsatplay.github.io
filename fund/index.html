@@ -57,23 +57,6 @@
         <h2>Select a Contribution</h2>
     </div>
     <hr>
-    <div class="form-container">
-        <div class="form-context">
-            <div class='flex'>
-                <form  id="contributor-info-form" class="form" action="">
-                    <div class="login-element">
-                        <input type="text" name="displayName" autocomplete="off" placeholder="Display Name"/>
-                    </div>
-                    <div class="login-element">
-                        <input type="text" name="contributionNote" autocomplete="off" placeholder="Contribution Note"/>
-                    </div>
-                    <div class="login-element">
-                        <input type="text" name="discordId" autocomplete="off" placeholder="Discord ID (optional)"/>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <div id="fund-contribution-amounts">
         <div data-amount="5">
@@ -102,26 +85,45 @@
         </div>
     </div>
 
-    <br>
-
-    <div id="dropin-container"></div>
+    <!-- <div id="dropin-container"></div> -->
     <br>
 
     <div id="checkout-container">
+        
+
         <button id="submit-button">
             <div>
                 <span>Fund!</span>
                 <br/>
                 <span class="small">Secured by Stripe</span>
-            </div>
+            </div>   
         </button>
-        <div>
+
+        <div class="form-container">
+            <div class="form-context">
+                <div class='flex'>
+                    <form  id="contributor-info-form" class="form" action="">
+                        <div class="login-element">
+                            <input type="text" name="contributionNote" autocomplete="off" placeholder="Add a Note (optional)"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="contribution-type-div">
+            <div><small id="contribution-type">One Time</small><br></div>
             <label class="switch">
                 <input type="checkbox">
                 <span class="slider round"></span>
             </label>
-            <small id="contribution-type">Monthly</small>
+            <div>
+                <small id="contribution-type">Monthly</small><br>
+            </div>
         </div>
+        <div id="contribution-account-warning">Note: Must <a class="text" onclick="toggleCurrentProfileOverlay()">sign into your account</a> to enable monthly subscription</div>
+
+    
     </div>
     
     <div class="notification">
@@ -138,25 +140,26 @@
 
 </body>
 
-<script src="./stripe.js" type="text/javascript"></script>
+<script type="module">
 
-<script>
+    import {accounts} from '../js/accounts.mjs' 
+    import {contributeToFund} from './stripe.mjs'
+    import {toggleMonthly} from './monthly.mjs'
 
-// Globals to Manage (and remove eventually...)
-let selectedContribution
-let recurring = true
+    let recurring = false
+    let selectedContribution
+
 
 const button = document.querySelector('#submit-button');
 button.onclick = () => {
 
     // Get Custom Fields for Form
-    let form = document.getElementById('contributor-info-form')
     let formDict = {metadata: {}, recurring}
-    let formData = new FormData(form);
-    for (var pair of formData.entries()) {
-        formDict.metadata[pair[0]] = pair[1];
-    }
+    let formData = new FormData(document.getElementById('contributor-info-form'));
+    for (var pair of formData.entries()) formDict.metadata[pair[0]] = pair[1];
 
+    formDict.metadata.id = accounts?.user?._id
+    formDict.metadata.displayName = accounts?.user?.username
     formDict.amount = selectedContribution
 
     // Trigger Stripe Action
@@ -164,11 +167,37 @@ button.onclick = () => {
 
 }
 
+// Check Monthly Toggle
+let checkbox = document.body.querySelector('input[type="checkbox"]')
+checkbox.onchange = () => {
+    recurring = toggleMonthly(recurring)
+}
+recurring = toggleMonthly(recurring)
+
+// Monitor Custom Amount
+let amounts = document.getElementById('fund-contribution-amounts')
+let divs = amounts.querySelectorAll('div')
+let custom = document.getElementById('custom')
+let customInput = document.getElementById('custom-contribution-amount')
+
+// Handle Custom Amount Input
+customInput.oninput = (e) => {
+    custom.setAttribute('data-amount', customInput.value)
+    selectedContribution = Number.parseFloat(customInput.value)
+}
+
+for (let div of divs) {
+    div.onclick = () => {
+        for (let d of divs) d.classList.remove('selected')
+        div.classList.add('selected')
+
+        selectedContribution = Number.parseFloat(div.getAttribute('data-amount'))
+        console.log(selectedContribution)
+    }
+}
+
 </script>
 
-<!-- <script src="./payment.js" type="text/javascript"></script> -->
 <script src="./total.js" type="text/javascript"></script>
-<script src="./monthly.js" type="text/javascript"></script>
-<script src="./custom.js" type="text/javascript"></script>
 
 </html>

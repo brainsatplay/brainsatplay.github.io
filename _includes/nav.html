@@ -1,5 +1,4 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-<script src="/js/accounts.js" type="text/javascript"></script>
 
 <div id="nav">
     <a href="/" class="logo">
@@ -17,11 +16,11 @@
                     <a href="/" class="link">Home</a>
                     <a href="/about" class="link">About</a>
                     <a href="/fund" class="link">Fund</a>
-                    <a href="/blog" class="link">Blog</a>
+                    <!-- <a href="/blog" class="link">Blog</a> -->
                     <a href="mailto:contact@brainsatplay.com" class="link" target="_blank">Contact</a>
                 </div>
                 <div>
-                    <!-- <a class="link" onclick="toggleProfile()">Profile</a> -->
+                    <a id="profile-nav-link" class="link">Profile</a>
                 </div>
 
             <!--    </div>-->
@@ -30,9 +29,16 @@
         </div>        
 </div>
 
-{% include login.html %}
+{% include profile.html %}
 
-<script>
+<script type="module">
+
+    import { accounts, toggleCurrentProfileOverlay}from '../js/accounts.mjs'
+
+    let profileLink = document.getElementById('profile-nav-link')
+    profileLink.onclick = () => {
+        toggleCurrentProfileOverlay()
+    }
 
     let nav = document.getElementById('nav')
     // check which a tag is selected
@@ -73,8 +79,12 @@
 
     // Scroll
     let navbar = document.getElementById("nav")
-    window.onscroll = (e) => {
-        if (window.scrollY > 75) navbar.style.background = 'rgba(0,0,0,0.8)'
+
+    let onScroll = (e) => {
+        if (window.scrollY > 75) navbar.style.background = 'rgba(0,0,0,0.9)'
         else navbar.style.background = 'transparent'
     }
+
+    window.onscroll = onScroll
+    onScroll()
 </script>

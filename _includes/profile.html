@@ -1,0 +1,196 @@
+<script src="/libraries/@brainsatplay/accounts-browser/index.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/profile.css" />
+
+<div id="profile-container" class=" overlay">
+    <section id="profile-details">
+        <div class="flex-center wrap">
+            <div>
+                <div class="profile-img"><img /></div>
+            </div>
+            <div id="profile-info-list">
+                <h3 id="full-name"></h3>
+                <p><strong>Email:</strong> <span id="email"></span></p>
+                <p><strong>Username:</strong> <span id="username"></span></p>
+            </div>
+        </div>
+        <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
+            <button id="logout-button">Log Out</button>
+        </div>
+
+        <h3>Subscriptions</h3>
+        <hr>
+        <div id="subscriptions">
+            <p><small id="subscription-error-message">No subscriptions found.</small></p>
+        </div>
+    </section>
+    <div id="profile-error" style="display:none"></div>
+</div>
+
+<div id="login-container" class="overlay form-container">
+    <section id="login" class="form-context">
+        <h3>Login</h3>
+        <p id="login-message" class="small2x"></p>
+        <div class='flex'>
+            <form id="login-form" class="form" action="">
+                <div class="login-element">
+                    <input type="email" name="email" autocomplete="off" placeholder="Email" />
+                </div>
+                <div class="login-element" style="text-align:right;">
+                    <input type="password" name="password" autocomplete="off" placeholder="Password" />
+                    <a class="small text" href="/forgot">Forgot password?</a>
+                </div>
+            </form>
+        </div>
+        <div class="login-buttons">
+
+            <button id="login-button" class="full-width">Log In</button>
+            <button id="google-button" class="full-width">Log In with Google</button>
+            <button id="to-signup-button" class="secondary">Sign Up</button>
+            <button id="go-back-button" class="secondary">Exit</button>
+        </div>
+    </section>
+</div>
+
+<div id="signup-container" class="overlay form-container">
+    <section id="signup" class="form-context">
+        <h3>Sign Up</h3>
+        <p id="signup-message" class="small2x"></p>
+        <div class='flex'>
+            <form id="signup-form" class="form" action="">
+                <div class="login-element">
+                    <input type="email" name="email" autocomplete="off" placeholder="Email" />
+                </div>
+                <div class="login-element">
+                    <input type="password" name="password" autocomplete="off" placeholder="Password" />
+                </div>
+                <div class="login-element">
+                    <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password" />
+                </div>
+                <!-- <div class="login-element">
+                    <input type="text" name="code" autocomplete="off" placeholder="Code (optional)"/>
+                </div> -->
+            </form>
+        </div>
+        <div class="login-buttons">
+            <button id="signup-button" class="full-width">Sign Up</button>
+            <button id="to-login-button" class="secondary">Login</button>
+        </div>
+    </section>
+</div>
+
+<script type="module">
+
+    import { accounts, setProfileInfo, toggleLoginScreen, toggleSignUpScreen, setCurrentOverlay } from '../js/accounts.mjs'
+
+    const loginButton = document.getElementById('login-button')
+    const googleButton = document.getElementById('google-button')
+    const signupButton = document.getElementById('signup-button')
+    document.getElementById('to-signup-button').onclick = () => { toggleLoginScreen(false); toggleSignUpScreen(true) }
+    document.getElementById('to-login-button').onclick = () => { toggleLoginScreen(true); toggleSignUpScreen(false) }
+    document.getElementById('go-back-button').onclick = () => { toggleLoginScreen(false); }
+
+    const logoutButton = document.getElementById('logout-button');
+    const deleteButton = document.getElementById('delete-button');
+
+    let loginForm = document.getElementById('login-form')
+    let signupForm = document.getElementById('signup-form')
+    let loginMessage = document.getElementById('login-message')
+    let signupMessage = document.getElementById('signup-message')
+
+    let profileImage = document.querySelector('.profile-img')
+
+    accounts.login().then((res) => setProfileInfo(res)) // Auto-login
+
+
+    // Set Profile Image
+    profileImage.onclick = () => {
+        var x = document.createElement("INPUT");
+        x.setAttribute("type", "file")
+        x.setAttribute("accept", "image/*")
+
+        x.onchange = (ev) => {
+            console.log(ev)
+            let img = profileImage.querySelector('img')
+            var selectedFile = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                img.src = event.target.result;
+                // accounts.set('image', event.target.result)
+                profileImage.classList.remove('placeholder');
+            };
+
+            reader.readAsDataURL(selectedFile);
+        }
+        x.click()
+
+    }
+
+
+    // Set Login Command
+    if (loginButton) {
+        loginButton.onclick = () => {
+
+            let formData = new FormData(loginForm);
+            let userDetails = {}
+            for (var pair of formData.entries()) {
+                userDetails[pair[0]] = pair[1];
+            }
+
+            accounts.getCredentials(userDetails).then((credentials) => {
+                accounts.login(credentials).then((res) => {
+                    loginForm.reset()
+                    if (!('err' in res.data)) setProfileInfo(res)
+                    else loginMessage.innerHTML = res.data.err.error
+                })
+            })
+        }
+    }
+
+    // Set Google Command
+    if (googleButton) {
+        googleButton.onclick = () => {
+            accounts.getGoogleCredentials().then((credentials) => {
+                accounts.login(credentials).then((res) => setProfileInfo(res))
+            })
+        }
+    }
+
+    // Set Google Command
+    if (signupButton) {
+        signupButton.onclick = () => {
+
+            let formData = new FormData(signupForm);
+            let userDetails = {}
+            for (var pair of formData.entries()) {
+                userDetails[pair[0]] = pair[1];
+            }
+
+            accounts.create(userDetails).then(() => {
+                signupForm.reset()
+                accounts.getCredentials(userDetails).then((credentials) => {
+                    accounts.login(credentials).then((res) => setProfileInfo(res))
+                })
+            })
+        }
+    }
+
+    // Set Logout Command
+    if (logoutButton) {
+        logoutButton.onclick = () => {
+            accounts.logout().then(() => {
+                setProfileInfo()
+                setCurrentOverlay('login', true)
+            })
+        }
+    }
+
+    // Set Delete Command
+    if (deleteButton) {
+        deleteButton.onclick = () => {
+            accounts.delete().then(() => {
+                setCurrentOverlay('login', true)
+            })
+        }
+    }
+
+</script>

@@ -40,15 +40,15 @@ feed.insertAdjacentElement("beforeend", commits);
         // images.classList.add('images')
         // div.insertAdjacentElement('beforeend', images)
         // images.innerHTML += `
-        //   <a href="https://github.com/${o.actor.login}" class="link" target="_blank" rel="noopener"><img src="${o.actor.avatar_url}"/></a>
+        //   <a href="https://github.com/${o.actor.login}" class="text" target="_blank" rel="noopener"><img src="${o.actor.avatar_url}"/></a>
         // `
-        // if (o.org) images.innerHTML += `<a href="https://github.com/${o.org.login}" class="link" target="_blank" rel="noopener"><img src="${o.org.avatar_url}"/></a>`
+        // if (o.org) images.innerHTML += `<a href="https://github.com/${o.org.login}" class="text" target="_blank" rel="noopener"><img src="${o.org.avatar_url}"/></a>`
 
 
         let info = document.createElement('div')
         div.insertAdjacentElement('beforeend', info)
         // info.innerHTML = `
-        //   <p><small><a href="https://github.com/${o.repo.name}" class="link" target="_blank" rel="noopener">${o.repo.name}</a></small></p>
+        //   <p><small><a href="https://github.com/${o.repo.name}" class="text" target="_blank" rel="noopener">${o.repo.name}</a></small></p>
         // `
 
         // Add Date/Time
@@ -58,24 +58,24 @@ feed.insertAdjacentElement("beforeend", commits);
         if (o.type === 'PushEvent'){
           o.payload.commits.forEach(c => {
             info.innerHTML += `
-            <p><a href="https://github.com/${o.actor.login}" class="link" target="_blank" rel="noopener">${o.actor.login}</a> committed to <a href="https://github.com/${o.repo.name}" class="link" target="_blank" rel="noopener">${o.repo.name}</a></p>
-            <p><small><a href="${c.url}" class="link" target="_blank" rel="noopener">${c.message}</a></small></p>
+            <p><a href="https://github.com/${o.actor.login}" class="text" target="_blank" rel="noopener">${o.actor.login}</a> committed to <a href="https://github.com/${o.repo.name}" class="text" target="_blank" rel="noopener">${o.repo.name}</a></p>
+            <p><small><a href="${c.url}" class="text" target="_blank" rel="noopener">${c.message}</a></small></p>
             `
           })
         } 
         
         // Starring
         else if (o.type === 'WatchEvent'){
-          info.innerHTML += `<p><a href="https://github.com/${o.actor.login}" class="link" target="_blank" rel="noopener">${o.actor.login}</a> starred <a href="https://github.com/${o.repo.name}" class="link" target="_blank" rel="noopener">${o.repo.name}</a></p>`
+          info.innerHTML += `<p><a href="https://github.com/${o.actor.login}" class="text" target="_blank" rel="noopener">${o.actor.login}</a> starred <a href="https://github.com/${o.repo.name}" class="text" target="_blank" rel="noopener">${o.repo.name}</a></p>`
         } 
         
         // Creating Repositories or Branches
         else if (o.type === 'CreateEvent'){
-          if (o.payload.ref) info.innerHTML += `<p><a href="https://github.com/${o.actor.login}" class="link" target="_blank" rel="noopener">${o.actor.login}</a> created branch '${o.payload.ref}' on <a href="https://github.com/${o.repo.name}" class="link" target="_blank" rel="noopener">${o.repo.name}</a></p>`
+          if (o.payload.ref) info.innerHTML += `<p><a href="https://github.com/${o.actor.login}" class="text" target="_blank" rel="noopener">${o.actor.login}</a> created branch '${o.payload.ref}' on <a href="https://github.com/${o.repo.name}" class="text" target="_blank" rel="noopener">${o.repo.name}</a></p>`
           else {
             info.innerHTML += `
-            <p><a href="https://github.com/${o.actor.login}" class="link" target="_blank" rel="noopener">${o.actor.login}</a> created <a href="https://github.com/${o.repo.name}" class="link" target="_blank" rel="noopener">${o.repo.name}</a></p>
-            <p><small><a href="${o.payload.url}" class="link" target="_blank" rel="noopener">${o.payload.description}</a></small></p>
+            <p><a href="https://github.com/${o.actor.login}" class="text" target="_blank" rel="noopener">${o.actor.login}</a> created <a href="https://github.com/${o.repo.name}" class="text" target="_blank" rel="noopener">${o.repo.name}</a></p>
+            <p><small><a href="${o.payload.url}" class="text" target="_blank" rel="noopener">${o.payload.description}</a></small></p>
             `
           }
         }

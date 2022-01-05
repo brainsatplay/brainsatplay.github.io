@@ -19,7 +19,7 @@
 }
 
 html {
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 }
 
 strong {
@@ -38,13 +38,55 @@ i {
     font-size: 64%;
 }
 
+.noscroll { 
+    overflow: hidden;
+  }
+body .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+
+    height: 100vh;
+    width: 100vw;
+    opacity: 0;
+    pointer-events: none;
+    padding: 50px;
+    z-index: 10;
+
+    background:linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
+    transition: 0.5s opacity ease-in-out;
+    -o-transition: 0.5s opacity ease-in-out;
+    -ms-transition: 0.5s opacity ease-in-out;
+    -moz-transition: 0.5s opacity ease-in-out;
+    -webkit-transition: 0.5s opacity ease-in-out;
+
+    overflow-y: scroll;
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
+
+
+.overlay::-webkit-scrollbar {
+    display: none;
+  }
+  
+.overlay > div {
+    width: 100%;
+}
+
 body{
     margin: 0px;
     font-size: 20px;
     background: black;
     font-family: Lato, sans-serif;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: white;
@@ -81,6 +123,7 @@ h2{
 h3{
     font-size: 30px;
     font-weight: normal;
+    margin: 10px 0px 0px 0px;
 }
 
 h4{
@@ -100,6 +143,7 @@ button {
     padding: 10px 20px;
     border-radius: 5px;
     transition: 0.5s;
+    background:rgba(0, 0, 0, 0.8);
 }
 
 button.secondary {
@@ -112,8 +156,8 @@ button.secondary {
 
 
 button:hover{
-    color: #6a8eb0;
-    border-color: #6a8eb0;
+    color: #acd1f3;
+    border-color: #acd1f3;
 }
 
 .debug {
@@ -204,12 +248,17 @@ section{
     justify-content: flex-end;
 }
 
-a.text {
-    color: #6a8eb0;
-    text-decoration: none;
+a {
+    cursor: pointer;
 }
 
-a.text:visited {
+a.text {
+    color: #acd1f3;
+    text-decoration: none;
+    transition: color 0.5s;
+}
+
+a.text:visited, a.text:hover {
     color: #999999;
 }
 
@@ -223,11 +272,11 @@ a.link {
 }
 
 a.link:hover {
-    color: #6a8eb0;
+    color: #acd1f3;
 }
 
 a.link .current{
-    color: #6a8eb0;
+    color: #acd1f3;
 }
 
 /* Split */
@@ -505,7 +554,7 @@ input:focus{
 }
 
 .input-cont:focus-within {
-    border-bottom: 1px solid #6a8eb0
+    border-bottom: 1px solid #acd1f3
 }
 
 .email-in{
@@ -763,7 +812,7 @@ footer {
     flex-wrap: wrap;
     padding: 25px 50px;
     background: #0c0b0c;
-    z-index: 999;
+    z-index: 9;
     width: 100vw;
 }
 
@@ -817,7 +866,7 @@ footer a {
 }
 
 .social a:hover svg {
-    fill: #6a8eb0;
+    fill: #acd1f3;
 }
 
 /*.social a:before {*/
@@ -845,151 +894,8 @@ footer a {
     align-items: center;
 }
 
-.fullscreen{
-    display: flex;
-    flex-wrap: wrap;
-    padding: 50px 0px;
-    min-height:calc(100vh - 150px);
-    justify-content: center;
-    align-items: center;
-}
-
 .full-center{
     max-width: 500px;
-}
-
-/*Games List*/
-
-#game-nav {
-    display: flex;
-    position: sticky;
-    position: -webkit-sticky;
-    top: 65px;
-    z-index: 100;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    background: #201e20;
-    transition: 0.5s;
-}
-
-.game-option {
-    flex-grow: 1;
-    text-align: center;
-    color: gray;
-    cursor: pointer;
-    transition: .5s;
-    padding: 0px 25px;
-    border-bottom: 1px solid transparent;
-}
-
-.game-option:hover {
-    color: white;
-    /*border-bottom-color: #6a8eb0;*/
-}
-
-
-.unavailable{
-    color: gray;
-    cursor: default;
-}
-
-.unavailable:hover {
-    color: gray;
-}
-
-.selected {
-    color: white;
-    border-bottom-color: #6a8eb0;
-    font-weight: normal;
-}
-
-.game {
-    position: relative;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    height: calc(75vw * 1080/1920);
-    width: 75vw;
-    min-width: 75vw;
-    background-attachment: scroll;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    cursor: pointer;
-}
-
-#available .game {
-    flex: 1 1 0;
-}
-
-.game-mask{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: 50%;
-    transition: .5s;
-    z-index: 0;
-}
-
-.game:hover .game-mask {
-    opacity: 30%;
-}
-
-.submission-emoji {
-    position: absolute;
-    bottom: 25px;
-    right: 25px;
-    z-index: 1;
-}
-
-.game-text {
-    margin: 25px;
-    z-index: 1;
-    text-align: left;
-    width: 75%;
-    /*flex-grow: 1;*/
-}
-
-
-.game-text h3{
-    margin: 0px;
-    font-size: 25px;
-}
-
-.permalink-section
-{
-    white-space: pre-wrap; /* CSS3 */
-    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-    white-space: -pre-wrap; /* Opera 4-6 */
-    white-space: -o-pre-wrap; /* Opera 7 */
-    word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
-
-.game-media-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 50px 0px;
-}
-
-.game-media {
-    height: auto;
-    width: 100%;
-    max-width: 1080px
-}
-
-
-#games-actions {
-    /*padding: 50px;*/
-    width: 40vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 #back {
@@ -997,23 +903,6 @@ footer a {
     bottom: 25px;
     right: 25px;
     background: black;
-}
-
-#game {
-    box-sizing: border-box;
-    position: relative;
-    padding: 50px;
-    width: calc(100vw - 400px)
-}
-
-
-#submitted-content-container{
-    width: calc(100vw - 400px)
-}
-
-#submitted {
-   display: flex;
-    flex-wrap: wrap;
 }
 
 #temp-message {
@@ -1069,18 +958,25 @@ footer a {
 } */
 
 .flex-center{
+    display: flex;
     align-items:center;
     justify-content:center;
 }
 
 .flex-left{
+    display: flex;
     align-items:center;
     justify-content:flex-start;
 }
 
 .flex-right{
+    display: flex;
     align-items:center;
     justify-content:flex-end;
+}
+
+.wrap {
+    flex-wrap: wrap;
 }
 
 /*Submission*/
@@ -1414,23 +1310,7 @@ blockquote {
     -webkit-transform: rotate(-45deg);
 }
 
-
 /* Login */
-#login-container, #signup-container {
-    position: fixed;
-    top: 0;
-    right: 0;
-
-    justify-content:center;
-    align-items: center;
-    text-align: center;
-
-    height: 100vh;
-    width: 100vw;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 10;
-}
 
 form.form input {
     width: 100%; height: 100%; padding: 10px 0px; display: flex; align-items: center; justify-content:center; color: white; background:transparent; border: transparent; border-bottom: 1px solid white;
@@ -1438,21 +1318,15 @@ form.form input {
 
 input:focus{
     outline: none;
-}
+}a
 
 .form-container{
-    background:linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
     display: flex;
     justify-content:flex-start;
     align-items: center;
     text-align: left;
     flex-wrap: wrap;
-    transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    -ms-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -webkit-transition: 0.5s ease-in-out;
-}
+}iner
 
 .form-container button {
     margin: 10px;
@@ -1470,31 +1344,24 @@ input:focus{
 .form-context {
     flex-grow: 1;
     max-width: 500px;
+    font-size: 20px;
+    text-align: center;
+    z-index:1;
 }
 
 .form-context form {
     width: 100%;
 }
 
-#login{
-    /* linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)); */
-    width: 75%;
-    font-size: 20px;
-    text-align: center;
-    z-index:1;
-}
 
 .login-element{
     margin:20px;
 }
 
-#login-button {
+.full-width {
     width: 100%;
 }
 
-#signup-button {
-    width: 100%;
-}
 
 .login-buttons{
     display: flex;
@@ -1735,7 +1602,7 @@ input[type="range"] {
     background: #0c0b0c;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
-    transition: transform 0.5s; /* 0.5 second transition effect to slide in the nav */
+    transition: transform 0.5s; 
 }
 
 #nav.open #sideNav{
@@ -1766,7 +1633,7 @@ input[type="range"] {
     font-size: 200%;
     color: #818181;
     display: block;
-    transition: 0.5s;
+    transition: 0.5s color;
 }
 
 #sideNav a:hover {
@@ -1787,6 +1654,17 @@ input[type="range"] {
 }
 
 
+.fullscreen{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px 0px;
+    min-height:calc(100vh - 150px);
+    justify-content: center;
+    align-items: center;
+}
+
+
+
 @media (min-width: 700px) {
 
     #sideNav {
@@ -1801,7 +1679,7 @@ input[type="range"] {
         background: transparent;
         overflow-x: hidden; /* Disable horizontal scroll */
         padding-top: 0px; /* Place content 60px from the top */
-        transition: translate 0.5s; /* 0.5 second transition effect to slide in the nav */
+        transition: none;
     }
 
     #sideNav > div {

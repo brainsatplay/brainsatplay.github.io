@@ -2,6 +2,7 @@
 <html lang=en>
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JM1KWWMJE8"></script>
+
 <script>
     // -------------------------- Set Globals --------------------------
     window.dataLayer = window.dataLayer || [];
@@ -15,8 +16,8 @@
     const SERVER_URI = (window.location.hostname != 'brainsatplay.com') ? 'http://localhost:443' : 'https://brainsatplay.azurewebsites.net'
     let STRIPE_PUBLISHABLE_KEY = (window.location.hostname != 'brainsatplay.com') ? `pk_test_51KCSVzKdUIB1gLvUov8Bdg0yWBHhBVsrhus0A7lki0ovAHf5ys6jH29kit5U1T2FqiECAfnHrO5suyzvbOztetaz00nHKgrguQ` : `pk_live_51KCSVzKdUIB1gLvUkXaLJKYanY5OfqmpU3m2KUSkrlvBojlpIZusiOieNEEgdmFkN6ZOIDvvMb1meXsmmATmit6N00l5RLlGiD`
 
-console.log(window.location)
 </script>
+
 <meta charset=utf-8>
 <meta http-equiv=X-UA-Compatible content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -53,7 +54,6 @@ console.log(window.location)
 
     <!--Navbar-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-<script src="/js/accounts.js" type="text/javascript"></script>
 
 <div id="nav">
     <a href="/" class="logo">
@@ -71,11 +71,11 @@ console.log(window.location)
                     <a href="/" class="link">Home</a>
                     <a href="/about" class="link">About</a>
                     <a href="/fund" class="link">Fund</a>
-                    <a href="/blog" class="link">Blog</a>
+                    <!-- <a href="/blog" class="link">Blog</a> -->
                     <a href="mailto:contact@brainsatplay.com" class="link" target="_blank">Contact</a>
                 </div>
                 <div>
-                    <!-- <a class="link" onclick="toggleProfile()">Profile</a> -->
+                    <a id="profile-nav-link" class="link">Profile</a>
                 </div>
 
             <!--    </div>-->
@@ -84,47 +84,73 @@ console.log(window.location)
         </div>        
 </div>
 
-<div id="login-container" class="form-container">
-    <div id="login" class="form-context">
+<script src="/libraries/@brainsatplay/accounts-browser/index.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/profile.css" />
+
+<div id="profile-container" class=" overlay">
+    <section id="profile-details">
+        <div class="flex-center wrap">
+            <div>
+                <div class="profile-img"><img /></div>
+            </div>
+            <div id="profile-info-list">
+                <h3 id="full-name"></h3>
+                <p><strong>Email:</strong> <span id="email"></span></p>
+                <p><strong>Username:</strong> <span id="username"></span></p>
+            </div>
+        </div>
+        <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
+            <button id="logout-button">Log Out</button>
+        </div>
+
+        <h3>Subscriptions</h3>
+        <hr>
+        <div id="subscriptions">
+            <p><small id="subscription-error-message">No subscriptions found.</small></p>
+        </div>
+    </section>
+    <div id="profile-error" style="display:none"></div>
+</div>
+
+<div id="login-container" class="overlay form-container">
+    <section id="login" class="form-context">
         <h3>Login</h3>
-        <p id="login-message" class="small"></p>
+        <p id="login-message" class="small2x"></p>
         <div class='flex'>
             <form id="login-form" class="form" action="">
                 <div class="login-element">
-                    <input type="text" name="username" autocomplete="off" placeholder="Username or email"/>
+                    <input type="email" name="email" autocomplete="off" placeholder="Email" />
                 </div>
                 <div class="login-element" style="text-align:right;">
-                    <input type="password" name="password" autocomplete="off" placeholder="Password"/>
+                    <input type="password" name="password" autocomplete="off" placeholder="Password" />
                     <a class="small text" href="/forgot">Forgot password?</a>
                 </div>
             </form>
         </div>
         <div class="login-buttons">
 
-            <button id="login-button" onclick="login('profile')">Log In</button>
-            <button class="secondary" onclick="toggleLoginScreen(false); toggleSignUpScreen(true)">Sign Up</button>
-            <button id="goBack" class="secondary"  onclick="toggleLoginScreen(false);">Exit</button>
+            <button id="login-button" class="full-width">Log In</button>
+            <button id="google-button" class="full-width">Log In with Google</button>
+            <button id="to-signup-button" class="secondary">Sign Up</button>
+            <button id="go-back-button" class="secondary">Exit</button>
         </div>
-    </div>
+    </section>
 </div>
 
-<div id="signup-container" class="form-container">
-    <div id="signup" class="form-context">
+<div id="signup-container" class="overlay form-container">
+    <section id="signup" class="form-context">
         <h3>Sign Up</h3>
-        <p id="signup-message" class="small"></p>
+        <p id="signup-message" class="small2x"></p>
         <div class='flex'>
-            <form id="signup-form"  class="form" action="">
+            <form id="signup-form" class="form" action="">
                 <div class="login-element">
-                    <input type="email" name="email" autocomplete="off" placeholder="Email"/>
+                    <input type="email" name="email" autocomplete="off" placeholder="Email" />
                 </div>
                 <div class="login-element">
-                    <input type="text" name="username" autocomplete="off" placeholder="Username"/>
+                    <input type="password" name="password" autocomplete="off" placeholder="Password" />
                 </div>
                 <div class="login-element">
-                    <input type="password" name="password" autocomplete="off" placeholder="Password"/>
-                </div>
-                <div class="login-element">
-                    <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password"/>
+                    <input type="password" name="confirm-password" autocomplete="off" placeholder="Confirm Password" />
                 </div>
                 <!-- <div class="login-element">
                     <input type="text" name="code" autocomplete="off" placeholder="Code (optional)"/>
@@ -132,14 +158,137 @@ console.log(window.location)
             </form>
         </div>
         <div class="login-buttons">
-            <button id="signup-button" onclick="signup()">Sign Up</button>
-            <button class="secondary"  onclick="toggleLoginScreen(true); toggleSignUpScreen(false)">Login</button>
+            <button id="signup-button" class="full-width">Sign Up</button>
+            <button id="to-login-button" class="secondary">Login</button>
         </div>
-    </div>
+    </section>
 </div>
 
+<script type="module">
 
-<script>
+    import { accounts, setProfileInfo, toggleLoginScreen, toggleSignUpScreen, setCurrentOverlay } from '../js/accounts.mjs'
+
+    const loginButton = document.getElementById('login-button')
+    const googleButton = document.getElementById('google-button')
+    const signupButton = document.getElementById('signup-button')
+    document.getElementById('to-signup-button').onclick = () => { toggleLoginScreen(false); toggleSignUpScreen(true) }
+    document.getElementById('to-login-button').onclick = () => { toggleLoginScreen(true); toggleSignUpScreen(false) }
+    document.getElementById('go-back-button').onclick = () => { toggleLoginScreen(false); }
+
+    const logoutButton = document.getElementById('logout-button');
+    const deleteButton = document.getElementById('delete-button');
+
+    let loginForm = document.getElementById('login-form')
+    let signupForm = document.getElementById('signup-form')
+    let loginMessage = document.getElementById('login-message')
+    let signupMessage = document.getElementById('signup-message')
+
+    let profileImage = document.querySelector('.profile-img')
+
+    accounts.login().then((res) => setProfileInfo(res)) // Auto-login
+
+
+    // Set Profile Image
+    profileImage.onclick = () => {
+        var x = document.createElement("INPUT");
+        x.setAttribute("type", "file")
+        x.setAttribute("accept", "image/*")
+
+        x.onchange = (ev) => {
+            console.log(ev)
+            let img = profileImage.querySelector('img')
+            var selectedFile = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                img.src = event.target.result;
+                // accounts.set('image', event.target.result)
+                profileImage.classList.remove('placeholder');
+            };
+
+            reader.readAsDataURL(selectedFile);
+        }
+        x.click()
+
+    }
+
+
+    // Set Login Command
+    if (loginButton) {
+        loginButton.onclick = () => {
+
+            let formData = new FormData(loginForm);
+            let userDetails = {}
+            for (var pair of formData.entries()) {
+                userDetails[pair[0]] = pair[1];
+            }
+
+            accounts.getCredentials(userDetails).then((credentials) => {
+                accounts.login(credentials).then((res) => {
+                    loginForm.reset()
+                    if (!('err' in res.data)) setProfileInfo(res)
+                    else loginMessage.innerHTML = res.data.err.error
+                })
+            })
+        }
+    }
+
+    // Set Google Command
+    if (googleButton) {
+        googleButton.onclick = () => {
+            accounts.getGoogleCredentials().then((credentials) => {
+                accounts.login(credentials).then((res) => setProfileInfo(res))
+            })
+        }
+    }
+
+    // Set Google Command
+    if (signupButton) {
+        signupButton.onclick = () => {
+
+            let formData = new FormData(signupForm);
+            let userDetails = {}
+            for (var pair of formData.entries()) {
+                userDetails[pair[0]] = pair[1];
+            }
+
+            accounts.create(userDetails).then(() => {
+                signupForm.reset()
+                accounts.getCredentials(userDetails).then((credentials) => {
+                    accounts.login(credentials).then((res) => setProfileInfo(res))
+                })
+            })
+        }
+    }
+
+    // Set Logout Command
+    if (logoutButton) {
+        logoutButton.onclick = () => {
+            accounts.logout().then(() => {
+                setProfileInfo()
+                setCurrentOverlay('login', true)
+            })
+        }
+    }
+
+    // Set Delete Command
+    if (deleteButton) {
+        deleteButton.onclick = () => {
+            accounts.delete().then(() => {
+                setCurrentOverlay('login', true)
+            })
+        }
+    }
+
+</script>
+
+<script type="module">
+
+    import { accounts, toggleCurrentProfileOverlay}from '../js/accounts.mjs'
+
+    let profileLink = document.getElementById('profile-nav-link')
+    profileLink.onclick = () => {
+        toggleCurrentProfileOverlay()
+    }
 
     let nav = document.getElementById('nav')
     // check which a tag is selected
@@ -180,10 +329,14 @@ console.log(window.location)
 
     // Scroll
     let navbar = document.getElementById("nav")
-    window.onscroll = (e) => {
-        if (window.scrollY > 75) navbar.style.background = 'rgba(0,0,0,0.8)'
+
+    let onScroll = (e) => {
+        if (window.scrollY > 75) navbar.style.background = 'rgba(0,0,0,0.9)'
         else navbar.style.background = 'transparent'
     }
+
+    window.onscroll = onScroll
+    onScroll()
 </script>
 
 
@@ -206,27 +359,27 @@ console.log(window.location)
 
                 <div style="align-items: center; justify-content: center;">
                     <div class="button-nav flex-center">
-                        <button onclick="window.location.href='./fund'" target="_blank" type="button" style="width: 100%;">
+                        <button onclick="window.location.href='./fund'" target="_blank" type="button" style="width: 200px;">
                             <div>
                                 <span>Support our Work</span>
                                 <br/>
                                 <span class="small">The Brains@Play Fund</span>
                             </div>
                         </button>
-                        <button onclick="window.location.href='https://app.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
+                        <button onclick="window.location.href='https://app.brainsatplay.com'" target="_blank" type="button" style="width: 200px;">
                             <div>
                                 <span>Biosensing Platform</span>
                                 <br/>
-                                <span class="small">Pre-Alpha Tests</span>
+                                <span class="small">Pre-Alpha Version</span>
                             </div>
                         </button>
-                        <button onclick="window.location.href='https://docs.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
+                        <!-- <button onclick="window.location.href='https://docs.brainsatplay.com'" target="_blank" type="button" style="width: 45%;">
                             <div>
                                 <span>Documentation</span>
                                 <br/>
-                                <span class="small">Still being updated</span>
+                                <span class="small">In Progress</span>
                             </div>
-                        </button>
+                        </button> -->
                     </div>
                     <div class="social">
 

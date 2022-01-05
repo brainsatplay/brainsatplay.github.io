@@ -17,20 +17,47 @@
 
 #checkout-container {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
 }
 
 #checkout-container > button {
-    margin-bottom: 0px;
+    margin: 0px;
+    /* width: 100%; */
 }
 
 #fund-contribution-amounts{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
-#contribution-type {
-    margin-left: 15px;
+#contribution-type-div {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  padding-bottom: 10px;
+  font-size: 80%;
+}
+
+#contribution-type-div > div {
+  width: 100px;
+}
+
+#contribution-type-div div:first-of-type {
+  text-align: right;
+  margin-right: 15px;
+}
+
+#contribution-type-div div:last-of-type {
+  margin-left: 15px;
+}
+
+#contribution-account-warning {
+  font-size: 60%;
 }
 
 #contribution-header {
@@ -74,7 +101,7 @@
 }
 
 #fund-contribution-amounts div:hover, #fund-contribution-amounts .selected {
-    border: 1px solid #6a8eb0;
+    border: 1px solid #acd1f3;
     color: white;
 }
 
@@ -104,11 +131,11 @@
 }
 
 #fund-latest-contributor-name {
-    color: #6a8eb0;
+    color: #acd1f3;
 }
 
 #fund-total-current {
-    color: #6a8eb0;
+    color: #acd1f3;
 }
 
 #custom-contribution-amount {
@@ -183,11 +210,11 @@
   }
   
   input:checked + .slider {
-    background-color: #6a8eb0;
+    background-color: #acd1f3;
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 1px #6a8eb0;
+    box-shadow: 0 0 1px #acd1f3;
   }
   
   input:checked + .slider:before {
