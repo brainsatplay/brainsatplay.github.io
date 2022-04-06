@@ -304,6 +304,12 @@ a.link .current{
 
 } */
 
+.unavailable {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+}
+
 
 span.line {
     display: inline-block;
@@ -313,7 +319,7 @@ span.line {
 
 #hero1{
     min-height: 500px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/nasa-min.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)), url('/assets/images/nasa-min.jpg');
 }
 
 #hero1 h1 {

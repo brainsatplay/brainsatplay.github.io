@@ -15,12 +15,12 @@
                 <div>
                     <a href="/" class="link">Home</a>
                     <a href="/about" class="link">About</a>
-                    <a href="https://opencollective.com/brainsatplay" class="link">Fund</a>
+                    <a href="https://opencollective.com/brainsatplay" target="_blank" class="link">Contribute</a>
                     <!-- <a href="/blog" class="link">Blog</a> -->
                     <a href="mailto:contact@brainsatplay.com" class="link" target="_blank">Contact</a>
                 </div>
                 <div>
-                    <a id="profile-nav-link" class="link">Profile</a>
+                    <!-- <a id="profile-nav-link" class="link">Profile</a> -->            
                 </div>
 
             <!--    </div>-->
@@ -33,12 +33,12 @@
 
 <script type="module">
 
-    import { accounts, toggleCurrentProfileOverlay}from '../js/accounts.mjs'
+    // import { accounts, toggleCurrentProfileOverlay} from '../js/accounts.mjs'
 
-    let profileLink = document.getElementById('profile-nav-link')
-    profileLink.onclick = () => {
-        toggleCurrentProfileOverlay()
-    }
+    // let profileLink = document.getElementById('profile-nav-link')
+    // profileLink.onclick = () => {
+    //     toggleCurrentProfileOverlay()
+    // }
 
     let nav = document.getElementById('nav')
     // check which a tag is selected
