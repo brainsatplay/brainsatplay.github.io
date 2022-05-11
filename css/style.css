@@ -734,7 +734,7 @@ input:focus{
 .labeled {
     position: relative;
     width: 200px;
-    height: 200px;
+    /* height: 200px; */
 }
 
 .labeled h4 {
@@ -744,13 +744,22 @@ input:focus{
 
 
 .labeled div {
-    position: absolute; 
+    /* position: absolute; 
     bottom: 0px;
-    left: 0px;
-    background: rgba(0, 0, 0, 0.7);
+    left: 0px; */
+    background: rgb(35, 35, 35);
     width: 100%;
     font-size: 80%;
     padding: 15px 25px;
+}
+
+#bgc p , #livewire p {
+    margin-top: 7px;
+    margin-right: 10px;
+    padding: 10px;
+    background: rgb(35, 35, 35);
+    border-radius: 10px;
+    font-size: 80%;
 }
 
 #projects a{
