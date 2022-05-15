@@ -753,7 +753,7 @@ input:focus{
     padding: 15px 25px;
 }
 
-#bgc p , #livewire p {
+#bgc p , #livewire p, #collaborators p {
     margin-top: 7px;
     margin-right: 10px;
     padding: 10px;
