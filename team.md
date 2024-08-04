@@ -28,7 +28,7 @@ Together, we ran an [international design function competition](/projects/initia
 ### Brains@Play LLC (2022 - 2023)
 At the peak of the COVID-19 pandemic, Brains@Play LLC was organized by Garrett Flynn and Joshua Brewster to develop low-cost biosensing hardware and browser-based BCI applications.
 
-Though we built a considerable amount of open-source software—including the original [Brains@Play Platform](app.brainsatplay.com)—along the way, we did not secure sustainable funding and the company was dissolved in late 2023.
+Though we built a considerable amount of open-source software—including the original [Brains@Play Platform](https://app.brainsatplay.com)—along the way, we did not secure sustainable funding and the company was dissolved in late 2023.
 
 ### Brains@Play (2024 - Present)
 Since mid-2024, Brains@Play has been revitalized as a personal initiative of Garrett Flynn to release free and open-source educational material on the design and development of brain-responsive applications.
