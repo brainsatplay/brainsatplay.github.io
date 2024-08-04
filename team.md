@@ -23,7 +23,7 @@ The initiative was supported by faculty advisors including:
 - [Dong Song](https://www.linkedin.com/in/dong-song-159aa221/): Director of the USC Neural Modeling and Interface Laboratory
 - [Dimitris Grammenos](https://www.linkedin.com/in/dgrammenos/): Principal Researcher at ICS-FORTH
 
-Together, we ran an [international design function competition](/projects/initiative/brains-and-games-competition.md), hosted a [virtual event](/projects/initiative/livewire.md) on the ethical and social implications of emerging neurotechnology, and even led a [high school course](/projects/initiative/brains-at-play-course.md) on brain-computer interfaces.
+Together, we ran an [international design fiction competition](/projects/initiative/brains-and-games-competition.md), hosted a [virtual event](/projects/initiative/livewire.md) on the ethical and social implications of emerging neurotechnology, and even led a [high school course](/projects/initiative/brains-at-play-course.md) on brain-computer interfaces.
 
 ### Brains@Play LLC (2022 - 2023)
 At the peak of the COVID-19 pandemic, Brains@Play LLC was organized by Garrett Flynn and Joshua Brewster to develop low-cost biosensing hardware and browser-based BCI applications.
