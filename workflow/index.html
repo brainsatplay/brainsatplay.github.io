@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- {% include meta.html %} -->
+    <title>Workflow | Brains@Play</title>
+
+    <link rel=icon href=../assets/favicons/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <script src= "../libraries/custom-protocol-check/index.js"></script>
+  </head>
+  <body>
+    <!--Navbar-->
+    <!-- {% include nav.html %} -->
+
+    <!--Content-->
+    <section>
+      <h1>Workflow</h1>
+      <p>Brains@Play is a community of developers, researchers, and enthusiasts who are building open-source (AGPLv3) brain and biomedical sensing tools with modern web technologies and low-cost IoT hardware. We are paving the way for community-led health technologies.</p>
+  </section>
+
+  <section>
+    <h2>Extension</h2>
+    <p>The Brains@Play Chrome Extension lets you do some cool stuff.</p>
+    <button id="extension" style="width: auto; padding: 10px 40px;">Download Extension</button>
+  </section>
+
+  <section>
+    <h2>Server-Side Control</h2>
+    <p>The Brains@Play Electron App lets you do some cool stuff on the server.</p>
+    <button id="electron" style="width: auto; padding: 10px 40px;">Open App</button>
+  </section>
+
+  <section>
+    <h2>More coming soon...</h2>
+  </section>
+
+  <!-- Footer -->
+    <!-- {% include footer.html %} -->
+
+  </body>
+  <script type="module">
+const extensionScriptId = 'brainsatplay-injection-proxy'
+
+
+    const openOptions = (id) => {
+      window.postMessage({
+        source: id,
+        command: 'openOptions' // direct shortcut command
+      })
+    }
+
+    const checkExtension = () => {
+      let hasExtension = false;
+
+      const extensionButton = document.getElementById('extension')
+      extensionButton.onclick = () => {
+          const extensionURL = "https://github.com/brainsatplay/brainsatplay-extension"
+          window.open(extensionURL, '_blank');
+      }
+
+      // Check if extension is installed
+
+      const el = document.getElementById(extensionScriptId);
+      if (el) {
+        const version = el.getAttribute('data-version')
+        if (version) {
+            const id = el.getAttribute('data-id')
+            // if (version >= requiredVersion) {
+                hasExtension = true;
+
+                extensionButton.innerHTML = 'Open Extension Options'
+                extensionButton.onclick = () => openOptions(id)
+            // }
+        }
+      }
+
+      return hasExtension      
+    }
+
+    window.onload = function () {
+     const res = checkExtension()
+     if (!res) setTimeout(checkExtension, 100)
+    }
+
+
+
+    const electronButton = document.getElementById('electron')
+    electronButton.onclick = () => {
+          customProtocolCheck(
+            "brainsatplay://",
+            () => {
+              window.open("https://github.com/brainsatplay/brainsatplay-electron", "_blank");
+              console.log("Custom protocol not found.");
+            },
+            () => {
+              console.log("Custom protocol found and opened the file successfully.");
+            }, 
+            // 5000
+          );
+    }
+
+  </script>
+</html>

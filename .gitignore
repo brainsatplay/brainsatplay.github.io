@@ -1,8 +1,9 @@
-
 .DS_Store
-node_modules
-
-.vitepress/cache
-
-dist
+.idea
 _site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
+
+.vscode

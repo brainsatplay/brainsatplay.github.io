@@ -1,0 +1,96 @@
+---
+---
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    {% include meta.html %}
+    <title>Home | Brains@Play</title>
+
+    <link rel=icon href=assets/favicons/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brainsatplay@0.0.1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+</head>
+<body>
+<noscript>
+    <strong>We're sorry but Brains@Play doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
+<div>
+
+    <!--Navbar-->
+    {% include nav.html %}
+
+    <!--Content-->
+            <div id= "hero1" class="hero header">
+                <div class="split">
+
+                    <img src="/assets/brand/logo_colorized-min.png" class="logo">
+
+                    <div>
+                        <strong><span class="line">WE ARE</span> <h1><span class="line">BRAINS <span class="line">AT PLAY.</span></span></strong></h1>
+                        <p><span class="line"><strong>8B</strong> Brains |</span> <span class="line"><strong>5B</strong> Internet Users |</span> <span class="line"><strong>1</strong> Open Biosensing Ecosystem</span></p>
+                        <p><small>
+                                <p><strong>Brains@Play is developing open-source (AGPLv3) brain and biomedical sensing tools with modern web technologies and low-cost IoT hardware.</strong> 
+                                <!-- </p> -->
+                                <!-- <p> -->
+                                    We are helping pave the way for future community-led health technologies.</p>
+                        </small></p>
+                    </div>
+
+                <div style="align-items: center; justify-content: center;">
+                    <div class="button-nav flex-center">
+                        <!-- <button onclick="window.location.href='https://opencollective.com/brainsatplay'" target="_blank" type="button" style="width: 200px;">
+                            <div>
+                                <span>Support our Work</span>
+                                <br/>
+                                <span class="small">The Brains@Play Fund</span>
+                            </div>
+                        </button> -->
+                        <button onclick="window.location.href='https://app.brainsatplay.com'" target="_blank" type="button" style="width: 200px;">
+                            <div>
+                                <span>Platform</span>
+                                <br/>
+                                <small class="small">Pre-Alpha</small>
+                            </div>
+                        </button>
+                        <button onclick="window.location.href='https://docs.brainsatplay.com'" target="_blank" type="button" style="width: 200px;"  class="unavailable">
+                            <div>
+                                <span>Docs</span>
+                                <br/>
+                                <span class="small">Coming Soon</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                {% include social.html %}
+                <a href="https://opencollective.com/brainsatplay" target="_blank"><img src="https://opencollective.com/brainsatplay/contribute/button@2x.png?color=blue" height=40 /></a>
+            </div>
+            </div>
+
+            <!-- Add a placeholder for the Twitch embed -->
+            <div id="twitch-embed"></div>
+
+            <!-- Load the Twitch embed JavaScript file -->
+            <script src="https://embed.twitch.tv/embed/v1.js"></script>
+
+            <!-- Create a Twitch.Embed object that will render within the "twitch-embed" element -->
+            <script type="text/javascript">
+            new Twitch.Embed("twitch-embed", {
+                width: 854,
+                height: 480,
+                channel: "brainsatplay",
+                // Only needed if this page is going to be embedded on other websites
+                parent: ["embed.example.com", "othersite.example.com"]
+            });
+            </script>
+
+
+    {% include footer.html %}
+
+</div>
+</body>
+</html>
+
+

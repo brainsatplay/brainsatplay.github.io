@@ -1,0 +1,245 @@
+.notification {
+    font-size: 60%;
+    padding: 20px;
+    border: 1px solid white;
+    border-radius: 25px;
+    display: none;
+}
+
+.notification > * {
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.notification > *:last-child {
+    margin-bottom: 0px;
+}
+
+#checkout-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#checkout-container > button {
+    margin: 0px;
+    /* width: 100%; */
+}
+
+#fund-contribution-amounts{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#contribution-type-div {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  padding-bottom: 10px;
+  font-size: 80%;
+}
+
+#contribution-type-div > div {
+  width: 100px;
+}
+
+#contribution-type-div div:first-of-type {
+  text-align: right;
+  margin-right: 15px;
+}
+
+#contribution-type-div div:last-of-type {
+  margin-left: 15px;
+}
+
+#contribution-account-warning {
+  font-size: 60%;
+}
+
+#contribution-header {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+#contribution-header h2 {
+    width: auto;
+}
+
+#contribution-header > * {
+    padding-right: 25px;
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+    padding-top: 10px;
+}
+
+#contribution-header > * > * {
+    padding-right: 10px;
+    font-size: 85%;
+}
+
+#fund-contribution-amounts div {
+    padding: 25px;
+    border: 2px solid grey;
+    color: grey;
+    border-radius: 10px;
+    margin: 10px;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+#fund-contribution-amounts div:hover {
+    cursor: pointer;
+}
+
+#fund-contribution-amounts div:hover, #fund-contribution-amounts .selected {
+    border: 1px solid #acd1f3;
+    color: white;
+}
+
+#fund-info {
+  display:flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#fund-info > div:first-of-type{
+    text-align: center;
+    margin: 50px;
+}
+
+#fund-info > div:last-of-type{
+  padding: 10px;
+  height: 200px;
+}
+
+#fund-info > div:first-of-type > * {
+    margin: 0;
+}
+
+#fund-total {
+    font-size: 40px;
+}
+
+#fund-latest-contributor-name {
+    color: #acd1f3;
+}
+
+#fund-total-current {
+    color: #acd1f3;
+}
+
+#custom-contribution-amount {
+    background: transparent;
+    color: white;
+    border: none;
+    border-bottom: 1px solid grey;
+    color: grey;
+    width: 50px;
+    font-size: 15px;
+    /* height: 20px; */
+    padding: 5px;
+    transform: translateY(-2.5px)
+}
+
+#fund-contribution-amounts .selected #custom-contribution-amount {
+    border-bottom: 1px solid white;
+    color: white;
+}
+
+#fund-contribution-monthly {
+
+}
+
+#fund-rewards {
+
+}
+
+
+
+
+
+/* Cute slider from W3Schools (https://www.w3schools.com/howto/howto_css_switch.asp) */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #acd1f3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #acd1f3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(30px);
+    -ms-transform: translateX(30px);
+    transform: translateX(30px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 30px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

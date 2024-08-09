@@ -1,0 +1,64 @@
+#feed {
+    /* padding: 25px; */
+    border: 1px solid white;
+    /* border-radius: 20px; */
+    font-size: 60%;
+    max-width: 400px;
+    overflow-y: scroll;
+    max-height: 600px;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    /* color: black; */
+}
+
+.local-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid white;
+    background: black;
+    z-index: 1;
+    height: 40px;
+    /* font-size: 80%; */
+}
+
+
+#feed > div {
+    padding: 10px 15px;
+}
+
+#feed p {
+    margin: 0px;
+}
+
+#feed > div > div {
+    width: 100%;
+    padding: 10px 5px;
+    border-bottom: 1px solid gray;
+    margin: 3px;
+    display: flex;
+    align-items: center;
+}
+
+#feed .images {
+    position: relative;
+    padding-right: 25px;
+} 
+
+#feed .images img{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 20px;
+    width: 25px;
+    height: 25px;
+} 
+
+#feed .images > a:first-of-type > img{
+    border-radius: 30px;
+    width: 50px;
+    height: 50px;
+    position: static;
+} 

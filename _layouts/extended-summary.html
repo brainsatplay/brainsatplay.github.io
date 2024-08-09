@@ -1,0 +1,54 @@
+---
+---
+<!doctype html>
+<html lang=en>
+<head>
+    {% include meta.html %}
+    <link rel=icon href=/assets/favicons/favicon.ico>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <title>Brains@Play | {{ page.title }}</title>
+</head>
+<body>
+<!-- <div id=app> -->
+    <!--Navbar-->
+    {% include nav.html %}
+
+    <!--Header-->
+    <div class="header" style="background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url({{ page.image }})">
+        <i>{{ page.date }}</i>
+        <h2>{{ page.title }}</h2>
+        <h3>{{ page.subtitle }}</h3>
+        <div class="button-nav flex-center">
+            <button onclick="window.location.href='/about#{{ page.title | downcase }}'">Back to Projects</button>
+        </div>
+    </div>
+
+    <!--Content-->
+    <section>
+        <h2>Overview</h2>
+        <hr/>
+        {{ content }}
+        <br/>
+        <h2>Project Details</h2>
+        <div>
+            {{ page.video }}
+        </div>
+        <h3>Goals</h3>
+        <ul>
+            {% for goal in page.goals %}
+            <li>{{ goal | capitalize }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Involvement</h3>
+        {% for person in page.people %}
+        <p><a href="{{person.link}}" class="text">{{ person.name }}</a> — {{person.role | capitalize }}</p>
+        {% endfor %}
+
+        <h3>Credits</h3>
+        {{page.credits}}
+    </section>
+    <!--Footer-->
+    {% include footer.html %}
+<!-- </div> -->
+</body>
+</html>
